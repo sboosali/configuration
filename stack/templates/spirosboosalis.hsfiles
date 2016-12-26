@@ -1,0 +1,382 @@
+{-# START_FILE {{name}}.cabal #-}
+name:                {{name}}
+version:             0.0.0
+synopsis:            TODO
+description:         TODO
+homepage:            http://github.com/{{github-username}}/{{name}}#readme
+license:             BSD3
+license-file:        LICENSE
+author:              {{author-name}}
+maintainer:          {{author-email}}
+copyright:           {{copyright}}
+category:            TODO
+build-type:          Simple
+cabal-version:       >=1.10
+
+-- PVP
+-- https://wiki.haskell.org/Package_versioning_policy
+-- "A.B is known as the major version number, and C the minor version number."
+
+extra-source-files:
+  README.md
+  .gitignore
+  .travis.yml
+  HLint.hs
+  stack.yaml
+
+-- data-files:
+
+--  data/
+
+source-repository head
+  type:     git
+  location: https://github.com/{{github-username}}/{{name}}
+
+
+library
+ hs-source-dirs:      sources
+ default-language:    Haskell2010
+ ghc-options:
+  -Wall
+  -fwarn-incomplete-uni-patterns
+  -fwarn-incomplete-record-updates
+  -fwarn-identities
+  -fno-warn-unticked-promoted-constructors
+ default-extensions: AutoDeriveTypeable DeriveDataTypeable DeriveGeneric
+                     DeriveFunctor DeriveFoldable DeriveTraversable
+                     LambdaCase EmptyCase TypeOperators PostfixOperators
+                     ViewPatterns BangPatterns KindSignatures
+                     NamedFieldPuns RecordWildCards TupleSections
+                     MultiWayIf DoAndIfThenElse EmptyDataDecls
+                     MultiParamTypeClasses FlexibleContexts FlexibleInstances
+                     TypeFamilies FunctionalDependencies
+                     ScopedTypeVariables StandaloneDeriving
+
+ exposed-modules:
+                 {{module}}
+                 {{module}}.Types
+-- other-modules:
+                 {{module}}.Extra
+                 {{module}}.Example
+
+ build-depends:
+               base >=4.7 && <5
+
+--              , transformers
+--              , mtl
+--              , containers
+--              , bytestring
+--              , stm
+--              , template-haskell
+
+          , deepseq
+          , hashable
+          , semigroups
+
+--              , lens
+--              , exceptions
+--              , free
+--              , bifunctors
+--              , profunctors
+--              , either
+--              , pipes
+--              , formatting
+--              , servant
+--              , Earley
+--              , split
+--              , interpolatedstring-perl6
+--              , wl-pprint-text
+--              , text
+--              , aeson
+--              , hashable
+--              , unordered-containers
+--              , async
+--              , parallel
+
+
+executable example-{{name}}
+ hs-source-dirs:      executables
+ main-is:             Main.hs
+
+ default-language:    Haskell2010
+ ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+
+ build-depends:
+    base
+  , {{name}}
+
+
+-- $ stack test doctest
+test-suite doctest
+ hs-source-dirs:      tests
+ main-is:             DocTest.hs
+ type:                exitcode-stdio-1.0
+
+ default-language:    Haskell2010
+ ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+
+ build-depends:
+    base
+  , {{name}}
+  , doctest
+
+
+-- $ stack test unittest
+test-suite unittest
+ hs-source-dirs:      tests
+ main-is:             UnitTest.hs
+ type:                exitcode-stdio-1.0
+
+ default-language:    Haskell2010
+ ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+
+ other-modules:
+  {{module}}.Test
+
+ build-depends:
+    base
+  , {{name}}
+  , hspec ==2.2.*
+  , QuickCheck ==2.8.*
+  -- , tasty
+  -- , tasty-quickcheck
+
+
+-- $ stack bench
+benchmark command
+ hs-source-dirs:      benchmarks
+ main-is:             Bench.hs
+ type:                exitcode-stdio-1.0
+
+ default-language: Haskell2010
+ ghc-options:      -Wall -threaded -rtsopts -with-rtsopts=-N
+
+ build-depends:
+    base
+  , {{name}}
+  , criterion
+  , deepseq
+
+
+{-# START_FILE cabal.config #-}
+executable-profiling: True
+library-profiling: True
+
+
+{-# START_FILE Setup.hs #-}
+import Distribution.Simple
+main = defaultMain
+
+
+{-# START_FILE stack.yaml #-}
+resolver: lts-7.5
+compiler: ghc-8.0
+
+packages:
+- .
+
+extra-deps: []
+
+
+{-# START_FILE sources/{{module}}.hs #-}
+module {{module}}
+ ( module {{module}}.Types
+ ) where
+import {{module}}.Types
+
+
+{-# START_FILE sources/{{module}}/Types.hs #-}
+module {{module}}.Types where
+import {{module}}.Extra()
+
+type {{module}} = String
+
+
+{-# START_FILE sources/{{module}}/Example.hs #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-} -- to test inference
+module {{module}}.Example where
+import {{module}}()
+
+{-|
+@
+stack build && stack exec -- example-{{name}}
+@
+-}
+main :: IO ()
+main = do
+ putStrLn "({{module}}.Example...)"
+
+
+{-# START_FILE sources/{{module}}/Extra.hs #-}
+module {{module}}.Extra
+ ( module {{module}}.Extra
+ , module X
+ ) where
+
+import Control.DeepSeq as X (NFData)
+import Data.Hashable as X (Hashable)
+import Data.Semigroup as X (Semigroup)
+
+import GHC.Generics as X (Generic)
+import Data.Data as X (Data)
+
+import Control.Arrow as X ((>>>))
+import Data.Function as X ((&))
+import Data.Foldable as X (traverse_)
+
+nothing :: (Monad m) => m ()
+nothing = return ()
+
+maybe2bool :: Maybe a -> Bool
+maybe2bool = maybe False (const True)
+
+either2maybe :: Either e a -> Maybe a
+either2maybe = either (const Nothing) Just
+
+either2bool :: Either e a -> Bool
+either2bool = either (const False) (const True)
+
+
+{-# START_FILE tests/{{module}}/Test.hs #-}
+module {{module}}.Test where
+import {{module}}
+
+main = do
+ print "{{module}}"
+
+
+{-# START_FILE tests/DocTest.hs #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
+import Test.DocTest
+
+main = doctest
+ [ "sources/{{module}}.hs"
+ ]
+
+
+{-# START_FILE tests/UnitTest.hs #-}
+{-# OPTIONS_GHC -F -pgmF hspec-discover #-}
+
+
+{-# START_FILE executables/Main.hs #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
+import qualified {{module}}.Example
+
+main = {{module}}.Example.main
+
+
+{-# START_FILE benchmarks/Bench.hs #-}
+import {{module}}()
+import Criterion.Main
+
+main = defaultMain [
+  bgroup "{{module}}"
+    [ bench "1" $ nf   length [1..1000::Int]
+    , bench "2" $ whnf length [1..1000::Int]
+    ]
+  ]
+
+
+{-# START_FILE .travis.yml #-}
+# https://docs.travis-ci.com/user/languages/haskell
+
+#   - 8.0
+ghc:
+  - 7.10
+  - 7.8
+
+# install: stack install
+
+# script: stack test
+
+notifications:
+  email:
+    - {{author-email}}
+
+{-# START_FILE HLint.hs #-}
+{-# LANGUAGE PackageImports, TemplateHaskell #-}
+import "hint" HLint.Default
+import "hint" HLint.Dollar
+import "hint" HLint.Generalise
+ignore "Use unwords"
+ignore "Use map once"
+ignore "Use =<<"
+ignore "Functor law"
+
+
+{-# START_FILE .gitignore #-}
+# my
+ignore/
+notes
+goals
+TODO
+cbits/main
+.projectile
+
+# Haskell
+dist
+cabal-dev
+*.o
+*.hi
+*.chi
+*.chs.h
+.virtualenv
+.hsenv
+.cabal-sandbox/
+cabal.sandbox.config
+cabal.config
+report.html
+.stack-work/
+
+# Emacs
+\#*
+*~
+.#*
+\#*\#
+*.log
+TAGS
+
+# OS X
+.DS_Store
+
+
+{-# START_FILE LICENSE #-}
+Copyright {{author-name}} (c) 2015
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+
+    * Redistributions in binary form must reproduce the above
+      copyright notice, this list of conditions and the following
+      disclaimer in the documentation and/or other materials provided
+      with the distribution.
+
+    * Neither the name of {{author-name}} nor the names of other
+      contributors may be used to endorse or promote products derived
+      from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+{-# START_FILE README.md #-}
+[![Build Status](https://secure.travis-ci.org/{{github-username}}/{{name}}.svg)](http://travis-ci.org/{{github-username}}/{{name}})
+[![Hackage](https://img.shields.io/hackage/v/{{name}}.svg)](https://hackage.haskell.org/package/{{name}})
+
+# {{name}}
+
+TODO

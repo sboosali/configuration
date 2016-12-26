@@ -1,0 +1,276 @@
+{-# START_FILE {{name}}.cabal #-}
+name:                {{name}}
+version:             0.0.0
+synopsis:            TODO
+description:         TODO
+homepage:            http://github.com/{{github-username}}/{{name}}#readme
+license:             BSD3
+license-file:        LICENSE
+author:              {{author-name}}
+maintainer:          {{author-email}}
+copyright:           {{copyright}}
+category:            Development
+build-type:          Simple
+-- extra-source-files:
+cabal-version:       >=1.10
+
+-- PVP
+-- https://wiki.haskell.org/Package_versioning_policy
+-- "A.B is known as the major version number, and C the minor version number."
+
+extra-source-files:
+  README.md
+  .gitignore
+  .travis.yml
+  HLint.hs
+  stack.yaml
+
+source-repository head
+  type:     git
+  location: https://github.com/{{github-username}}/{{name}}
+
+
+library
+ hs-source-dirs:      sources
+ default-language:    Haskell2010
+ ghc-options:       
+  -Wall
+  -fwarn-incomplete-uni-patterns
+  -fwarn-incomplete-record-updates
+  -fwarn-identities
+  -fno-warn-unticked-promoted-constructors
+
+ c-sources:        native/{{module}}.c
+ includes:         native/{{module}}.h
+ install-includes: native/{{module}}.h
+ include-dirs:     native
+
+ exposed-modules:
+  {{module}}
+  {{module}}.Main
+  {{module}}.Bindings
+  {{module}}.Foreign
+
+ build-depends:
+    base >=4.7 && <5
+  , lens
+
+
+-- $ stack build && stack exec -- {{name}}-example
+executable {{name}}-example
+ hs-source-dirs:      executables
+ main-is:             Main.hs
+
+ default-language:    Haskell2010
+ ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+
+ build-depends:
+    base
+  , {{name}}
+
+
+-- $ stack test doctest
+test-suite doctest
+ hs-source-dirs:      tests
+ main-is:             DocTest.hs
+ type:                exitcode-stdio-1.0
+
+ default-language:    Haskell2010
+ ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+
+ build-depends:
+    base
+  , {{name}}
+  , doctest 
+
+
+-- $ stack test unittest
+test-suite unittest
+ hs-source-dirs:      tests
+ main-is:             UnitTest.hs
+ type:                exitcode-stdio-1.0
+
+ default-language:    Haskell2010
+ ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+
+ other-modules:
+  {{module}}.Test
+
+ build-depends:
+    base
+  , {{name}}
+  , hspec ==2.2.*
+  , QuickCheck ==2.8.*
+  -- , tasty
+  -- , tasty-quickcheck
+
+
+-- $ stack bench
+benchmark command
+ hs-source-dirs:      benchmarks
+ main-is:             Bench.hs
+ type:                exitcode-stdio-1.0
+
+ default-language: Haskell2010
+ ghc-options:      -Wall -threaded -rtsopts -with-rtsopts=-N
+
+ build-depends:
+    base 
+  , {{name}}
+  , criterion
+  , deepseq 
+
+
+
+{-# START_FILE cabal.config #-}
+executable-profiling: True
+library-profiling: True
+
+
+{-# START_FILE Setup.hs #-}
+import Distribution.Simple
+main = defaultMain
+
+
+{-# START_FILE stack.yaml #-}
+resolver: lts-5.5
+
+packages:
+- .
+
+extra-deps: []
+
+
+{-# START_FILE sources/{{module}}.hs #-}
+module {{module}} where
+
+
+{-# START_FILE sources/{{module}}/Main.hs #-}
+module {{module}}.Main where
+import {{module}}.Bindings
+
+main :: IO ()
+main = do
+ print =<< _{{module}}
+
+
+{-# START_FILE sources/{{module}}/Bindings.hs #-}
+module {{module}}.Bindings where
+import {{module}}.Foreign
+
+{-|
+
+>>> _Playground
+"Playground"
+
+-}
+_{{module}} :: IO String
+_{{module}} = c_{{module}} >>= peekCString
+
+
+{-# START_FILE sources/{{module}}/Foreign.hs #-}
+{-# LANGUAGE ForeignFunctionInterface, CPP #-}
+module {{module}}.Foreign where
+
+import Foreign()
+import Foreign.C.String
+
+#include "calling_convention.h"
+
+foreign import CALLING_CONVENTION safe "{{module}}.h {{module}}"
+ c_{{module}} :: IO CString
+
+
+{-# START_FILE tests/{{module}}/Test.hs #-}
+module {{module}}.Test where
+import {{module}}
+
+main = do
+ print "{{module}}"
+
+
+{-# START_FILE tests/DocTest.hs #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
+import Test.DocTest
+main = do
+ doctest
+  [ "{{module}}.Bindings"
+  ]
+
+
+{-# START_FILE tests/UnitTest.hs #-}
+{-# OPTIONS_GHC -F -pgmF hspec-discover #-}
+
+
+{-# START_FILE executables/Main.hs #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
+import qualified {{module}}.Main
+
+main = {{module}}.Main.main
+
+
+{-# START_FILE native/{{module}}.c #-}
+
+const char* {{module}}() {
+ return "{{module}}";
+}
+
+
+{-# START_FILE native/{{module}}.h #-}
+
+const char* {{module}}();
+
+
+{-# START_FILE native/calling_convention.h #-}
+
+#ifndef __WINDOWS_CCONV_H
+#define __WINDOWS_CCONV_H
+
+#if defined(i386_HOST_ARCH)
+# define CALLING_CONVENTION stdcall
+#elif defined(x86_64_HOST_ARCH)
+# define CALLING_CONVENTION ccall
+#else
+# define CALLING_CONVENTION ccall
+#endif
+
+#endif
+
+
+{-# START_FILE LICENSE #-}
+Copyright {{author-name}} (c) 2015
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+
+    * Redistributions in binary form must reproduce the above
+      copyright notice, this list of conditions and the following
+      disclaimer in the documentation and/or other materials provided
+      with the distribution.
+
+    * Neither the name of {{author-name}} nor the names of other
+      contributors may be used to endorse or promote products derived
+      from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+{-# START_FILE README.md #-}
+# {{name}}
+
+TODO
