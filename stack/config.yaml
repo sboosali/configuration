@@ -7,3 +7,9 @@ templates:
     github-username: sboosali
     copyright: 2016 Spiros Boosalis
     module: TODO 
+
+nix:
+  enable: true
+  pure: true
+  # shell-file: shell.nix
+  packages: [zlib]

@@ -62,16 +62,18 @@ library
  build-depends:
                base >=4.7 && <5
 
+             , spiros
+
+             , deepseq
+             , hashable
+             , semigroups
+
 --              , transformers
 --              , mtl
 --              , containers
 --              , bytestring
 --              , stm
 --              , template-haskell
-
-          , deepseq
-          , hashable
-          , semigroups
 
 --              , lens
 --              , exceptions
@@ -88,7 +90,6 @@ library
 --              , wl-pprint-text
 --              , text
 --              , aeson
---              , hashable
 --              , unordered-containers
 --              , async
 --              , parallel
@@ -169,20 +170,31 @@ main = defaultMain
 
 
 {-# START_FILE stack.yaml #-}
-resolver: lts-7.5
-compiler: ghc-8.0
+resolver: lts-8.16
+compiler: ghc-8.0.2
+
+nix:
+  enable: true
+  pure: true
+  packages:
+  - zlib
+  # shell-file: shell.nix
 
 packages:
-- .
+- ./
+- ../speech/spiros
 
-extra-deps: []
+extra-deps: 
+- spiros-0.0.0
 
 
 {-# START_FILE sources/{{module}}.hs #-}
 module {{module}}
  ( module {{module}}.Types
+ , module {{module}}.Core
  ) where
 import {{module}}.Types
+import {{module}}.Core
 
 
 {-# START_FILE sources/{{module}}/Types.hs #-}
@@ -192,10 +204,20 @@ import {{module}}.Extra()
 type {{module}} = String
 
 
+{-# START_FILE sources/{{module}}/Core.hs #-}
+{-# LANGUAGE NoImplicitPrelude #-}
+module {{module}}.Core where
+import {{module}}.Extra
+import {{module}}.Types
+
+import Prelude.Spiros
+
+
 {-# START_FILE sources/{{module}}/Example.hs #-}
 {-# OPTIONS_GHC -fno-warn-missing-signatures #-} -- to test inference
 module {{module}}.Example where
 import {{module}}()
+import System.Environment
 
 {-|
 @
@@ -204,37 +226,24 @@ stack build && stack exec -- example-{{name}}
 -}
 main :: IO ()
 main = do
+ arguments <- getArgs >>= \case
+  [s] -> return (s)
+  _ -> return ("")
+ mainWith arguments
+
+main s = do
+ putStrLn s
  putStrLn "({{module}}.Example...)"
 
 
 {-# START_FILE sources/{{module}}/Extra.hs #-}
+{-# LANGUAGE NoImplicitPrelude #-}
 module {{module}}.Extra
  ( module {{module}}.Extra
- , module X
+ , module Prelude.Spiros
  ) where
 
-import Control.DeepSeq as X (NFData)
-import Data.Hashable as X (Hashable)
-import Data.Semigroup as X (Semigroup)
-
-import GHC.Generics as X (Generic)
-import Data.Data as X (Data)
-
-import Control.Arrow as X ((>>>))
-import Data.Function as X ((&))
-import Data.Foldable as X (traverse_)
-
-nothing :: (Monad m) => m ()
-nothing = return ()
-
-maybe2bool :: Maybe a -> Bool
-maybe2bool = maybe False (const True)
-
-either2maybe :: Either e a -> Maybe a
-either2maybe = either (const Nothing) Just
-
-either2bool :: Either e a -> Bool
-either2bool = either (const False) (const True)
+import Prelude.Spiros
 
 
 {-# START_FILE tests/{{module}}/Test.hs #-}
@@ -314,7 +323,9 @@ cbits/main
 .projectile
 
 # Haskell
-dist
+cabal.project.local
+dist-newstyle/
+dist/
 cabal-dev
 *.o
 *.hi
