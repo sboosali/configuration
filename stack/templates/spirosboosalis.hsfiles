@@ -55,6 +55,7 @@ library
  exposed-modules:
                  {{module}}
                  {{module}}.Types
+                 {{module}}.Core		 
 -- other-modules:
                  {{module}}.Extra
                  {{module}}.Example
@@ -170,7 +171,7 @@ main = defaultMain
 
 
 {-# START_FILE stack.yaml #-}
-resolver: lts-8.16
+resolver: lts-8.5
 compiler: ghc-8.0.2
 
 nix:

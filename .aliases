@@ -37,15 +37,6 @@ alias cd.....="cd ../../../.."
 alias cd......="cd ../../../../.."
 alias cd.......="cd ../../../../../.."
 
-alias cdt="cd ~/turn"
-alias cdm="cd ~/turn/src/java/com/turn/platform/profile/mapreduce/adhocAnalyses/mta"
-alias cdp="cd ~/poc"
-alias cdn="cd ~/Dropbox"
-alias cdw="cd ~/Dropbox/work"
-alias cde="cd ~/Dropbox/etc"
-alias cdh="cd /server/hadoop"
-alias cdc="cd ~/config"
-
 alias ls="ls -aFG"
 alias l="ls | cat"
 
