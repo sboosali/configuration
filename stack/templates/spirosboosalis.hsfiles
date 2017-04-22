@@ -38,10 +38,14 @@ library
  default-language:    Haskell2010
  ghc-options:
   -Wall
+  # disable
+  -fno-warn-unticked-promoted-constructors
+  # enable
   -fwarn-incomplete-uni-patterns
   -fwarn-incomplete-record-updates
   -fwarn-identities
-  -fno-warn-unticked-promoted-constructors
+  -fwarn-missing-fields
+
  default-extensions: AutoDeriveTypeable DeriveDataTypeable DeriveGeneric
                      DeriveFunctor DeriveFoldable DeriveTraversable
                      LambdaCase EmptyCase TypeOperators PostfixOperators
@@ -232,7 +236,7 @@ main = do
   _ -> return ("")
  mainWith arguments
 
-main s = do
+mainWith s = do
  putStrLn s
  putStrLn "({{module}}.Example...)"
 
@@ -339,6 +343,9 @@ cabal.sandbox.config
 cabal.config
 report.html
 .stack-work/
+
+# nix
+result/
 
 # Emacs
 \#*

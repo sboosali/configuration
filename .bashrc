@@ -73,11 +73,12 @@ alias n=nano
 alias f='find'
 alias g='git'
 alias c='cat'
-alias cpr="rsync -arRv"
-alias cprd="rsync -arRv --dry-run"
+alias cpr="rsync -arRv" # e.g. cpr stuff backup # ./backup/stuff doesn't exist yet and is created
+alias cprd="rsync -arRv --dry-run" # --exclude ".stack-work" --exclude "dist-newstyle"
 alias r='rm -r'
 alias lnr='readlink -f'
 alias o="echo"
+alias t=brush
 
 alias disksize="df -h /"
 
@@ -176,16 +177,28 @@ echo $PATH | tr ':' '\n'
 
 DIV="\n\n--------------------------------------------------------------------------------\n\n"
 
-# Running projects
+# Running projects, ghc
 function h() {
     PACKAGE=$(basename $PWD)
     # stack build --ghc-options -fno-code
     # if [ "$?" -ne 0 ]; then
     # 	return 1;
     # fi
-    if [ -f build.exe ]; then
-    echo '(running ./build.exe)'
-    source build.exe
+    if [ -f build.sh ]; then
+    echo '(./build.sh)'
+    source build.sh
+    else
+    stack build && printf $DIV && stack exec -- example-$PACKAGE "$@"
+    fi
+# Running a script the first way runs it as a child process. Sourcing (the second way), on the other way, runs the script as if you entered all its commands into the current shell - if the script sets a variable, it will remain set, if the script exits, your session will exit. See help . for documentation
+}
+
+# Running projects, ghcjs
+function j() {
+    PACKAGE=$(basename $PWD)
+    if [ -f build.sh ]; then
+    echo '(./build.sh)'
+    source build.sh
     else
     stack build && printf $DIV && stack exec -- example-$PACKAGE "$@"
     fi
@@ -257,9 +270,27 @@ export HISTFILESIZE=HISTSIZE=
 shopt -s histappend
 export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
+# To generate a Nix build expression for it, change into the project’s top-level directory and run the command:
+# $ cabal2nix . >foo.nix
+# Then write the following snippet into a file called default.nix:
+# { nixpkgs ? import <nixpkgs> {}, compiler ? "ghc7102" }:
+# nixpkgs.pkgs.haskell.packages.${compiler}.callPackage ./foo.nix { }
+# Finally, store the following code in a file called shell.nix:
+# { nixpkgs ? import <nixpkgs> {}, compiler ? "ghc7102" }:
+# (import ./default.nix { inherit nixpkgs compiler; }).env
+
 function h2n() {
-    cabal2nix . > default.nix
-    cat <<EOF > shell.nix
+cabal2nix . > package.nix
+
+if [[ ! -f default.nix ]]; then
+cat <<EOF > default.nix
+{ nixpkgs ? import <nixpkgs> {}, compiler ? "ghc802" }:
+nixpkgs.pkgs.haskell.packages.\${compiler}.callPackage ./package.nix { }
+EOF
+fi
+
+if [[ ! -f shell.nix ]]; then  # `-f` caveat: http://stackoverflow.com/questions/638975/how-do-i-tell-if-a-regular-file-does-not-exist-in-bash
+cat <<EOF > shell.nix
 { nixpkgs ? import <nixpkgs> {}, compiler ? "default" }:
 
 let
@@ -268,7 +299,7 @@ let
 
   f = import ./default.nix;
   ps = {
-    spiros = ../spiros;
+    spiros = ~/spiros; # absolute
   };
 
   haskellPackages = if compiler == "default"
@@ -281,7 +312,33 @@ in
 
   if pkgs.lib.inNixShell then drv.env else drv
 EOF
+fi
 }
+
+# { ps ? (import <nixpkgs> {}).pkgs, mkDerivation
+# , array, base, containers, deepseq, doctest, ghc-prim
+# , spiros, stdenv, template-haskell, vinyl
+# }:
+# mkDerivation {
+#   pname = "enumerate";
+#   version = "0.2.1";
+#   src = ./.;
+#   isLibrary = true;
+#   isExecutable = true;
+#   libraryHaskellDepends = [
+#     array base containers deepseq ghc-prim spiros template-haskell
+#     vinyl
+#   ];
+#   executableHaskellDepends = [ base ]; # why no enumerate i.e. self?
+#   testHaskellDepends = [ base doctest ];
+#   homepage = "https://github.com/sboosali/enumerate";
+#   description = "enumerate all the values in a finite type (automatically)";
+#   license = stdenv.lib.licenses.mit;
+#   # shellHook = '' '';
+#   # buildTools = (with ps; [cabal-install haskellPackages.stack]);  
+#   enableSplitObjs = false;
+# }
+
 
 function blame {
  FILE=$1
