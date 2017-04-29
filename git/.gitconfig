@@ -38,7 +38,6 @@
         track = checkout --track
 	remove = !sh -c 'git ls-files -d | xargs git rm'
 
-        l = log
         g = log --graph --oneline --decorate
 	lsd = log --graph --decorate --pretty=oneline --abbrev-commit --all
         lp = log --format='%ad %x09 %h %x09 %s' --date=relative
@@ -75,6 +74,9 @@
         m = merge --no-ff
         ma = merge --abort
 
+        sm = submodule 
+        smu = submodule update --remote --merge
+
 	unedit = checkout --
 	unstage = reset HEAD --
         uncommit = reset --soft HEAD~1
@@ -84,6 +86,9 @@
         rc = rebase --continue
         ra = rebase --abort
         rpm = rebase -p master
+
+        p = push
+        l = pull
 
 [push]
 	default = current

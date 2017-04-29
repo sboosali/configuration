@@ -69,6 +69,9 @@ alias dc='cd ~/configuration'
 alias ds='cd ~/speech'
 # alias d='cd '
 
+# help aliases
+alias lnh="echo 'ln -sf /path/to/file /path/to/symlink'"
+
 alias n=nano
 alias f='find'
 alias g='git'
@@ -77,6 +80,7 @@ alias cpr="rsync -arRv" # e.g. cpr stuff backup # ./backup/stuff doesn't exist y
 alias cprd="rsync -arRv --dry-run" # --exclude ".stack-work" --exclude "dist-newstyle"
 alias r='rm -r'
 alias lnr='readlink -f'
+alias lnf='ln -sf' # /path/to/file /path/to/symlink
 alias o="echo"
 alias t=brush
 
@@ -209,6 +213,15 @@ function heg() {
     PACKAGE=$(basename $PWD)
     #.stack-work/install/x86_64-linux-*/lts-*/*/bin/example-$PACKAGE
     stack exec example-$PACKAGE
+}
+
+function hdot () {
+PACKAGE=$(basename $PWD)
+# prunet boot packages  and wired-in
+# http://stackoverflow.com/a/10056017/1337806
+stack dot --external --prune base,base-orphans,ghc-prim,integer-gmp,integer-simple,hsc2hs,haddock,array,binary,bytestring,Cabal,ghc-compact,containers,deepseq,directory,filepath,haskeline,hoopl,hpc,pretty,process,terminfo,time,transformers,xhtml,parallel,stm,random,primitive,vector,dph,template-haskell,transformers-compat,hashable > $PACKAGE.dot
+dot -Tpng -o $PACKAGE.png $PACKAGE.dot 
+chromium $PACKAGE.png &d
 }
 
 # New project scaffolding
@@ -369,4 +382,8 @@ function nr () {
   echo 'c = (import /etc/nixos/configuration.nix) { inherit (p) pkgs config lib; }'
   nix-repl
 }
+
+# https://www.gnupg.org/documentation/manuals/gnupg/Invoking-GPG_002dAGENT.html
+GPG_TTY=$(tty)
+export GPG_TTY
 
