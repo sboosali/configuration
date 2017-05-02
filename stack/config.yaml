@@ -5,11 +5,20 @@ templates:
     author-email: samboosalis@gmail.com
     author-name: Spiros Boosalis
     github-username: sboosali
-    copyright: 2016 Spiros Boosalis
+    copyright: 2017 Spiros Boosalis
     module: TODO 
 
+system-ghc: true
+
 nix:
-  enable: true
-  pure: true
+  enable: true # false
+  pure: true # false
+  packages:
+  - zlib
   # shell-file: shell.nix
-  packages: [zlib]
+
+extra-include-dirs:
+  - /home/sboo/.nix-profile/include
+
+extra-lib-dirs:
+  - /home/sboo/.nix-profile/lib

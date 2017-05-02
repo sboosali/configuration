@@ -68,14 +68,17 @@
 	c = commit
 	cm = commit -m
 	ca = "!git commit --amend && echo && git status"
+	can = commit --amend --no-edit
         # amend = "!git add -u && git commit --amend --no-edit && echo && git status"
 	amend = commit --amend -C HEAD --no-verify
 
         m = merge --no-ff
         ma = merge --abort
 
-        sm = submodule 
+        sm = submodule
+        sma = submodule add
         smu = submodule update --remote --merge
+        # smr = git rm the_submodule && rm -rf .git/modules/the_submodule
 
 	unedit = checkout --
 	unstage = reset HEAD --

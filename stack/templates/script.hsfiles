@@ -1,0 +1,43 @@
+{-# START_FILE package.yaml #-}
+{}
+
+{-# START_FILE {{name}}.exe.hs #-}
+#!/usr/bin/env stack
+{-
+stack
+--resolver lts-8.12
+--compiler ghc-8.0.2
+--install-ghc
+runghc
+--package turtle
+
+-}
+
+{-# LANGUAGE NoImplicitPrelude, NoMonomorphismRestriction #-}
+{-# LANGUAGE AutoDeriveTypeable, DeriveDataTypeable, DeriveGeneric,
+             DeriveFunctor, DeriveFoldable, DeriveTraversable,
+             StandaloneDeriving #-}
+{-# LANGUAGE LambdaCase, EmptyCase, TypeOperators, PostfixOperators,
+             ViewPatterns, BangPatterns,
+             OverloadedStrings, OverloadedLists, 
+             NamedFieldPuns, RecordWildCards, TupleSections,
+             MultiWayIf, DoAndIfThenElse, EmptyDataDecls #-}
+{-# LANGUAGE MultiParamTypeClasses, FlexibleContexts, FlexibleInstances,
+             TypeFamilies, FunctionalDependencies,
+             ScopedTypeVariables #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
+
+import Prelude
+import Turtle
+
+{-
+
+chmod u+x {{name}}.exe.hs
+
+-}
+
+main = do                  --
+  dir  <- pwd            -- DIR=$(pwd)
+  time <- datefile dir   -- TIME=$(date -r $DIR)
+  print time             -- echo $TIME
+

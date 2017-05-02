@@ -45,7 +45,7 @@ function nqe() {
 
 alias nix-make-shell='cabal2nix *.cabal --sha256=0 --shell > shell.nix'
 
-alias hs="stack setup"
+alias hn="stack setup" # "n"ew
 alias hb="stack build"
 function he() { 
  stack exec -- "$@" 
@@ -80,7 +80,7 @@ alias cpr="rsync -arRv" # e.g. cpr stuff backup # ./backup/stuff doesn't exist y
 alias cprd="rsync -arRv --dry-run" # --exclude ".stack-work" --exclude "dist-newstyle"
 alias r='rm -r'
 alias lnr='readlink -f'
-alias lnf='ln -sf' # /path/to/file /path/to/symlink
+alias lns='ln -sf' # /path/to/file /path/to/symlink
 alias o="echo"
 alias t=brush
 
@@ -118,7 +118,7 @@ function seteditor () {
 }
 
 # linux-specific, needs installation
-alias open='xdg-open' # &d
+alias open='xdg-open' # &disown
 alias copy='xclip -selection clipboard'
 
 # Reloading
@@ -221,18 +221,50 @@ PACKAGE=$(basename $PWD)
 # http://stackoverflow.com/a/10056017/1337806
 stack dot --external --prune base,base-orphans,ghc-prim,integer-gmp,integer-simple,hsc2hs,haddock,array,binary,bytestring,Cabal,ghc-compact,containers,deepseq,directory,filepath,haskeline,hoopl,hpc,pretty,process,terminfo,time,transformers,xhtml,parallel,stm,random,primitive,vector,dph,template-haskell,transformers-compat,hashable > $PACKAGE.dot
 dot -Tpng -o $PACKAGE.png $PACKAGE.dot 
-chromium $PACKAGE.png &d
+rm $PACKAGE.dot 
+chromium file://$(path $PACKAGE.png) &disown
+}
+
+# scaffolding
+# "h"askell "s"cript
+function hs () { 
+
+    _NAME="$1"
+    _MESSAGE='hs SCRIPTNAME'
+    if [ "$#" -ne 1 ]; then
+        echo -e $_MESSAGE
+	return 1
+    fi
+
+    _TEMPLATE_NAME=script.hsfiles
+    _LOCAL_TEMPLATE=~/.stack/templates/"$_TEMPLATE_NAME"
+    _REMOTE_TEMPLATE='https://raw.githubusercontent.com/sboosali/config/master/stack/templates/'"$_TEMPLATE_NAME"
+    if [ -f "$_LOCAL_TEMPLATE" ]; then
+	_TEMPLATE=$_LOCAL_TEMPLATE
+    else
+	_TEMPLATE=$_REMOTE_TEMPLATE
+    fi
+
+    _FILE="$_NAME".exe.hs
+
+    stack new "$_NAME" "$_TEMPLATE"
+    cd "$_NAME"
+    chmod u+x "$_FILE"
+    ./"$_FILE"
+    $EDITOR "$_FILE" &disown
+
 }
 
 # New project scaffolding
 function hnew () {
     PACKAGE="$1"
     MODULE="$2"
+    _FILEPATH="$3"
 
-    MESSAGE='hnew PACKAGE MODULE'
+    MESSAGE='hnew PACKAGE MODULE FILEPATH''\n''e.g. hnew workflow-derived Workflow.Derived Workflow/Derived'
 
-    if [ "$#" -ne 2 ]; then
-        echo $MESSAGE
+    if [ "$#" -ne 3 ]; then
+        echo -e $MESSAGE
 	return 1
     fi
 
@@ -244,15 +276,15 @@ function hnew () {
 	TEMPLATE=$REMOTE_TEMPLATE
     fi
     
-    stack new $PACKAGE $TEMPLATE -pmodule:$MODULE
+    stack new $PACKAGE $TEMPLATE -pmodule:$MODULE -pfilepath:$_FILEPATH
     cd $PACKAGE
     if [ "$?" -ne 0 ]; then
-        echo $MESSAGE
+        echo -e $MESSAGE
 	return 1
     fi
 
     echo $PACKAGE | copy
-    open http://github.com/new # create repository, manually
+    $BROWSER http://github.com/new # create repository, manually
 
     stack build
     stack exec -- example-$PACKAGE
@@ -260,7 +292,7 @@ function hnew () {
     git init
     git add .
     git commit -m"1st"
-    git remote add origin https://github.com/sboosali/$PACKAGE.git
+    git remote add origin git@github.com:sboosali/"$PACKAGE".git # https://github.com/sboosali/$PACKAGE.git
     git push -u origin master
 
     # open sources/$MODULE/Example.hs
@@ -386,4 +418,88 @@ function nr () {
 # https://www.gnupg.org/documentation/manuals/gnupg/Invoking-GPG_002dAGENT.html
 GPG_TTY=$(tty)
 export GPG_TTY
+
+# for github
+#
+# http://stackoverflow.com/questions/9607295/how-do-i-find-my-rsa-key-fingerprint
+function ssh-fingerprint () {
+ssh-keygen -E md5 -lf "$1.pub"
+} 
+
+alias sshl='ssh-add -l'
+
+function ssha () {
+_PRIVATE_KEY="$1"
+_MESSAGE='sshl PRIVATE_KEY'
+if [ "$#" -ne 1 ]; then
+        echo $_MESSAGE
+	return 1
+fi
+ssh-add ~/.ssh/$1
+}
+
+# ssh-add github
+# passwd same as github.com
+#
+# ssh-key with passphrase, with ssh-ident:
+# ssh-ident is an utility that can manage ssh-agent on your behalf and load identities as necessary. It adds keys only once as they are needed, regardless of how many terminals, ssh or login sessions that require access to an ssh-agent.
+# alias ssh='ssh-ident' # TODO
+
+function clone () {
+# use ssh
+_GITHUB_USER=$1
+_GITHUB_REPOSITORY=$2
+_MESSAGE='clone USER REPOSITORY'
+if [ "$#" -ne 2 ]; then
+        echo $_MESSAGE
+	return 1
+fi
+git clone git@github.com:"$_GITHUB_USER"/"$_GITHUB_REPOSITORY".git
+cd "$_GITHUB_REPOSITORY"
+}
+
+# submodule
+function git-mod () {
+_GITHUB_REPOSITORY=$1
+_MESSAGE='git-mod REPOSITORY'
+if [ "$#" -ne 1 ]; then
+        echo $_MESSAGE
+	return 1
+fi
+git submodule add git@github.com:sboosali/"$_GITHUB_REPOSITORY".git "$_GITHUB_REPOSITORY"
+}
+
+# e.g.
+# git remote set-url origin $( make-github-ssh sboosali .emacs.d)
+function make-github-ssh () {
+_GITHUB_USER=$1
+_GITHUB_REPOSITORY=$2
+git@github.com:"$_GITHUB_USER"/"$_GITHUB_REPOSITORY".git
+}
+
+# git subtree add -P <prefix> <repo> <rev>
+function git-merge-repos () {
+_MESSAGE='git-merge-repos <prefix> <repo> <rev> (to be merged into the current one)'
+if [ "$#" -ne 3 ]; then
+        echo $_MESSAGE
+	return 1
+fi
+
+git subtree add -P "$@"
+}
+
+# # http://stackoverflow.com/questions/1425892/how-do-you-merge-two-git-repositories
+# function git-merge-repos () {
+# _FILEPATH="$1"
+# _MESSAGE='git-merge-repos REPOSITORY_PATH (to be merged into the current one)'
+# if [ "$#" -ne 1 ]; then
+#         echo $_MESSAGE
+# 	return 1
+# fi
+# _TEMPORARY=temporary-project
+# git remote add $_TEMPORARY $_FILEPATH
+# git fetch $_TEMPORARY
+# git merge --allow-unrelated-histories $_TEMPORARY/master # or whichever branch you want to merge
+# git remote remove $_TEMPORARY 
+# }
 

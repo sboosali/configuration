@@ -2,7 +2,16 @@
 name:                {{name}}
 version:             0.0.0
 synopsis:            TODO
-description:         TODO
+description:         
+ .
+ TODO
+ . 
+ see the source of "{{module}}.Example" for an example.
+ .
+ transitive dependencies:
+ .
+ <<{{name}}.png>>
+
 homepage:            http://github.com/{{github-username}}/{{name}}#readme
 license:             BSD3
 license-file:        LICENSE
@@ -175,11 +184,11 @@ main = defaultMain
 
 
 {-# START_FILE stack.yaml #-}
-resolver: lts-8.5
+resolver: lts-8.12
 compiler: ghc-8.0.2
 
 nix:
-  enable: true
+  # enable: true
   pure: true
   packages:
   - zlib
@@ -187,13 +196,13 @@ nix:
 
 packages:
 - ./
-- ../speech/spiros
+# - ~/spiros
 
 extra-deps: 
 - spiros-0.0.0
 
 
-{-# START_FILE sources/{{module}}.hs #-}
+{-# START_FILE sources/{{filepath}}.hs #-}
 module {{module}}
  ( module {{module}}.Types
  , module {{module}}.Core
@@ -202,14 +211,14 @@ import {{module}}.Types
 import {{module}}.Core
 
 
-{-# START_FILE sources/{{module}}/Types.hs #-}
+{-# START_FILE sources/{{filepath}}/Types.hs #-}
 module {{module}}.Types where
 import {{module}}.Extra()
 
 type {{module}} = String
 
 
-{-# START_FILE sources/{{module}}/Core.hs #-}
+{-# START_FILE sources/{{filepath}}/Core.hs #-}
 {-# LANGUAGE NoImplicitPrelude #-}
 module {{module}}.Core where
 import {{module}}.Extra
@@ -218,7 +227,7 @@ import {{module}}.Types
 import Prelude.Spiros
 
 
-{-# START_FILE sources/{{module}}/Example.hs #-}
+{-# START_FILE sources/{{filepath}}/Example.hs #-}
 {-# OPTIONS_GHC -fno-warn-missing-signatures #-} -- to test inference
 module {{module}}.Example where
 import {{module}}()
@@ -241,7 +250,7 @@ mainWith s = do
  putStrLn "({{module}}.Example...)"
 
 
-{-# START_FILE sources/{{module}}/Extra.hs #-}
+{-# START_FILE sources/{{filepath}}/Extra.hs #-}
 {-# LANGUAGE NoImplicitPrelude #-}
 module {{module}}.Extra
  ( module {{module}}.Extra
@@ -251,7 +260,7 @@ module {{module}}.Extra
 import Prelude.Spiros
 
 
-{-# START_FILE tests/{{module}}/Test.hs #-}
+{-# START_FILE tests/{{filepath}}/Test.hs #-}
 module {{module}}.Test where
 import {{module}}
 
@@ -345,6 +354,7 @@ report.html
 .stack-work/
 
 # nix
+result
 result/
 
 # Emacs
