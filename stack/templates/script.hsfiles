@@ -10,6 +10,7 @@ stack
 --install-ghc
 runghc
 --package turtle
+--package options
 
 -}
 
@@ -29,6 +30,20 @@ runghc
 
 import Prelude
 import Turtle
+import Control.Applicative
+import Options
+
+data MainOptions = MainOptions
+    { optMessage :: String
+    , optQuiet :: Bool
+    }
+
+instance Options MainOptions where
+    defineOptions = pure MainOptions
+        <*> simpleOption "message" "Hello world!"
+            "A message to show the user."
+        <*> simpleOption "quiet" False
+            "Whether to be quiet."
 
 {-
 
@@ -37,6 +52,11 @@ chmod u+x {{name}}.exe.hs
 -}
 
 main = do                  --
+main = runCommand $ \opts args -> do
+  if optQuiet opts
+        then return ()
+        else putStrLn (optMessage opts)
+
   dir  <- pwd            -- DIR=$(pwd)
   time <- datefile dir   -- TIME=$(date -r $DIR)
   print time             -- echo $TIME

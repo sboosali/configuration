@@ -197,6 +197,11 @@ function h() {
 # Running a script the first way runs it as a child process. Sourcing (the second way), on the other way, runs the script as if you entered all its commands into the current shell - if the script sets a variable, it will remain set, if the script exits, your session will exit. See help . for documentation
 }
 
+function ht() {
+    PACKAGE=$(basename $PWD)
+    stack build && printf $DIV && stack test
+}
+
 # Running projects, ghcjs
 function j() {
     PACKAGE=$(basename $PWD)
@@ -217,12 +222,14 @@ function heg() {
 
 function hdot () {
 PACKAGE=$(basename $PWD)
+DIRECTORY=images
 # prunet boot packages  and wired-in
 # http://stackoverflow.com/a/10056017/1337806
-stack dot --external --prune base,base-orphans,ghc-prim,integer-gmp,integer-simple,hsc2hs,haddock,array,binary,bytestring,Cabal,ghc-compact,containers,deepseq,directory,filepath,haskeline,hoopl,hpc,pretty,process,terminfo,time,transformers,xhtml,parallel,stm,random,primitive,vector,dph,template-haskell,transformers-compat,hashable > $PACKAGE.dot
-dot -Tpng -o $PACKAGE.png $PACKAGE.dot 
-rm $PACKAGE.dot 
-chromium file://$(path $PACKAGE.png) &disown
+mkdir -p $DIRECTORY
+stack dot --external --prune base,base-orphans,ghc-prim,integer-gmp,integer-simple,hsc2hs,haddock,array,binary,bytestring,Cabal,ghc-compact,containers,deepseq,directory,filepath,haskeline,hoopl,hpc,pretty,process,terminfo,time,transformers,xhtml,parallel,stm,random,primitive,vector,dph,template-haskell,transformers-compat,hashable > $DIRECTORY/$PACKAGE.dot
+dot -Tpng -o $DIRECTORY/$PACKAGE.png $DIRECTORY/$PACKAGE.dot 
+rm $DIRECTORY/$PACKAGE.dot 
+chromium file://$(path $DIRECTORY/$PACKAGE.png) &disown
 }
 
 # scaffolding
@@ -253,6 +260,10 @@ function hs () {
     ./"$_FILE"
     $EDITOR "$_FILE" &disown
 
+}
+
+function hd () {
+stack haddock --open --keep-going 
 }
 
 # New project scaffolding
@@ -325,7 +336,10 @@ export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 # (import ./default.nix { inherit nixpkgs compiler; }).env
 
 function h2n() {
+
 cabal2nix . > package.nix
+# package.nix gets overwritten
+# default.nix and shell.nix don't get overwritten, if present
 
 if [[ ! -f default.nix ]]; then
 cat <<EOF > default.nix
