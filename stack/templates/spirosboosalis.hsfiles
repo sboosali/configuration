@@ -184,15 +184,14 @@ main = defaultMain
 
 
 {-# START_FILE stack.yaml #-}
-resolver: lts-8.12
-compiler: ghc-8.0.2
+resolver: nightly-2017-11-25 
+compiler: ghc-8.2.2
 
 nix:
-  # enable: true
+  enable: false 
   pure: true
   packages:
   - zlib
-  # shell-file: shell.nix
 
 packages:
 - ./
@@ -212,10 +211,9 @@ import {{module}}.Core
 
 
 {-# START_FILE sources/{{filepath}}/Types.hs #-}
+{-# LANGUAGE NoImplicitPrelude #-}
 module {{module}}.Types where
-import {{module}}.Extra()
-
-type {{module}} = String
+-- import {{module}}.Extra
 
 
 {-# START_FILE sources/{{filepath}}/Core.hs #-}
@@ -230,7 +228,7 @@ import Prelude.Spiros
 {-# START_FILE sources/{{filepath}}/Example.hs #-}
 {-# OPTIONS_GHC -fno-warn-missing-signatures #-} -- to test inference
 module {{module}}.Example where
-import {{module}}()
+-- import {{module}}
 import System.Environment
 
 {-|
@@ -347,6 +345,7 @@ cabal-dev
 *.chs.h
 .virtualenv
 .hsenv
+ghcid.txt
 .cabal-sandbox/
 cabal.sandbox.config
 cabal.config
@@ -370,7 +369,7 @@ TAGS
 
 
 {-# START_FILE LICENSE #-}
-Copyright {{author-name}} (c) 2015
+Copyright {{author-name}} (c) 2017
 
 All rights reserved.
 
