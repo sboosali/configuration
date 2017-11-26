@@ -34,8 +34,7 @@ extra-source-files:
   stack.yaml
 
 -- data-files:
-
---  data/
+--   data/
 
 source-repository head
   type:     git
@@ -81,32 +80,21 @@ library
              , deepseq
              , hashable
              , semigroups
+--             , enumerate 
+             
+             , vinyl 
 
---              , transformers
---              , mtl
---              , containers
---              , bytestring
---              , stm
---              , template-haskell
+             , containers
+             , unordered-containers
 
---              , lens
---              , exceptions
---              , free
---              , bifunctors
---              , profunctors
---              , either
---              , pipes
---              , formatting
---              , servant
---              , Earley
---              , split
---              , interpolatedstring-perl6
---              , wl-pprint-text
---              , text
---              , aeson
---              , unordered-containers
---              , async
---              , parallel
+             , text 
+             , bytestring
+
+             , transformers
+             , mtl
+
+             , lens
+             , exceptions
 
 
 executable example-{{name}}
