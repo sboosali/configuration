@@ -1,7 +1,26 @@
-# .bashrc is for shells that are bash-compatible and interactive
+################################################################################
+## NOTES 
+
+# ".bashrc is read by a bash(-compatible) shell that's both interactive and non-login"
+# .profile would be read by login shells
+
+################################################################################
+## SETTINGS 
 
 # the relative binary directory for nix-build
+# WARNING a relative path, for a more convenient `nix-build`
 export PATH=./result/bin:$PATH
+
+# bash history
+export HISTCONTROL=erasedups
+export HISTFILESIZE=HISTSIZE=
+shopt -s histappend
+export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+
+# export BROWSER=chromium
+
+################################################################################
+## DEFINITIONS 
 
 alias ne='nix-env -f "<nixpkgs>"'
 alias nea='nix-env -A -f "<nixpkgs>"'
@@ -92,12 +111,11 @@ alias xp='xclip -selection clipboard -o'
 alias xb='xbrightness'
 alias xbr='xbrightness 65535'
 
-export BROWSER=chromium
-
 #editing
 function e() { 
  emacsclient "$1" & 
 }
+
 alias ee="emacsclient"
 alias en="sudo nano /etc/nixos/configuration.nix && nixos-rebuild build"
 alias enr="nano /etc/nixos/configuration.nix"
@@ -164,6 +182,20 @@ alias yt='youtube-dl -f 22'
 
 alias unzip="7z x"
 
+DIV="\n\n--------------------------------------------------------------------------------\n\n"
+
+function dog {
+ SEP="--------------------------------------------------------"
+ while read file; do
+     if [ -f "$file" ]; then
+         echo -e "\n"$SEP
+         echo "$file"
+         echo -e $SEP"\n"
+         cat "$file"
+     fi
+ done
+}
+
 function brush () {
 # synonym for "touch"
 mkdir -p `dirname "$1"`
@@ -179,7 +211,34 @@ function show-path () {
 echo $PATH | tr ':' '\n'
 }
 
-DIV="\n\n--------------------------------------------------------------------------------\n\n"
+function download {
+    URL=$1
+    FILE=`basename $1`
+    curl $URL > $FILE
+}
+
+function cobra () {
+python -c "
+import sys
+x = list(sys.stdin)[0].strip().split()
+print($@)
+"
+}
+
+function space () {
+stat -f%z "$@" | '(float(x[0])/1e9, "gigabytes")'
+}
+
+function blame {
+ FILE=$1
+ LINE=$2
+ git show $(git blame "$FILE" -L $LINE,$LINE | awk '{print $1}')
+}
+
+# absolute path
+function path {
+ echo $(cd $(dirname "$1"); pwd)/$(basename "$1")
+}
 
 # Running projects, ghc
 function h() {
@@ -309,23 +368,6 @@ function hnew () {
     # open sources/$MODULE/Example.hs
 }
 
-function blame {
- FILE=$1
- LINE=$2
- git show $(git blame "$FILE" -L $LINE,$LINE | awk '{print $1}')
-}
-
-# absolute path
-function path {
- echo $(cd $(dirname "$1"); pwd)/$(basename "$1")
-}
-
-# bash history
-export HISTCONTROL=erasedups
-export HISTFILESIZE=HISTSIZE=
-shopt -s histappend
-export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
-
 # To generate a Nix build expression for it, change into the project’s top-level directory and run the command:
 # $ cabal2nix . >foo.nix
 # Then write the following snippet into a file called default.nix:
@@ -396,31 +438,6 @@ fi
 #   # shellHook = '' '';
 #   # buildTools = (with ps; [cabal-install haskellPackages.stack]);  
 #   enableSplitObjs = false;
-# }
-
-
-function blame {
- FILE=$1
- LINE=$2
- git show $(git blame "$FILE" -L $LINE,$LINE | awk '{print $1}')
-}
-
-function download {
-    URL=$1
-    FILE=`basename $1`
-    curl $URL > $FILE
-}
-
-function cobra () {
-python -c "
-import sys
-x = list(sys.stdin)[0].strip().split()
-print($@)
-"
-}
-
-# function space () {
-# stat -f "$@" | cobra '(float(x[0])/1e9, "gigabytes")'
 # }
 
 function nr () {
@@ -517,3 +534,9 @@ git subtree add -P "$@"
 # git remote remove $_TEMPORARY 
 # }
 
+################################################################################
+## EFFECTS 
+
+echo 'PATH =' $(echo $PATH | tr ':' '\n')
+
+################################################################################
