@@ -5,13 +5,15 @@ templates:
     author-email: samboosalis@gmail.com
     author-name: Spiros Boosalis
     github-username: sboosali
-    copyright: 2017 Spiros Boosalis
+    copyright: 2018 Spiros Boosalis
     module: TODO 
+    
+default-template: https://raw.githubusercontent.com/sboosali/configuration/master/stack/templates/spirosboosalis.hsfiles    
 
 system-ghc: true
 
 nix:
-  enable: true # false
+  enable: false # true # false
   pure: true # false
   packages:
   - zlib
