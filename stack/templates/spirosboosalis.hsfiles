@@ -28,7 +28,6 @@ cabal-version:       >=1.10
 
 extra-source-files:
   README.md
-  .gitignore
   .travis.yml
   HLint.hs
   stack.yaml
