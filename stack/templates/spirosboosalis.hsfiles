@@ -1,7 +1,10 @@
 {-# START_FILE {{name}}.cabal #-}
 name:                {{name}}
 version:             0.0.0
-synopsis:            TODO
+cabal-version:       >=1.10
+build-type:          Simple 
+category:            Data 
+synopsis:            {{synopsis}} 
 description:         
  .
  TODO
@@ -13,14 +16,14 @@ description:
  <<{{name}}.png>>
 
 homepage:            http://github.com/{{github-username}}/{{name}}#readme
-license:             BSD3
-license-file:        LICENSE
+bug-reports:         http://github.com/{{github-username}}/{{name}}/issues
 author:              {{author-name}}
 maintainer:          {{author-email}}
 copyright:           {{copyright}}
-category:            TODO
-build-type:          Simple
-cabal-version:       >=1.10
+license:             BSD3
+license-file:        LICENSE
+stability:           provisional
+tested-with:         GHC == 8.2.2
 
 -- PVP
 -- https://wiki.haskell.org/Package_versioning_policy
@@ -28,9 +31,9 @@ cabal-version:       >=1.10
 
 extra-source-files:
   README.md
+  stack.yaml
   .travis.yml
   HLint.hs
-  stack.yaml
 
 -- data-files:
 --   data/
@@ -38,6 +41,11 @@ extra-source-files:
 source-repository head
   type:     git
   location: https://github.com/{{github-username}}/{{name}}
+
+-- make the `template` test suite dump its template-haskell splices
+flag dump-splices
+  default: False
+  manual: True
 
 
 library
@@ -70,30 +78,30 @@ library
 -- other-modules:
                  {{module}}.Extra
                  {{module}}.Example
-
+                 -- Paths_{{name}}
+                 
  build-depends:
                base >=4.7 && <5
 
+-- mine 
              , spiros
+--              , enumerate 
 
+-- (extended) standard library 
              , deepseq
              , hashable
-             , semigroups
---             , enumerate 
-             
-             , vinyl 
-
              , containers
              , unordered-containers
-
              , text 
              , bytestring
-
              , transformers
              , mtl
 
-             , lens
+-- ekmett 
              , exceptions
+             , lens
+
+-- other packages 
 
 
 executable example-{{name}}
@@ -108,10 +116,10 @@ executable example-{{name}}
   , {{name}}
 
 
--- $ stack test doctest
-test-suite doctest
+-- $ stack test documentation
+test-suite documentation 
  hs-source-dirs:      tests
- main-is:             DocTest.hs
+ main-is:             DocTests.hs
  type:                exitcode-stdio-1.0
 
  default-language:    Haskell2010
@@ -123,10 +131,10 @@ test-suite doctest
   , doctest
 
 
--- $ stack test unittest
-test-suite unittest
+-- $ stack test unit
+test-suite unit
  hs-source-dirs:      tests
- main-is:             UnitTest.hs
+ main-is:             UnitTests.hs
  type:                exitcode-stdio-1.0
 
  default-language:    Haskell2010
@@ -137,22 +145,55 @@ test-suite unittest
 
  build-depends:
     base
+  , {{name}} 
+  , tasty
+  
+
+-- $ stack test properties 
+test-suite properties 
+ hs-source-dirs:      tests
+ main-is:             PropertyTests.hsbut 
+ type:                exitcode-stdio-1.0
+
+ default-language:    Haskell2010
+ ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+
+ other-modules:
+  {{module}}.Property 
+
+ build-depends:
+    base
   , {{name}}
-  , hspec ==2.2.*
-  , QuickCheck ==2.8.*
-  -- , tasty
-  -- , tasty-quickcheck
+  , QuickCheck 
+  , tasty
+  , tasty-quickcheck
 
 
--- $ stack bench
-benchmark command
+-- $ stack test templates 
+-- Template Haskell 
+test-suite templates
+  type: exitcode-stdio-1.0
+  main-is: TemplateHaskellTests.hs
+  ghc-options: -Wall -threaded
+  hs-source-dirs: tests
+
+  if flag(dump-splices)
+    ghc-options: -ddump-splices
+    
+  build-depends:
+      base
+    , {{name}}
+  
+
+-- $ stack bench 
+benchmark everything 
  hs-source-dirs:      benchmarks
  main-is:             Bench.hs
  type:                exitcode-stdio-1.0
 
  default-language: Haskell2010
- ghc-options:      -Wall -threaded -rtsopts -with-rtsopts=-N
-
+ ghc-options:      -Wall -O2 -threaded -fdicts-cheap -funbox-strict-fields
+ 
  build-depends:
     base
   , {{name}}
@@ -160,9 +201,24 @@ benchmark command
   , deepseq
 
 
+-- originally generated with this command:  
+-- 
+-- $ stack new {{name}} https://raw.githubusercontent.com/sboosali/configuration/m
+aster/stack/templates/spirosboosalis.hsfiles -p "module:{{module}}" -p "filepath:{{filepath}}" -p "synopsis:{{synopsis}}" 
+-- 
+-- given this configuration in `.stack/config.yaml`: 
+-- 
+-- templates:
+--   params:
+--     author-email:    {{author-email}} 
+--     author-name:     {{author-name}} 
+--     github-username: {{github-username}} 
+--     copyright:       {{copyright}}  
+--     synopsis:        TODO 
+
 {-# START_FILE cabal.config #-}
-executable-profiling: True
-library-profiling: True
+# executable-profiling: True
+# library-profiling: True
 
 
 {-# START_FILE Setup.hs #-}
@@ -171,18 +227,22 @@ main = defaultMain
 
 
 {-# START_FILE stack.yaml #-}
-resolver: nightly-2017-11-25 
-compiler: ghc-8.2.2
+resolver: nightly-2017-12-17 
 
 nix:
   enable: false 
-  pure: true
+  pure:   true
   packages:
   - zlib
 
 packages:
 - ./
-# - ~/spiros
+
+# - location:
+#     git:    https://github.com/sboosali/spiros
+#     commit: 0c5f3584e73ae3e4c00b0a142d2024c241ac3032
+#   extra-dep: true
+#   subdirs: [.] 
 
 extra-deps: 
 - spiros-0.0.0
@@ -247,10 +307,12 @@ import Prelude.Spiros
 
 {-# START_FILE tests/{{filepath}}/Test.hs #-}
 module {{module}}.Test where
-import {{module}}
+import {{module}}() 
 
-main = do
- print "{{module}}"
+
+{-# START_FILE tests/{{filepath}}/Property.hs #-}
+module {{module}}.Property where
+import {{module}}
 
 
 {-# START_FILE tests/DocTest.hs #-}
@@ -262,19 +324,28 @@ main = doctest
  ]
 
 
-{-# START_FILE tests/UnitTest.hs #-}
-{-# OPTIONS_GHC -F -pgmF hspec-discover #-}
+{-# START_FILE tests/UnitTests.hs #-}
+-- {-# OPTIONS_GHC -F -pgmF hspec-discover #-}
+import {{module}}.Test
+
+main = do
+ print "[{{module}}.Test]"
+
+
+{-# START_FILE tests/PropertyTests.hs #-}
+import {{module}}.Property() 
+
+main = do
+ print "[{{module}}.Property]"
 
 
 {-# START_FILE executables/Main.hs #-}
 {-# OPTIONS_GHC -fno-warn-missing-signatures #-}
-import qualified {{module}}.Example
-
+import qualified {{module}}.Examplewhat 
 main = {{module}}.Example.main
 
-
 {-# START_FILE benchmarks/Bench.hs #-}
-import {{module}}()
+import {{module}}
 import Criterion.Main
 
 main = defaultMain [
@@ -314,12 +385,9 @@ ignore "Functor law"
 
 {-# START_FILE .gitignore #-}
 # my
-ignore/
-notes
-goals
+ignore/ 
+temporary/ 
 TODO
-cbits/main
-.projectile
 
 # Haskell
 cabal.project.local
@@ -350,6 +418,7 @@ result/
 \#*\#
 *.log
 TAGS
+.projectile
 
 # OS X
 .DS_Store
@@ -388,10 +457,18 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+{-# START_FILE CHANGELOG.md #-}
+
+0.0.0 
+----
+
+* nothing 
+
+
 {-# START_FILE README.md #-}
 [![Build Status](https://secure.travis-ci.org/{{github-username}}/{{name}}.svg)](http://travis-ci.org/{{github-username}}/{{name}})
 [![Hackage](https://img.shields.io/hackage/v/{{name}}.svg)](https://hackage.haskell.org/package/{{name}})
 
 # {{name}}
 
-TODO
+{{synopsis}} 
