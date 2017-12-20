@@ -457,6 +457,26 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+
+{-# START_FILE appveyor.yml #-}
+
+version: 0.0.0.{build}
+
+shallow_clone: true
+
+cache:
+  - "%APPDATA%\\stack"
+  - .stack-work
+
+build_script:
+  - choco install haskell-stack
+  - stack --no-terminal setup > NUL
+  - stack --no-terminal exec pacman -- -Syu --force --noconfirm --noprogressbar
+  - stack --no-terminal exec pacman -- -Syu --force --noconfirm --noprogressbar
+  - stack --no-terminal exec pacman -- -Syu --force --noconfirm --noprogressbar
+  - stack --no-terminal build --haddock
+
+
 {-# START_FILE CHANGELOG.md #-}
 
 0.0.0 
