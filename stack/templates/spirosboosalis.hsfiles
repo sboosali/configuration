@@ -1,7 +1,7 @@
 {-# START_FILE {{name}}.cabal #-}
 name:                {{name}}
 version:             0.0.0
-cabal-version:       >=1.10
+cabal-version:       >=2.0
 build-type:          Simple 
 category:            Data 
 synopsis:            {{synopsis}} 
@@ -74,12 +74,15 @@ library
  exposed-modules:
                  {{module}}
                  {{module}}.Types
-                 {{module}}.Core		 
--- other-modules:
-                 {{module}}.Extra
-                 {{module}}.Example
+                 {{module}}.Core		
+                 {{module}}.Example                
+other-modules:
+
+                 {{module}}.Extra            
                  -- Paths_{{name}}
-                 
+-- autogen-modules:
+                 -- Paths_{{name}}
+
  build-depends:
                base >=4.7 && <5
 
