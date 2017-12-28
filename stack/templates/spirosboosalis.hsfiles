@@ -76,7 +76,7 @@ library
                  {{module}}.Types
                  {{module}}.Core		
                  {{module}}.Example                
-other-modules:
+ other-modules:
 
                  {{module}}.Extra            
                  -- Paths_{{name}}
@@ -155,7 +155,7 @@ test-suite unit
 -- $ stack test properties 
 test-suite properties 
  hs-source-dirs:      tests
- main-is:             PropertyTests.hsbut 
+ main-is:             PropertyTests.hs
  type:                exitcode-stdio-1.0
 
  default-language:    Haskell2010
@@ -344,7 +344,7 @@ main = do
 
 {-# START_FILE executables/Main.hs #-}
 {-# OPTIONS_GHC -fno-warn-missing-signatures #-}
-import qualified {{module}}.Examplewhat 
+import qualified {{module}}.Example
 main = {{module}}.Example.main
 
 {-# START_FILE benchmarks/Bench.hs #-}
