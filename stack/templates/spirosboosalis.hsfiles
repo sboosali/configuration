@@ -61,7 +61,7 @@ library
   -fwarn-identities
   -fwarn-missing-fields
 
- default-extensions: AutoDeriveTypeable DeriveDataTypeable DeriveGeneric
+ default-extensions: PackageImports AutoDeriveTypeable DeriveDataTypeable DeriveGeneric
                      DeriveFunctor DeriveFoldable DeriveTraversable
                      LambdaCase EmptyCase TypeOperators PostfixOperators
                      ViewPatterns BangPatterns KindSignatures
