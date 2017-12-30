@@ -26,6 +26,7 @@ ln -sf ~/config/stack/templates/shell-monad.hsfiles    ~/.stack/templates/shell-
 
 # X-keys?
 
+# TODO
 # terminal
 # faster repeat when holding down keys (e.g. arrow keys in mouse-less terminal)
 defaults write NSGlobalDomain KeyRepeat -int 2

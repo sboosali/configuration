@@ -1,0 +1,27 @@
+
+
+
+    let Link = { i : Text, o : Text }
+
+in  let map = http://prelude.dhall-lang.org/List/map 
+
+in  map
+    Link
+    Text
+    (λ(l : Link) → l.i # " " # l.o)
+    (   [ { i = "./.bashrc", o = "~/.bashrc" }
+        , { i = "./.gitconfig", o = "~/.gitconfig" }
+        , { i = "./stack/config.yaml", o = "~/.stack/config.yaml" }
+        , { i = "./nix/config.nix", o = "~/.nixpkgs/config.nix" }
+        ]
+      : List Link
+    )
+
+
+
+
+
+$ dhall <<< 'let map = http://prelude.dhall-lang.org/List/map in map Natural Natural (\(i : Natural) -> +10 * i) [+1,+2]' 
+List Natural
+
+[ +10, +20 ] : List Natural
