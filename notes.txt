@@ -1,0 +1,65 @@
+----------------
+xbindkeys
+
+Version 1.6.0 : 
+Add a 'Release' modifier to catch release events of keys or mouse buttons instead of press events.
+Xbindkeys doesn't use pthreads+system any more to start commands, it use fork+exec instead.
+
+
+----------
+xdotool
+
+Usage: key [options] <keysequence> [keysequence ...]
+--clearmodifiers     - clear active keyboard modifiers during keystrokes
+--delay DELAY        - Use DELAY milliseconds between keystrokes
+--repeat TIMES       - How many times to repeat the key sequence
+--repeat-delay DELAY - DELAY milliseconds between repetitions
+--window WINDOW      - send keystrokes to a specific window
+Each keysequence can be any number of modifiers and keys, separated by plus (+)
+  For example: alt+r
+
+----------
+xev
+
+KeyPress event, serial 37, synthetic NO, window 0x5e00001,
+    root 0x271, subw 0x0, time 64786741, (137,103), root:(1427,259),
+    state 0x0, keycode 118 (keysym 0xff63, Insert), same_screen YES,
+    XLookupString gives 0 bytes: 
+    XmbLookupString gives 0 bytes: 
+    XFilterEvent returns: False
+
+KeyRelease event, serial 37, synthetic NO, window 0x5e00001,
+    root 0x271, subw 0x0, time 64786821, (137,103), root:(1427,259),
+    state 0x0, keycode 118 (keysym 0xff63, Insert), same_screen YES,
+    XLookupString gives 0 bytes: 
+    XFilterEvent False: False
+
+----------
+xte
+
+ Commands:
+  key k          Press and release key k
+  keydown k      Press key k down
+  keyup k        Release key k
+  str string     Do a bunch of key X events for each char in string
+  mouseclick i   Click mouse button i
+  mousemove x y  Move mouse to screen position x,y
+  mousermove x y Move mouse relative from current location by x,y
+  mousedown i    Press mouse button i down
+  mouseup i      Release mouse button i
+  sleep x        Sleep x seconds
+  usleep x       uSleep x microseconds
+
+"xte 'keydown Super_L' 'key S' 'keyup Super_L'"
+
+----------
+xvkbd
+
+
+----------
+
+----------
+
+----------
+
+----------
