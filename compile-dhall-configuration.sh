@@ -1,5 +1,10 @@
 #!/bin/bash
 
+LINK_OPTIONS=$1 # no force by default
+# LINK_OPTIONS=${1:-"-f"} # force by default
+echo "[OPTIONS] $LINK_OPTIONS"
+echo
+
 # absolute path
 function _get_absolute_path {
  echo $(readlink -f "$1")
@@ -12,15 +17,34 @@ function _get_absolute_path {
 # subshell preserve's (super)shell's pwd
 eval $(cd dhall  &&  cat links.dhall | dhall-to-bash --explain --declare MY_CONFIGURATION_LINKS)
 
-echo "[SYMBOLICALLY LINKING]"
+echo
+echo '----------------------------------------'
+echo "[DIFFING]"
+echo
 
 for l in ${MY_CONFIGURATION_LINKS[@]}; do
   MY_SOURCE=$(echo $l | cut -d':' -f1 | xargs readlink -f)
   MY_LINK=$(echo $l | cut -d':' -f2 | xargs echo) # | xargs readlink -f)
   MY_LINK=${MY_LINK/#\~/$HOME}  # "unquote, e.g. "~" to ~
   echo 
-  echo "$MY_LINK  ->  $MY_SOURCE"
-  ln -s $MY_SOURCE $MY_LINK
+  echo "[ $MY_LINK  versus  $MY_SOURCE ]"
+  echo
+  diff $MY_SOURCE $MY_LINK
+done
+
+echo
+echo '----------------------------------------'
+echo "[SYMBOLICALLY LINKING]"
+echo
+
+for l in ${MY_CONFIGURATION_LINKS[@]}; do
+  MY_SOURCE=$(echo $l | cut -d':' -f1 | xargs readlink -f)
+  MY_LINK=$(echo $l | cut -d':' -f2 | xargs echo) # | xargs readlink -f)
+  MY_LINK=${MY_LINK/#\~/$HOME}  # "unquote, e.g. "~" to ~
+  echo 
+  echo "[ $MY_LINK  ->  $MY_SOURCE ]"
+  mkdir -p $(dirname $MY_LINK)
+  ln -s $LINK_OPTIONS $MY_SOURCE $MY_LINK
   # echo $MY_SOURCE
   # echo $MY_LINK
   # echo 

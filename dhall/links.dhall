@@ -6,11 +6,14 @@ in let link-to-string = λ(l : ./Link) → "${quote l.i}:${quote l.o}"
 -- output `o` (i.e. the link w.r.t ln)
 in let links = 
    [ { o = "~/.bashrc" ,                                 i = "./bash/.bashrc"                           }
+   , { o = "~/.aliases" ,                                i = "./bash/.aliases"                          }
    , { o = "~/.profile" ,                                i = "./bash/.profile"                          }
    , { o = "~/.bash_definitions" ,                       i = "./bash/.bash_definitions"                 }
    , { o = "~/.bash_settings" ,                          i = "./bash/.bash_settings"                    }
+   , { o = "~/.bash_logout" ,                            i = "./bash/.bash_logout"                      }
 
    , { o = "~/.gitconfig" ,                              i = "./git/.gitconfig"                         }
+   , { o = "~/.git-prompt.sh " ,                         i = "./bash/.git-prompt.sh "                   }
 
    , { o = "~/.nixpkgs/config.nix" ,                     i = "./nix/config.nix"                         }
    , { o = "~/.nix-channels" ,                           i = "./nix/nix-channels.txt"                   }
