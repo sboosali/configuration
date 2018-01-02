@@ -1,26 +1,256 @@
 ################################################################################
 ## NOTES 
 
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
+
 # ".bashrc is read by a bash(-compatible) shell that's both interactive and non-login"
 # .profile would be read by login shells
 
+# when you run a script, the current shell makes a new shell to run that script in. 
+# to exec a script in the current shell, you must source it (i.e. `source ./run.sh`, not `./run.sh`)
+
+
+################################################################################
+## INITIAL
+
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
 ################################################################################
 ## SETTINGS 
+
+# export BROWSER=chromium
+
+################################################################################
+## PATH SETTINGS
+
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/bin" ] ; then
+    export PATH="$HOME/bin:$PATH"
+fi
 
 # the relative binary directory for nix-build
 # WARNING a relative path, for a more convenient `nix-build`
 export PATH=./result/bin:$PATH
 
-# bash history
-export HISTCONTROL=erasedups
-export HISTFILESIZE=HISTSIZE=
-shopt -s histappend
-export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+################################################################################
+## HISTORY SETTINGS
 
-# export BROWSER=chromium
+# don't put duplicate lines or lines starting with space in the history.
+HISTCONTROL=ignoreboth
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=-1 # infinite # orig 1000
+HISTFILESIZE=-1 # infinite # orig 2000
+# export HISTFILESIZE=HISTSIZE=
+HISTFILE=~/.bash_history_eternal # any `bash --norc` will truncate the default history file
+PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND} ;}history -a; history -c; history -r;";
+# make sure PROMPT_COMMAND isn't null
+# history -a write history to HISTFILE after each command (the default is only on exit, it's kept in memory until)
+# history -r read current history in HISTORY after each command (to be available to the current shell)
+# history -c clears the current shell's current history
+
+#########################################
+## UBUNTU BASHRC DEFAULT SETTINGS
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# If set, the pattern "**" used in a pathname expansion context will
+# match all files and zero or more directories and subdirectories.
+shopt -s globstar
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+# the focus in a terminal window
+# should be on the output of commands, not on the prompt
+
+# If this is an xterm set the title to user@host:dir
+case "$TERM" in
+xterm*|rxvt*)
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    ;;
+*)
+    ;;
+esac
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+# colored GCC warnings and errors
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
 
 ################################################################################
 ## DEFINITIONS 
+
+# short
+alias n=nano
+alias f='find'
+alias g='git'
+alias c='cat'
+alias r='rm -r'
+alias o="echo"
+# alias e="echo" # emacs
+alias t=brush
+
+# cd
+alias d='cd'
+alias dh='cd ~'
+alias d-="cd -"
+alias d..="cd .."
+alias d...="cd ../.."
+alias d....="cd ../../.."
+alias d.....="cd ../../../.."
+alias d......="cd ../../../../.."
+alias d.......="cd ../../../../../.."
+alias de='cd ~/.emacs.d'
+alias dew='cd ~/.emacs.d-windows'
+alias dc='cd ~/configuration'
+# alias d='cd '
+
+# ls 
+alias ll='ls -alF'
+alias la='ls -A'
+alias lc='ls -CF'
+
+# copy/paste
+alias xc='xclip -selection clipboard'
+alias xp='xclip -selection clipboard -o'
+alias copy='xclip -selection clipboard'
+
+# xbrightness
+alias xb='xbrightness'
+alias xbr='xbrightness 65535'
+
+# workflow
+alias xd='xdotool'
+alias xw='wmctrl'
+alias xo='xdg-open'
+alias open='xdg-open' # &disown
+
+# keybindings
+alias xm='xmodmap'
+alias xb='xbindkeys'
+
+# grep
+alias r="grep -E --color=auto -i"
+
+# editing
+export EDITOR=emacsclient
+function seteditor () {
+   export EDITOR="$1"
+}
+
+# emacs
+function e() { 
+ emacsclient "$@" & 
+}
+alias ee="emacsclient"
+alias eb="$EDITOR ~/.bashrc && source ~/.bashrc"
+alias ed="emacs --debug-init"
+alias eq="emacs -q"
+alias edq="emacs -q --debug-init"
+alias ec="emacs -q ~/.emacs.d/init.el" # to debug
+
+# nano
+alias nb="nano ~/.bashrc && source ~/.bashrc"
+
+# Reloading
+alias sb="source ~/.bashrc"
+alias sn="nixos-rebuild -I nixpkgs=~/nixpkgs/ build"
+function se () {
+    (cd ~/.emacs.d && nix-build emacs.nix && ./result/bin/emacs --debug-init)
+}
+
+# rm
+alias rm="rm -f"
+alias rmr="rm -rf"
+alias rmt="rm -f *~ .*~ \#*\# .\#* matlab_crash_dump.* java.log.* *.pyc *.class __pycache__/*.pyc *.agdai *.hi *.hout *.o"
+
+# chmod
+alias c7="chmod 700"
+
+# help aliases
+alias lnh="echo 'ln -sf /path/to/file /path/to/symlink'"
+
+# misc
+alias disksize="df -h /"
+alias cpr="rsync -arRv" # e.g. cpr stuff backup # ./backup/stuff doesn't exist yet and is created
+alias cprd="rsync -arRv --dry-run" # --exclude ".stack-work" --exclude "dist-newstyle"
+alias lnr='readlink -f'
+alias lns='ln -sf' # /path/to/file /path/to/symlink
+# alias pwn="sudo chown -R sboo:users"
+alias yt='youtube-dl -f 22' # needs youtube-dl
+alias unzip="7z x" # needs 7z
+
+# Natural Language Commands
+
+alias list="ls -1aFG"
+alias remove="rm -f"
+alias show="cat"
+alias get="git"
+alias grab="grep"
+
+# ps
+alias psa="ps -cax -o \"command, pid, %mem, %cpu, user, start, \" "
+# alias processes="ps -cax -o \"command, pid, %mem, %cpu, user, start, \" "
+
+# python
+alias p="python3"
+alias pi="ipython"
+alias p3="python3"
+alias p2="python2.7"
+
+# git
+alias g="git"
+alias gl="git status"
+alias dif="git dif"
+alias ga="git amend"
+alias gorc="git status --porcelain | cut -d ' ' -f 2 | tr '\n' ' '"
+
+################################################################################
+## NIX
+
+alias emacs-nix='./result/bin/emacs -q --load "./init.el"' # relative filepaths
 
 alias ne='nix-env -f "<nixpkgs>"'
 alias nea='nix-env -A -f "<nixpkgs>"'
@@ -63,182 +293,27 @@ function nqe() {
 }
 
 alias nix-make-shell='cabal2nix *.cabal --sha256=0 --shell > shell.nix'
+alias nix-make-default='cabal2nix *.cabal > default.nix'
 
-alias hn="stack setup" # "n"ew
-alias hb="stack build"
-function he() { 
- stack exec -- "$@" 
+function nr () {
+  echo 'p = import <nixpkgs> {}'
+  echo 'c = (import /etc/nixos/configuration.nix) { inherit (p) pkgs config lib; }'
+  nix-repl
 }
+
+################################################################################
+## HASKELL
+
+## haskell
+
+# alias hn="stack setup" # "n"ew
+# alias hb="stack build"
+# function he() { 
+#  stack exec -- "$@" 
+# }
 
 alias hcc="cabal configure"
 alias hcb="cabal build"
-
-alias d='cd'
-alias d-="cd -"
-alias d..="cd .."
-alias d...="cd ../.."
-alias d....="cd ../../.."
-alias d.....="cd ../../../.."
-alias d......="cd ../../../../.."
-alias d.......="cd ../../../../../.."
-alias dh='cd ~'
-alias dx='cd ~/.xmonad'
-alias de='cd ~/.emacs.d'
-alias dc='cd ~/configuration'
-alias ds='cd ~/speech'
-# alias d='cd '
-
-# help aliases
-alias lnh="echo 'ln -sf /path/to/file /path/to/symlink'"
-
-alias n=nano
-alias f='find'
-alias g='git'
-alias c='cat'
-alias cpr="rsync -arRv" # e.g. cpr stuff backup # ./backup/stuff doesn't exist yet and is created
-alias cprd="rsync -arRv --dry-run" # --exclude ".stack-work" --exclude "dist-newstyle"
-alias r='rm -r'
-alias lnr='readlink -f'
-alias lns='ln -sf' # /path/to/file /path/to/symlink
-alias o="echo"
-alias t=brush
-
-alias disksize="df -h /"
-
-# copy/paste
-alias xc='xclip -selection clipboard'
-alias xp='xclip -selection clipboard -o'
-alias xb='xbrightness'
-alias xbr='xbrightness 65535'
-
-#editing
-function e() { 
- emacsclient "$1" & 
-}
-
-alias ee="emacsclient"
-alias en="sudo nano /etc/nixos/configuration.nix && nixos-rebuild build"
-alias enr="nano /etc/nixos/configuration.nix"
-alias ent="sudo nano /etc/nixos/configuration.nix && sudo nixos-rebuild boot"
-alias ens="sudo nano /etc/nixos/configuration.nix && sudo nixos-rebuild switch"
-alias enp="cat /etc/nixos/configuration.nix | copy"
-alias eb="$EDITOR ~/.bashrc && source ~/.bashrc"
-alias ex="$EDITOR .xmonad/xmonad.hs"
-#alias e="$EDITOR"
-alias ed="emacs --debug-init"
-alias eq="emacs -q"
-alias edq="emacs -q --debug-init"
-alias ec="emacs -q ~/.emacs.d/init.el" # to debug
-
-export EDITOR=emacsclient
-function seteditor () {
-   export EDITOR="$1"
-}
-
-# linux-specific, needs installation
-alias open='xdg-open' # &disown
-alias copy='xclip -selection clipboard'
-
-# Reloading
-alias sb="source ~/.bashrc"
-alias sn="nixos-rebuild -I nixpkgs=~/nixpkgs/ build"
-function se () {
-    (cd ~/.emacs.d && nix-build emacs.nix && ./result/bin/emacs --debug-init)
-}
-
-alias pwn="sudo chown -R sboo:users"
-
-# Natural Language Commands
-
-alias list="ls -1aFG"
-alias remove="rm -f"
-alias show="cat"
-alias processes="ps -cax -o \"command, pid, %mem, %cpu, user, start, \" "
-alias get="git"
-alias grab="grep"
-
-alias rm="rm -f"
-alias rmr="rm -rf"
-alias rmt="rm -f *~ .*~ \#*\# .\#* matlab_crash_dump.* java.log.* *.pyc *.class __pycache__/*.pyc *.agdai *.hi *.hout *.o"
-
-alias c7="chmod 700"
-
-alias psa="ps -cax -o \"command, pid, %mem, %cpu, user, start, \" "
-
-alias ip="ipython"
-alias p="python3"
-alias p3="python3"
-alias p2="python2.7"
-
-alias r="grep -E --color=auto -i"
-
-alias g="git"
-alias gl="git status"
-alias dif="git dif"
-alias ga="git amend"
-alias gorc="git status --porcelain | cut -d ' ' -f 2 | tr '\n' ' '"
-
-alias yt='youtube-dl -f 22'
-
-alias unzip="7z x"
-
-DIV="\n\n--------------------------------------------------------------------------------\n\n"
-
-function dog {
- SEP="--------------------------------------------------------"
- while read file; do
-     if [ -f "$file" ]; then
-         echo -e "\n"$SEP
-         echo "$file"
-         echo -e $SEP"\n"
-         cat "$file"
-     fi
- done
-}
-
-function brush () {
-# synonym for "touch"
-mkdir -p `dirname "$1"`
-touch "$1"
-}
-
-function show-variable () {
-echo "$1" | tr ':' '\n'
-}
-
-# Pretty print the path
-function show-path () {
-echo $PATH | tr ':' '\n'
-}
-
-function download {
-    URL=$1
-    FILE=`basename $1`
-    curl $URL > $FILE
-}
-
-function cobra () {
-python -c "
-import sys
-x = list(sys.stdin)[0].strip().split()
-print($@)
-"
-}
-
-function space () {
-stat -f%z "$@" | '(float(x[0])/1e9, "gigabytes")'
-}
-
-function blame {
- FILE=$1
- LINE=$2
- git show $(git blame "$FILE" -L $LINE,$LINE | awk '{print $1}')
-}
-
-# absolute path
-function path {
- echo $(cd $(dirname "$1"); pwd)/$(basename "$1")
-}
 
 # Running projects, ghc
 function h() {
@@ -440,12 +515,63 @@ fi
 #   enableSplitObjs = false;
 # }
 
-function nr () {
-  echo 'p = import <nixpkgs> {}'
-  echo 'c = (import /etc/nixos/configuration.nix) { inherit (p) pkgs config lib; }'
-  nix-repl
+################################################################################
+## MORE DEFINITIONS
+
+DIV="\n\n--------------------------------------------------------------------------------\n\n"
+
+function dog {
+ SEP="--------------------------------------------------------"
+ while read file; do
+     if [ -f "$file" ]; then
+         echo -e "\n"$SEP
+         echo "$file"
+         echo -e $SEP"\n"
+         cat "$file"
+     fi
+ done
 }
 
+function brush () {
+# synonym for "touch"
+mkdir -p `dirname "$1"`
+touch "$1"
+}
+
+function show-variable () {
+echo "$1" | tr ':' '\n'
+}
+
+# Pretty print the path
+function show-path () {
+echo $PATH | tr ':' '\n'
+}
+
+# needs curl
+function download {
+    URL=$1
+    FILE=`basename $1`
+    curl $URL > $FILE
+}
+
+function cobra () {
+python -c "
+import sys
+x = list(sys.stdin)[0].strip().split()
+print($@)
+"
+}
+
+function space () {
+stat -f%z "$@" | '(float(x[0])/1e9, "gigabytes")'
+}
+
+# absolute path
+function absolute-path {
+ echo $(cd $(dirname "$1"); pwd)/$(basename "$1")
+}
+alias path='absolute-path'
+ 
 # https://www.gnupg.org/documentation/manuals/gnupg/Invoking-GPG_002dAGENT.html
 GPG_TTY=$(tty)
 export GPG_TTY
@@ -475,6 +601,15 @@ ssh-add ~/.ssh/$1
 # ssh-key with passphrase, with ssh-ident:
 # ssh-ident is an utility that can manage ssh-agent on your behalf and load identities as necessary. It adds keys only once as they are needed, regardless of how many terminals, ssh or login sessions that require access to an ssh-agent.
 # alias ssh='ssh-ident' # TODO
+
+################################################################################
+## GIT 
+
+function blame {
+ FILE=$1
+ LINE=$2
+ git show $(git blame "$FILE" -L $LINE,$LINE | awk '{print $1}')
+}
 
 function clone () {
 # use ssh
@@ -534,9 +669,32 @@ git subtree add -P "$@"
 # git remote remove $_TEMPORARY 
 # }
 
+########################################
+## IMPORTS
+
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+if [ -f  ~/.bash_aliases ]; then
+  source ~/.bash_aliases
+fi
+
+if [ -f  ~/.bash_functions ]; then
+  source ~/.bash_functions
+fi
+
+# Nix
+if [ -f  "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
+  source "$HOME/.nix-profile/etc/profile.d/nix.sh"
+fi
+
 ################################################################################
 ## EFFECTS 
 
 echo 'PATH =' $(echo $PATH | tr ':' '\n')
 
-################################################################################
+########################################
+## (AUTO-ADDED)
+

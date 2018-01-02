@@ -45,3 +45,4 @@ ln -sf ~/config/nix/config.nix  ~/.nixpkgs/config.nix
 
 # local? 
 
+# nql | tr -s ' ' | cut -d' ' -f2 > configuration/packages.txt

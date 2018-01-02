@@ -1,20 +1,30 @@
 #!/bin/sh
 # alias =''
-alias aliases="source $CONFIG/.aliases"
-alias profile="source $CONFIG/.profile"
+alias aliases="source ~/.bash_aliases"
+# alias aliases="source ~/.aliases"
+alias profile="source ~/.profile"
 
-alias red="xrandr --gamma 255:0:0"
-
+# eDP-1-1 is name of the laptop screen (the first field)
+# "Why is it called eDP? bcause it is an embedded display port style adapter, and not a video graphics array style one."
+# 0x42 is the Identifier from `xrandr --verbose`
+# alias red="xrandr --output 0x42 --crtc 0 --gamma "
+# xrandr -d :0 --output eDP-1-1 --gamma "1:1:1" # restore default
+# xrandr -d :0 --output eDP-1-1 --gamma "1:1:1"
+alias red="redshift -O 1000" # one-shot, 1000K
+alias un-red="redshift -x" # 
+alias orange="redshift -O 2000" # one-shot
 
 # Natural Language Commands
 
 alias list="ls -1aFG"
 alias remove="rm -f"
 alias show="cat"
-alias processes="ps -cax -o \"command, pid, %mem, %cpu, user, start, \" "
 alias get="git"
 alias grab="grep"
-
+alias processes="ps aux"
+# "ps -A -o \"command, pid, %mem, %cpu, user, start, \" "
+# pstree
+#alias processes="ps -cax -o \"command, pid, %mem, %cpu, user, start, \" "
 
 # fish
 
@@ -47,7 +57,7 @@ alias rmt="rm -f *~ .*~ \#*\# .\#* matlab_crash_dump.* java.log.* *.pyc *.class 
 
 alias c7="chmod 700"
 
-alias ps="ps -cax -o \"command, pid, %mem, %cpu, user, start, \" "
+alias _ps="ps -A -o \"command, pid, %mem, %cpu, user, start, \" "
 
 # programming languages
 

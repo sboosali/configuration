@@ -7,6 +7,7 @@ in let links =
    , { o = "~/.stack/config.yaml" ,	i = "./stack/config.yaml" }
    , { o = "~/.nixpkgs/config.nix" ,	i = "./nix/config.nix" }
    , { o = "~/.xbindkeysrc.scm" ,	i = "./xbindkeys/.xbindkeysrc.scm" }
+   , { o = "~/.Xmodmap" ,               i = "./xmodmap/.Xmodmap" }
    ] : List ./Link 
 in (concatMapSep
     "\n"
