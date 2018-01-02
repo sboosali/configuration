@@ -2,7 +2,7 @@
 
 # absolute path
 function _get_absolute_path {
- echo $(cd $(dirname "$1"); pwd)/$(basename "$1")
+ echo $(readlink -f "$1")
 }
 # (internal helper function)
 # e.g. echo `_get_absolute_path ~`
@@ -15,11 +15,12 @@ eval $(cd dhall  &&  cat links.dhall | dhall-to-bash --explain --declare MY_CONF
 echo "[SYMBOLICALLY LINKING]"
 
 for l in ${MY_CONFIGURATION_LINKS[@]}; do
-  MY_SOURCE=$(_get_absolute_path $(echo $l | cut -d':' -f1))
-  MY_LINK=`echo $l | cut -d':' -f2`
+  MY_SOURCE=$(echo $l | cut -d':' -f1 | xargs readlink -f)
+  MY_LINK=$(echo $l | cut -d':' -f2 | xargs echo) # | xargs readlink -f)
+  MY_LINK=${MY_LINK/#\~/$HOME}  # "unquote, e.g. "~" to ~
   echo 
   echo "$MY_LINK  ->  $MY_SOURCE"
-  # ln -s $MY_SOURCE $MY_LINK
+  ln -s $MY_SOURCE $MY_LINK
   # echo $MY_SOURCE
   # echo $MY_LINK
   # echo 
@@ -44,3 +45,7 @@ done
 # }
 
 # MY_VARIABLE="${1:-MY_CONFIGURATION_LINKS}"
+
+# $ readlink -f "~/.gitconfig" 
+# $ readlink -f ~/.gitconfig 
+# /home/sboo/.gitconfig

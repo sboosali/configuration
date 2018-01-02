@@ -252,6 +252,10 @@ alias dif="git dif"
 alias ga="git amend"
 alias gorc="git status --porcelain | cut -d ' ' -f 2 | tr '\n' ' '"
 
+# cleaning TODO
+alias clean-haskell="remove \"$1\".{dyn_hi,dyn_o,hi,o}"
+alias clean-emacs="remove $1.{~} .#$1"
+
 ################################################################################
 ## NIX
 
@@ -573,7 +577,8 @@ stat -f%z "$@" | '(float(x[0])/1e9, "gigabytes")'
 
 # absolute path
 function absolute-path {
- echo $(cd $(dirname "$1"); pwd)/$(basename "$1")
+ echo $(readlink -f "$1")
+ # echo $(cd $(dirname "$1"); pwd)/$(basename "$1")
 }
 alias path='absolute-path'
  
@@ -598,6 +603,40 @@ if [ "$#" -ne 1 ]; then
 	return 1
 fi
 ssh-add ~/.ssh/$1
+}
+
+# 
+function my-mysql() {
+
+if [ $# -gt 1 ]
+then echo "Usage: mysql [start stop \"\"]"
+     return 0
+fi
+
+case "$1" in
+start) sudo /opt/local/bin/mysqld_safe5 &
+;;
+stop)  /opt/local/bin/mysqladmin5 -u root -p shutdown
+;;
+"")    echo todo
+;;
+*)     echo "Usage: mysql [start stop \"\"]"
+;;
+esac
+}
+
+# 
+function my-postgresql() {
+}
+
+# converts video to audio, and opens it
+function blind {
+ NAME="${1%%.*}"
+ INPUT="$NAME.mp4"
+ OUTPUT="$NAME.m4a"
+ # echo $NAME
+ ffmpeg  -i "$INPUT"  -c copy "$OUTPUT"
+ open "$OUTPUT"
 }
 
 # ssh-add github
@@ -682,13 +721,17 @@ git subtree add -P "$@"
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
-if [ -f  ~/.bash_aliases ]; then
-  source ~/.bash_aliases
+if [ -f  ~/.bash_definitions ]; then
+  source ~/.bash_definitions
 fi
 
-if [ -f  ~/.bash_functions ]; then
-  source ~/.bash_functions
-fi
+# if [ -f  ~/.bash_aliases ]; then
+#   source ~/.bash_aliases
+# fi
+
+# if [ -f  ~/.bash_functions ]; then
+#   source ~/.bash_functions
+# fi
 
 # Nix
 if [ -f  "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
