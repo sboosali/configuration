@@ -38,6 +38,9 @@ fi
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
 # pure stuff
+if [ -f  .aliases ]; then
+  source .aliases
+fi
 if [ -f  .bash_definitions.sh ]; then
   source .bash_definitions.sh
 fi
@@ -53,8 +56,11 @@ fi
 ########################################
 ## EFFECTS 
 
-echo 'PATH =' $(echo $PATH | tr ':' '\n')
 echo
+echo '[PATH]' 
+echo $(echo $PATH | tr ':' '\n')
+echo
+echo '[TERM]'
 echo "$TERM" # e.g. xterm-256color
 echo
 

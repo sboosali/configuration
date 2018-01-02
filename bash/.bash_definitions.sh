@@ -89,9 +89,11 @@ alias ec="emacs -q ~/.emacs.d/init.el" # to debug
 alias nb="nano ~/.bashrc && source ~/.bashrc"
 
 # Reloading
+# mnemonic: "s" for sourcing
 alias sb="source ~/.bashrc"
-alias sbd="source ~/.bash_definitions" # should be idempotent
-alias sbs="source ~/.bash_settings"
+alias sbd="source ~/.bash_definitions.sh" # should be idempotent
+alias sba="source ~/.aliases" # should be idempotent
+alias sbs="source ~/.bash_settings.sh"
 alias sbp="source ~/.profile"
 function se () {
     (cd ~/.emacs.d && nix-build emacs.nix && ./result/bin/emacs --debug-init)

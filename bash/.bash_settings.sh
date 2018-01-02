@@ -14,13 +14,21 @@
 ########################################
 ## IMPORTS
 
-source .git-prompt.sh
+if [ -f .git-prompt.sh ]; then
+  source .git-prompt.sh
+fi
 
 ########################################
 ## PROMPT SETTINGS
 
+PS1="\[\e]0;\w\a\]$PS1"
+# export PS1="\[\e]0;\w\a\]$PS1"
+
+#NOTE
+
+
 if [ -x "$(command -v __git_ps1)" ]; then
-  PROMPT_COMMAND='__git_ps1 "\u@\h:\w" "\\\$ '
+  PROMPT_COMMAND='__git_ps1 "\w" "\\\$ '
 # PS1='\w$(__git_ps1 " (%s)") \$ '
 # PS1="\n$PS1"
 fi
@@ -94,7 +102,7 @@ export PATH=./result/bin:$PATH
 ## HISTORY SETTINGS
 
 # don't put duplicate lines or lines starting with space in the history.
-HISTCONTROL=ignoreboth
+# HISTCONTROL=ignoreboth
 
 # append to the history file, don't overwrite it
 shopt -s histappend
@@ -104,10 +112,12 @@ HISTSIZE=-1 # infinite # orig 1000
 HISTFILESIZE=-1 # infinite # orig 2000
 # export HISTFILESIZE=HISTSIZE=
 HISTFILE=~/.bash_history_eternal # any `bash --norc` will truncate the default history file
-PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND} ;}history -a; history -c; history -r;"
+PROMPT_COMMAND="history -a; history -c; history -r; ${PROMPT_COMMAND}"
+
+# PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND} ;}history -a; history -c; history -r;"
 
 # NOTE
-# make sure PROMPT_COMMAND isn't null
+# make sure PROMPT_COMMAND isn't null (why?)
 # history -a write history to HISTFILE after each command (the default is only on exit, it's kept in memory until)
 # history -r read current history in HISTORY after each command (to be available to the current shell)
 # history -c clears the current shell's current history
