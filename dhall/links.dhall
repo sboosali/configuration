@@ -1,5 +1,6 @@
    let map = ./Prelude/List/map 
-in let link-to-list = (λ(l : ./Link) → [l.o, l.i]) -- "${l.i} ${l.o}"
+in let quote = λ(t : Text) → "\"${t}\""
+in let link-to-string = λ(l : ./Link) → "${quote l.i}:${quote l.o}"
 
 -- input `i` (i.e. the source w.r.t ln)
 -- output `o` (i.e. the link w.r.t ln)
@@ -23,14 +24,6 @@ in let links =
    , { o = "~/.stack/config.yaml" ,                      i = "./stack/config.yaml"                      }
    , { o = "~/.stack/templates/spirosboosalis.hsfiles" , i = "./stack/templates/spirosboosalis.hsfiles" }
 
-   ] : List ./Link 
+   ] : List ./Link
 
-in map ./Link (List Text) link-to-list links
-
---   let map = http://prelude.dhall-lang.org/List/map in
-
--- intercalate
--- ./concatMapSep ", " Integer Integer/show [0, 1, 2] = "0, 1, 2"
-
--- Only primitive values can be translated from Dhall to a Bash
-expression
+in map ./Link Text link-to-string links

@@ -1,0 +1,17 @@
+ipget QmQ8w5PLcsNz56dMvRtq54vbuPe9cNnCCUXAQp6xLc6Ccx/Prelude Prelude
+
+-- let map = http://prelude.dhall-lang.org/List/map in
+
+-- Only primitive values can be translated from Dhall to a Bash expression
+
+The following Dhall expression could not be translated to a Bash expression:
+
+↳ [ "~/.bashrc", "./bash/.bashrc" ]
+
+: (List Text)
+
+-- intercalate
+-- ./concatMapSep ", " Integer Integer/show [0, 1, 2] = "0, 1, 2"
+
+in let link-to-list = (λ(l : ./Link) → [l.o, l.i]) -- "\"${l.i}\" \"${l.o}\""
+
