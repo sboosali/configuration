@@ -119,6 +119,11 @@ if ! shopt -oq posix; then
   fi
 fi
 
+#########################################
+## xbindkeys
+
+xbindkeys -p -fg ~/configuration/xbindkeys/.xbindkeysrc.scm
+
 ################################################################################
 ## DEFINITIONS 
 
