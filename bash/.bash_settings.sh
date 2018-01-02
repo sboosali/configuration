@@ -19,52 +19,10 @@ if [ -f .git-prompt.sh ]; then
 fi
 
 ########################################
-## PROMPT SETTINGS
+## RE-SETTINGS
 
-PS1="\[\e]0;\w\a\]$PS1"
-# export PS1="\[\e]0;\w\a\]$PS1"
-
-#NOTE
-
-
-if [ -x "$(command -v __git_ps1)" ]; then
-  PROMPT_COMMAND='__git_ps1 "\w" "\\\$ '
-# PS1='\w$(__git_ps1 " (%s)") \$ '
-# PS1="\n$PS1"
-fi
-
-#NOTE `PROMPT_COMMAND` is faster than `PS1`
-
-# # if this is an xterm, set the title to the `pwd`
-# case "$TERM" in
-# xterm*|rxvt*)
-#     PS1="\[\e]0;\h: \w\a\]$PS1"
-#     ;;
-# *)
-#     ;;
-# esac
-
-### (too slow)
-# # show current branch when in git repo (or descendent thereof)
-# if [ -x "$(command -v git-radar)" ]; then
-#   export PS1="\W\$(git-radar --bash --fetch) "
-# fi
-
-# NOTE
-# `-x FILE` tests if the FILE is executable
-# `command` is POSIX, and thus most portable
-
-# NOTE
-# requires `git-radar`
-
-#NOTE
-  # --fetch  # Fetches your repo asynchronously in the background every 5 mins
-  # --bash   # Output prompt using Bash style color characters
-
-# source ~/bin/git-prompt.sh
-# PS1='\w$(__git_ps1 " (%s)") \$ '
-# PS1="\n$PS1"
-
+# clear
+PROMPT_COMMAND=""
 
 ########################################
 ## EDITOR SETTINGS
@@ -112,15 +70,17 @@ HISTSIZE=-1 # infinite # orig 1000
 HISTFILESIZE=-1 # infinite # orig 2000
 # export HISTFILESIZE=HISTSIZE=
 HISTFILE=~/.bash_history_eternal # any `bash --norc` will truncate the default history file
-PROMPT_COMMAND="history -a; history -c; history -r; ${PROMPT_COMMAND}"
-
-# PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND} ;}history -a; history -c; history -r;"
+PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND} ;}history -a; history -c; history -r; "
+# PROMPT_COMMAND="history -a; history -c; history -r; ${PROMPT_COMMAND}"
 
 # NOTE
-# make sure PROMPT_COMMAND isn't null (why?)
+# the PROMPT_COMMAND is run before each prompt is shown, and before PS1 is computed
 # history -a write history to HISTFILE after each command (the default is only on exit, it's kept in memory until)
 # history -r read current history in HISTORY after each command (to be available to the current shell)
 # history -c clears the current shell's current history
+
+# PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND} ;}history -a; history -c; history -r;"
+# make sure PROMPT_COMMAND isn't null (why?)
 
 #########################################
 ## UBUNTU BASHRC DEFAULT SETTINGS
@@ -182,6 +142,86 @@ fi
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+########################################
+## PROMPT SETTINGS
+
+my_set_branch () {
+ # unless empty or unset
+ if [ -z "$__git_ps1" ]; then
+   BRANCH="$(__git_ps1 \(%s\))"
+   # echo $BRANCH
+ fi
+}
+
+my_prompt_command () {
+ my_set_branch
+}
+
+PROMPT_COMMAND="my_prompt_command; $PROMPT_COMMAND"
+
+# function my_get_branch {
+#  # unless empty or unset
+#  if [ -z "$__git_ps1" ]; then
+#    "$(__git_ps1 \(%s\))"
+#  fi
+# }
+
+#NOTE
+
+# this sets the prompt to show the current directory
+# later settings should preserve this as an infix:
+#     PS1="...${PS1}..."
+
+GREEN="\[$(tput setaf 2)\]"
+YELLOW="\[$(tput setaf 3)\]"
+RESET="\[$(tput sgr0)\]"
+PS1="\n\${BRANCH}${YELLOW}\w${RESET}\$ "
+
+# PS1="\n(${GREEN}\u${RESET})${YELLOW}\w${RESET}\$ "
+# PS1="\n(${GREEN}\u${RESET})${GREEN}\w${RESET}\$ "
+# export PS1="\[\e]0;\w\a\]$PS1"
+
+#NOTE
+# under a darkroom'd monitor, yellow is visible while green is faint
+# \${BRANCH}, with an escaped "$" via "\${...}, is a delayed substition
+
+# e.g.
+# GREEN="\[$(tput setaf 2)\]"
+# RESET="\[$(tput sgr0)\]"
+# export PS1="\n${GREEN}\w${RESET}\$ "
+
+#NOTE `PROMPT_COMMAND` is faster than `PS1`
+
+# # if this is an xterm, set the title to the `pwd`
+# case "$TERM" in
+# xterm*|rxvt*)
+#     PS1="\[\e]0;\h: \w\a\]$PS1"
+#     ;;
+# *)
+#     ;;
+# esac
+
+### (too slow)
+# # show current branch when in git repo (or descendent thereof)
+# if [ -x "$(command -v git-radar)" ]; then
+#   export PS1="\W\$(git-radar --bash --fetch) "
+# fi
+
+# NOTE
+# `-x FILE` tests if the FILE is executable
+# `command` is POSIX, and thus most portable
+
+# NOTE
+# requires `git-radar`
+
+#NOTE
+  # --fetch  # Fetches your repo asynchronously in the background every 5 mins
+  # --bash   # Output prompt using Bash style color characters
+
+# source ~/bin/git-prompt.sh
+# PS1='\w$(__git_ps1 " (%s)") \$ '
+# PS1="\n$PS1"
 
 #########################################
 ##

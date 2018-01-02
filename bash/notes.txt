@@ -19,3 +19,140 @@
 #        Optionally, you can supply a third argument with a printf
 #        format string to finetune the output of the branch status
 #
+
+----------------
+
+An interactive shell is
+- one started without non-option arguments, unless -s is specified, without specifying the -c option, and whose input and error output are both connected to terminals (as determined by isatty(3)), 
+- or one started with the -i option.
+An interactive shell generally reads from and writes to a user’s terminal.
+$ bash --interactive
+
+A login shell is a shell where you login.
+$ bash --login
+
+For example, if you login to bash using an xterm or terminal emulator like putty, then the session is both a login shell and an interactive one. If you then type bash then you enter an interactive shell, but it is not a login shell.
+
+If a shell script (a file containing shell commands) is run, then it is neither a login shell nor an interactive one.
+
+When a login bash shell is invoked, in this order:
+- if /etc/profile exists, source (run) it; then keep sourcing (the stuff below)
+- if ~/.bash_profile exists, source (run) it; then stop sourcing
+- if ~/.bash_login exists, source (run) it; then stop sourcing
+- if ~/.profile exists, source (run) it; then stop sourcing
+
+----------------
+
+Bash has four prompts that can be customized:
+
+- PS1 is the primary prompt which is displayed before each command, thus it is the one most people customize.
+- PS2 is the secondary prompt displayed when a command needs more input (e.g. a multi-line command).
+- PS3 is not very commonly used. It is the prompt displayed for Bash's select built-in which displays interactive menus. Unlike the other prompts, it does not expand Bash escape sequences. Usually you would customize it in the script where the select is used rather than in your .bashrc.
+- PS4 is also not commonly used. It is displayed when debugging bash scripts to indicate levels of indirection. The first character is repeated to indicate deeper levels.
+
+e.g.
+export PS2='> '
+
+When printing the prompt string, Bash looks for certain backslash-escaped characters and will expand them into special strings. For example, \u is expanded into the current username and \A is expanded to the current time. So a PS1 of '\A \u $ ' would be printed like 17:35 username $ .
+
+Aside from the escape characters recognized by Bash, most terminals recognize special escape sequences that affect the terminal itself rather than printing characters. For example they might change the color of subsequent printed characters, move the cursor to an arbitrary location, or clear the screen. 
+
+e.g.
+$ infocmp
+
+    #	Reconstructed via infocmp from file:     /lib/terminfo/x/xterm-256color
+    xterm-256color|xterm with 256 colors,
+    	am, bce, ccc, km, mc5i, mir, msgr, npc, xenl,
+    	colors#256, cols#80, it#8, lines#24, pairs#32767,
+    	acsc=``aaffggiijjkkllmmnnooppqqrrssttuuvvwwxxyyzz{{||}}~~,
+    	bel=^G, blink=\E[5m, bold=\E[1m, cbt=\E[Z, civis=\E[?25l,
+    	clear=\E[H\E[2J, cnorm=\E[?12l\E[?25h, cr=^M,
+    	csr=\E[%i%p1%d;%p2%dr, cub=\E[%p1%dD, cub1=^H,
+    	cud=\E[%p1%dB, cud1=^J, cuf=\E[%p1%dC, cuf1=\E[C,
+    	cup=\E[%i%p1%d;%p2%dH, cuu=\E[%p1%dA, cuu1=\E[A,
+    	cvvis=\E[?12;25h, dch=\E[%p1%dP, dch1=\E[P, dim=\E[2m,
+    	dl=\E[%p1%dM, dl1=\E[M, ech=\E[%p1%dX, ed=\E[J, el=\E[K,
+    	el1=\E[1K, flash=\E[?5h$<100/>\E[?5l, home=\E[H,
+    	hpa=\E[%i%p1%dG, ht=^I, hts=\EH, ich=\E[%p1%d@,
+    	il=\E[%p1%dL, il1=\E[L, ind=^J, indn=\E[%p1%dS,
+    	    initc=\E]4;%p1%d;rgb\:%p2%{255}%*%{1000}%/%2.2X/%p3%{255}%*%{1000}%/    %2.2X/%p4%{255}%*%{1000}%/%2.2X\E\\,
+    	invis=\E[8m, is2=\E[!p\E[?3;4l\E[4l\E>, kDC=\E[3;2~,
+    	kEND=\E[1;2F, kHOM=\E[1;2H, kIC=\E[2;2~, kLFT=\E[1;2D,
+    	kNXT=\E[6;2~, kPRV=\E[5;2~, kRIT=\E[1;2C, kb2=\EOE,
+    	kbs=\177, kcbt=\E[Z, kcub1=\EOD, kcud1=\EOB, kcuf1=\EOC,
+    	kcuu1=\EOA, kdch1=\E[3~, kend=\EOF, kent=\EOM, kf1=\EOP,
+    	kf10=\E[21~, kf11=\E[23~, kf12=\E[24~, kf13=\E[1;2P,
+    	kf14=\E[1;2Q, kf15=\E[1;2R, kf16=\E[1;2S, kf17=\E[15;2~,
+    	kf18=\E[17;2~, kf19=\E[18;2~, kf2=\EOQ, kf20=\E[19;2~,
+    	kf21=\E[20;2~, kf22=\E[21;2~, kf23=\E[23;2~,
+    	kf24=\E[24;2~, kf25=\E[1;5P, kf26=\E[1;5Q, kf27=\E[1;5R,
+    	kf28=\E[1;5S, kf29=\E[15;5~, kf3=\EOR, kf30=\E[17;5~,
+    	kf31=\E[18;5~, kf32=\E[19;5~, kf33=\E[20;5~,
+    	kf34=\E[21;5~, kf35=\E[23;5~, kf36=\E[24;5~,
+    	kf37=\E[1;6P, kf38=\E[1;6Q, kf39=\E[1;6R, kf4=\EOS,
+    	kf40=\E[1;6S, kf41=\E[15;6~, kf42=\E[17;6~,
+    	kf43=\E[18;6~, kf44=\E[19;6~, kf45=\E[20;6~,
+    	kf46=\E[21;6~, kf47=\E[23;6~, kf48=\E[24;6~,
+    	kf49=\E[1;3P, kf5=\E[15~, kf50=\E[1;3Q, kf51=\E[1;3R,
+    	kf52=\E[1;3S, kf53=\E[15;3~, kf54=\E[17;3~,
+    	kf55=\E[18;3~, kf56=\E[19;3~, kf57=\E[20;3~,
+    	kf58=\E[21;3~, kf59=\E[23;3~, kf6=\E[17~, kf60=\E[24;3~,
+    	kf61=\E[1;4P, kf62=\E[1;4Q, kf63=\E[1;4R, kf7=\E[18~,
+    	kf8=\E[19~, kf9=\E[20~, khome=\EOH, kich1=\E[2~,
+    	kind=\E[1;2B, kmous=\E[M, knp=\E[6~, kpp=\E[5~,
+    	kri=\E[1;2A, mc0=\E[i, mc4=\E[4i, mc5=\E[5i, meml=\El,
+    	memu=\Em, op=\E[39;49m, rc=\E8, rev=\E[7m, ri=\EM,
+    	rin=\E[%p1%dT, ritm=\E[23m, rmacs=\E(B, rmam=\E[?7l,
+    	rmcup=\E[?1049l, rmir=\E[4l, rmkx=\E[?1l\E>, rmso=\E[27m,
+    	rmul=\E[24m, rs1=\Ec, rs2=\E[!p\E[?3;4l\E[4l\E>, sc=\E7,
+    	    setab=\E[%?%p1%{8}%<%t4%p1%d%e%p1%{16}%<%t10%p1%{8}%-%d%e48;5;%p1%d%    ;m,
+    	    setaf=\E[%?%p1%{8}%<%t3%p1%d%e%p1%{16}%<%t9%p1%{8}%-%d%e38;5;%p1%d%;    m,
+    	    sgr=%?%p9%t\E(0%e\E(B%;\E[0%?%p6%t;1%;%?%p5%t;2%;%?%p2%t;4%;%?%p1%p3    %|%t;7%;%?%p4%t;5%;%?%p7%t;8%;m,
+    	sgr0=\E(B\E[m, sitm=\E[3m, smacs=\E(0, smam=\E[?7h,
+    	smcup=\E[?1049h, smir=\E[4h, smkx=\E[?1h\E=, smso=\E[7m,
+    	smul=\E[4m, tbc=\E[3g, u6=\E[%i%d;%dR, u7=\E[6n,
+    	u8=\E[?1;2c, u9=\E[c, vpa=\E[%i%p1%dd,
+    
+for legibility, you can use Bash's command substitution and     string interpolation. e.g.
+    GREEN="\[$(tput setaf 2)\]"
+    RESET="\[$(tput sgr0)\]"
+    export PS1="${GREEN}my prompt${RESET}> "
+
+
+# all colors
+$ for Color in `seq 1 1 7`; do  echo "$(tput setaf ${Color})color$(tput sgr0)"; done
+
+----------------
+
+for Item in `seq 1 2 9`
+    do 
+        echo $Item
+    done
+
+----------------
+
+`foo() any-compound-command`
+is the POSIX syntax supported by any Bourne-like shell
+
+compound commands include: 
+{ cmd; }
+for i do echo "$i"; done
+(cmd)
+... 
+The function keyword was introduced in ksh. The traditional Bourne shell only had the foo () syntax, and POSIX standardizes only the foo () syntax.
+
+----------------
+
+PROMPT_COMMAND can contain ordinary bash statements 
+whereas 
+the PS1 variable can also contain the special characters, such as '\h' for hostname, in the variable.
+
+----------------
+
+$(git_prompt) 
+will be evaluated when the .bashrc is evaluated and
+
+\$(git_prompt) 
+will be evaluated everytime a new prompt is displayed
+
+----------------
