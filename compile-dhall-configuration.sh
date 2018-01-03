@@ -5,6 +5,11 @@ LINK_OPTIONS=$1 # no force by default
 echo "[OPTIONS] $LINK_OPTIONS"
 echo
 
+# 
+function _get_directory {
+ echo $(dirname "$1")
+}
+
 # absolute path
 function _get_absolute_path {
  echo $(readlink -f "$1")

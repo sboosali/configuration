@@ -38,6 +38,7 @@ alias d.......="cd ../../../../../.."
 alias de='cd ~/.emacs.d'
 alias dew='cd ~/.emacs.d-windows'
 alias dc='cd ~/configuration'
+alias dn='cd ~/.config/nixpkgs'
 # alias d='cd '
 
 # ls 

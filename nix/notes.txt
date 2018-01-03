@@ -1,4 +1,25 @@
 ----------------------------------------
+overlays
+
+type Overlay a = (a -> a -> a)
+
+type Overlay = (Dict -> Dict -> Dict)
+
+identityOverlay :: Overlay
+identityOverlay self super = {}
+
+----
+
+overlays.nix is a list of overlays
+
+each overlays/_.nix can be an overlay "Endo Endo Dict"
+
+
+
+
+
+
+----------------------------------------
 
 # ln -s <nixpkgs> ~/.nix-defexpr 
 # don't need to use -f
