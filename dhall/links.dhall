@@ -15,12 +15,16 @@ in let links =
    , { o = "~/.gitconfig" ,                              i = "./git/.gitconfig"                         }
    , { o = "~/.git-prompt.sh" ,                          i = "./bash/.git-prompt.sh"                    }
 
-   , { o = "~/.nixpkgs/config.nix" ,                     i = "./nix/config.nix"                         }
+   , { o = "~/.config/nixpkgs/config.nix" ,                     i = "./nix/config.nix"                         }
    , { o = "~/.nix-channels" ,                           i = "./nix/nix-channels.txt"                   }
+   , { o = "~/.config/nixpkgs/overlays.nix" ,                     i = "./nix/overlays.nix"                         }
+   
 
    , { o = "~/.xbindkeysrc.scm" ,                        i = "./xbindkeys/.xbindkeysrc.scm"             }
 
    , { o = "~/.Xmodmap" ,                                i = "./xmodmap/.Xmodmap"                       }
+
+--   , { o = "~/.xprofile" ,                                i = "./x11/.xprofile"                       }
 
    , { o = "~/.ghci" ,                                   i = "./ghci/ghci.conf"                         }
    , { o = "~/.cabal/config" ,                           i = "./cabal/config.yaml"                      }

@@ -1,27 +1,44 @@
+----------------------------------------
+
+# ln -s <nixpkgs> ~/.nix-defexpr 
+# don't need to use -f
+
+----------------------------------------
+
+This nix expression requires that cudnn-8.0-linux-x64-v6.0.tgz is already part of the store.
+Register yourself to NVIDIA Accelerated Computing Developer Program, retrieve the cuDNN library
+at https://developer.nvidia.com/cudnn, and run the following command in the download directory:
+nix-prefetch-url file://cudnn-8.0-linux-x64-v6.0.tgz
+
+Register yourself to NVIDIA Accelerated Computing Developer Program
+retrieve the cuDNN library at https://developer.nvidia.com/cudnn
+nix-prefetch-url file://cudnn-8.0-linux-x64-v6.0.tgz
+
+----------------------------------------
+google-chrome v chromium
+
+svox-2017-07-18
+speech-dispatcher-0.8.8
+espeak-ng-1.49.2
+pcaudiolib-2016-07-19
+sonic-2016-03-01
+
+pcaudiolib
+    Provides a C API to different audio devices
+
+sonic
+    Simple library to speed up or slow down speech
+
+speech-dispatcher
+    Common interface to speech synthesis
+
+eSpeak NG 
+Text-to-Speech
+
+svox
+Automated Speech Recognition (ASR), Text-to-Speech (TTS) and Speech Dialog systems
+an embedded speech technology company acquired by Nuance 
+customers mostly being manufacturers and system integrators in automotive and mobile device industries.
 
 
-
-    let Link = { i : Text, o : Text }
-
-in  let map = http://prelude.dhall-lang.org/List/map 
-
-in  map
-    Link
-    Text
-    (λ(l : Link) → l.i # " " # l.o)
-    (   [ { i = "./.bashrc", o = "~/.bashrc" }
-        , { i = "./.gitconfig", o = "~/.gitconfig" }
-        , { i = "./stack/config.yaml", o = "~/.stack/config.yaml" }
-        , { i = "./nix/config.nix", o = "~/.nixpkgs/config.nix" }
-        ]
-      : List Link
-    )
-
-
-
-
-
-$ dhall <<< 'let map = http://prelude.dhall-lang.org/List/map in map Natural Natural (\(i : Natural) -> +10 * i) [+1,+2]' 
-List Natural
-
-[ +10, +20 ] : List Natural
+----------------------------------------

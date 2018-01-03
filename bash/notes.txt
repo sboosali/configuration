@@ -156,3 +156,45 @@ will be evaluated when the .bashrc is evaluated and
 will be evaluated everytime a new prompt is displayed
 
 ----------------
+export
+
+export makes the variable available to sub-processes (not any parent processes)
+
+export name=value
+
+means that the variable name is available to any process you run from that shell process. If you want a process to make use of this variable, use export, and run the process from that shell.
+
+name=value
+
+means the variable scope is restricted to the shell, and is not available to any other process. You would use this for (say) loop variables, temporary variables etc.
+
+It's important to note that exporting a variable doesn't make it available to parent processes. That is, specifying and exporting a variable in a spawned process doesn't make it available in the process that launched it.
+
+name=value command does make the variable available in the sub-process command.
+
+If export is not used, the variable will only be available in the shell, and only shell builtins can access it.
+
+tango=3
+env | grep tango # prints nothing, since env is a child process
+set | grep tango # prints tango=3 - "type set" shows `set` is a shell builtin
+
+~$ type set
+set is a shell builtin
+
+~$ type env
+env is /usr/bin/env
+
+subshells v subprocesses
+subshells (those that are created by (), ``, $() or loops)
+subprocesses (processes that are invoked by name, for example a literal bash appearing in your script)
+
+Subshells will have access to all variables from the parent, regardless of their exported state. Subprocesses on the other hand will only see the exported variables. What is common in these two constructs is that neither can pass variables back to the parent shell.
+
+Usually fork()s are immediately followed by exec()s, and that's why it would seem that the fork() is the thing to look for, while in fact it's the exec(). You can run commands without fork()ing first with the exec command, and processes started by this method will also have no access to unexported variables:
+
+$ noexport=noexport; export export=export; exec bash -c 'echo execd process: $noexport $export; execd=execd'; echo parent: $execd
+execd process: export
+# `parent:` is not seen
+
+
+----------------

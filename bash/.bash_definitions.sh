@@ -149,6 +149,11 @@ alias clean-haskell="remove \"$1\".{dyn_hi,dyn_o,hi,o}"
 alias clean-emacs="remove $1.{~} .#$1"
 
 ########################################
+## META CONFIGURATION
+
+alias configuration='~/configuration/run-configuration.sh' # TODO make relpath
+
+########################################
 ## NIX
 
 alias emacs-nix='./result/bin/emacs -q --load "./init.el"' # relative filepaths
@@ -182,7 +187,7 @@ function nih() {
 }
 
 function nie() {
- nix-env -f "<nixpkgs>" -i -A emacsPackagesNg.melpaPackages."$@"
+ nix-env -f "<nixpkgs>" -i -A emacs25PackagesNg.melpaPackages."$@"
 }
 
 function nqh() {
@@ -190,17 +195,57 @@ function nqh() {
 }
 
 function nqe() {
- nix-env -f "<nixpkgs>" -qaP -A emacsPackagesNg.melpaPackages | grep -i "$@"
+ nix-env -f "<nixpkgs>" -qaP -A emacs25PackagesNg.melpaPackages | grep -i "$@"
 }
 
 alias nix-make-shell='cabal2nix *.cabal --sha256=0 --shell > shell.nix'
 alias nix-make-default='cabal2nix *.cabal > default.nix'
 
+# e.g.
+# 
+# $ nr
+# nix-repl> p = import <nixpkgs> {}
+# nix-repl> :t p
+# a set
+# nix-repl> :a p
+# Added 8184 variables.
+# nix-repl> 
+# nix-repl> 
+# nix-repl> 
+# 
+# <x> = <expr>  Bind expression to variable
+# :a <expr>     Add attributes from resulting set to scope
+# 
+# echo 'p = import <nixpkgs> {}' | nix-repl
+#
+# :a lib
+# 
 function nr () {
+  echo
   echo 'p = import <nixpkgs> {}'
-  echo 'c = (import /etc/nixos/configuration.nix) { inherit (p) pkgs config lib; }'
+  echo ':a p'
+  echo
+  echo 'l = lib'
+  echo ':a lib'
+  # echo '   # std lib'
+  echo
+  echo 'c = config' 
+  echo 'l.length (l.toList c)'
+  # echo '    # from ~/.nixpkgs/config.nix'
+  echo
+  echo 'h = p.haskellPackages'
+  echo 'ghc = p.haskell.compiler'
+  echo 'l.hasAttr "ghc822" ghc'
+  echo
+  echo 'e = p.emacs25PackagesNg.melpaPackages'  
+  echo
+  echo
+  #  echo 'c = (import /etc/nixos/configuration.nix) { inherit (p) pkgs config lib; }'
   nix-repl
 }
+
+# NixOS
+# echo 'c = (import /etc/nixos/configuration.nix) { inherit (p) pkgs config lib; }'
 
 ########################################
 ## HASKELL
@@ -479,6 +524,15 @@ function ssh-fingerprint () {
 ssh-keygen -E md5 -lf "$1.pub"
 } 
 
+# https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/
+# 
+# ssh-keygen -t rsa -b 4096 -C "github-sboosali"
+# ssh-add ~/.ssh/id_rsa
+# 
+# xclip -sel clip < ~/.ssh/id_rsa.pub
+# xdg-open https://github.com/settings/ssh/new
+
+
 alias sshl='ssh-add -l'
 
 function ssha () {
@@ -612,6 +666,11 @@ alias red="redshift -O 1000" # one-shot, 1000K
 alias un-red="redshift -x" # 
 alias orange="redshift -O 2000" # one-shot
 alias yellow="redshift -O 3000" # one-shot
+
+########################################
+## SSH
+
+eval "$(ssh-agent -s)"
 
 ########################################
 ## 
