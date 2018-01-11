@@ -38,7 +38,6 @@ alias d.......="cd ../../../../../.."
 alias de='cd ~/.emacs.d'
 alias dew='cd ~/.emacs.d-windows'
 alias dc='cd ~/configuration'
-alias dn='cd ~/.config/nixpkgs'
 # alias d='cd '
 
 # ls 
@@ -150,11 +149,6 @@ alias clean-haskell="remove \"$1\".{dyn_hi,dyn_o,hi,o}"
 alias clean-emacs="remove $1.{~} .#$1"
 
 ########################################
-## META CONFIGURATION
-
-alias configuration='~/configuration/run-configuration.sh' # TODO make relpath
-
-########################################
 ## NIX
 
 alias emacs-nix='./result/bin/emacs -q --load "./init.el"' # relative filepaths
@@ -188,7 +182,7 @@ function nih() {
 }
 
 function nie() {
- nix-env -f "<nixpkgs>" -i -A emacs25PackagesNg.melpaPackages."$@"
+ nix-env -f "<nixpkgs>" -i -A emacsPackagesNg.melpaPackages."$@"
 }
 
 function nqh() {
@@ -196,57 +190,17 @@ function nqh() {
 }
 
 function nqe() {
- nix-env -f "<nixpkgs>" -qaP -A emacs25PackagesNg.melpaPackages | grep -i "$@"
+ nix-env -f "<nixpkgs>" -qaP -A emacsPackagesNg.melpaPackages | grep -i "$@"
 }
 
 alias nix-make-shell='cabal2nix *.cabal --sha256=0 --shell > shell.nix'
 alias nix-make-default='cabal2nix *.cabal > default.nix'
 
-# e.g.
-# 
-# $ nr
-# nix-repl> p = import <nixpkgs> {}
-# nix-repl> :t p
-# a set
-# nix-repl> :a p
-# Added 8184 variables.
-# nix-repl> 
-# nix-repl> 
-# nix-repl> 
-# 
-# <x> = <expr>  Bind expression to variable
-# :a <expr>     Add attributes from resulting set to scope
-# 
-# echo 'p = import <nixpkgs> {}' | nix-repl
-#
-# :a lib
-# 
 function nr () {
-  echo
   echo 'p = import <nixpkgs> {}'
-  echo ':a p'
-  echo
-  echo 'l = lib'
-  echo ':a lib'
-  # echo '   # std lib'
-  echo
-  echo 'c = config' 
-  echo 'l.length (l.toList c)'
-  # echo '    # from ~/.nixpkgs/config.nix'
-  echo
-  echo 'h = p.haskellPackages'
-  echo 'ghc = p.haskell.compiler'
-  echo 'l.hasAttr "ghc822" ghc'
-  echo
-  echo 'e = p.emacs25PackagesNg.melpaPackages'  
-  echo
-  echo
-  #  echo 'c = (import /etc/nixos/configuration.nix) { inherit (p) pkgs config lib; }'
+  echo 'c = (import /etc/nixos/configuration.nix) { inherit (p) pkgs config lib; }'
   nix-repl
 }
-
-# NixOS
-# echo 'c = (import /etc/nixos/configuration.nix) { inherit (p) pkgs config lib; }'
 
 ########################################
 ## HASKELL
@@ -407,7 +361,7 @@ cabal2nix . > package.nix
 
 if [[ ! -f default.nix ]]; then
 cat <<EOF > default.nix
-{ nixpkgs ? import <nixpkgs> {}, compiler ? "ghc802" }:
+{ nixpkgs ? import <nixpkgs> {}, compiler ? "ghc822" }:
 nixpkgs.pkgs.haskell.packages.\${compiler}.callPackage ./package.nix { }
 EOF
 fi
@@ -422,7 +376,7 @@ let
 
   f = import ./default.nix;
   ps = {
-    spiros = ~/spiros; # absolute
+    # spiros = ~/spiros; # TODO absolute
   };
 
   haskellPackages = if compiler == "default"
@@ -524,15 +478,6 @@ export GPG_TTY
 function ssh-fingerprint () {
 ssh-keygen -E md5 -lf "$1.pub"
 } 
-
-# https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/
-# 
-# ssh-keygen -t rsa -b 4096 -C "github-sboosali"
-# ssh-add ~/.ssh/id_rsa
-# 
-# xclip -sel clip < ~/.ssh/id_rsa.pub
-# xdg-open https://github.com/settings/ssh/new
-
 
 alias sshl='ssh-add -l'
 
@@ -667,11 +612,6 @@ alias red="redshift -O 1000" # one-shot, 1000K
 alias un-red="redshift -x" # 
 alias orange="redshift -O 2000" # one-shot
 alias yellow="redshift -O 3000" # one-shot
-
-########################################
-## SSH
-
-eval "$(ssh-agent -s)"
 
 ########################################
 ## 

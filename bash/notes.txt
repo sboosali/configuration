@@ -1,3 +1,15 @@
+----------------
+
+
+----------------
+title
+
+set title of terminal window
+
+PROMPT_COMMAND='echo -ne "\033]0;YOUR TITLE GOES HERE\007"'
+
+----------------
+
 # To enable:
 #
 #    1) Copy this file to somewhere (e.g. ~/.git-prompt.sh).
