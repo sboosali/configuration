@@ -354,6 +354,18 @@ import Language.Haskell.HLint
 import System.Environment
 import System.Exit
 
+{-|
+
+Usage:
+
+you can hide code from hlint, 
+by using cpp in the source:
+
+    #ifndef HLINT
+    ...
+    #endif
+
+-}
 main :: IO ()
 main = do
     args <- getArgs
