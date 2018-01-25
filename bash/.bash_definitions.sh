@@ -27,7 +27,7 @@ alias o="echo"
 # alias e="echo" # emacs
 
 # cd
-alias dh='cd ~'
+# d == cd == 'cd ~'
 alias d-="cd -"
 alias d..="cd .."
 alias d...="cd ../.."
@@ -38,6 +38,12 @@ alias d.......="cd ../../../../../.."
 alias de='cd ~/.emacs.d'
 alias dew='cd ~/.emacs.d-windows'
 alias dc='cd ~/configuration'
+alias dh='cd ~/haskell'
+alias dt='cd ~/temporary'
+alias dw='cd ~/Downloads'
+alias dm='cd ~/Documents'
+alias dn='cd ~/.nixpkgs'
+# alias d='cd '
 # alias d='cd '
 
 # ls 
@@ -118,7 +124,7 @@ alias lnr='readlink -f'
 alias lns='ln -sf' # /path/to/file /path/to/symlink
 # alias pwn="sudo chown -R sboo:users"
 alias yt='youtube-dl -f 22' # needs youtube-dl
-alias unzip="7z x" # needs 7z
+# alias unzip="7z x" # needs 7z
 
 # Natural Language Commands
 alias list="ls -1aFG"
@@ -153,25 +159,55 @@ alias clean-emacs="remove $1.{~} .#$1"
 
 alias emacs-nix='./result/bin/emacs -q --load "./init.el"' # relative filepaths
 
+alias nf='nix-env -f"' # e.g. nf "<nixpkgs>"
 alias ne='nix-env -f "<nixpkgs>"'
 alias nea='nix-env -A -f "<nixpkgs>"'
 alias ni="nix-env -i"
+alias nu="nix-env --uninstall"
+alias nua="nix-env -u '*'"
+
 alias nb="nix-build"
-alias ns="nix-store"
-alias nlp="nix-shell --pure"
+alias nbe="nix-build ~/.nixpkgs/environment.nix" #TODO home.nix
+
 alias nl="nix-shell"
-alias nbe="nix-build ~/.nixpkgs/environment.nix"
+alias nlp="nix-shell --pure"
+
+alias nix-eval="nix-instantiate --eval"
+alias nx="nix-instantiate --eval"
+alias nxv="nix-instantiate --eval"
+alias nxp="nix-instantiate --parse"
+alias nxe="nix-instantiate --eval"
+alias nxs="nix-instantiate --eval --strict" 
+  # recursively evaluate list elements and attributes
+  # NOTE may loop
+alias nxx="nix-instantiate --expr" # nxx 'import ./"$1" {}'
+           # Interpret the command line arguments as a list of Nix expressions to be parsed and evaluated, rather than as a list of
+           # file names of Nix expressions. 
+# alias nx1="nix-instantiate --eval" # eval unary with defaults
+# alias nx2="nix-instantiate --eval" # eval binary with defaults
+alias nx1="nix-instantiate --eval" # eval unary with defaults
+
+alias ns="nix-store"
 alias nsr='nix-store --query --references'
 alias nsi='nix-store --query --references $(nix-instantiate "<nixpkgs>" -A "$1")'
+
 alias ncu="nix-channel --update"
 alias ncux="nix-channel --update nixpkgs"
-alias nua="nix-env -u '*'"
-alias neu="nix-env --uninstall"
+
+alias npg="nix-prefetch-git --quiet"
+alias npu="nix-prefetch-url"
+
 #alias n="nix-"
 #alias n="nix-"
 
-nq(){ nix-env -qa \* -P | fgrep -i "$1"; }
-nql(){ nix-env -q \* -P | fgrep -i "$1"; } # local
+function nq() {
+ nix-env -qa \* -P | fgrep -i "$1";
+}
+
+function nql() {
+ nix-env -q \* -P | fgrep -i "$1";
+ # local
+} 
 
 function nia() {
  nix-env -f "<nixpkgs>" -i -A "$@"
@@ -198,7 +234,9 @@ alias nix-make-default='cabal2nix *.cabal > default.nix'
 
 function nr () {
   echo 'p = import <nixpkgs> {}'
-  echo 'c = (import /etc/nixos/configuration.nix) { inherit (p) pkgs config lib; }'
+  echo 'c = p.config'
+  echo 'l = p.lib'  
+  # echo 'c = (import /etc/nixos/configuration.nix) { inherit (p) pkgs config lib; }'
   nix-repl
 }
 
@@ -212,6 +250,10 @@ function nr () {
 # function he() { 
 #  stack exec -- "$@" 
 # }
+
+alias hc="cabal configure"
+alias hb="cabal build"
+alias hr="cabal run"
 
 alias hcc="cabal configure"
 alias hcb="cabal build"
@@ -256,15 +298,15 @@ function heg() {
 }
 
 function hdot () {
-PACKAGE=$(basename $PWD)
-DIRECTORY=images
-# prunet boot packages  and wired-in
-# http://stackoverflow.com/a/10056017/1337806
-mkdir -p $DIRECTORY
-stack dot --external --prune base,base-orphans,ghc-prim,integer-gmp,integer-simple,hsc2hs,haddock,array,binary,bytestring,Cabal,ghc-compact,containers,deepseq,directory,filepath,haskeline,hoopl,hpc,pretty,process,terminfo,time,transformers,xhtml,parallel,stm,random,primitive,vector,dph,template-haskell,transformers-compat,hashable > $DIRECTORY/$PACKAGE.dot
-dot -Tpng -o $DIRECTORY/$PACKAGE.png $DIRECTORY/$PACKAGE.dot 
-rm $DIRECTORY/$PACKAGE.dot 
-chromium file://$(path $DIRECTORY/$PACKAGE.png) &disown
+ PACKAGE=$(basename $PWD)
+ DIRECTORY=images
+ # prunet boot packages  and wired-in
+ # http://stackoverflow.com/a/10056017/1337806
+ mkdir -p $DIRECTORY
+ stack dot --external --prune base,base-orphans,ghc-prim,integer-gmp,integer-simple,hsc2hs,haddock,array,binary,bytestring,Cabal,ghc-compact,containers,deepseq,directory,filepath,haskeline,hoopl,hpc,pretty,process,terminfo,time,transformers,xhtml,parallel,stm,random,primitive,vector,dph,template-haskell,transformers-compat,hashable > $DIRECTORY/$PACKAGE.dot
+ dot -Tpng -o $DIRECTORY/$PACKAGE.png $DIRECTORY/$PACKAGE.dot 
+ rm $DIRECTORY/$PACKAGE.dot 
+ chromium file://$(path $DIRECTORY/$PACKAGE.png) &disown
 }
 
 # scaffolding
@@ -298,7 +340,7 @@ function hs () {
 }
 
 function hd () {
-stack haddock --open --keep-going 
+ stack haddock --open --keep-going 
 }
 
 # New project scaffolding
@@ -344,6 +386,38 @@ function hnew () {
     # open sources/$MODULE/Example.hs
 }
 
+# New project scaffolding
+function h-new () {
+    PACKAGE="$1"
+    MODULE="$2"
+    _FILEPATH="$3"
+
+    MESSAGE='h-new PACKAGE MODULE FILEPATH''\n''e.g. h-new workflow-derived Workflow.Derived Workflow/Derived'
+
+    if [ "$#" -ne 3 ]; then
+        echo -e $MESSAGE
+	return 1
+    fi
+
+    LOCAL_TEMPLATE=~/.stack/templates/spirosboosalis.hsfiles
+    REMOTE_TEMPLATE='https://raw.githubusercontent.com/sboosali/config/master/stack/templates/spirosboosalis.hsfiles'
+    if [ -f "$LOCAL_TEMPLATE" ]; then
+	TEMPLATE=$LOCAL_TEMPLATE
+    else
+	TEMPLATE=$REMOTE_TEMPLATE
+    fi
+    
+    stack new $PACKAGE $TEMPLATE -pmodule:$MODULE -pfilepath:$_FILEPATH
+    cd $PACKAGE
+    if [ "$?" -ne 0 ]; then
+        echo -e $MESSAGE
+	return 1
+    fi
+
+    cabal2nix . --shell > shell.nix
+    # (nix-shell && cabal build && cabal run example-$PACKAGE)
+}
+
 # To generate a Nix build expression for it, change into the project’s top-level directory and run the command:
 # $ cabal2nix . >foo.nix
 # Then write the following snippet into a file called default.nix:
@@ -354,20 +428,20 @@ function hnew () {
 # (import ./default.nix { inherit nixpkgs compiler; }).env
 
 function h2n() {
+ 
+ cabal2nix . > package.nix
+ # package.nix gets overwritten
+ # default.nix and shell.nix don't get overwritten, if present
 
-cabal2nix . > package.nix
-# package.nix gets overwritten
-# default.nix and shell.nix don't get overwritten, if present
-
-if [[ ! -f default.nix ]]; then
-cat <<EOF > default.nix
+ if [[ ! -f default.nix ]]; then
+ cat <<EOF > default.nix
 { nixpkgs ? import <nixpkgs> {}, compiler ? "ghc822" }:
 nixpkgs.pkgs.haskell.packages.\${compiler}.callPackage ./package.nix { }
 EOF
-fi
+ fi
 
-if [[ ! -f shell.nix ]]; then  # `-f` caveat: http://stackoverflow.com/questions/638975/how-do-i-tell-if-a-regular-file-does-not-exist-in-bash
-cat <<EOF > shell.nix
+ if [[ ! -f shell.nix ]]; then  # `-f` caveat: http://stackoverflow.com/questions/638975/how-do-i-tell-if-a-regular-file-does-not-exist-in-bash
+ cat <<EOF > shell.nix
 { nixpkgs ? import <nixpkgs> {}, compiler ? "default" }:
 
 let
@@ -389,7 +463,7 @@ in
 
   if pkgs.lib.inNixShell then drv.env else drv
 EOF
-fi
+ fi
 }
 
 # { ps ? (import <nixpkgs> {}).pkgs, mkDerivation
@@ -421,25 +495,25 @@ fi
 
 DIV="\n\n--------------------------------------------------------------------------------\n\n"
 
-function dog {
- SEP="--------------------------------------------------------"
- while read file; do
-     if [ -f "$file" ]; then
-         echo -e "\n"$SEP
-         echo "$file"
-         echo -e $SEP"\n"
-         cat "$file"
-     fi
- done
-}
+# function dog {
+#  SEP="--------------------------------------------------------"
+#  while read file; do
+#      if [ -f "$file" ]; then
+#          echo -e "\n"$SEP
+#          echo "$file"
+#          echo -e $SEP"\n"
+#          cat "$file"
+#      fi
+#  done
+# }
 
 function show-variable () {
-echo "$1" | tr ':' '\n'
+ echo "$1" | tr ':' '\n'
 }
 
 # Pretty print the path
 function show-path () {
-echo $PATH | tr ':' '\n'
+ echo $PATH | tr ':' '\n'
 }
 
 # needs curl
@@ -450,7 +524,7 @@ function download {
 }
 
 function cobra () {
-python -c "
+ python -c "
 import sys
 x = list(sys.stdin)[0].strip().split()
 print($@)
@@ -458,7 +532,7 @@ print($@)
 }
 
 function space () {
-stat -f%z "$@" | '(float(x[0])/1e9, "gigabytes")'
+ stat -f%z "$@" | '(float(x[0])/1e9, "gigabytes")'
 }
 
 # absolute path
@@ -476,19 +550,19 @@ export GPG_TTY
 #
 # http://stackoverflow.com/questions/9607295/how-do-i-find-my-rsa-key-fingerprint
 function ssh-fingerprint () {
-ssh-keygen -E md5 -lf "$1.pub"
+ ssh-keygen -E md5 -lf "$1.pub"
 } 
 
 alias sshl='ssh-add -l'
 
 function ssha () {
-_PRIVATE_KEY="$1"
-_MESSAGE='sshl PRIVATE_KEY'
-if [ "$#" -ne 1 ]; then
-        echo $_MESSAGE
-	return 1
-fi
-ssh-add ~/.ssh/$1
+ _PRIVATE_KEY="$1"
+ _MESSAGE='sshl PRIVATE_KEY'
+ if [ "$#" -ne 1 ]; then
+     echo $_MESSAGE
+     return 1
+ fi
+ ssh-add ~/.ssh/$1
 }
 
 # # 
@@ -542,46 +616,48 @@ function blame {
 }
 
 function clone () {
-# use ssh
-_GITHUB_USER=$1
-_GITHUB_REPOSITORY=$2
-_MESSAGE='clone USER REPOSITORY'
-if [ "$#" -ne 2 ]; then
-        echo $_MESSAGE
-	return 1
-fi
-git clone git@github.com:"$_GITHUB_USER"/"$_GITHUB_REPOSITORY".git
-cd "$_GITHUB_REPOSITORY"
+ # use ssh
+ _GITHUB_USER=$1
+ _GITHUB_REPOSITORY=$2
+ _MESSAGE='clone USER REPOSITORY'
+ if [ "$#" -ne 2 ]; then
+         echo $_MESSAGE
+ 	return 1
+ fi
+ git clone git@github.com:"$_GITHUB_USER"/"$_GITHUB_REPOSITORY".git
+ cd "$_GITHUB_REPOSITORY"
 }
+ 
+alias gc="clone sboosali"
 
 # submodule
 function git-mod () {
-_GITHUB_REPOSITORY=$1
-_MESSAGE='git-mod REPOSITORY'
-if [ "$#" -ne 1 ]; then
-        echo $_MESSAGE
-	return 1
-fi
-git submodule add git@github.com:sboosali/"$_GITHUB_REPOSITORY".git "$_GITHUB_REPOSITORY"
+ _GITHUB_REPOSITORY=$1
+ _MESSAGE='git-mod REPOSITORY'
+ if [ "$#" -ne 1 ]; then
+         echo $_MESSAGE
+ 	return 1
+ fi
+ git submodule add git@github.com:sboosali/"$_GITHUB_REPOSITORY".git "$_GITHUB_REPOSITORY"
 }
 
 # e.g.
 # git remote set-url origin $( make-github-ssh sboosali .emacs.d)
 function make-github-ssh () {
-_GITHUB_USER=$1
-_GITHUB_REPOSITORY=$2
-git@github.com:"$_GITHUB_USER"/"$_GITHUB_REPOSITORY".git
+ _GITHUB_USER=$1
+ _GITHUB_REPOSITORY=$2
+ git@github.com:"$_GITHUB_USER"/"$_GITHUB_REPOSITORY".git
 }
-
+ 
 # git subtree add -P <prefix> <repo> <rev>
 function git-merge-repos () {
-_MESSAGE='git-merge-repos <prefix> <repo> <rev> (to be merged into the current one)'
-if [ "$#" -ne 3 ]; then
-        echo $_MESSAGE
-	return 1
-fi
-
-git subtree add -P "$@"
+ _MESSAGE='git-merge-repos <prefix> <repo> <rev> (to be merged into the current one)'
+ if [ "$#" -ne 3 ]; then
+    echo $_MESSAGE
+    return 1
+ fi
+ 
+ git subtree add -P "$@"
 }
 
 # # http://stackoverflow.com/questions/1425892/how-do-you-merge-two-git-repositories
@@ -599,6 +675,14 @@ git subtree add -P "$@"
 # git remote remove $_TEMPORARY 
 # }
 
+
+# unzip each zip file into its own folder
+function unzip-each () {
+ for i in *.zip; do 
+   unzip "$i" -d "${i%%.zip}"
+ done
+}
+
 ########################################
 ## X
 
@@ -609,9 +693,9 @@ git subtree add -P "$@"
 # xrandr -d :0 --output eDP-1-1 --gamma "1:1:1" # restore default
 # xrandr -d :0 --output eDP-1-1 --gamma "1:1:1"
 alias red="redshift -O 1000" # one-shot, 1000K
-alias un-red="redshift -x" # 
+alias un-red="redshift -x" #
+alias white="redshift -x" # 
 alias orange="redshift -O 2000" # one-shot
 alias yellow="redshift -O 3000" # one-shot
 
 ########################################
-## 
