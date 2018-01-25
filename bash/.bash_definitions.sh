@@ -626,8 +626,13 @@ function clone () {
  fi
  git clone git@github.com:"$_GITHUB_USER"/"$_GITHUB_REPOSITORY".git
  cd "$_GITHUB_REPOSITORY"
+
+ git branch --set-upstream-to=origin/master master
+
+ git remote -v
+ git branch -a
 }
- 
+
 alias gc="clone sboosali"
 
 # submodule
