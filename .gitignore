@@ -5,6 +5,7 @@ TODO
 # nix
 result/
 result
+**/result
 
 # Haskell
 cabal.project.local
