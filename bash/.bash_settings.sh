@@ -15,6 +15,7 @@
 ## IMPORTS
 
 if [ -f .git-prompt.sh ]; then
+  # shellcheck disable=SC1091 
   source .git-prompt.sh
 fi
 
@@ -115,7 +116,12 @@ fi
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+
+    if   test -r ~/.dircolors
+    then eval "$(dircolors -b ~/.dircolors)"
+    else eval "$(dircolors -b)"
+    fi
+
     alias ls='ls --color=auto'
     #alias dir='dir --color=auto'
     #alias vdir='vdir --color=auto'
@@ -133,8 +139,10 @@ export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quo
 # sources /etc/bash.bashrc).
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
+    # shellcheck disable=SC1091,SC1094
     . /usr/share/bash-completion/bash_completion
   elif [ -f /etc/bash_completion ]; then
+    # shellcheck disable=SC1091
     . /etc/bash_completion
   fi
 fi
@@ -148,6 +156,7 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 
 my_set_branch () {
  # unless empty or unset
+ # shellcheck disable=SC2154 
  if [ -z "$__git_ps1" ]; then
    BRANCH="$(__git_ps1 \(%s\))"
    # echo $BRANCH
@@ -173,10 +182,10 @@ PROMPT_COMMAND="my_prompt_command; $PROMPT_COMMAND"
 # later settings should preserve this as an infix:
 #     PS1="...${PS1}..."
 
-GREEN="\[$(tput setaf 2)\]"
-YELLOW="\[$(tput setaf 3)\]"
-RESET="\[$(tput sgr0)\]"
-PS1="\n\${BRANCH}${YELLOW}\w${RESET}\$ "
+# GREEN="\\[$(tput setaf 2)\\]"
+YELLOW="\\[$(tput setaf 3)\\]"
+RESET="\\[$(tput sgr0)\\]"
+PS1="\\n\${BRANCH}${YELLOW}\\w${RESET}\$ "
 
 # PS1="\n(${GREEN}\u${RESET})${YELLOW}\w${RESET}\$ "
 # PS1="\n(${GREEN}\u${RESET})${GREEN}\w${RESET}\$ "

@@ -28,6 +28,7 @@ esac
 
 # nix
 if [ -f  "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
+  # shellcheck disable=SC1090
   source "$HOME/.nix-profile/etc/profile.d/nix.sh"
 fi
 

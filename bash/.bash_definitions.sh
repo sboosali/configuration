@@ -1,4 +1,6 @@
 #!/bin/bash
+########################################
+## NOTES
 
 # this file is "pure", it only declares aliases and functions.
 # like .bash_aliases plus .bash_functions
@@ -9,10 +11,11 @@
 ## DEFINITIONS 
 
 function brush () {
-# synonym for "touch"
-mkdir -p `dirname "$1"`
-touch "$1"
+  # synonym for "touch"
+  mkdir -p "$(dirname "$1")"
+  touch "$1"
 }
+alias t=brush
 
 # short
 alias d='cd'
@@ -20,7 +23,6 @@ alias c='cat'
 alias n=nano
 alias r='rm -r'
 alias l='ls -al'
-alias t=brush
 alias f='find'
 alias g='git'
 alias o="echo"
@@ -64,7 +66,7 @@ alias xbr='xbrightness 65535'
 alias xd='xdotool'
 alias xw='wmctrl'
 alias xo='xdg-open'
-function open {
+function open () {
   xdg-open &disown
 }
 
@@ -76,16 +78,16 @@ alias xb='xbindkeys'
 alias r="grep -E --color=auto -i"
 
 # editing
-function seteditor {
+function seteditor () {
    export EDITOR="$1"
 }
 
 # emacs
-function e() { 
+function e () { 
  emacsclient "$@" & 
 }
 alias ee="emacsclient"
-alias eb="$EDITOR ~/.bashrc && source ~/.bashrc"
+alias eb='$EDITOR ~/.bashrc && source ~/.bashrc' # single-quotes for dynamically-scoped EDITOR
 alias ed="emacs --debug-init"
 alias eq="emacs -q"
 alias edq="emacs -q --debug-init"
@@ -108,7 +110,7 @@ function se () {
 # rm
 alias rm="rm -f"
 alias rmr="rm -rf"
-alias rmt="rm -f *~ .*~ \#*\# .\#* matlab_crash_dump.* java.log.* *.pyc *.class __pycache__/*.pyc *.agdai *.hi *.hout *.o"
+alias rmt='rm -f *~ .*~ \#*\# .\#* matlab_crash_dump.* java.log.* *.pyc *.class __pycache__/*.pyc *.agdai *.hi *.hout *.o'
 
 # chmod
 alias c7="chmod 700"
@@ -148,11 +150,11 @@ alias g="git"
 alias gl="git status" # mnemonic: git "list"
 alias gd="git dif"
 alias ga="git amend"
-alias gorc="git status --porcelain | cut -d ' ' -f 2 | tr '\n' ' '"
+alias gorc="git status --porcelain | cut -d ' ' -f 3 | tr '\\n' ' '"
 
-# cleaning TODO
-alias clean-haskell="remove \"$1\".{dyn_hi,dyn_o,hi,o}"
-alias clean-emacs="remove $1.{~} .#$1"
+# # cleaning TODO
+# alias clean-haskell="remove \"$1\".{dyn_hi,dyn_o,hi,o}"
+# alias clean-emacs='remove "${1:?}".~ .\#"${1:?}"'
 
 ########################################
 ## NIX
@@ -189,7 +191,6 @@ alias nx1="nix-instantiate --eval" # eval unary with defaults
 
 alias ns="nix-store"
 alias nsr='nix-store --query --references'
-alias nsi='nix-store --query --references $(nix-instantiate "<nixpkgs>" -A "$1")'
 
 alias ncu="nix-channel --update"
 alias ncux="nix-channel --update nixpkgs"
@@ -201,11 +202,11 @@ alias npu="nix-prefetch-url"
 #alias n="nix-"
 
 function nq() {
- nix-env -qa \* -P | fgrep -i "$1";
+ nix-env -qa \* -P | grep -F -i "$1";
 }
 
 function nql() {
- nix-env -q \* -P | fgrep -i "$1";
+ nix-env -q \* -P | grep -F -i "$1";
  # local
 } 
 
@@ -214,11 +215,11 @@ function nia() {
 }
 
 function nih() {
- nix-env -f "<nixpkgs>" -i -A haskellPackages."$@"
+ nix-env -f "<nixpkgs>" -i -A "haskellPackages.$*"
 }
 
 function nie() {
- nix-env -f "<nixpkgs>" -i -A emacsPackagesNg.melpaPackages."$@"
+ nix-env -f "<nixpkgs>" -i -A "emacsPackagesNg.melpaPackages.$*"
 }
 
 function nqh() {
@@ -238,6 +239,23 @@ function nr () {
   echo 'l = p.lib'  
   # echo 'c = (import /etc/nixos/configuration.nix) { inherit (p) pkgs config lib; }'
   nix-repl
+}
+
+function nix-where () {
+  # obligatorily unary function
+  #   bash: 1: parameter null or not set
+  nix-instantiate "<nixpkgs>" -A "${1:?}" 2>/dev/null
+}
+
+# TODO
+# function nsi () {
+#   LOCATION=nix-instantiate "<nixpkgs>" -A "${1:?}"
+#   nix-store --query --references "$LOCATION"
+# }
+
+function nsi () {
+  LOCATION="$(nix-where "${1:?}")"
+  nix-store --query --references "$LOCATION"
 }
 
 ########################################
@@ -260,53 +278,56 @@ alias hcb="cabal build"
 
 # Running projects, ghc
 function h() {
-    PACKAGE=$(basename $PWD)
+    PACKAGE="$(basename "$PWD")"
     # stack build --ghc-options -fno-code
     # if [ "$?" -ne 0 ]; then
     # 	return 1;
     # fi
     if [ -f build.sh ]; then
-    echo '(./build.sh)'
-    source build.sh
+      echo '(./build.sh)'
+      # shellcheck disable=SC1091
+      source build.sh
     else
-    stack build && printf $DIV && stack exec -- example-$PACKAGE "$@"
+      stack build && _printDiv && stack exec -- example-"$PACKAGE" "$@"
     fi
 # Running a script the first way runs it as a child process. Sourcing (the second way), on the other way, runs the script as if you entered all its commands into the current shell - if the script sets a variable, it will remain set, if the script exits, your session will exit. See help . for documentation
 }
 
 function ht() {
-    PACKAGE=$(basename $PWD)
-    stack build && printf $DIV && stack test
+    PACKAGE="$(basename "$PWD")"
+    stack build && _printDiv && stack test
 }
 
 # Running projects, ghcjs
 function j() {
-    PACKAGE=$(basename $PWD)
+    PACKAGE="$(basename "$PWD")"
     if [ -f build.sh ]; then
-    echo '(./build.sh)'
-    source build.sh
+      echo '(./build.sh)'
+      # shellcheck disable=SC1091
+      source build.sh
     else
-    stack build && printf $DIV && stack exec -- example-$PACKAGE "$@"
+      # shellcheck disable=SC2059
+      stack build && _printDiv && stack exec -- example-"$PACKAGE" "$@"
     fi
 # Running a script the first way runs it as a child process. Sourcing (the second way), on the other way, runs the script as if you entered all its commands into the current shell - if the script sets a variable, it will remain set, if the script exits, your session will exit. See help . for documentation
 }
 
 function heg() {
-    PACKAGE=$(basename $PWD)
+    PACKAGE="$(basename "$PWD")"
     #.stack-work/install/x86_64-linux-*/lts-*/*/bin/example-$PACKAGE
-    stack exec example-$PACKAGE
+    stack exec example-"$PACKAGE"
 }
 
 function hdot () {
- PACKAGE=$(basename $PWD)
+ PACKAGE="$(basename "$PWD")"
  DIRECTORY=images
  # prunet boot packages  and wired-in
  # http://stackoverflow.com/a/10056017/1337806
- mkdir -p $DIRECTORY
- stack dot --external --prune base,base-orphans,ghc-prim,integer-gmp,integer-simple,hsc2hs,haddock,array,binary,bytestring,Cabal,ghc-compact,containers,deepseq,directory,filepath,haskeline,hoopl,hpc,pretty,process,terminfo,time,transformers,xhtml,parallel,stm,random,primitive,vector,dph,template-haskell,transformers-compat,hashable > $DIRECTORY/$PACKAGE.dot
- dot -Tpng -o $DIRECTORY/$PACKAGE.png $DIRECTORY/$PACKAGE.dot 
- rm $DIRECTORY/$PACKAGE.dot 
- chromium file://$(path $DIRECTORY/$PACKAGE.png) &disown
+ mkdir -p "$DIRECTORY"
+ stack dot --external --prune base,base-orphans,ghc-prim,integer-gmp,integer-simple,hsc2hs,haddock,array,binary,bytestring,Cabal,ghc-compact,containers,deepseq,directory,filepath,haskeline,hoopl,hpc,pretty,process,terminfo,time,transformers,xhtml,parallel,stm,random,primitive,vector,dph,template-haskell,transformers-compat,hashable > "$DIRECTORY"/"$PACKAGE".dot
+ dot -Tpng -o "$DIRECTORY"/"$PACKAGE".png "$DIRECTORY"/"$PACKAGE".dot 
+ rm "$DIRECTORY"/"$PACKAGE".dot 
+ "$BROWSER" file://"$(path "$DIRECTORY"/"$PACKAGE".png)" &disown
 }
 
 # scaffolding
@@ -316,7 +337,7 @@ function hs () {
     _NAME="$1"
     _MESSAGE='hs SCRIPTNAME'
     if [ "$#" -ne 1 ]; then
-        echo -e $_MESSAGE
+        echo -e "$_MESSAGE"
 	return 1
     fi
 
@@ -324,18 +345,18 @@ function hs () {
     _LOCAL_TEMPLATE=~/.stack/templates/"$_TEMPLATE_NAME"
     _REMOTE_TEMPLATE='https://raw.githubusercontent.com/sboosali/config/master/stack/templates/'"$_TEMPLATE_NAME"
     if [ -f "$_LOCAL_TEMPLATE" ]; then
-	_TEMPLATE=$_LOCAL_TEMPLATE
+	_TEMPLATE="$_LOCAL_TEMPLATE"
     else
-	_TEMPLATE=$_REMOTE_TEMPLATE
+	_TEMPLATE="$_REMOTE_TEMPLATE"
     fi
 
     _FILE="$_NAME".exe.hs
 
     stack new "$_NAME" "$_TEMPLATE"
-    cd "$_NAME"
+    cd "$_NAME" || return
     chmod u+x "$_FILE"
     ./"$_FILE"
-    $EDITOR "$_FILE" &disown
+    "$EDITOR" "$_FILE" &disown
 
 }
 
@@ -352,30 +373,30 @@ function hnew () {
     MESSAGE='hnew PACKAGE MODULE FILEPATH''\n''e.g. hnew workflow-derived Workflow.Derived Workflow/Derived'
 
     if [ "$#" -ne 3 ]; then
-        echo -e $MESSAGE
+        echo -e "$MESSAGE"
 	return 1
     fi
 
     LOCAL_TEMPLATE=~/.stack/templates/spirosboosalis.hsfiles
     REMOTE_TEMPLATE='https://raw.githubusercontent.com/sboosali/config/master/stack/templates/spirosboosalis.hsfiles'
     if [ -f "$LOCAL_TEMPLATE" ]; then
-	TEMPLATE=$LOCAL_TEMPLATE
+	TEMPLATE="$LOCAL_TEMPLATE"
     else
-	TEMPLATE=$REMOTE_TEMPLATE
+	TEMPLATE="$REMOTE_TEMPLATE"
     fi
     
-    stack new $PACKAGE $TEMPLATE -pmodule:$MODULE -pfilepath:$_FILEPATH
-    cd $PACKAGE
-    if [ "$?" -ne 0 ]; then
-        echo -e $MESSAGE
+    stack new "$PACKAGE" "$TEMPLATE" -pmodule:"$MODULE" -pfilepath:"$_FILEPATH"
+
+    if ! cd "$PACKAGE"; then
+        echo -e "$MESSAGE"
 	return 1
     fi
 
-    echo $PACKAGE | copy
-    $BROWSER http://github.com/new # create repository, manually
+    echo "$PACKAGE | copy"
+    "$BROWSER" http://github.com/new # create repository, manually
 
     stack build
-    stack exec -- example-$PACKAGE
+    stack exec -- example-"$PACKAGE"
 
     git init
     git add .
@@ -395,22 +416,22 @@ function h-new () {
     MESSAGE='h-new PACKAGE MODULE FILEPATH''\n''e.g. h-new workflow-derived Workflow.Derived Workflow/Derived'
 
     if [ "$#" -ne 3 ]; then
-        echo -e $MESSAGE
+        echo -e "$MESSAGE"
 	return 1
     fi
 
     LOCAL_TEMPLATE=~/.stack/templates/spirosboosalis.hsfiles
     REMOTE_TEMPLATE='https://raw.githubusercontent.com/sboosali/config/master/stack/templates/spirosboosalis.hsfiles'
     if [ -f "$LOCAL_TEMPLATE" ]; then
-	TEMPLATE=$LOCAL_TEMPLATE
+	TEMPLATE="$LOCAL_TEMPLATE"
     else
-	TEMPLATE=$REMOTE_TEMPLATE
+	TEMPLATE="$REMOTE_TEMPLATE"
     fi
     
-    stack new $PACKAGE $TEMPLATE -pmodule:$MODULE -pfilepath:$_FILEPATH
-    cd $PACKAGE
-    if [ "$?" -ne 0 ]; then
-        echo -e $MESSAGE
+    stack new "$PACKAGE" "$TEMPLATE" -pmodule:"$MODULE" -pfilepath:"$_FILEPATH"
+
+    if ! cd "$PACKAGE"; then
+        echo -e "$MESSAGE"
 	return 1
     fi
 
@@ -493,7 +514,11 @@ EOF
 ########################################
 ## MORE DEFINITIONS
 
-DIV="\n\n--------------------------------------------------------------------------------\n\n"
+function _printDiv () {
+  printf '\n\n'
+  printf "%s" '----------------------------------------'
+  printf '\n\n'
+}
 
 # function dog {
 #  SEP="--------------------------------------------------------"
@@ -513,21 +538,21 @@ function show-variable () {
 
 # Pretty print the path
 function show-path () {
- echo $PATH | tr ':' '\n'
+ echo "$PATH" | tr ':' '\n'
 }
 
 # needs curl
 function download {
-    URL=$1
-    FILE=`basename $1`
-    curl $URL > $FILE
+    URL="$1"
+    FILE=$(basename "$1")
+    curl "$URL" > "$FILE"
 }
 
 function cobra () {
  python -c "
 import sys
 x = list(sys.stdin)[0].strip().split()
-print($@)
+print($*)
 "
 }
 
@@ -537,7 +562,7 @@ function space () {
 
 # absolute path
 function absolute-path {
- echo $(readlink -f "$1")
+ readlink -f "$1"
  # echo $(cd $(dirname "$1"); pwd)/$(basename "$1")
 }
 alias path='absolute-path'
@@ -559,10 +584,10 @@ function ssha () {
  _PRIVATE_KEY="$1"
  _MESSAGE='sshl PRIVATE_KEY'
  if [ "$#" -ne 1 ]; then
-     echo $_MESSAGE
+     echo "$_MESSAGE"
      return 1
  fi
- ssh-add ~/.ssh/$1
+ ssh-add ~/.ssh/"$_PRIVATE_KEY"
 }
 
 # # 
@@ -610,22 +635,22 @@ function ssha () {
 ## GIT 
 
 function blame {
- FILE=$1
- LINE=$2
- git show $(git blame "$FILE" -L $LINE,$LINE | awk '{print $1}')
+ FILE="$1"
+ LINE="$2"
+ git show "$(git blame "$FILE" -L "$LINE","$LINE" | awk '{print $1}')"
 }
 
 function clone () {
  # use ssh
- _GITHUB_USER=$1
- _GITHUB_REPOSITORY=$2
+ _GITHUB_USER="$1"
+ _GITHUB_REPOSITORY="$2"
  _MESSAGE='clone USER REPOSITORY'
  if [ "$#" -ne 2 ]; then
-         echo $_MESSAGE
- 	return 1
+        echo "$_MESSAGE"
+        return 1
  fi
  git clone git@github.com:"$_GITHUB_USER"/"$_GITHUB_REPOSITORY".git
- cd "$_GITHUB_REPOSITORY"
+ cd "$_GITHUB_REPOSITORY" || return
 
  git branch --set-upstream-to=origin/master master
 
@@ -640,7 +665,7 @@ function git-mod () {
  _GITHUB_REPOSITORY=$1
  _MESSAGE='git-mod REPOSITORY'
  if [ "$#" -ne 1 ]; then
-         echo $_MESSAGE
+        echo "$_MESSAGE"
  	return 1
  fi
  git submodule add git@github.com:sboosali/"$_GITHUB_REPOSITORY".git "$_GITHUB_REPOSITORY"
@@ -649,8 +674,8 @@ function git-mod () {
 # e.g.
 # git remote set-url origin $( make-github-ssh sboosali .emacs.d)
 function make-github-ssh () {
- _GITHUB_USER=$1
- _GITHUB_REPOSITORY=$2
+ _GITHUB_USER="$1"
+ _GITHUB_REPOSITORY="$2"
  git@github.com:"$_GITHUB_USER"/"$_GITHUB_REPOSITORY".git
 }
  
@@ -658,7 +683,7 @@ function make-github-ssh () {
 function git-merge-repos () {
  _MESSAGE='git-merge-repos <prefix> <repo> <rev> (to be merged into the current one)'
  if [ "$#" -ne 3 ]; then
-    echo $_MESSAGE
+    echo "$_MESSAGE"
     return 1
  fi
  
@@ -704,3 +729,41 @@ alias orange="redshift -O 2000" # one-shot
 alias yellow="redshift -O 3000" # one-shot
 
 ########################################
+# notes about shellcheck
+
+# ^-- SC2142: Aliases can't use positional parameters. Use a function.
+# ^-- SC2086: Double quote to prevent globbing and word splitting.
+# ^-- SC2005: Useless echo? Instead of 'echo $(cmd)', just use 'cmd'.
+# ^-- SC2006: Use $(..) instead of legacy `..`.
+
+# ^-- SC2164: Use 'cd ... || exit' or 'cd ... || return' in case cd fails.
+#
+# cd can fail for a variety of reasons:
+#   misspelled paths, missing directories, missing permissions, broken symlinks and more.
+#
+#  cd foo || exit as suggested to just abort immediately
+#
+#  if cd foo; then echo "Ok"; else echo "Fail"; fi for custom handling
+#
+#  For functions, you may want to use return:
+#      func(){
+#        cd foo || return
+#        do_something
+#      }
+#
+#
+
+# print($@)
+#       ^-- SC2145: Argument mixes string and array. Use * or separate argument.
+#
+# https://github.com/koalaman/shellcheck/wiki/SC2145
+#
+# E.g., with the parameters foo,bar,baz, "--flag=$@" is equivalent to the three arguments "--flag=foo" "bar" "baz".
+# If the intention is to concatenate all the array elements into one argument, use $*. This concatenates based on IFS.
+
+# if [ "$?" -ne 0 ]; then
+#      ^-- SC2181: Check exit code directly with e.g. 'if mycmd;', not indirectly with $?.
+
+#  if [ -z "$__git_ps1" ]; then
+#           ^-- SC2154: __git_ps1 is referenced but not assigned.
+
