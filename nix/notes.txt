@@ -1,5 +1,111 @@
+
+
+
+
+
+
+----------------------------------------
+
+
+
+
+
+
+----------------------------------------
+nixpkgs
+
+ nixpkgsPath ? <nixpkgs> 
+, overlays    ? []
+# , nixpkgs     ? import nixpkgsPath {}
+
+
+----------------------------------------
+
+lib.filterAttrs (k: v: v) { opengl = false; bundled = false; demos = true; }
+{ demos = true; }
+
+l.attrNames (l.filterAttrs (k: v: v) { opengl = false; bundled = false; demos = true; })
+[ "demos" ]
+
+
+l.mapAttrs (k: v: (if v then "" else "-") + k) { opengl = false; bundled = false; demos = true; }
+{ bundled = "-bundled"; demos = "demos"; opengl = "-opengl"; }
+
+let flags = l.attrValues (l.mapAttrs (k: v: (if v then "" else "-") + k) { opengl = false; bundled = false; demos = true; }); in flags
+[ "-bundled" "demos" "-opengl" ]
+
+let flags = l.concatStringsSep " " (l.attrValues (l.mapAttrs (k: v: (if v then "" else "-") + k) { opengl = false; bundled = false; demos = true; })); in ''--flags="${flags}"'' 
+"--flags=\"-bundled demos -opengl\""
+
+ 
+
+ nixSet2cabalInstallOptions = inputFlags:
+   let outputFlags 
+         = concatStringsSep " "                                  # e.g. "-bundled demos -opengl"
+              (attrValues                                        # e.g. [ "-bundled" "demos" "-opengl" ]
+                  (mapAttrs (k: v: (if v then "" else "-") + k)  # e.g. { bundled = "-bundled"; demos = "demos"; opengl = "-opengl"; }
+                      inputFlags));                              # e.g. { opengl = false; bundled = false; demos = true; }
+   in 
+       ''--flags="${outputFlags}"'';                             # e.g. ''--flags="-bundled demos -opengl"''
+
+
+
+----------------------------------------
+cabal
+
+    --enable-nix                   Enable Nix integration: run commands through
+                                   nix-shell if a 'shell.nix' file exists
+
+ -f --flags=FLAGS                    Force values for the given flags in Cabal
+                                     conditionals in the .cabal file. E.g.,
+                                     --flags="debug -usebytestrings" forces the
+                                     flag "debug" to true and "usebytestrings"
+                                     to false.
+
+
+----------------------------------------
+nix-shell --pure
+
+$ which cabal
+/home/sboo/.nix-profile/bin/cabal
+$ cp /home/sboo/.nix-profile/bin/cabal ~/bin/
+$ nix-shell --pure
+[nix-shell]$ export PATH="~/bin:$PATH"
+# `export` to expose for subprocesses, wherein autoconf is run
+
+NOPE
+
+
+
+
+
+----------------------------------------
+interp
+
+
+
+           #! /usr/bin/env nix-shell
+           #! nix-shell -i runghc -p haskellPackages.ghc haskellPackages.HTTP haskellPackages.tagsoup
+           #! nix-shell -I nixpkgs=https://github.com/NixOS/nixpkgs-channels/archive/nixos-14.12.tar.gz
+
+           import Network.HTTP
+           import Text.HTML.TagSoup
+
+           -- Fetch nixos.org and print all hrefs.
+           main = do
+             resp <- Network.HTTP.simpleHTTP (getRequest "http://nixos.org/")
+             body <- getResponseBody resp
+             let tags = filter (isTagOpenName "a") $ parseTags body
+             let tags' = map (fromAttrib "href") tags
+             mapM_ putStrLn $ filter (/= "") tags'
+
+
+
+
 ----------------------------------------
 overlays
+
+
 
 type Overlay a = (a -> a -> a)
 
@@ -23,8 +129,36 @@ The second argument (super) corresponds to the result of the evaluation of the p
 
 ----
 
+
+----------------------------------------
+
+cat ./packages.nix | xargs nix-env -i
+
 ----------------------------------------
 haskell
+
+
+# I'm defining the GHC version myself, pulling from Hackage, and from GitHub. 
+# only slightly more verbose than styx/stack yaml file but more flexible.
+haskellPackages = pkgs.haskell.packages.ghc802.override {
+  overrides = self: super: {
+    turtle = self.callHackage "turtle" "1.3.1" {};
+    rawr = self.callCabal2nix (pkgs.fetchFromGitHub {
+      owner  = "PkmX";
+      repo   = "rawr";
+      rev    = "669a66819b92a7066f91f744f3a8372e614d6189";
+      sha256 = "1gdgndmfpv2iszx0wx091m7ffrxkwy2xmm3cb8185ivyqj8p8zyq";
+    }) {};
+  };
+};
+
+# I can even pinpoint a version of nixpkgs like this:
+pkgs = import ((import <nixpkgs> {}).fetchzip {
+  url    = "https://d3g5gsiof5omrk.cloudfront.net/nixpkgs/nixpkgs-17.03pre99971.05ee547/nixexprs.tar.xz";
+  sha256 = "0snpqlrp1s6bqq7lgv7y0zajd9mag28sb7irk853vgz9iml3y0zi";
+});
+
+
 
 let
   haskellPackages = (import <nixpkgs> {}).haskellPackages;
