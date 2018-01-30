@@ -48,6 +48,18 @@ alias dn='cd ~/.nixpkgs'
 # alias d='cd '
 # alias d='cd '
 
+# create parent directories by default
+alias mkdir='mkdir -pv'
+alias md='mkdir -pv'
+
+# requires: colordiff package
+if [ -x "$(command -v colordiff)" ]; then
+  alias diff='colordiff'
+else
+  echo '[WARGNING] colordiff is not installed, using diff.' >&2
+fi
+
+
 # ls 
 alias ll='ls -alF'
 alias la='ls -A'
@@ -98,7 +110,7 @@ alias nb="nano ~/.bashrc && source ~/.bashrc"
 
 # Reloading
 # mnemonic: "s" for sourcing
-alias sb="source ~/.bashrc"
+alias sbr="source ~/.bashrc"
 alias sbd="source ~/.bash_definitions.sh" # should be idempotent
 alias sba="source ~/.aliases" # should be idempotent
 alias sbs="source ~/.bash_settings.sh"
@@ -120,6 +132,10 @@ alias lnh="echo 'ln -sf /path/to/file /path/to/symlink'"
 
 # misc
 alias disksize="df -h /"
+function filesize () {
+ # shellcheck disable=
+ du -h "$@" | cut -f1
+}
 alias cpr="rsync -arRv" # e.g. cpr stuff backup # ./backup/stuff doesn't exist yet and is created
 alias cprd="rsync -arRv --dry-run" # --exclude ".stack-work" --exclude "dist-newstyle"
 alias lnr='readlink -f'
@@ -135,6 +151,68 @@ alias show="cat"
 alias get="git"
 alias grab="grep"
 alias processes=ps
+
+alias path='echo -e ${PATH//:/\\n}'
+alias now='date +"%T"'
+
+alias reboot='sudo /sbin/reboot'
+alias poweroff='sudo /sbin/poweroff'
+alias halt='sudo /sbin/halt'
+alias shutdown='sudo /sbin/shutdown'
+
+## pass options to free ##
+alias meminfo='free -m -l -t'
+## get top process eating memory
+alias psmem='ps auxf | sort -nr -k 4'
+alias psmem10='ps auxf | sort -nr -k 4 | head -10'
+## get top process eating cpu ##
+alias pscpu='ps auxf | sort -nr -k 3'
+alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
+## Get server cpu info ##
+alias cpuinfo='lscpu' 
+## get GPU ram on desktop / laptop##
+alias gpumeminfo='grep -i --color memory /var/log/Xorg.0.log'
+
+# e.g.
+
+# $ cpuinfo
+# Architecture:          x86_64
+# CPU op-mode(s):        32-bit, 64-bit
+# Byte Order:            Little Endian
+# CPU(s):                8
+# On-line CPU(s) list:   0-7
+# Thread(s) per core:    2
+# Core(s) per socket:    4
+# Socket(s):             1
+# NUMA node(s):          1
+# Vendor ID:             GenuineIntel
+# CPU family:            6
+# Model:                 158
+# Model name:            Intel(R) Core(TM) i7-7820HQ CPU @ 2.90GHz
+# Stepping:              9
+# CPU MHz:               799.992
+# CPU max MHz:           3900.0000
+# CPU min MHz:           800.0000
+# BogoMIPS:              5807.98
+# Virtualization:        VT-x
+# L1d cache:             32K
+# L1i cache:             32K
+# L2 cache:              256K
+# L3 cache:              8192K
+# NUMA node0 CPU(s):     0-7
+# Flags:                 fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb invpcid_single intel_pt kaiser tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm mpx rdseed adx smap clflushopt xsaveopt xsavec xgetbv1 dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp
+
+# $ meminfo              total        used        free      shared  buff/cache   available
+# Mem:          32027       16709         541        1205       14775       13546
+# Low:          32027       31485         541
+# High:             0           0           0
+# Swap:             0           0           0
+# Total:        32027       16709         541
+
+# $ gpumeminfo
+# [     5.860] (--) NVIDIA(0): Memory: 4194304 kBytes
+# [     6.657] (II) NVIDIA: Using 12288.00 MB of virtual memory for indirect memory
+# [     6.678] (==) NVIDIA(0): Disabling shared memory pixmaps
 
 # ps
 # TODO alias psa="ps -o \"command, pid, %mem, %cpu, user, start, \" "
@@ -364,13 +442,58 @@ function hd () {
  stack haddock --open --keep-going 
 }
 
+# # New project scaffolding
+# function hnew () {
+#     PACKAGE="$1"
+#     MODULE="$2"
+#     _FILEPATH="$3"
+
+#     MESSAGE='hnew PACKAGE MODULE FILEPATH''\n''e.g. hnew workflow-derived Workflow.Derived Workflow/Derived'
+
+#     if [ "$#" -ne 3 ]; then
+#         echo -e "$MESSAGE"
+# 	return 1
+#     fi
+
+#     LOCAL_TEMPLATE=~/.stack/templates/spirosboosalis.hsfiles
+#     REMOTE_TEMPLATE='https://raw.githubusercontent.com/sboosali/config/master/stack/templates/spirosboosalis.hsfiles'
+#     if [ -f "$LOCAL_TEMPLATE" ]; then
+# 	TEMPLATE="$LOCAL_TEMPLATE"
+#     else
+# 	TEMPLATE="$REMOTE_TEMPLATE"
+#     fi
+    
+#     stack new "$PACKAGE" "$TEMPLATE" -pmodule:"$MODULE" -pfilepath:"$_FILEPATH"
+
+#     if ! cd "$PACKAGE"; then
+#         echo -e "$MESSAGE"
+# 	return 1
+#     fi
+
+#     echo "$PACKAGE | copy"
+#     "$BROWSER" http://github.com/new # create repository, manually
+
+#     stack build
+#     stack exec -- example-"$PACKAGE"
+
+#     git init
+#     git add .
+#     git commit -m"1st"
+#     git remote add origin git@github.com:sboosali/"$PACKAGE".git # https://github.com/sboosali/$PACKAGE.git
+#     git push -u origin master
+
+#     # open sources/$MODULE/Example.hs
+# }
+
 # New project scaffolding
 function hnew () {
+    # requires: nix, cabal2nix, sed (/stdenv), stack, cabal-install, hscolour, 
+
     PACKAGE="$1"
     MODULE="$2"
     _FILEPATH="$3"
 
-    MESSAGE='hnew PACKAGE MODULE FILEPATH''\n''e.g. hnew workflow-derived Workflow.Derived Workflow/Derived'
+    MESSAGE='h-new PACKAGE MODULE FILEPATH''\n''e.g. h-new workflow-core Workflow.Core Workflow/Core'
 
     if [ "$#" -ne 3 ]; then
         echo -e "$MESSAGE"
@@ -384,58 +507,50 @@ function hnew () {
     else
 	TEMPLATE="$REMOTE_TEMPLATE"
     fi
-    
-    stack new "$PACKAGE" "$TEMPLATE" -pmodule:"$MODULE" -pfilepath:"$_FILEPATH"
+
+    echo
+    echo "[TEMPLATE]"
+    echo "$TEMPLATE"
+    echo
+
+    stack new "$PACKAGE" "$TEMPLATE" -p module:"$MODULE" -p filepath:"$_FILEPATH" 
+    # -p synopsis:"$SYNOPSIS"
 
     if ! cd "$PACKAGE"; then
         echo -e "$MESSAGE"
 	return 1
     fi
 
-    echo "$PACKAGE | copy"
-    "$BROWSER" http://github.com/new # create repository, manually
+    # patch documentation
+    # e.g. "Cards.Common-Example.html" -> "Cards-Common-Example.html"
+    STRING_FROM="$MODULE"-Example.html
+    STRING_INTO="$(echo "$MODULE"-Example | sed 's/\./-/g')".html
+    sed -i  s/"$STRING_FROM"/"$STRING_INTO"/g  sources/"$_FILEPATH"/Example.hs
 
-    stack build
-    stack exec -- example-"$PACKAGE"
+    NIX_FILE="$PACKAGE".nix
+    cabal2nix . > "$NIX_FILE"
 
-    git init
-    git add .
-    git commit -m"1st"
-    git remote add origin git@github.com:sboosali/"$PACKAGE".git # https://github.com/sboosali/$PACKAGE.git
-    git push -u origin master
+    SHELL_FILE=shell-"$PACKAGE".nix
+    cabal2nix . --shell > "$SHELL_FILE" 
 
-    # open sources/$MODULE/Example.hs
-}
+    # SC2035
+    chmod 700 ./*.sh
 
-# New project scaffolding
-function h-new () {
-    PACKAGE="$1"
-    MODULE="$2"
-    _FILEPATH="$3"
+    echo
+    echo "========================================"
+    echo "[Building Everything...]"
+    echo "========================================"
+    echo
 
-    MESSAGE='h-new PACKAGE MODULE FILEPATH''\n''e.g. h-new workflow-derived Workflow.Derived Workflow/Derived'
+    nix-shell "$SHELL_FILE" --arg doBenchmark true --run 'cabal configure --enable-tests --enable-benchmarks'
 
-    if [ "$#" -ne 3 ]; then
-        echo -e "$MESSAGE"
-	return 1
-    fi
+    # nix-shell "$SHELL_FILE" --arg doBenchmark true 
+    cabal build
+    cabal run example-"$PACKAGE"
+    cabal test
+    cabal bench
+    cabal haddock --haddock-option="--hyperlinked-source"
 
-    LOCAL_TEMPLATE=~/.stack/templates/spirosboosalis.hsfiles
-    REMOTE_TEMPLATE='https://raw.githubusercontent.com/sboosali/config/master/stack/templates/spirosboosalis.hsfiles'
-    if [ -f "$LOCAL_TEMPLATE" ]; then
-	TEMPLATE="$LOCAL_TEMPLATE"
-    else
-	TEMPLATE="$REMOTE_TEMPLATE"
-    fi
-    
-    stack new "$PACKAGE" "$TEMPLATE" -pmodule:"$MODULE" -pfilepath:"$_FILEPATH"
-
-    if ! cd "$PACKAGE"; then
-        echo -e "$MESSAGE"
-	return 1
-    fi
-
-    cabal2nix . --shell > shell.nix
     # (nix-shell && cabal build && cabal run example-$PACKAGE)
 }
 
@@ -511,6 +626,98 @@ EOF
 #   enableSplitObjs = false;
 # }
 
+# 
+# http://alpmestan.com/posts/2017-09-06-quick-haskell-hacking-with-nix.html
+# 
+# e.g.
+# $ nix-haskell-environment lens aeson wreq
+# ==>
+# $ nix-shell -p "haskell.packages.ghc822.ghcWithPackages (haskellPackages: with haskellPackages; [lens aeson wreq])"
+#
+# e.g.
+# $ nix-haskell-environment zip-archive zlib -- zlib
+# ==>
+# $ nix-shell -p "haskell.packages.ghc822.ghcWithPackages (haskellPackages: with haskellPackages; [zip-archive zlib])"
+#
+# ([zlib xorg.xprop] ++ [haskell.packages.ghc822.ghcWithPackages (ps: with ps; [lens aeson wreq])])
+#
+function nix-haskell-system-environment () {
+  HASKELL_COMPILER=ghc822 # e.g. "ghc822"
+  HASKELL_PACKAGES="$*" # e.g. "lens aeson wreq"
+#  SYSTEM_PACKAGES=  # e.g. "zlib xorg.xprop"
+  
+#  NIX_EXPRESSION="'([ ${SYSTEM_PACKAGES} ] ++ [ haskell.packages.${HASKELL_COMPILER}.ghcWithPackages (haskellPackages: with haskellPackages; [ ${HASKELL_PACKAGES} ])])'"
+
+  NIX_EXPRESSION="haskell.packages.${HASKELL_COMPILER}.ghcWithPackages (haskellPackages: with haskellPackages; [ ${HASKELL_PACKAGES} ])'"
+
+  nix-shell -p --show-trace -v "$NIX_EXPRESSION"
+}
+
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# $ nix-instantiate --eval -E 'let nixpkgs = import <nixpkgs> {}; in with nixpkgs; with lib; attrNames haskell.packages'
+# [ "ghc7103" "ghc7103Binary" "ghc802" "ghc821Binary" "ghc822" "ghcCross" "ghcHEAD" "ghcHaLVM240" "ghcjs" "ghcjsHEAD" "integer-simple" "stackage" ]
+# 
+function nix-haskell-environment () {
+  if [[ $# -lt 2 ]];
+  then
+    echo '$ nix-haskell-environment COMPILER PACKAGE [PACKAGE...]'
+    echo
+    echo 'DESCRIPTION'
+    echo
+    echo '   a ghc version, and one-or-more haskell packages'
+    echo
+    echo 'EXAMPLE'
+    echo
+    echo '   nix-haskell-environment ghc822 lens aeson wreq'
+    echo
+    echo 'ARGUMENTS'
+    echo
+    echo '   COMPILER is one of:'
+    echo '       '
+    POSSIBLE_COMPILERS=$(nix-instantiate --eval --expr 'let nixpkgs = import <nixpkgs> {}; in with nixpkgs; with lib; let compilers = attrNames haskell.packages; in concatStringsSep "\n" ([""] ++ compilers ++ [""])')
+    echo -e "${POSSIBLE_COMPILERS}"
+    echo 
+    echo '   PACKAGE'
+    echo '       Almost always, Nixpkgs names (which must be valid Nix identifiers) and Hackage names coincide'
+    echo
+    echo '       (run the following command with any COMPILER from above, for example:)'
+    echo
+    # echo POSSIBLE_PACKAGES=nix-instantiate --eval --expr 'let nixpkgs = import <nixpkgs> {}; in with nixpkgs; with lib; let packages = attrNames haskell.packages.ghc822; in concatStringsSep "\n" ([""] ++ packages ++ [""])'
+    # echo -e "${POSSIBLE_PACKAGES}"
+
+    # set variable to heredoc
+    read -r -d '' EXAMPLE_NIX_EXPRESSION <<EOF
+let nixpkgs = import <nixpkgs> {}; in 
+with nixpkgs; 
+with lib; 
+let packages = attrNames haskell.packages.ghc822; in 
+concatStringsSep "\\n" ([""] ++ packages ++ [""])
+EOF
+    EXAMPLE_NIX_COMMAND="nix-instantiate --eval --expr '${EXAMPLE_NIX_EXPRESSION}'"
+    echo -e "${EXAMPLE_NIX_COMMAND}"
+    echo
+    return 1;
+    # e.g. nix-repl> lib.attrNames nixpkgs.haskell.packages
+    # [ "ghc7103" "ghc7103Binary" "ghc802" "ghc821Binary" "ghc822" "ghcCross" "ghcHEAD" "ghcHaLVM240" "ghcjs" "ghcjsHEAD" "integer-simple" "stackage" ]
+    #
+  else
+    HASKELL_COMPILER="$1" # e.g. "ghc822"
+    HASKELL_PACKAGES="${*:2}" # e.g. "lens aeson wreq"
+  #  SYSTEM_PACKAGES=  # e.g. "zlib xorg.xprop"
+
+  #  NIX_EXPRESSION="'([ ${SYSTEM_PACKAGES} ] ++ [ haskell.packages.${HASKELL_COMPILER}.ghcWithPackages (haskellPackages: with haskellPackages; [ ${HASKELL_PACKAGES} ])])'"
+    NIX_EXPRESSION="haskell.packages.${HASKELL_COMPILER}.ghcWithPackages (haskellPackages: with haskellPackages; [ ${HASKELL_PACKAGES} ])"
+  
+    nix-shell -p --show-trace -v "$NIX_EXPRESSION"
+fi
+}
+ 
 ########################################
 ## MORE DEFINITIONS
 
@@ -560,13 +767,22 @@ function space () {
  stat -f%z "$@" | '(float(x[0])/1e9, "gigabytes")'
 }
 
-# absolute path
-function absolute-path {
- readlink -f "$1"
- # echo $(cd $(dirname "$1"); pwd)/$(basename "$1")
+function raw-absolute-path {
+ echo $(cd $(dirname "$1"); pwd)/$(basename "$1")
+
+ # versus `readlink`, which
+ # /reads links/, which will be by cosntruction identical
 }
-alias path='absolute-path'
- 
+
+function true-absolute-path {
+ readlink -f "$1"
+}
+
+function absolute-path {
+ true-absolute-path "$@"
+}
+alias path=absolute-path
+
 # https://www.gnupg.org/documentation/manuals/gnupg/Invoking-GPG_002dAGENT.html
 GPG_TTY=$(tty)
 export GPG_TTY
@@ -727,6 +943,12 @@ alias un-red="redshift -x" #
 alias white="redshift -x" # 
 alias orange="redshift -O 2000" # one-shot
 alias yellow="redshift -O 3000" # one-shot
+
+########################################
+# ephemeral/specialized stuff
+
+#TODO rm
+alias melpa2nix=/nix/store/2g4pm399808pmz6zsd89m2iwahk439vi-emacs2nix-0.1.0.0/bin/melpa2nix 
 
 ########################################
 # notes about shellcheck

@@ -39,6 +39,9 @@ fi
 
 #NOTE
 # these files below are relative imports
+# this single alias is here, instead of in .bash_definitions.sh, 
+# for guaranteeing it gets sourced, and everything can be easily reloaded.
+alias sb="(cd ~ && source .bashrc)"
 
 # pure stuff
 if [ -f  .aliases ]; then
