@@ -5,6 +5,15 @@
 
 
 ----------------------------------------
+emacs / melpa
+
+emacs2nix
+
+melpa2nix
+
+$ melpa2nix --melpa ~/melpa -o ~/nixpkgs/pkgs/applications/editors/emacs-modes/melpa-generated.nix
+
+
 
 
 
@@ -104,6 +113,8 @@ interp
 
 ----------------------------------------
 overlays
+
+
 
 
 
