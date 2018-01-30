@@ -18,8 +18,9 @@ in let links =
    , { o = "~/.config/nixpkgs/config.nix" ,                     i = "./nix/config.nix"                         }
    , { o = "~/.nix-channels" ,                           i = "./nix/nix-channels.txt"                   }
 --   , { o = "~/.config/nixpkgs/overlays.nix" ,                     i = "./nix/overlays.nix"                         }
-  , { o = "~/.config/nixpkgs/overlays/haskell.nix" ,                     i = "./nix/overlays/haskell.nix"                         } 
---  , { o = "/etc/nix/nix.conf" ,                     i = "./nix/global-nix.conf"                         }
+--  , { o = "~/.config/nixpkgs/overlays/haskell.nix" ,                     i = "./nix/overlays/haskell.nix"                         } 
+--  , { o = "/etc/nix/nix.conf" ,                     i = "./nix/global-nix.conf"                      --  , { o = "~/.config/nixpkgs/overlays/" ,                     i = "./nix/overlays/haskell.nix"                         } 
+   }
 
 
    , { o = "~/.xbindkeysrc.scm" ,                        i = "./xbindkeys/.xbindkeysrc.scm"             }
