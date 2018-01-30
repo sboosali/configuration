@@ -1,15 +1,24 @@
 # Configuration
-My personal configuration (dotfiles, etc.)
+My personal configuration (dotfiles, etc)
+
+Uses `nix`.
+
 
 ## Setup
+
+### get `nix`
+
+    curl https://nixos.org/nix/install | sh
+
 
 ### installation of dependencies (via `nix`)
 
 TODO
 
-    nix-build configuration.nix
+    # nix-build configuration.nix
+    nix-env -i configuration.nix
 
-### symlinks
+### 'ln -s` symlinks
 
 this
 
@@ -26,5 +35,17 @@ it takes a single optional argument, which is passes onto `ln`. for example, thi
 
     ./compile-dhall-configuration.sh
 
+### `cp` directly
+
+    ./reconfigure-privileged.sh
+
+    ./configuration-cp.sh
+
+
 ## Dependencies
+
+TODO
+
+see `TODO.nix`
+
 

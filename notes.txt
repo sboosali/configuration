@@ -57,6 +57,18 @@ xvkbd
 
 
 ----------
+compizconfig-settings-manager 
+
+`compiz` takes too much RAM (1.5GB * 8!)
+
+manually install compizconfig-settings-manager 
+
+start via Launcher
+
+General > click on OpenGL
+ > Uncheck Sync To VBlank
+ > select “Fast” in Texture Filter
+
 
 ----------
 
