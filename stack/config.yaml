@@ -1,20 +1,33 @@
+########################################
+# notes
+
 # https://github.com/commercialhaskell/stack/blob/release/doc/yaml_configuration.md
+
+########################################
+# templates
 
 templates:
   params:
-    author-email: samboosalis@gmail.com
-    author-name: Spiros Boosalis
-    github-username: sboosali
-    copyright: 2018 Spiros Boosalis
-    module: TODO 
-    
-default-template: https://raw.githubusercontent.com/sboosali/configuration/master/stack/templates/spirosboosalis.hsfiles    
 
-system-ghc: true
+    author-email:    samboosalis@gmail.com
+    author-name:     Spiros Boosalis
+    github-username: sboosali
+    copyright:       2018 Spiros Boosalis
+
+    module:          TODO 
+    synopsis:        TODO 
+
+default-template: ~/.stack/templates/spirosboosalis.hsfiles
+# https://raw.githubusercontent.com/sboosali/configuration/master/stack/templates/spirosboosalis.hsfiles
+
+########################################
+# nix
+
+# system-ghc: true
 
 nix:
-  enable: false # true # false
-  pure: true # false
+  enable: false 
+  pure:   true
   packages:
   - zlib
   # shell-file: shell.nix
@@ -24,3 +37,5 @@ extra-include-dirs:
 
 extra-lib-dirs:
   - /home/sboo/.nix-profile/lib
+
+########################################

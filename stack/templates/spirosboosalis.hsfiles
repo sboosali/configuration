@@ -1,7 +1,10 @@
 {-# START_FILE {{name}}.cabal #-}
 name:                {{name}}
 version:             0.0.0
-cabal-version:       >=2.0
+cabal-version:       >=1.24
+
+----------------------------------------
+
 build-type:          Simple 
 category:            Data 
 synopsis:            {{synopsis}} 
@@ -13,7 +16,7 @@ description:
  .
  transitive dependencies:
  .
- <<{{name}}.png>>
+ <<{{name}}-dependencies.png>>
 
 homepage:            http://github.com/{{github-username}}/{{name}}#readme
 bug-reports:         http://github.com/{{github-username}}/{{name}}/issues
@@ -29,6 +32,8 @@ tested-with:         GHC == 8.2.2
 -- https://wiki.haskell.org/Package_versioning_policy
 -- "A.B is known as the major version number, and C the minor version number."
 
+----------------------------------------
+
 extra-source-files:
   README.md
   stack.yaml
@@ -42,15 +47,20 @@ source-repository head
   type:     git
   location: https://github.com/{{github-username}}/{{name}}
 
+----------------------------------------
+-- FLAGS
+
 -- make the `template` test suite dump its template-haskell splices
 flag dump-splices
   default: False
   manual: True
 
+----------------------------------------
+-- LIBRARY
 
 library
  hs-source-dirs:      sources
- default-language:    Haskell2010
+
  ghc-options:
   -Wall
 -- disable
@@ -61,6 +71,7 @@ library
   -fwarn-identities
   -fwarn-missing-fields
 
+ default-language:   Haskell2010
  default-extensions: PackageImports AutoDeriveTypeable DeriveDataTypeable DeriveGeneric
                      DeriveFunctor DeriveFoldable DeriveTraversable
                      LambdaCase EmptyCase TypeOperators PostfixOperators
@@ -106,6 +117,8 @@ library
 
 -- other packages 
 
+----------------------------------------
+-- EXECUTABLES
 
 executable example-{{name}}
  hs-source-dirs:      executables
@@ -118,20 +131,8 @@ executable example-{{name}}
     base
   , {{name}}
 
-
--- $ stack test documentation
-test-suite documentation 
- hs-source-dirs:      tests
- main-is:             DocTests.hs
- type:                exitcode-stdio-1.0
-
- default-language:    Haskell2010
- ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
-
- build-depends:
-    base
-  , {{name}}
-  , doctest
+----------------------------------------
+-- TESTS
 
 
 -- $ stack test unit
@@ -156,8 +157,8 @@ test-suite unit
 test-suite properties 
  hs-source-dirs:      tests
  main-is:             PropertyTests.hs
- type:                exitcode-stdio-1.0
 
+ type:                exitcode-stdio-1.0
  default-language:    Haskell2010
  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
 
@@ -172,28 +173,54 @@ test-suite properties
   , tasty-quickcheck
 
 
+-- $ stack test documentation
+test-suite documentation 
+ -- `ghcjsi` doesn't work, or `doctest` needs the GHC API?
+ if impl(ghcjs)
+    buildable: False
+
+ hs-source-dirs:      tests
+ main-is:             DocTests.hs
+ type:                exitcode-stdio-1.0
+
+ default-language:    Haskell2010
+ ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+
+ build-depends:
+    base
+  , {{name}}
+  , doctest
+
+
 -- $ stack test templates 
 -- Template Haskell 
+-- Verify that Template Haskell expansion works
 test-suite templates
-  type: exitcode-stdio-1.0
-  main-is: TemplateHaskellTests.hs
-  ghc-options: -Wall -threaded
-  hs-source-dirs: tests
+  hs-source-dirs:      tests
+  main-is:             TemplateHaskellTests.hs
+
+  type:             exitcode-stdio-1.0
+  default-language: Haskell2010
+  ghc-options:      -Wall -threaded
 
   if flag(dump-splices)
     ghc-options: -ddump-splices
-    
+
   build-depends:
       base
     , {{name}}
-  
+    , lens
+
+
+----------------------------------------
+-- BENCHMARKS
 
 -- $ stack bench 
-benchmark everything 
+benchmark speed
  hs-source-dirs:      benchmarks
  main-is:             Bench.hs
- type:                exitcode-stdio-1.0
 
+ type:             exitcode-stdio-1.0
  default-language: Haskell2010
  ghc-options:      -Wall -O2 -threaded -fdicts-cheap -funbox-strict-fields
  
@@ -203,13 +230,14 @@ benchmark everything
   , criterion
   , deepseq
 
+----------------------------------------
+-- NOTES
 
 -- originally generated with this command:  
 -- 
--- $ stack new {{name}} https://raw.githubusercontent.com/sboosali/configuration/m
-aster/stack/templates/spirosboosalis.hsfiles -p "module:{{module}}" -p "filepath:{{filepath}}" -p "synopsis:{{synopsis}}" 
+-- $ stack new {{name}} https://raw.githubusercontent.com/sboosali/configuration/master/stack/templates/spirosboosalis.hsfiles -p "module:{{module}}" -p "filepath:{{filepath}}"
 -- 
--- given this configuration in `.stack/config.yaml`: 
+-- given this configuration in `~/.stack/config.yaml`: 
 -- 
 -- templates:
 --   params:
@@ -219,21 +247,101 @@ aster/stack/templates/spirosboosalis.hsfiles -p "module:{{module}}" -p "filepath
 --     copyright:       {{copyright}}  
 --     synopsis:        TODO 
 
-{-# START_FILE cabal.config #-}
-# executable-profiling: True
-# library-profiling: True
+----------------------------------------
 
+{-# START_FILE verify.sh #-}
+#!/bin/sh
+set -e
+./configure.sh
+./build.sh
+
+./test.sh     || true
+./document.sh || true
+./bench.sh    || true
+./run.sh      || true
+
+# cabal test    || true
+# cabal bench   || true
+# cabal haddock || true
+
+{-# START_FILE configure.sh #-}
+#!/bin/sh
+cabal configure --enable-tests --enable-benchmarks
+
+{-# START_FILE environment.sh #-}
+#!/bin/bash
+NIX_SHELL_FILE=shell-{{name}}.nix
+NIX_SHELL_OPTIONS=(--arg doBenchmark true)
+nix-shell "$NIX_SHELL_FILE" "${NIX_SHELL_OPTIONS[@]}"
+
+{-# START_FILE provision.sh #-}
+#!/bin/bash
+SHELL_FILE=shell-{{name}}.nix
+nix-shell "$SHELL_FILE" --arg doBenchmark true --run "./configure.sh"
+
+{-# START_FILE reconfigure.sh #-}
+#!/bin/bash
+SHELL_FILE=shell-{{name}}.nix
+cabal2nix . --shell > "$SHELL_FILE"
+# if [ ! -f "$SHELL_FILE" ]; then 
+#   # don't overwrite if it already exists
+#   cabal2nix . --shell > "$SHELL_FILE" 
+# fi
+./provision.sh
+
+{-# START_FILE build.sh #-}
+#!/bin/sh
+cabal build
+
+{-# START_FILE run.sh #-}
+#!/bin/sh
+cabal build
+cabal run example-{{name}}
+
+{-# START_FILE test.sh #-}
+#!/bin/sh
+cabal test
+
+{-# START_FILE bench.sh #-}
+#!/bin/sh
+cabal bench
+
+{-# START_FILE document.sh #-}
+#!/bin/sh
+cabal haddock --haddock-option="--hyperlinked-source"
+# not `cabal haddock --hyperlink-source` lol
+
+{-# START_FILE interpreter.sh #-}
+#!/bin/sh
+cabal repl
+
+{-# START_FILE watch.sh #-}
+#!/bin/bash
+ghcid --command 'nix-shell --command "cabal repl"'
+
+{-# START_FILE build.bat #-}
+cabal build
+
+{-# START_FILE cabal.config #-}
+-- hyperlink-source: True
+-- profiling: True
+-- library-profiling: True
 
 {-# START_FILE Setup.hs #-}
 import Distribution.Simple
 main = defaultMain
 
+{-# START_FILE cabal.project #-}
+-- http://blog.ezyang.com/2016/05/announcing-cabal-new-build-nix-style-local-builds/
 
-{-# START_FILE stack.yaml #-}
-resolver: nightly-2017-12-17 
+packages:
+  ./
+
+{-# START_FILE stack-nix.yaml #-}
+resolver: nightly-2018-01-22 
 
 nix:
-  enable: false 
+  enable: true
   pure:   true
   packages:
   - zlib
@@ -252,6 +360,15 @@ extra-deps:
 
 
 {-# START_FILE sources/{{filepath}}.hs #-}
+
+{-| 
+
+Examples prefixed by @>>> @ are @doctest@'ed. 
+
+>>> stub
+"stub"
+
+-}
 module {{module}}
  ( module {{module}}.Types
  , module {{module}}.Core
@@ -262,29 +379,67 @@ import {{module}}.Core
 
 {-# START_FILE sources/{{filepath}}/Types.hs #-}
 {-# LANGUAGE NoImplicitPrelude #-}
+
+{-| The core types. 
+
+This module mostly defines types 
+(i.e. @data@, @newtype@, @type@, @class@, @instance@) 
+and whatever values are necessary for instances.
+
+-}
 module {{module}}.Types where
--- import {{module}}.Extra
+import {{module}}.Extra()
 
 
 {-# START_FILE sources/{{filepath}}/Core.hs #-}
 {-# LANGUAGE NoImplicitPrelude #-}
+
+{-| The core definitions. 
+
+-}
 module {{module}}.Core where
-import {{module}}.Extra
-import {{module}}.Types
+import {{module}}.Extra()
+import {{module}}.Types()
 
 import Prelude.Spiros
 
+stub = "stub"
+
 
 {-# START_FILE sources/{{filepath}}/Example.hs #-}
+
 {-# OPTIONS_GHC -fno-warn-missing-signatures #-} -- to test inference
+
+{-| This module provides an example program. 
+Please read the source too <https://hackage.haskell.org/package/{{name}}/docs/src/{{module}}-Example.html (direct Hackage link)>. 
+
+Being a @library@ module, it's typechecked with the package, 
+and thus should always build.
+
+Only public interfaces are imported (i.e. no @.Internal@s),
+and there are minimal other dependencies. 
+
+'main' is executed by the @{{name}}-example@ executable. 
+
+-}
 module {{module}}.Example where
--- import {{module}}
+
+import {{module}}()
+
 import System.Environment
 
 {-|
+
+Running:
+
+@
+cabal build && cabal run example-{{name}}
+@
+
 @
 stack build && stack exec -- example-{{name}}
 @
+
 -}
 main :: IO ()
 main = do
@@ -300,12 +455,16 @@ mainWith s = do
 
 {-# START_FILE sources/{{filepath}}/Extra.hs #-}
 {-# LANGUAGE NoImplicitPrelude #-}
+
+{-|
+
+-}
 module {{module}}.Extra
  ( module {{module}}.Extra
  , module Prelude.Spiros
  ) where
 
-import Prelude.Spiros
+import Prelude.Spiros()
 
 
 {-# START_FILE tests/{{filepath}}/Test.hs #-}
@@ -318,19 +477,59 @@ module {{module}}.Property where
 import {{module}}
 
 
-{-# START_FILE tests/DocTest.hs #-}
+{-# START_FILE tests/DocTests.hs #-}
 {-# OPTIONS_GHC -fno-warn-missing-signatures #-}
 import Test.DocTest
 
+main :: IO ()
 main = doctest
- [ "sources/{{module}}.hs"
+
+   -- every module in this directory (i.e. `hs-source-dirs`)
+ [ "sources/"
+
+   -- all language extensions enabled by default (i.e. `default-extensions`)
+ , "-XPackageImports"
+ , "-XAutoDeriveTypeable"
+ , "-XDeriveDataTypeable"
+ , "-XDeriveGeneric"
+ , "-XDeriveFunctor"
+ , "-XDeriveFoldable"
+ , "-XDeriveTraversable"
+ , "-XLambdaCase"
+ , "-XEmptyCase"
+ , "-XTypeOperators"
+ , "-XPostfixOperators"
+ , "-XViewPatterns"
+ , "-XBangPatterns"
+ , "-XKindSignatures"
+ , "-XNamedFieldPuns"
+ , "-XRecordWildCards"
+ , "-XTupleSections"
+ , "-XMultiWayIf"
+ , "-XDoAndIfThenElse"
+ , "-XEmptyDataDecls"
+ , "-XMultiParamTypeClasses"
+ , "-XFlexibleContexts"
+ , "-XFlexibleInstances"
+ , "-XTypeFamilies"
+ , "-XFunctionalDependencies"
+ , "-XScopedTypeVariables"
+ , "-XStandaloneDeriving"
  ]
+
+ -- [ "sources/{{filepath}}/Extra.hs"
+ -- , "sources/{{filepath}}/Types.hs"
+ -- , "sources/{{filepath}}/Core.hs"
+ -- , "sources/{{filepath}}.hs"
+ -- , "sources/{{filepath}}/Example.hs"
+ -- ]
 
 
 {-# START_FILE tests/UnitTests.hs #-}
 -- {-# OPTIONS_GHC -F -pgmF hspec-discover #-}
 import {{module}}.Test
 
+main :: IO ()
 main = do
  print "[{{module}}.Test]"
 
@@ -338,15 +537,45 @@ main = do
 {-# START_FILE tests/PropertyTests.hs #-}
 import {{module}}.Property() 
 
+main :: IO ()
 main = do
  print "[{{module}}.Property]"
 
 
+{-# START_FILE tests/TemplateHaskellTests.hs #-}
+{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE FunctionalDependencies #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE Rank2Types #-}
+{-# LANGUAGE GADTs #-}
+{-# LANGUAGE UndecidableInstances #-}
+{-# LANGUAGE CPP #-}
+
+module Main where
+
+import Control.Lens
+
+-- NOTE below we mock out any TemplateHaskell tests with `lens`'s
+-- if your package doesn't provide TemplateHaskell-macros,
+-- remove this file and the stanza
+
+data Bar a b c = Bar { _baz :: (a, b) }
+makeLenses ''Bar
+
+checkBaz :: Iso (Bar a b c) (Bar a' b' c') (a, b) (a', b')
+checkBaz = baz
+
+main :: IO ()
+main = putStrLn "[tests/TemplateHaskellTests.hs] ok"
+
 
 {-# START_FILE tests/HLintTest.hs #-}
 -- (by ekmett via lens)
--- This module runs HLint on the lens source tree.
------------------------------------------------------------------------------
+-- This module runs HLint on the source tree.
+
 module Main where
 
 import Control.Monad
@@ -382,6 +611,7 @@ main = {{module}}.Example.main
 import {{module}}
 import Criterion.Main
 
+main :: IO ()
 main = defaultMain [
   bgroup "{{module}}"
     [ bench "1" $ nf   length [1..1000::Int]
