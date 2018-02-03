@@ -1,6 +1,26 @@
 self: super:
 
-/*
+/* USAGE
+
+Bootstrap:
+
+   nix-env -f '<nixpkgs>' -iA sboo.pkgs
+
+Installation: 
+
+    # safe
+    nix-home-install
+    
+    # "unsafe" (may require `nix-rollback` if you corrupt your user-environment)
+    nix-home-rebuild
+
+Testing:
+
+    nix-home-test
+
+*/
+
+/* BOOTSTRAPPING NOTES
 
 Bootstrap with:
 
@@ -656,11 +676,12 @@ let
 
 inherit (super.lib) attrValues;
 
-lnl = pkgs // { inherit pkgs env; };
+# my username
+sboo = pkgs // { inherit pkgs env; };
 
 /* i.e.
 
-lnl = {
+sboo = {
 
  hello = _;
 
@@ -683,7 +704,7 @@ lnl = {
 */
 
 env = super.buildEnv {
-  name  = "lnl";
+  name  = "sboo";
   paths = attrValues pkgs;
 };
 
@@ -693,29 +714,30 @@ pkgs = {
  nix-home-install = super.writeScriptBin "nix-home-install"
   ''
     #! ${self.stdenv.shell}
-    exec nix-env -f '<nixpkgs>' -iA lnl.pkgs
+    exec nix-env -f '<nixpkgs>' -iA sboo.pkgs
   '';
 
  # replace the user-environment with these packages
- nix-home-rebuild-pure = super.writeScriptBin "nix-home-rebuild-pure"
+ nix-home-rebuild = super.writeScriptBin "nix-home-rebuild"
   ''
     #! ${self.stdenv.shell}
-    exec nix-env -f '<nixpkgs>' -r -iA lnl.pkgs
+    exec nix-env -f '<nixpkgs>' -r -iA sboo.pkgs
   '';
 
  # test the user-environment before installation
  # (i.e. what would happen under the strict nix-home-rebuild-pure)
+
  nix-home-test = super.writeScriptBin "nix-home-test"
   ''
     #! ${self.stdenv.shell}
-    nix-shell --pure -p lnl.env
+    nix-shell --pure -p sboo.env
   '';
 
  #NOTE Add Your Packages Either Here...
 
  hello = self.hello;
  /*NOTE `self` is correct and not recursive:
- `self.hello` is `nixpkgs.hello` (not `nixpkgs.lnl.hello`)
+ `self.hello` is `nixpkgs.hello` (not `nixpkgs.sboo.hello`)
  */
 } // namesakes;
 
@@ -724,7 +746,7 @@ pkgs = {
 # namesakes = with self; [ 
 #   cabal-install
 # ];
-#NOTE `self` is safe, just don't call `lnl` itself?
+#NOTE `self` is safe, just don't call `sboo` itself?
 
 /* same names as `nixpkgs`
 
@@ -738,6 +760,6 @@ namesakes = {
 in
 ########################################
 {
- inherit lnl;
+ inherit sboo;
 }
 ########################################

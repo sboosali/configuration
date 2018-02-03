@@ -2,7 +2,14 @@
 
 
 
+----------------------------------------
 
+
+
+----------------------------------------
+nix garbage-collection
+
+TODO save gc-roots to /nix/var/nix/profiles/default-182-link and reflex-platform
 
 
 ----------------------------------------
