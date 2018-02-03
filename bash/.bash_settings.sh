@@ -1,4 +1,5 @@
 #!/bin/bash
+#set -e
 
 # this file is "impure";
 # it has effects like overwriting environment variables, spawning daemons, calling `shopt`, etc
@@ -24,6 +25,12 @@ fi
 
 # clear
 PROMPT_COMMAND=""
+
+########################################
+## BASH COMPLETION SETTINGS
+
+source ~/.nix-profile/etc/bash_completion.d/*             || true
+source ~/.nix-profile/share/bash-completion/completions/* || true
 
 ########################################
 ## EDITOR SETTINGS
@@ -53,9 +60,9 @@ if [ -d "$HOME/bin" ] ; then
     export PATH="$HOME/bin:$PATH"
 fi
 
-# the relative binary directory for nix-build
-# WARNING a relative path, for a more convenient `nix-build`
-export PATH=./result/bin:$PATH
+# # the relative binary directory for nix-build
+# # WARNING a relative path, for a more convenient `nix-build`
+# export PATH=./result/bin:$PATH
 
 ########################################
 ## HISTORY SETTINGS
@@ -154,13 +161,17 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 ########################################
 ## PROMPT SETTINGS
 
+# https://stackoverflow.com/a/26759734/1337806
 my_set_branch () {
- # unless empty or unset
- # shellcheck disable=SC2154 
- if [ -z "$__git_ps1" ]; then
+ # if present and executable
+ if [ -x "$(command -v __git_ps1)" ]; then
    BRANCH="$(__git_ps1 \(%s\))"
    # echo $BRANCH
  fi
+
+# unless empty or unset
+# shellcheck disable=SC2154 
+# if [ -z "$__git_ps1" ]; then
 }
 
 my_prompt_command () {

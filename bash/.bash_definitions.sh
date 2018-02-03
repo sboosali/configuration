@@ -7,6 +7,23 @@
 
 # TODO increase portability, just `sh`, not `bash`
 
+## multiline strings
+
+# echo -e <<EOF
+# this is a multiline string
+# that's echoed.
+# EOF
+
+# cat <<EOF > /dev/null
+# this is a multiline string
+# that's written to a file.
+# EOF
+
+# read -r -d '' A_MULTILINE _STRING <<EOF
+# this is a multiline string
+# that's assigned to a variable.
+# EOF
+
 ########################################
 ## DEFINITIONS 
 
@@ -18,14 +35,15 @@ function brush () {
 alias t=brush
 
 # short
-alias d='cd'
-alias c='cat'
+alias d=cd
+alias c=cat
 alias n=nano
-alias r='rm -r'
+#alias r='rm -r'
 alias l='ls -al'
-alias f='find'
-alias g='git'
-alias o="echo"
+alias f=find
+alias g=git
+alias o=echo
+alias m=man
 # alias e="echo" # emacs
 
 # cd
@@ -87,7 +105,7 @@ alias xm='xmodmap'
 alias xb='xbindkeys'
 
 # grep
-alias r="grep -E --color=auto -i"
+alias p="grep -E -i -n --color=auto"
 
 # editing
 function seteditor () {
@@ -112,7 +130,7 @@ alias nb="nano ~/.bashrc && source ~/.bashrc"
 # mnemonic: "s" for sourcing
 alias sbr="source ~/.bashrc"
 alias sbd="source ~/.bash_definitions.sh" # should be idempotent
-alias sba="source ~/.aliases" # should be idempotent
+alias sba="source ~/.aliases"             # should be idempotent
 alias sbs="source ~/.bash_settings.sh"
 alias sbp="source ~/.profile"
 function se () {
@@ -121,8 +139,10 @@ function se () {
 
 # rm
 alias rm="rm -f"
-alias rmr="rm -rf"
-alias rmt='rm -f *~ .*~ \#*\# .\#* matlab_crash_dump.* java.log.* *.pyc *.class __pycache__/*.pyc *.agdai *.hi *.hout *.o'
+alias rr="rm -rf"
+alias rt='rm -f *~ .*~ \#*\# .\#* matlab_crash_dump.* java.log.* *.pyc *.class __pycache__/*.pyc *.agdai *.hi *.hout *.o'
+alias rmr=rr #TODO
+alias rmt=rt #TODO
 
 # chmod
 alias c7="chmod 700"
@@ -132,9 +152,18 @@ alias lnh="echo 'ln -sf /path/to/file /path/to/symlink'"
 
 # misc
 alias disksize="df -h /"
+function dirsize () {
+ du -hcs "$@"
+ # du --total --dereference --human-readable "$@"
+ # #  dereference all symbolic links
+}
 function filesize () {
  # shellcheck disable=
- du -h "$@" | cut -f1
+ du -h "${@:?}" | cut -f1
+# https://unix.stackexchange.com/questions/208184/issue-an-error-when-using-empty-shell-variables
+# e.g.
+# ~$ : "${UNSET_VAR?Unset variable}"
+# bash: UNSET_VAR: Unset variable
 }
 alias cpr="rsync -arRv" # e.g. cpr stuff backup # ./backup/stuff doesn't exist yet and is created
 alias cprd="rsync -arRv --dry-run" # --exclude ".stack-work" --exclude "dist-newstyle"
@@ -251,6 +280,8 @@ alias nbe="nix-build ~/.nixpkgs/environment.nix" #TODO home.nix
 
 alias nl="nix-shell"
 alias nlp="nix-shell --pure"
+alias nlr="nix-shell --run"
+alias nlrp="nix-shell --pure --run"
 
 alias nix-eval="nix-instantiate --eval"
 alias nx="nix-instantiate --eval"
@@ -311,11 +342,29 @@ function nqe() {
 alias nix-make-shell='cabal2nix *.cabal --sha256=0 --shell > shell.nix'
 alias nix-make-default='cabal2nix *.cabal > default.nix'
 
+# OLD
+#  echo 'c = (import /etc/nixos/configuration.nix) { inherit (p) pkgs config lib; }'
 function nr () {
-  echo 'p = import <nixpkgs> {}'
-  echo 'c = p.config'
-  echo 'l = p.lib'  
-  # echo 'c = (import /etc/nixos/configuration.nix) { inherit (p) pkgs config lib; }'
+
+ read -r -d '' NIX_REPL_EXAMPLES <<EOF
+
+nixpkgs = import <nixpkgs> {}
+
+b  = builtins
+p  = nixpkgs
+c  = p.config
+l  = p.lib
+ps = p.pkgs
+hs = ps.haskellPackages
+h  = p.haskell.lib
+
+:a builtins
+:a nixpkgs
+:a nixpkgs.lib
+
+EOF
+
+  echo -e "$NIX_REPL_EXAMPLES"
   nix-repl
 }
 
@@ -486,8 +535,19 @@ function hd () {
 # }
 
 # New project scaffolding
-function hnew () {
-    # requires: nix, cabal2nix, sed (/stdenv), stack, cabal-install, hscolour, 
+# 
+# requires:
+# nix, cabal2nix, sed (/stdenv), stack, cabal-install, hscolour,
+#
+# NOTES
+# function definition is subshell ("(" not "{")
+# 
+# '''You may directly use a subshell as your function definition and set it to exit immediately with set -e. This would limit the scope of set -e to the function subshell only and would later avoid switching between set +e and set -e.
+# In addition, you can use a variable assignment in the if test and then echo the result in an additional else statement.'''
+# https://stackoverflow.com/questions/4072984/set-e-in-a-function
+# 
+function new-haskell-project () (
+    set -e
 
     PACKAGE="$1"
     MODULE="$2"
@@ -498,6 +558,8 @@ function hnew () {
     if [ "$#" -ne 3 ]; then
         echo -e "$MESSAGE"
 	return 1
+        # NOTE `return` v `exit`?
+        # `return`, in the subshell-defined-function, still seems to work.
     fi
 
     LOCAL_TEMPLATE=~/.stack/templates/spirosboosalis.hsfiles
@@ -513,7 +575,7 @@ function hnew () {
     echo "$TEMPLATE"
     echo
 
-    stack new "$PACKAGE" "$TEMPLATE" -p module:"$MODULE" -p filepath:"$_FILEPATH" 
+    stack new "$PACKAGE" "$TEMPLATE" -p module:"$MODULE" -p filepath:"$_FILEPATH" || true # ignore failure
     # -p synopsis:"$SYNOPSIS"
 
     if ! cd "$PACKAGE"; then
@@ -526,12 +588,19 @@ function hnew () {
     STRING_FROM="$MODULE"-Example.html
     STRING_INTO="$(echo "$MODULE"-Example | sed 's/\./-/g')".html
     sed -i  s/"$STRING_FROM"/"$STRING_INTO"/g  sources/"$_FILEPATH"/Example.hs
+    sed -i  s/"$STRING_FROM"/"$STRING_INTO"/g  README.md
 
-    NIX_FILE="$PACKAGE".nix
-    cabal2nix . > "$NIX_FILE"
+    # patch cabal file
+    # e.g. "Paths_reflex-vinyl" -> "Paths_reflex_vinyl"
+    STRING_FROM_2="Paths_$PACKAGE"
+    STRING_INTO_2="$(echo "$STRING_FROM_2" | sed 's/-/_/g')"
+    sed -i  s/"$STRING_FROM_2"/"$STRING_INTO_2"/g "$PACKAGE.cabal"
 
-    SHELL_FILE=shell-"$PACKAGE".nix
-    cabal2nix . --shell > "$SHELL_FILE" 
+    NIX_DEFAULT_FILE="$PACKAGE-default.nix"
+    cabal2nix .         > "$NIX_DEFAULT_FILE"
+
+    NIX_SHELL_FILE="$PACKAGE-shell.nix"
+    cabal2nix . --shell > "$NIX_SHELL_FILE" 
 
     # SC2035
     chmod 700 ./*.sh
@@ -542,17 +611,35 @@ function hnew () {
     echo "========================================"
     echo
 
-    nix-shell "$SHELL_FILE" --arg doBenchmark true --run 'cabal configure --enable-tests --enable-benchmarks'
+    # try to open a tab in the default browser to create a GitHub repository,
+    # during the build (which should take a minute)
+    GITHUB_URL=https://github.com/new
+    xdg-open "$GITHUB_URL" 2>/dev/null || open "$GITHUB_URL" 2>/dev/null || true # ignore failure
+
+    nix-shell "$NIX_SHELL_FILE" --arg doBenchmark true --arg doTest true --run 'cabal configure --enable-tests --enable-benchmarks'
 
     # nix-shell "$SHELL_FILE" --arg doBenchmark true 
     cabal build
-    cabal run example-"$PACKAGE"
-    cabal test
-    cabal bench
-    cabal haddock --haddock-option="--hyperlinked-source"
+    cabal run "example-$PACKAGE"
+    cabal test || true # ignore failure
+    cabal bench || true # ignore failure
+    cabal haddock --haddock-option="--hyperlinked-source" || true # ignore failure
 
     # (nix-shell && cabal build && cabal run example-$PACKAGE)
-}
+
+    echo
+    echo "========================================"
+    echo "[Initializing Repository...]"
+    echo "========================================"
+    echo
+    git init
+    git add .
+    git commit -m '1st'
+    git remote add origin "git@github.com:sboosali/$PACKAGE".git
+    git push -u origin master
+)
+
+alias hnew=new-haskell-project
 
 # To generate a Nix build expression for it, change into the project’s top-level directory and run the command:
 # $ cabal2nix . >foo.nix
@@ -927,6 +1014,25 @@ function unzip-each () {
  for i in *.zip; do 
    unzip "$i" -d "${i%%.zip}"
  done
+}
+
+function new-script () {
+
+ FILENAME="$1"
+ 
+ cat <<EOF > "$FILENAME"
+ #!/bin/bash
+ set -e
+ ########################################
+ ########################################
+ ARGUMENTS="$1"
+ ########################################
+ echo "$ARGUMENTS"
+ ########################################
+EOF
+ 
+ chmod 700 "$FILENAME"
+ emacsclient "$FILENAME"
 }
 
 ########################################

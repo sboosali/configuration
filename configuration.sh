@@ -176,7 +176,6 @@ safe-link ./bash/.bash_logout                      ~/.bash_logout
 safe-link ./git/.gitconfig                         ~/.gitconfig                           
 safe-link ./bash/.git-prompt.sh                    ~/.git-prompt.sh                       
 
-safe-link ./ghci/ghci.conf                         ~/.ghci                                 
 safe-link ./cabal/config.yaml                      ~/.cabal/config                         
 safe-link ./stack/config.yaml                      ~/.stack/config.yaml                     
 safe-link ./stack/templates/spirosboosalis.hsfiles ~/.stack/templates/spirosboosalis.hsfiles  
@@ -188,9 +187,15 @@ safe-link ./x11/.xprofile                          ~/.xprofile
 # dirs
 safe-link ./nix/overlays ~/.config/nixpkgs/overlays 
 
-# non-home
+
+#TODO non-home
 # safe-link ./nix/global-nix.conf /etc/nix/nix.conf
 
+
+########################################
+
+# bad
+# safe-link ./ghci/ghci.conf                         ~/.ghci                                 
 # old
 # safe-link ./nix/config.nix                         ~/.nixpkgs/config.nix
 
