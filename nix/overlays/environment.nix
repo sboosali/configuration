@@ -1,26 +1,12 @@
-#!/bin/bash
-set -e
-########################################
-
-if [[ $# -ne 1 ]];
-then
-    echo '$ new-nix-overlay FILENAME'
-    echo
-    echo '# e.g.'
-    echo '$ new-nix-overlay emacs'
-    echo
-    exit 1
-else
-    FILENAME="$1.nix"
-fi
-
-########################################
-
-# (set a variable to a heredoc)
-read -r -d '' NIX_OVERLAY_TEMPLATE <<EOF || true
 self: super: 
 ########################################
 let
+
+homeWith = pathsWith: self: super:
+ super.buildEnv {
+  name  = "homeEnv";
+  paths = pathsWith self;
+ };
 
 # :: GitHub -> Derivation
 github = x:
@@ -32,7 +18,25 @@ file = x:
 
 in
 ########################################
+let
+
+# which packages' executables. 
+# it links their /bin to the PATH. 
+myExecutablesWith = self: with self; [ 
+ emacs25
+];
+
+in
+########################################
+
 {
+
+ home = homeWith myExecutablesWith self super;
+ 
+ # # namespaced with my username
+ # sboo = {
+ #  home = homeWith myExecutablesWith self super;  
+ # };
 
 /*
 
@@ -64,29 +68,21 @@ identityOverlay = self: super: {}
 # e.g.
 $ nix-repl
 > nixpkgs = import <nixpkgs> {}
-> let super = { inherit (nixpkgs) callPackage fetchFromGitHub ...; }; self = import ./$FILENAME.nix self super; in self
+> let super = { inherit (nixpkgs) callPackage fetchFromGitHub ...; }; self = import ./environment.nix.nix self super; in self
 { emacs2nix = «derivation /nix/store/nxssrxd2qq2kkps34p2q16zzh83295kv-source.drv»; }
 
 # e.g.
-$ cat ./shell-$FILENAME.nix 
+$ cat ./shell-environment.nix.nix 
 let
 nixpkgs = import <nixpkgs> {}
 super = { inherit (nixpkgs) callPackage fetchFromGitHub ...; }
-self = import ./$FILENAME.nix self super
+self = import ./environment.nix.nix self super
 in
 self
-$ nix-eval ./shell-$FILENAME.nix 
-{ $FILENAME = «derivation /nix/store/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-source.drv»; }
+$ nix-eval ./shell-environment.nix.nix 
+{ environment.nix = «derivation /nix/store/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-source.drv»; }
 
 # e.g.
 $ nix-prefetch-git 'https://github.com/ttuegel/emacs2nix' > emacs2nix.json
 
 */
-EOF
-
-echo
-echo "$FILENAME"
-echo
-echo "$NIX_OVERLAY_TEMPLATE" > "$FILENAME"
-
-########################################

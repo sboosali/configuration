@@ -4,6 +4,27 @@
 
 
 
+
+----------------------------------------
+size of /nix/store/
+
+~$  du -hs ~
+217G	/home/sboo
+217G	total
+
+~$ time du -hs /nix/store/
+147G	/nix/store/
+real	0m11.902s
+
+$ ls /nix/store | wc -l
+138731
+
+..lol
+
+
+
+
+
 ----------------------------------------
 emacs / melpa
 
