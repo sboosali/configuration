@@ -101,16 +101,28 @@ library
 
  ghc-options:
   -Wall
--- disable
-  -fno-warn-unticked-promoted-constructors
--- enable
-  -fwarn-incomplete-uni-patterns
-  -fwarn-incomplete-record-updates
-  -fwarn-identities
-  -fwarn-missing-fields
+  -Wcompat
+
+  -- disable
+  -Wno-unticked-promoted-constructors
+
+  -- enable
+  -Wincomplete-uni-patterns
+  -Wincomplete-record-updates
+  -Widentities
+  -Wmissing-methods
+
+  -- raise a warning into an error
+  -Werror=missing-fields
+
+  -- use `typed-holes`, not `undefined`, during development
+  -fdefer-typed-holes
+  -Wtyped-holes
 
  default-language:   Haskell2010
- default-extensions: PackageImports AutoDeriveTypeable DeriveDataTypeable DeriveGeneric
+ -- NOTE -XNoImplicitPrelude 
+ default-extensions: NoImplicitPrelude 
+                     PackageImports AutoDeriveTypeable DeriveDataTypeable DeriveGeneric
                      DeriveFunctor DeriveFoldable DeriveTraversable
                      LambdaCase EmptyCase TypeOperators PostfixOperators
                      ViewPatterns BangPatterns KindSignatures
@@ -119,6 +131,8 @@ library
                      MultiParamTypeClasses FlexibleContexts FlexibleInstances
                      TypeFamilies FunctionalDependencies
                      ScopedTypeVariables StandaloneDeriving
+
+ other-extensions: TemplateHaskell
 
  exposed-modules:
                  {{module}}
@@ -328,14 +342,13 @@ cabal configure --enable-tests --enable-benchmarks
 
 {-# START_FILE environment.sh #-}
 #!/bin/bash
-NIX_SHELL_FILE=shell-{{name}}.nix
+NIX_SHELL_FILE=shell.nix
 NIX_SHELL_OPTIONS=(--arg doBenchmark true)
-nix-shell "$NIX_SHELL_FILE" "${NIX_SHELL_OPTIONS[@]}"
+nix-shell "$NIX_SHELL_FILE" "${NIX_SHELL_OPTIONS[@]}" "$@"
 
 {-# START_FILE provision.sh #-}
 #!/bin/bash
-SHELL_FILE={{name}}-shell.nix
-nix-shell "$SHELL_FILE" --arg doBenchmark true --run "./configure.sh"
+./environment.sh --run "./configure.sh" "$@"
 
 {-# START_FILE reconfigure.sh #-}
 #!/bin/bash
@@ -364,6 +377,7 @@ cabal build
 
 {-# START_FILE run.sh #-}
 #!/bin/sh
+set -e
 cabal build
 cabal run example-{{name}}
 
@@ -382,19 +396,18 @@ cabal haddock --haddock-option="--hyperlinked-source"
 
 {-# START_FILE interpreter.sh #-}
 #!/bin/sh
-cabal repl
+cabal repl {{name}}
 
 {-# START_FILE watch.sh #-}
 #!/bin/bash
-ghcid --command 'nix-shell --command "cabal repl"'
+ghcid -o ghcid.txt --command 'nix-shell --run "cabal repl {{name}}"'
 
 {-# START_FILE build.bat #-}
 cabal build
 
 {-# START_FILE cabal.config #-}
--- hyperlink-source: True
--- profiling: True
--- library-profiling: True
+profiling:         True
+library-profiling: True
 
 {-# START_FILE Setup.hs #-}
 import Distribution.Simple
@@ -434,8 +447,8 @@ extra-deps:
 
 Examples prefixed by @>>> @ are @doctest@'ed. 
 
->>> stub
-"stub"
+>>> version
+"0.0.0"
 
 -}
 module {{module}}
@@ -472,7 +485,7 @@ import {{module}}.Types()
 
 import Prelude.Spiros
 
-stub = "stub"
+version = "0.0.0"
 
 
 {-# START_FILE sources/{{filepath}}/Example.hs #-}
@@ -496,6 +509,8 @@ module {{module}}.Example where
 import {{module}}()
 
 import System.Environment
+
+import Prelude
 
 {-|
 
@@ -538,12 +553,12 @@ import Prelude.Spiros()
 
 {-# START_FILE tests/{{filepath}}/Test.hs #-}
 module {{module}}.Test where
-import {{module}}() 
+--import {{module}}() 
 
 
 {-# START_FILE tests/{{filepath}}/Property.hs #-}
 module {{module}}.Property where
-import {{module}}
+--import {{module}}
 
 
 {-# START_FILE tests/DocTests.hs #-}
@@ -585,13 +600,6 @@ main = doctest
  , "-XScopedTypeVariables"
  , "-XStandaloneDeriving"
  ]
-
- -- [ "sources/{{filepath}}/Extra.hs"
- -- , "sources/{{filepath}}/Types.hs"
- -- , "sources/{{filepath}}/Core.hs"
- -- , "sources/{{filepath}}.hs"
- -- , "sources/{{filepath}}/Example.hs"
- -- ]
 
 
 {-# START_FILE tests/UnitTests.hs #-}
@@ -704,6 +712,9 @@ ghc:
 notifications:
   email:
     - {{author-email}}
+
+{-# START_FILE .ghci #-}
+
 
 {-# START_FILE HLint.hs #-}
 {-# LANGUAGE PackageImports, TemplateHaskell #-}

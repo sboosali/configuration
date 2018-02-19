@@ -171,7 +171,8 @@ safe-link ./bash/.aliases                          ~/.aliases
 safe-link ./bash/.profile                          ~/.profile                             
 safe-link ./bash/.bash_definitions.sh              ~/.bash_definitions.sh                    
 safe-link ./bash/.bash_settings.sh                 ~/.bash_settings.sh                       
-safe-link ./bash/.bash_logout                      ~/.bash_logout                         
+safe-link ./bash/.bash_logout                      ~/.bash_logout   
+safe-link ./bash/.bash_login                       ~/.bash_login
 
 safe-link ./git/.gitconfig                         ~/.gitconfig                           
 safe-link ./bash/.git-prompt.sh                    ~/.git-prompt.sh                       
@@ -182,7 +183,8 @@ safe-link ./stack/templates/spirosboosalis.hsfiles ~/.stack/templates/spirosboos
 
 safe-link ./xbindkeys/.xbindkeysrc.scm             ~/.xbindkeysrc.scm                      
 safe-link ./xmodmap/.Xmodmap                       ~/.Xmodmap                              
-safe-link ./x11/.xprofile                          ~/.xprofile                              
+safe-link ./x11/.xprofile                          ~/.xprofile      
+                        
 
 # dirs
 safe-link ./nix/overlays ~/.config/nixpkgs/overlays 

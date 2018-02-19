@@ -1,7 +1,6 @@
 #!/bin/bash
 ########################################
 ## NOTES
-
 # this file is "pure", it only declares aliases and functions.
 # like .bash_aliases plus .bash_functions
 
@@ -66,6 +65,10 @@ alias dn='cd ~/.nixpkgs'
 # alias d='cd '
 # alias d='cd '
 
+# grep
+alias p="grep -E -i -n --color=auto"
+alias pf="grep -F"
+
 # create parent directories by default
 alias mkdir='mkdir -pv'
 alias md='mkdir -pv'
@@ -74,7 +77,7 @@ alias md='mkdir -pv'
 if [ -x "$(command -v colordiff)" ]; then
   alias diff='colordiff'
 else
-  echo '[WARGNING] colordiff is not installed, using diff.' >&2
+  echo '[WARNING] colordiff is not installed, using diff.' >&2
 fi
 
 
@@ -104,8 +107,10 @@ function open () {
 alias xm='xmodmap'
 alias xb='xbindkeys'
 
-# grep
-alias p="grep -E -i -n --color=auto"
+# e.g.
+# grep '^\S*' 
+# \S means match non-whitespace character.
+# And anchor ^ is used to match at the beginning of the line.
 
 # editing
 function seteditor () {
@@ -180,6 +185,7 @@ alias show="cat"
 alias get="git"
 alias grab="grep"
 alias processes=ps
+alias synchronize="rsync -av"
 
 alias path='echo -e ${PATH//:/\\n}'
 alias now='date +"%T"'
@@ -247,8 +253,7 @@ alias gpumeminfo='grep -i --color memory /var/log/Xorg.0.log'
 # TODO alias psa="ps -o \"command, pid, %mem, %cpu, user, start, \" "
 
 # python
-alias p="python3"
-alias pi="ipython"
+#alias pi="ipython"
 alias p3="python3"
 alias p2="python2.7"
 
@@ -282,6 +287,8 @@ alias nl="nix-shell"
 alias nlp="nix-shell --pure"
 alias nlr="nix-shell --run"
 alias nlrp="nix-shell --pure --run"
+alias nlx="nix-shell --run return"
+alias nlxp="nix-shell --pure --run exit"
 
 alias nix-eval="nix-instantiate --eval"
 alias nx="nix-instantiate --eval"
@@ -349,7 +356,6 @@ function nr () {
  read -r -d '' NIX_REPL_EXAMPLES <<EOF
 
 nixpkgs = import <nixpkgs> {}
-
 b  = builtins
 p  = nixpkgs
 c  = p.config
@@ -357,14 +363,15 @@ l  = p.lib
 ps = p.pkgs
 hs = ps.haskellPackages
 h  = p.haskell.lib
-
 :a builtins
 :a nixpkgs
 :a nixpkgs.lib
 
 EOF
 
+  echo
   echo -e "$NIX_REPL_EXAMPLES"
+  echo
   nix-repl
 }
 
@@ -650,6 +657,11 @@ alias hnew=new-haskell-project
 # { nixpkgs ? import <nixpkgs> {}, compiler ? "ghc7102" }:
 # (import ./default.nix { inherit nixpkgs compiler; }).env
 
+function c2n() { 
+ echo 'cabal2nix $@ . > default.nix'
+ cabal2nix . "$@" > default.nix
+}
+
 function h2n() {
  
  cabal2nix . > package.nix
@@ -870,6 +882,30 @@ function absolute-path {
 }
 alias path=absolute-path
 
+# https://stackoverflow.com/questions/965053/extract-filename-and-extension-in-bash
+#
+# filebasename=$(basename "$fullfile")
+# extension="${filebasename##*.}"
+# filename="${filebasename%.*}"
+# filename="${fullfile##*/}"
+#
+function directory {
+ FILEPATH="$1"
+ DIRECTORY=$(dirname "$FILEPATH")
+ echo "$DIRECTORY"
+}
+function filename {
+ FILEPATH="$1"
+ FILEBASE=$(basename "$FILEPATH")
+ FILENAME="${FILEBASE%.*}"
+ echo "$FILENAME"
+}
+function extension {
+ FILEPATH="$1"
+ EXTENSION="${FILEPATH##*.}"
+ echo "$EXTENSION"
+}
+
 # https://www.gnupg.org/documentation/manuals/gnupg/Invoking-GPG_002dAGENT.html
 GPG_TTY=$(tty)
 export GPG_TTY
@@ -1021,14 +1057,14 @@ function new-script () {
  FILENAME="$1"
  
  cat <<EOF > "$FILENAME"
- #!/bin/bash
- set -e
- ########################################
- ########################################
- ARGUMENTS="$1"
- ########################################
- echo "$ARGUMENTS"
- ########################################
+#!/bin/bash
+set -e
+########################################
+
+ARGUMENTS=
+
+########################################
+
 EOF
  
  chmod 700 "$FILENAME"
