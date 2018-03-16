@@ -1,6 +1,6 @@
 {-# START_FILE {{name}}.cabal #-}
 name:                {{name}}
-version:             0.0.0
+version:             0.0
 cabal-version:       >=1.24
 
 ----------------------------------------
@@ -50,6 +50,9 @@ extra-source-files:
   stack.yaml
   .travis.yml
   HLint.hs
+  metadata/dependencies.dot
+  metadata/dependencies.png
+  metadata/dependencies.txt
 
 -- data-files:
 --   data/
@@ -61,27 +64,37 @@ source-repository head
 ----------------------------------------
 -- FLAGS
 
--- You can disable the doctests test suite with -f-test-doctests.
-flag test-docs
+flag examples
+  default:     True
+  description: Build the examples in @examples/@. They are exposed library modules, for better haddocks and for guaranteeing that they typecheck. 
+
+-- You can disable the doctests test suite with -f-test-doctest.
+flag test-doctest
   default:     False
   description: Run the doctests (with the eponymous `doctest`), called the `test documentation` unit (in this cabal file). 
   manual:      True
 
--- You can disable the hunit test suite with -f-test-hunit. 
+-- You can disable the HUnit test suite with -f-test-unit. 
 flag test-unit
   default:     False
   description: Run the unit tests, called the `test unit` unit (in this cabal file).  
   manual:      True
 
+-- You can disable the QuickCheck test suite with -f-test-unit. 
 flag test-properties
   default:     False
   description: Run the property tests (i.e. QuickCheck), called the `test properties` unit (in this cabal file).  
   manual:      True
 
-flag test-macros
+flag test-static
   default: False
-  description: Run any macro tests (i.e. TemplateHaskell), called the `test templates` unit (in this cabal file).  
-  manual:  True
+  description: Whether to build the `static` test modules; i.e. the fact that they type check correctly is the test, there's nothing (necessarily) "dynamic" that is tested by running. 
+  manual: True
+
+-- flag test-macros
+--   default: False
+--   description: Run any macro tests (i.e. TemplateHaskell), called the `test templates` unit (in this cabal file).  
+--   manual:  True
 
 flag bench-speed
   default:     False
@@ -92,6 +105,11 @@ flag dump-splices
   default:     False
   description: Make the `template` test suite dump its template-haskell splices.
   manual:      True
+
+-- flag orphans
+--  default: False
+--  description: Implement orphan instances for TODO, at the cost of more dependencies and, obviously, the presence of orphans. Note: this option is provided for advanced users. 
+--  manual: True
 
 ----------------------------------------
 -- LIBRARY
@@ -113,61 +131,229 @@ library
   -Wmissing-methods
 
   -- raise a warning into an error
-  -Werror=missing-fields
+  -- -Werror=missing-fields
 
   -- use `typed-holes`, not `undefined`, during development
   -fdefer-typed-holes
   -Wtyped-holes
 
  default-language:   Haskell2010
- -- NOTE -XNoImplicitPrelude 
- default-extensions: NoImplicitPrelude 
-                     PackageImports AutoDeriveTypeable DeriveDataTypeable DeriveGeneric
-                     DeriveFunctor DeriveFoldable DeriveTraversable
-                     LambdaCase EmptyCase TypeOperators PostfixOperators
-                     ViewPatterns BangPatterns KindSignatures
-                     NamedFieldPuns RecordWildCards TupleSections
-                     MultiWayIf DoAndIfThenElse EmptyDataDecls
-                     MultiParamTypeClasses FlexibleContexts FlexibleInstances
-                     TypeFamilies FunctionalDependencies
-                     ScopedTypeVariables StandaloneDeriving
 
- other-extensions: TemplateHaskell
+ -- NOTE -XNoImplicitPrelude 
+ default-extensions:
+   NoImplicitPrelude
+   -- deriving
+   AutoDeriveTypeable DeriveDataTypeable DeriveGeneric DeriveFunctor DeriveFoldable DeriveTraversable DeriveLift StandaloneDeriving
+   -- syntax
+   PackageImports LambdaCase EmptyCase TypeOperators PostfixOperators BangPatterns KindSignatures NamedFieldPuns RecordWildCards TupleSections MultiWayIf DoAndIfThenElse EmptyDataDecls InstanceSigs
+   -- typeclasses
+   MultiParamTypeClasses FlexibleContexts FlexibleInstances TypeFamilies FunctionalDependencies
+   -- patterns
+   ViewPatterns PatternSynonyms
+   -- (miscellaneous)
+   ScopedTypeVariables
+
+ other-extensions:
+  -- macros
+  TemplateHaskell
+  -- QuasiQuotes
+  -- syntax (of literals)
+  OverloadedStrings OverloadedLists
+  -- RebindableSyntax
+  -- kinds
+  -- DataKinds ConstraintKinds
+  -- harmful to inference
+  -- GADTs RankNTypes
+  -- (miscellaneous)
+
+ if impl(ghc >= 8.2)
+    ghc-options: -Wcpp-undef
+    -- for `base-feature-macros`
 
  exposed-modules:
                  {{module}}
                  {{module}}.Types
-                 {{module}}.Core		
-                 {{module}}.Example                
+                 {{module}}.Core
+                 {{module}}.Derived
+                 {{module}}.Example
  other-modules:
-
-                 {{module}}.Extra            
-                 -- Paths_{{name}}
+                 {{module}}.Extra
+                 -- Paths_{{identifier}}
 -- autogen-modules:
-                 -- Paths_{{name}}
+                 -- Paths_{{identifier}}
+
+ if flag(examples)
+    hs-source-dirs: examples
+    exposed-modules:
+      Examples_{{identifier}}
+      Example.{{module}}
 
  build-depends:
-               base >=4.7 && <5
+-- boot libraries / standard library
+    base >=4.7 && <5
+  , text 
+  , bytestring
+  , transformers
+  , mtl
+  , containers
 
 -- mine 
-             , spiros
-             -- , enumerate 
+  , spiros >=0.2
+  -- , enumerate >=0.2 
 
--- (extended) standard library 
-             , deepseq
-             , hashable
-             , containers
-             , unordered-containers
-             , text 
-             , bytestring
-             , transformers
-             , mtl
+-- extended standard library 
+  , deepseq
+  , hashable
+  , unordered-containers
 
 -- ekmett 
-             , exceptions
-             , lens
+  , exceptions
+  , lens
 
 -- other packages 
+
+----------------------------------------
+-- TESTS...
+
+----------------------------------------
+
+test-suite doctest
+ if (!flag(test-doctest) || impl(ghcjs))
+    buildable: False
+    -- (`ghcjsi` just doesn't work? or `doctest` needs the GHC API?)
+
+ hs-source-dirs:      test
+ main-is:             DocTests.hs
+ type:                exitcode-stdio-1.0
+
+ default-language:    Haskell2010
+ ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+
+ build-depends:
+    base
+  , {{name}}
+  , doctest
+
+----------------------------------------
+
+-- $ stack test unit
+test-suite unit
+ if !flag(test-unit)
+    buildable: False
+
+ hs-source-dirs: test
+ main-is:        UnitTests.hs
+ 
+ type:             exitcode-stdio-1.0
+ default-language: Haskell2010
+ ghc-options:      
+   -Wall -threaded -rtsopts -with-rtsopts=-N
+
+ other-modules:
+  {{module}}.Test
+
+ build-depends:
+    base
+  , {{name}} 
+  , tasty
+  , tasty-hunit
+  -- , hspec      >=2.2
+
+----------------------------------------
+
+-- $ stack test properties 
+test-suite properties 
+ if !flag(test-properties)
+    buildable: False
+
+ hs-source-dirs:      test
+ main-is:             PropertyTests.hs
+
+ type:                exitcode-stdio-1.0
+ default-language:    Haskell2010
+ ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+
+ other-modules:
+  {{module}}.Properties 
+
+ build-depends:
+    base
+  , {{name}}
+  , tasty
+  -- , QuickCheck  >=2.8
+  -- , tasty-quickcheck
+  -- , smallcheck >=1.1
+  -- , tasty-smallcheck
+  , hedgehog
+  , tasty-hedgehog
+
+----------------------------------------
+-- STATIC TESTS
+
+-- test-suite static
+--  if !flag(test-static)
+--     buildable: False
+-- 
+--  hs-source-dirs: test
+--  main-is:        StaticTests.hs
+--  other-modules:
+--   StaticTests.Example
+-- 
+--  type:                exitcode-stdio-1.0
+--  default-language:    Haskell2010
+--  ghc-options:         -Wall 
+-- 
+--  build-depends:
+--     base
+--   , {{name}}
+
+----------------------------------------
+
+-- Template Haskell 
+-- Verify that Template Haskell expansion works
+-- test-suite macros
+--  if !flag(test-macros)
+--     buildable: False
+-- 
+--  hs-source-dirs:      test
+--  main-is:             TemplateHaskellTests.hs
+--  type:             exitcode-stdio-1.0
+--  default-language: Haskell2010
+-- 
+--  ghc-options:      -Wall -threaded
+-- 
+--  if flag(dump-splices)
+--     ghc-options: -ddump-splices
+-- 
+--  build-depends:
+--     base
+--   , {{name}}
+--   , template-haskell
+--   -- , lens
+
+----------------------------------------
+-- BENCHMARKS
+
+-- $ stack bench 
+benchmark speed
+ if !flag(bench-speed)
+    buildable: False
+
+ hs-source-dirs:      benchmark
+ main-is:             Speed.hs
+
+ type: exitcode-stdio-1.0
+ default-language: Haskell2010
+
+ ghc-options:
+   -Wall -threaded
+   -O2 -fdicts-cheap -funbox-strict-fields
+
+ build-depends:
+    base
+  , {{name}}
+  , criterion
+  , deepseq
 
 ----------------------------------------
 -- EXECUTABLES
@@ -182,119 +368,6 @@ executable example-{{name}}
  build-depends:
     base
   , {{name}}
-
-----------------------------------------
--- TESTS
-
-
--- $ stack test unit
-test-suite unit
- hs-source-dirs:      tests
- main-is:             UnitTests.hs
- type:                exitcode-stdio-1.0
-
- default-language:    Haskell2010
- ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
-
- other-modules:
-  {{module}}.Test
-
- if !flag(test-unit)
-    buildable: False
- else
-    build-depends:
-       base
-     , {{name}} 
-     , tasty
-  
-
--- $ stack test properties 
-test-suite properties 
- hs-source-dirs:      tests
- main-is:             PropertyTests.hs
-
- type:                exitcode-stdio-1.0
- default-language:    Haskell2010
- ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
-
- other-modules:
-  {{module}}.Property 
-
- build-depends:
-    base
-  , {{name}}
-  , QuickCheck 
-  , tasty
-  , tasty-quickcheck
-  , hedgehog
-  , tasty-hedgehog
-
-
--- $ stack test documentation
-test-suite documentation 
-
- hs-source-dirs:      tests
- main-is:             DocTests.hs
- type:                exitcode-stdio-1.0
-
- default-language:    Haskell2010
- ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
-
- if (!flag(test-docs) || impl(ghcjs))
-    buildable: False
-    -- (`ghcjsi` just doesn't work? or `doctest` needs the GHC API?) else
-    build-depends:
-       base
-     , {{name}}
-     , doctest
-
-
--- $ stack test templates 
--- Template Haskell 
--- Verify that Template Haskell expansion works
-test-suite templates
-  hs-source-dirs:      tests
-  main-is:             TemplateHaskellTests.hs
-
-  type:             exitcode-stdio-1.0
-  default-language: Haskell2010
-  ghc-options:      -Wall -threaded
-
-  if flag(dump-splices)
-    ghc-options: -ddump-splices
-
-  if !flag(test-macros)
-     buildable: False
-  else
-     build-depends:
-         base
-       , {{name}}
-       , lens
-
-
-----------------------------------------
--- BENCHMARKS
-
--- $ stack bench 
-benchmark speed
- hs-source-dirs:      benchmarks
- main-is:             Bench.hs
-
- type:             exitcode-stdio-1.0
- default-language: Haskell2010
- ghc-options:
-      -Wall -threaded
-       -O2 -fdicts-cheap -funbox-strict-fields
-
- if !flag(bench-speed)
-    buildable: False
- else
-    build-depends:
-       base
-     , {{name}}
-     , criterion
-     , deepseq
-
 
 ----------------------------------------
 -- NOTES
@@ -315,99 +388,320 @@ benchmark speed
 
 ----------------------------------------
 
-{-# START_FILE default.nix #-}
-import ./{{name}}-default.nix 
+{-# START_FILE nix/shell.nix #-}
 
-{-# START_FILE shell.nix #-}
-import ./{{name}}-shell.nix 
+{-# START_FILE default.nix #-}
+import ./nix/{{name}}.nix 
+
+
+{-# START_FILE upload.sh #-}
+#!/bin/sh
+set -e
+########################################
+########################################
+
+{-# START_FILE commit.sh #-}
+#!/bin/sh
+set -e
+########################################
+./verify.sh
+
+./dependencies.sh
+git add metadata
+
+git commit
+########################################
 
 {-# START_FILE verify.sh #-}
 #!/bin/sh
 set -e
+########################################
 ./configure.sh
 ./build.sh
 
-./test.sh     || true
-./document.sh || true
-./bench.sh    || true
-./run.sh      || true
+./test.sh
 
-# cabal test    || true
-# cabal bench   || true
-# cabal haddock || true
+./bench.sh    || true
+./haddock.sh  || true
+########################################
 
 {-# START_FILE configure.sh #-}
 #!/bin/sh
-cabal configure --enable-tests --enable-benchmarks
+########################################
 
-{-# START_FILE environment.sh #-}
-#!/bin/bash
-NIX_SHELL_FILE=shell.nix
-NIX_SHELL_OPTIONS=(--arg doBenchmark true)
-nix-shell "$NIX_SHELL_FILE" "${NIX_SHELL_OPTIONS[@]}" "$@"
+nix-shell --run 'cabal configure --enable-tests --enable-benchmarks'
+
+########################################
 
 {-# START_FILE provision.sh #-}
 #!/bin/bash
-./environment.sh --run "./configure.sh" "$@"
+########################################
+
+./environment.sh $@ --run "./configure.sh"
+
+########################################
 
 {-# START_FILE reconfigure.sh #-}
 #!/bin/bash
 set -e
 ########################################
 
-cabal2nix .         > "{{name}}-default.nix"
-cabal2nix . --shell > "{{name}}-shell.nix"
+cabal2nix . > "nix/{{name}}.nix"
 
 ./provision.sh
-
 ########################################
-#
-# SHELL_FILE=shell-{{name}}.nix
-# cabal2nix . --shell > "$SHELL_FILE"
-#
-# if [ ! -f "$SHELL_FILE" ]; then 
-#   # don't overwrite if it already exists
-#   cabal2nix . --shell > "$SHELL_FILE" 
-# fi
-#
-
-{-# START_FILE build.sh #-}
-#!/bin/sh
-cabal build
 
 {-# START_FILE run.sh #-}
 #!/bin/sh
 set -e
+########################################
 cabal build
 cabal run example-{{name}}
+########################################
 
 {-# START_FILE test.sh #-}
+#!/bin/bash
+set -e
+########################################
+time nix-shell --run 'cabal new-test' 
+# "$@"
+########################################
+
+{-# START_FILE doctest.sh #-}
+#!/bin/bash
+set -e
+########################################
+time nix-shell --run 'cabal new-test doctest' 
+# "$@"
+########################################
+
+{-# START_FILE test-unit.sh #-}
+#!/bin/bash
+set -e
+########################################
+time nix-shell --run 'cabal new-test unit' 
+# "$@"
+########################################
+
+{-# START_FILE test-properties.sh #-}
+#!/bin/bash
+set -e
+########################################
+time nix-shell --run 'cabal new-test properties' 
+# "$@"
+########################################
+
+{-# START_FILE old-haddock.sh #-}
 #!/bin/sh
-cabal test
+set -e
+########################################
+
+# e.g.
+# 
+# ./haddock.sh --hyperlink-source --all --internal --hoogle
+#
+# ./haddock.sh --for-hackage --hyperlink-source 
+
+########################################
+
+cabal haddock --hyperlink-source "$@"
+
+########################################
+
+xdg-open ./dist/doc/html/{{name}}/index.html >/dev/null 2>&1
+
+########################################
+
+
+{-# START_FILE new-haddock.sh #-}
+#!/bin/sh
+set -e
+
+########################################
+
+cabal new-haddock --haddock-option="--hyperlinked-source"
+# not `cabal haddock --hyperlink-source` lol
+
+########################################
+
+ARCHITECTURE="x86_64-linux"
+COMPILER="ghc-8.2.2"
+
+PACKAGE="{{name}}"
+VERSION="0.0.0"
+
+xdg-open ./dist-newstyle/build/"$ARCHITECTURE/$COMPILER/$PACKAGE-$VERSION"/doc/html/"$PACKAGE"/index.html  >/dev/null 2>&1
+
+########################################
+
+{-# START_FILE haddock.sh #-}
+#!/bin/sh
+set -e
+########################################
+source ./new-haddock.sh
+########################################
 
 {-# START_FILE bench.sh #-}
 #!/bin/sh
-cabal bench
+########################################
+time nix-shell --run 'cabal bench'
+########################################
 
-{-# START_FILE document.sh #-}
+{-# START_FILE repl.sh #-}
 #!/bin/sh
-cabal haddock --haddock-option="--hyperlinked-source"
-# not `cabal haddock --hyperlink-source` lol
-
-{-# START_FILE interpreter.sh #-}
-#!/bin/sh
-cabal repl {{name}}
+########################################
+nix-shell --run 'cabal new-repl {{name}}'
+########################################
 
 {-# START_FILE watch.sh #-}
 #!/bin/bash
-ghcid -o ghcid.txt --command 'nix-shell --run "cabal repl {{name}}"'
+########################################
+
+GHCID_FILE=./ghcid.txt
+
+########################################
+
+echo '...' > "$GHCID_FILE"
+# emacsclient "$GHCID_FILE" &
+
+########################################
+
+COMMAND='nix-shell --run "cabal new-repl {{name}}"'
+ghcid -o "$GHCID_FILE" --command "$COMMAND"
+
+########################################
+
+{-# START_FILE dependencies.sh #-}
+#!/bin/bash
+set -e
+# DEPENDENCIES:
+# stack
+# graphviz
+# feh
+# 
+########################################
+
+# get all the nodes in a `.dot` graph
+function dot2nodes() {
+
+sed "1,1d; $d" | tr -cd '([:alnum:]|[\-\.]|[\n >])' | grep -F '>' | sed 's/ -> /\n/' | sort | uniq | sed '/^[[:space:]]*$/d'
+
+# NOTES
+#
+# delete the first line(/row) and the last one
+# sed "1,1d; $d"
+#
+# sed '/^[[:space:]]*$/d
+# delete blank lines (matching any sequence of whitespace characters)
+# 
+# TODO make less hacky, c.f. the filtering of `Cabal`'s dependencies:  grep -E -v "^(Cabal-|ghci-)" 
+
+}
+
+########################################
+
+DIRECTORY=metadata
+
+DOT_FILE="$DIRECTORY/dependencies.dot"
+TEXT_FILE="$DIRECTORY/dependencies.txt"
+IMAGE_FILE="$DIRECTORY/dependencies.png"
+
+########################################
+
+mkdir -p "$DIRECTORY"
+
+#TODO
+# ./environment.sh --pure --arg packageDotNix "./nix/{{name}}_only-library.nix" --arg minimalDependencies true --run "./generate-dependencies.sh > $DOT_FILE"
+
+# generate the transitive dependencies:
+
+stack dot --no-include-base --external > "$DOT_FILE"
+# --prune x,y,z
+
+# boot libraries (?):
+# 
+# array
+# binary
+# bytestring
+# containers
+# deepseq
+# directory
+# ghc-boot-th
+# pretty
+# process
+# rts
+# time
+
+########################################
+
+cat "$DOT_FILE" | dot2nodes > "$TEXT_FILE"
+
+echo 
+echo '========================================'
+echo '[the dependencies]'
+echo 
+cat "$TEXT_FILE"
+
+echo 
+echo '========================================'
+echo '[the number of dependencies]'
+echo 
+cat "$TEXT_FILE" | wc -l 
+
+########################################
+
+echo 
+echo '========================================'
+echo '[the image]'
+echo 
+dot -Tpng "$DOT_FILE" -o "$IMAGE_FILE"
+
+feh "$IMAGE_FILE"
+
+########################################
+
+ #       dot draws directed graphs.  It works well on directed acyclic graphs and other graphs that can be drawn as hierarchies  or
+ #       have a natural ``flow.''
+
+ #       neato  draws undirected graphs using a ``spring'' model and reducing the related energy (see Kamada and Kawai, Information
+ #       Processing Letters 31:1, April 1989).
+
+ #       twopi draws graphs using a radial layout (see G. Wills, Symposium on Graph Drawing GD'97,  September,  1997).  Basically,
+ #       one  node  is chosen as the center and put at the origin.  The remaining nodes are placed on a sequence of concentric cir‐
+ #       cles centered about the origin, each a fixed radial distance from the previous circle.  All nodes distance 1 from the cen‐
+ #       ter  are placed on the first circle; all nodes distance 1 from a node on the first circle are placed on the second circle;
+ #       and so forth.
+
+ #       circo draws graphs using a circular layout (see Six and Tollis, GD '99 and ALENEX '99, and Kaufmann and  Wiese,  GD  '02.)
+ #       The  tool  identifies  biconnected components and draws the nodes of the component on a circle. The block‐cutpoint tree is
+ #       then laid out using a recursive radial algorithm. Edge crossings within a circle are minimized by placing as many edges on
+ #       the circle's perimeter as possible.  In particular, if the component is outerplanar, the component will have a planar lay‐
+ #       out.  If a node belongs to multiple non‐trivial biconnected components, the layout puts  the  node  in  one  of  them.  By
+ #       default, this is the first non‐trivial component found in the search from the root component.
+
+ #       fdp  draws undirected graphs using a ``spring'' model. It relies on a force‐directed approach in the spirit of Fruchterman
+ #       and Reingold (cf. Software‐Practice & Experience 21(11), 1991, pp. 1129‐1164).
+
+ #       sfdp also draws undirected graphs using the ``spring'' model described above, but it uses a multi-scale approach  to  pro‐
+ #       duce layouts of large graphs in a reasonably short time.
+
+ #       patchwork  draws the graph as a squarified treemap (see M. Bruls et al., ``Squarified treemaps'', Proc. Joint Eurographics
+ #       and IEEE TCVG Symp. on Visualization, 2000, pp. 33-42). The clusters of the graph are used to specify the tree.
+
+ #       osage draws the graph using its cluster structure. For a given cluster, each of its subclusters is  laid  out  internally.
+ #       Then the subclusters, plus any remaining nodes, are repositioned based on the cluster's pack and packmode attributes.
+ # Manual page dot(1) line 20 (press h for help or q to quit)
+
+########################################
+
+
 
 {-# START_FILE build.bat #-}
 cabal build
 
 {-# START_FILE cabal.config #-}
-profiling:         True
-library-profiling: True
+-- profiling:         True
+-- library-profiling: True
 
 {-# START_FILE Setup.hs #-}
 import Distribution.Simple
@@ -419,62 +713,88 @@ main = defaultMain
 packages:
   ./
 
-{-# START_FILE stack-nix.yaml #-}
-resolver: nightly-2018-01-22 
+
+{-# START_FILE stack.yaml #-}
+resolver: nightly-2018-03-12
 
 nix:
   enable: true
-  pure:   true
+  pure:   false
   packages:
   - zlib
 
 packages:
 - ./
 
-# - location:
-#     git:    https://github.com/sboosali/spiros
-#     commit: 0c5f3584e73ae3e4c00b0a142d2024c241ac3032
-#   extra-dep: true
-#   subdirs: [.] 
+- location:
+    git:    https://github.com/sboosali/spiros
+    commit: e0b3a1e2eee3a44a450444bf36f722a6f14d0376
+  extra-dep: true
+  subdirs: [.] 
+# - ../spiros
 
 extra-deps: 
-- spiros-0.0.0
+- spiros-0.2
+
 
 
 {-# START_FILE sources/{{filepath}}.hs #-}
+-- {-# LANGUAGE  #-}
+-- {-# LANGUAGE OverloadedStrings #-}
+-- {-# LANGUAGE OverloadedLists #-}
 
 {-| 
 
 Examples prefixed by @>>> @ are @doctest@'ed. 
+(Ones prefixed by @> @ aren't). 
 
->>> version
-"0.0.0"
+@
+
+>>> 
+
+@
 
 -}
 module {{module}}
  ( module {{module}}.Types
  , module {{module}}.Core
+ , module {{module}}.Derived
+
+ -- , module {{module}}
  ) where
+----------------------------------------
 import {{module}}.Types
 import {{module}}.Core
+import {{module}}.Derived
+----------------------------------------
 
+----------------------------------------
 
 {-# START_FILE sources/{{filepath}}/Types.hs #-}
-{-# LANGUAGE NoImplicitPrelude #-}
+-- {-# LANGUAGE  #-}
+-- {-# LANGUAGE OverloadedStrings #-}
+-- {-# LANGUAGE OverloadedLists #-}
 
-{-| The core types. 
+{-| The primary types. 
 
 This module mostly defines types 
-(i.e. @data@, @newtype@, @type@, @class@, @instance@) 
-and whatever values are necessary for instances.
+(i.e. @data@, @newtype@, @type@, @class@, @instance@);
+it also defines whatever functions are necessary for those types' instances.
 
 -}
 module {{module}}.Types where
 import {{module}}.Extra()
 
+import "spiros" Prelude.Spiros.Classes
+
+----------------------------------------
+
+----------------------------------------
 
 {-# START_FILE sources/{{filepath}}/Core.hs #-}
-{-# LANGUAGE NoImplicitPrelude #-}
+-- {-# LANGUAGE  #-}
+-- {-# LANGUAGE OverloadedStrings #-}
+-- {-# LANGUAGE OverloadedLists #-}
 
 {-| The core definitions. 
 
@@ -483,14 +803,36 @@ module {{module}}.Core where
 import {{module}}.Extra()
 import {{module}}.Types()
 
-import Prelude.Spiros
+----------------------------------------
 
-version = "0.0.0"
+----------------------------------------
 
+{-# START_FILE sources/{{filepath}}/Derived.hs #-}
+-- {-# LANGUAGE  #-}
+-- {-# LANGUAGE OverloadedStrings #-}
+-- {-# LANGUAGE OverloadedLists #-}
+
+{-| Definitions that are derived from the core definitions (in "{{module}}.Core"). 
+
+-}
+module {{module}}.Derived where
+import {{module}}.Extra()
+import {{module}}.Types()
+import {{module}}.Core()
+
+----------------------------------------
+
+
+
+----------------------------------------
 
 {-# START_FILE sources/{{filepath}}/Example.hs #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-} 
+    -- to test inference
 
-{-# OPTIONS_GHC -fno-warn-missing-signatures #-} -- to test inference
+-- {-# LANGUAGE  #-}
+-- {-# LANGUAGE OverloadedStrings #-}
+-- {-# LANGUAGE OverloadedLists #-}
 
 {-| This module provides an example program. 
 Please read the source too <https://hackage.haskell.org/package/{{name}}/docs/src/{{module}}-Example.html (direct Hackage link)>. 
@@ -511,6 +853,8 @@ import {{module}}()
 import System.Environment
 
 import Prelude
+
+----------------------------------------
 
 {-|
 
@@ -536,90 +880,431 @@ mainWith s = do
  putStrLn s
  putStrLn "({{module}}.Example...)"
 
+----------------------------------------
 
 {-# START_FILE sources/{{filepath}}/Extra.hs #-}
-{-# LANGUAGE NoImplicitPrelude #-}
+-- {-# LANGUAGE  #-}
+-- {-# LANGUAGE OverloadedStrings #-}
+-- {-# LANGUAGE OverloadedLists #-}
 
 {-|
 
 -}
 module {{module}}.Extra
- ( module {{module}}.Extra
- , module Prelude.Spiros
+ ( module Prelude.Spiros
+ -- , module {{module}}.Extra
+ -- , module X
  ) where
 
-import Prelude.Spiros()
+----------------------------------------
+
+import "spiros" Prelude.Spiros
+-- import as X
+
+----------------------------------------
+
+{-# START_FILE examples/Examples_{{identifier}} #-}
+-- {-# LANGUAGE  #-}
+-- {-# LANGUAGE OverloadedStrings #-}
+-- {-# LANGUAGE OverloadedLists #-}
+
+{-|
+
+-}
+module Examples_{{identifier}} 
+  ( module Example.{{module}}
+  ) where
+----------------------------------------
+-- import Example.{{module}}
 
 
-{-# START_FILE tests/{{filepath}}/Test.hs #-}
+{-# START_FILE examples/Example/{{filepath}} #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
+    -- to test inference
+
+-- {-# LANGUAGE  #-}
+-- {-# LANGUAGE OverloadedStrings #-}
+-- {-# LANGUAGE OverloadedLists #-}
+
+{-| 
+
+Doctests:
+
+@
+TODO
+@
+
+(Please see the source too)
+
+-}
+module Example.{{module}} where
+
+-- import {{module}} 
+
+-- import "spiros" Prelude.Spiros
+import "base"   Prelude
+
+----------------------------------------
+
+{-# START_FILE test/UnitTests.hs #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
+-- {-# OPTIONS_GHC -F -pgmF hspec-discover #-}
+
+{-# LANGUAGE PackageImports #-}
+-- {-# LANGUAGE OverloadedStrings #-}
+-- {-# LANGUAGE OverloadedLists #-}
+
+import {{module}}.Test
+
+import "tasty" Test.Tasty
+
+----------------------------------------
+
+main :: IO ()
+main = defaultMain tests
+
+----------------------------------------
+
+{-# START_FILE test/{{filepath}}/Test.hs #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
+
+{-# LANGUAGE PackageImports #-}
+-- {-# LANGUAGE OverloadedStrings #-}
+-- {-# LANGUAGE OverloadedLists #-}
+
 module {{module}}.Test where
---import {{module}}() 
+
+--import {{module}} 
+
+----------------------------------------
+
+import "tasty"       Test.Tasty
+import "tasty-hunit" Test.Tasty.HUnit
+
+----------------------------------------
+
+  testCase "Example test case" $ do
+    -- assertion no. 1 (passes)
+    2 + 2 @?= 4
+    -- assertion no. 2 (fails)
+    assertBool "the list is not empty" $ null [1]
+    -- assertion no. 3 (would have failed, but won't be executed because
+    -- the previous assertion has already failed)
+    "foo" @?= "bar"
+
+----------------------------------------
+
+{-NOTES
 
 
-{-# START_FILE tests/{{filepath}}/Property.hs #-}
+-- | Asserts that the specified actual value is equal to the expected value
+--   (with the expected value on the left-hand side).
+(@=?)
+  :: (Eq a, Show a, HasCallStack)
+  => a -- ^ The expected value
+  -> a -- ^ The actual value
+  -> Assertion
+expected @=? actual = assertEqual "" expected actual
+
+-- | Asserts that the specified actual value is equal to the expected value
+--   (with the actual value on the left-hand side).
+(@?=)
+  :: (Eq a, Show a, HasCallStack)
+  => a -- ^ The actual value
+  -> a -- ^ The expected value
+  -> Assertion
+actual @?= expected = assertEqual "" expected actual
+
+-- | An infix and flipped version of 'assertBool'. E.g. instead of
+--
+-- >assertBool "Non-empty list" (null [1])
+--
+-- you can write
+--
+-- >null [1] @? "Non-empty list"
+--
+-- '@?' is also overloaded to accept @'IO' 'Bool'@ predicates, so instead
+-- of
+--
+-- > do
+-- >   e <- doesFileExist "test"
+-- >   e @? "File does not exist"
+--
+-- you can write
+--
+-- > doesFileExist "test" @? "File does not exist"
+(@?) :: (AssertionPredicable t, HasCallStack)
+  => t          -- ^ A value of which the asserted condition is predicated
+  -> String     -- ^ A message that is displayed if the assertion fails
+  -> Assertion
+predi @? msg = assertionPredicate predi >>= assertBool msg
+
+
+-}
+----------------------------------------
+
+{-# START_FILE test/{{filepath}}/Property.hs #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
+
+-- {-# LANGUAGE  #-}
+-- {-# LANGUAGE OverloadedStrings #-}
+-- {-# LANGUAGE OverloadedLists #-}
+
 module {{module}}.Property where
 --import {{module}}
 
+----------------------------------------
 
-{-# START_FILE tests/DocTests.hs #-}
+
+{-# START_FILE test/DocTests.hs #-}
 {-# OPTIONS_GHC -fno-warn-missing-signatures #-}
-import Test.DocTest
 
-main :: IO ()
-main = doctest
+{-# LANGUAGE PackageImports #-}
+-- {-# LANGUAGE OverloadedStrings #-}
+-- {-# LANGUAGE OverloadedLists #-}
 
-   -- every module in this directory (i.e. `hs-source-dirs`)
- [ "sources/"
+import "doctest" Test.DocTest (doctest)
 
-   -- all language extensions enabled by default (i.e. `default-extensions`)
- , "-XPackageImports"
- , "-XAutoDeriveTypeable"
- , "-XDeriveDataTypeable"
- , "-XDeriveGeneric"
- , "-XDeriveFunctor"
- , "-XDeriveFoldable"
- , "-XDeriveTraversable"
- , "-XLambdaCase"
- , "-XEmptyCase"
- , "-XTypeOperators"
- , "-XPostfixOperators"
- , "-XViewPatterns"
- , "-XBangPatterns"
- , "-XKindSignatures"
- , "-XNamedFieldPuns"
- , "-XRecordWildCards"
- , "-XTupleSections"
- , "-XMultiWayIf"
- , "-XDoAndIfThenElse"
- , "-XEmptyDataDecls"
- , "-XMultiParamTypeClasses"
- , "-XFlexibleContexts"
- , "-XFlexibleInstances"
- , "-XTypeFamilies"
- , "-XFunctionalDependencies"
- , "-XScopedTypeVariables"
- , "-XStandaloneDeriving"
- ]
+import "base" System.Environment (getArgs)
 
-
-{-# START_FILE tests/UnitTests.hs #-}
--- {-# OPTIONS_GHC -F -pgmF hspec-discover #-}
-import {{module}}.Test
+----------------------------------------
 
 main :: IO ()
 main = do
- print "[{{module}}.Test]"
+  arguments <- getArgs
+  doctest $ concat
+    [ sources
+    , extensions
+    , headers
+    , arguments
+    ]
+
+----------------------------------------
+
+sources :: [String]
+sources = sources2flags
+  [ "sources/"
+  , "examples/"
+  ] 
+  where
+  sources2flags :: [String] -> [String]
+  sources2flags = id
+
+headers :: [String]
+headers = headers2flags
+  [ "include/"
+  ]
+  where
+  headers2flags :: [String] -> [String]
+  headers2flags = fmap ("-I"++) 
+  -- -I<dir> adds <dir> to the #include search path.
+
+extensions :: [String]
+extensions = extensions2flags "NoImplicitPrelude PackageImports AutoDeriveTypeable DeriveDataTypeable DeriveGeneric DeriveFunctor DeriveFoldable DeriveTraversable LambdaCase EmptyCase TypeOperators PostfixOperators ViewPatterns BangPatterns KindSignatures NamedFieldPuns RecordWildCards TupleSections MultiWayIf DoAndIfThenElse EmptyDataDecls InstanceSigs MultiParamTypeClasses FlexibleContexts FlexibleInstances TypeFamilies FunctionalDependencies ScopedTypeVariables StandaloneDeriving"
+  where
+  extensions2flags :: String -> [String]
+  extensions2flags = fmap ("-X"++) . words
+
+----------------------------------------
+{-
+
+There's two sets of GHC extensions involved when running Doctest:
+
+- The set of GHC extensions that are active when compiling the module code (excluding the doctest examples). The easiest way to specify these extensions is through LANGUAGE pragmas in your source files. (Doctest will not look at your cabal file.)
+
+- The set of GHC extensions that are active when executing the Doctest examples. (These are not influenced by the LANGUAGE pragmas in the file.) The recommended way to enable extensions for Doctest examples is to switch them on like this:
+
+    -- |
+    -- >>> :set -XTupleSections
+    -- >>> fst' $ (1,) 2
+    -- 1
+    fst' :: (a, b) -> a
+    fst' = fst
+
+Alternatively you can pass any GHC options to Doctest, e.g.:
+
+    doctest -XCPP Foo.hs
 
 
-{-# START_FILE tests/PropertyTests.hs #-}
-import {{module}}.Property() 
+
+sources/Prelude/Spiros/Reexports.hs:2:0: error:
+     fatal error: base-feature-macros.h: No such file or directory
+     #include <base-feature-macros.h>
+
+-}
+
+{-# START_FILE test/PropertyTests.hs #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
+
+{-# LANGUAGE PackageImports #-}
+-- {-# LANGUAGE OverloadedStrings #-}
+-- {-# LANGUAGE OverloadedLists #-}
+
+import "tasty" Test.Tasty
+
+import {{module}}.Properties
+ 
+----------------------------------------
 
 main :: IO ()
+main = defaultMain $ properties
+
+----------------------------------------
+
+{-# START_FILE test/{{module}}/Properties.hs #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
+
+{-# LANGUAGE PackageImports #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+-- {-# LANGUAGE OverloadedStrings #-}
+-- {-# LANGUAGE OverloadedLists #-}
+
+-- import {{module}} 
+
+import "tasty"          Test.Tasty
+import "tasty-hedgehog" Test.Tasty.Hedgehog
+
+import "hedgehog" Hedgehog
+
+import qualified "bytestring" Data.ByteString.Lazy as B
+import           "bytestring" Data.ByteString.Lazy (ByteString)
+
+----------------------------------------
+
+properties :: TestTree
+properties = 
+
+  testGroup "list properties (stub)"
+    [ testProperty "reverse is involutive" 
+        property_reverse_involutive
+
+    , testProperty "sort is idempotent" 
+        property_sort_idempotent
+
+    , testProperty "Fermat's last theorem" $
+        \x y z n -> (n :: Integer) >= 3 ==>
+            x^n + y^n /= (z^n :: Integer)
+    ]
+
+property_reverse_involutive :: Property
+property_reverse_involutive = \(list :: [Int]) ->
+ list == reverse (reverse list)
+
+property_sort_idempotent :: Property
+property_sort_idempotent = \(list :: [Int]) ->
+ sort list == sort (sort list)
+
+----------------------------------------
+
+{-NOTES
+
+-- | Create a 'Test' from a Hedgehog property
+testProperty :: T.TestName -> Property -> T.TestTree
+testProperty name prop = T.singleTest name (HP name prop)
+
+-}
+
+----------------------------------------
+
+{-# START_FILE test/golden/{{name}}.golden #-}
+{{name}}
+{-# START_FILE test/GoldenTests.hs #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
+
+{-# LANGUAGE PackageImports #-}
+{-# LANGUAGE OverloadedStrings #-}
+
+module GoldenTests where
+----------------------------------------
+
+import "tasty"       Test.Tasty
+import "tasty-golden" Test.Tasty.Golden
+
+import qualified "bytestring" Data.ByteString.Lazy as B
+import            "bytestring" Data.ByteString.Lazy (ByteString)
+
+----------------------------------------
+
+golden_stub :: TestTree
+golden_stub = goldenVsString goldenName goldenFile goldenAction
+ where
+ goldenName   = "golden test (stub)"
+ goldenFile   =  "test/golden/{{name}}.golden" 
+ goldenAction = do
+     return "{{name}}"
+
+----------------------------------------
+
+{-NOTES
+
+goldenVsString "golden test (stub)" "test/golden/{{name}}.golden" (return "{{name}}")
+
+
+goldenVsString 
+
+:: TestName	
+test name
+
+-> FilePath	
+path to the «golden» file (the file that contains correct output)
+
+-> IO ByteString	
+action that returns a string
+
+-> TestTree	
+the test verifies that the returned string is the same as the golden file contents
+
+Compare a given string against the golden file contents
+
+
+Note about filenames. They are looked up in the usual way, thus relative names are relative to the processes current working directory. It is common to run tests from the package's root directory (via cabal test or cabal install --enable-tests), so if your test files are under the tests/ subdirectory, your relative file names should start with tests/ (even if your test.hs is itself under tests/, too).
+
+
+
+
+Note about line endings. The best way to avoid headaches with line endings (when running tests both on UNIX and Windows) is to treat your golden files as binary, even when they are actually textual.
+
+This means:
+
+When writing output files from Haskell code, open them in binary mode (see openBinaryFile, withBinaryFile and hSetBinaryMode). This will disable automatic \n -> \r\n conversion on Windows. For convenience, this module exports writeBinaryFile which is just like writeFile but opens the file in binary mode. When using ByteStrings note that Data.ByteString and Data.ByteString.Lazy use binary mode for writeFile, while Data.ByteString.Char8 and Data.ByteString.Lazy.Char8 use text mode.
+Tell your VCS not to do any newline conversion for golden files. For git check in a .gitattributes file with the following contents (assuming your golden files have .golden extension):
+*.golden	-text
+On its side, tasty-golden reads and writes files in binary mode, too.
+
+Why not let Haskell/git do automatic conversion on Windows? Well, for instance, tar will not do the conversion for you when unpacking a release tarball, so when you run cabal install your-package --enable-tests, the tests will be broken.
+
+-}
+
+
+{-# START_FILE test/{{filepath}}/StaticTests.hs #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
+
+{-# LANGUAGE PackageImports #-}
+-- {-# LANGUAGE OverloadedStrings #-}
+-- {-# LANGUAGE OverloadedLists #-}
+import qualified StaticTests.Example
+----------------------------------------
+main :: IO () 
 main = do
- print "[{{module}}.Property]"
+  StaticTests.Example.main
+----------------------------------------
 
+{-# START_FILE test/{{filepath}}/StaticTests/Example.hs #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
 
-{-# START_FILE tests/TemplateHaskellTests.hs #-}
+{-# LANGUAGE PackageImports #-}
+-- {-# LANGUAGE OverloadedStrings #-}
+-- {-# LANGUAGE OverloadedLists #-}
+
+module StaticTests.Example where
+-- import {{module}}
+----------------------------------------
+
+----------------------------------------
+
+{-# START_FILE test/TemplateHaskellTests.hs #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
+
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
@@ -635,6 +1320,8 @@ module Main where
 
 import Control.Lens
 
+----------------------------------------
+
 -- NOTE below we mock out any TemplateHaskell tests with `lens`'s
 -- if your package doesn't provide TemplateHaskell-macros,
 -- remove this file and the stanza
@@ -648,8 +1335,11 @@ checkBaz = baz
 main :: IO ()
 main = putStrLn "[tests/TemplateHaskellTests.hs] ok"
 
+----------------------------------------
 
-{-# START_FILE tests/HLintTest.hs #-}
+{-# START_FILE test/HLintTest.hs #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
+
 -- (by ekmett via lens)
 -- This module runs HLint on the source tree.
 
@@ -681,20 +1371,38 @@ main = do
 
 {-# START_FILE executables/Main.hs #-}
 {-# OPTIONS_GHC -fno-warn-missing-signatures #-}
-import qualified {{module}}.Example
-main = {{module}}.Example.main
+-- {-# LANGUAGE  #-}
+import qualified Example.{{module}} as Example
+main = do
+   Example.{{module}}.main
 
-{-# START_FILE benchmarks/Bench.hs #-}
+{-# START_FILE benchmarks/Speed.hs #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
+
+{-# LANGUAGE PackageImports #-}
+-- {-# LANGUAGE OverloadedStrings #-}
+-- {-# LANGUAGE OverloadedLists #-}
+
 import {{module}}
-import Criterion.Main
+
+import "criterion" Criterion.Main
+
+----------------------------------------
 
 main :: IO ()
 main = defaultMain [
   bgroup "{{module}}"
-    [ bench "1" $ nf   length [1..1000::Int]
-    , bench "2" $ whnf length [1..1000::Int]
+
+    [ bench "normal form" $
+       nf length [1..1000::Int]
+
+    , bench "weak head normal form" $
+       whnf length [1..1000::Int]
     ]
+
   ]
+
+----------------------------------------
 
 
 {-# START_FILE .travis.yml #-}
@@ -989,22 +1697,507 @@ import their respecitve autogen'd files, but can (and should) be edited manually
 If, you've forked this and have rewritten your own custom nix file for development (e.g. you're on OSX, or you need an older compiler version), please suffix it with that environment (e.g. `osx-shell.nix` or `ghc-7-10-03.nix`), and submit a pull request. Ditto for `stack.yaml` files. 
 
 
-{-# START_FILE shell.nix #-}
 
+{-# START_FILE link-default-dot-nix.sh #-}
+
+#!/bin/bash
+set -e
+########################################
+
+# Usage:
+# 
+# ./link-default-dot-nix.sh 
+# ./link-default-dot-nix.sh -f
+#
+
+#ARGUMENTS="$@"
+
+########################################
+
+function absolute-path {
+ echo $(cd $(dirname "$1"); pwd)/$(basename "$1")
+
+ # versus `readlink`, which
+ # /reads links/, which will be by cosntruction identical
+}
+
+########################################
+
+# symlink to the package's autogenerated-via-cabal2nix .nix file
+
+PACKAGE_DOT_NIX=./nix/{{name}}.nix
+
+cabal2nix . > "$PACKAGE_DOT_NIX"
+
+ln -s $@ "$(absolute-path $PACKAGE_DOT_NIX)" default.nix
+
+echo
+cat default.nix
+echo
+ls -l default.nix
+
+########################################
+
+# A symlink actually stores the path you give literally, as a string¹. That means your link ~/mylink contains "." (one character). When you access the link, that path is interpreted relative to where the link is, rather than where you were when you made the link.
+# Instead, you can store the actual path you want in the link:
+#
+# ln -s "$(pwd)" ~/mylink
+# 
+
+
+
+{-# START_FILE environment.sh #-}
+#!/bin/bash
+set -e
+########################################
+
+# e.g.
+#
+# ./build.sh
+#
+# ./build.sh 802
+# ./build.sh js
+#
+# ./build.sh --argstr compiler ghc802
+# ./build.sh --argstr compiler ghcjs
+#
+# ./build.sh js --arg isProfiled true 
+#
+# ./build.sh  --arg withHoogle true  --arg isProfiled true  --arg isTested true  --arg isBenchmarked true  --arg isDocumented true  --arg isHyperlinked true  --arg isDwarf true  --argstr whichLinker gold  --argstr whichObjectLibrary static
+#
+#
+
+########################################
+
+# ghc7103, ghc802, ghc822, ghc841, ghcjs
+
+DEFAULT_COMPILER="default"
+# DEFAULT_COMPILER="ghc822"
+
+COMPILER="$DEFAULT_COMPILER"
+#COMPILER="${1}"
+# bash default argument
+
+DEFAULT_INTEGER_SIMPLE=false
+
+INTEGER_SIMPLE="$DEFAULT_INTEGER_SIMPLE"
+
+########################################
+
+# aliases for nixpkgs' compiler identifiers:
+
+case "$1" in
+ 
+7.10|7.10.3)
+  COMPILER="ghc7103"
+  shift 1
+  ;;
+8.0|8.0.2)
+  COMPILER="ghc802"
+  shift 1
+  ;;
+8.2|8.2.2)
+  COMPILER="ghc822"
+  shift 1
+  ;;
+8.4|8.4.1)
+  COMPILER="ghc841"
+  shift 1
+  ;;
+
+7)
+  COMPILER="ghc7103"
+  shift 1
+  ;;
+8)
+  COMPILER="ghc841"
+  shift 1
+  ;;
+
+710|7103)
+  COMPILER="ghc7103"
+  shift 1
+  ;;
+80|802)
+  COMPILER="ghc802"
+  shift 1
+  ;;
+82|822)
+  COMPILER="ghc822"
+  shift 1
+  ;;
+84|841)
+  COMPILER="ghc841"
+  shift 1
+  ;;
+
+HEAD|head)
+  COMPILER="ghcHEAD"
+  shift 1
+  ;;
+
+j|js)
+  COMPILER="ghcjs"
+  shift 1
+  ;;
+
+jHEAD|jhead|jsHEAD|jshead|ghcjshead)
+  COMPILER="ghcjsHEAD"
+  shift 1
+  ;;
+
+i)
+  COMPILER="$DEFAULT_COMPILER"
+  INTEGER_SIMPLE=true
+  shift 1
+  ;;
+
+ghc7103)
+  COMPILER="ghc7103"
+  shift 1
+  ;;
+    
+ghc802)
+  COMPILER="ghc802"
+  shift 1
+  ;;
+    
+ghc822)
+  COMPILER="ghc822"
+  shift 1
+  ;;
+
+ghc841)
+  COMPILER="ghc842"
+  shift 1
+  ;;
+    
+ghc841)
+  COMPILER="ghc842"
+  shift 1
+  ;;
+    
+ghcHEAD)
+  COMPILER="ghcHEAD"
+  shift 1
+  ;;
+    
+ghcjs)
+  COMPILER="ghcjs"
+  shift 1
+  ;;
+    
+ghcjsHEAD)
+  COMPILER="ghcjsHEAD"
+  shift 1
+  ;;
+
+#TODO    
+# integer-simple)
+#   COMPILER="integer-simple"
+#   shift 
+#   ;;
+
+i80|i802|i8.0.2|integer-simple-8.0.2)
+  COMPILER="ghc801"
+  INTEGER_SIMPLE=true
+  shift 1
+  ;;
+
+i82|i822|i8.2.2|integer-simple|integer-simple-8.2.2)
+  COMPILER="ghc822"
+  INTEGER_SIMPLE=true
+  shift 1
+  ;;
+
+i841|i8.4.1|integer-simple-8.4.1)
+  COMPILER="ghc841"
+  INTEGER_SIMPLE=true
+  shift 1
+  ;;
+
+i84|i842|i8.4.2|integer-simple-8.4.2)
+  COMPILER="ghc842"
+  INTEGER_SIMPLE=true
+  shift 1
+  ;;
+
+default)
+  COMPILER="$DEFAULT_COMPILER"
+  shift 1
+  ;;
+
+*)
+  COMPILER="$DEFAULT_COMPILER"
+  ;;
+
+esac
+
+########################################
+
+echo "[COMPILER]" "$COMPILER" 
+echo 
+echo "[INTEGER-SIMPLE]" "$INTEGER_SIMPLE" 
+echo 
+echo "[OTHER ARGUMENTS]" "$@"
+echo
+
+nix-shell --show-trace --argstr compiler "$COMPILER" --arg integer-simple "$INTEGER_SIMPLE" "$@"
+
+
+{-# START_FILE cabal.sh #-}
+#!/bin/bash
+set -e
+########################################
+
+# e.g.
+#
+# ./cabal.sh
+#
+# ./cabal.sh new build
+# ./cabal.sh old build
+# 
+# ./cabal.sh new-repl
+# ./cabal.sh repl
+#
+# ./cabal.sh 802
+# ./cabal.sh js
+#
+# ./cabal.sh --argstr compiler ghc802
+# ./cabal.sh --argstr compiler ghcjs
+#
+# ./cabal.sh old 841 --arg isProfiled true 
+# ./cabal.sh new js  --arg isProfiled true 
+#
+# ./cabal.sh  --arg withHoogle true  --arg isProfiled true  --arg isTested true  --arg isBenchmarked true  --arg isDocumented true  --arg isHyperlinked true  --arg isDwarf true  --argstr whichLinker gold  --argstr whichObjectLibrary static
+#
+#
+
+########################################
+
+DEFAULT_COMMAND="cabal new-build"
+
+COMMAND="$DEFAULT_COMMAND"
+
+########################################
+
+# aliases for cabal new-versus-old:
+case "$1" in
+
+new)
+  SUBCOMMAND="${2:?}"
+  COMMAND="cabal new-$SUBCOMMAND"
+  shift 2
+  ;;
+
+old)
+  SUBCOMMAND="${2:?}"
+  COMMAND="cabal $SUBCOMMAND"
+  shift 2
+  ;;
+
+build|repl|test|bench|run|haddock)
+  SUBCOMMAND="${1}"
+  COMMAND="cabal $SUBCOMMAND"
+  shift 1
+  ;;
+
+new-build|new-repl|new-test|new-bench|new-run|new-haddock)
+  SUBCOMMAND="${1}"
+  COMMAND="cabal $SUBCOMMAND"
+  shift 1
+  ;;
+
+*)
+  ;;
+
+esac
+
+# case "$1" in
+
+# new)
+#   SUBCOMMAND="${2}"
+#   COMMAND="cabal new-$SUBCOMMAND"
+#   shift 1
+#   ;;
+
+# old)
+#   SUBCOMMAND="${2}"
+#   COMMAND="cabal $SUBCOMMAND"
+#   shift 1
+#   ;;
+
+# build|repl|test|bench|run|haddock)
+#   shift 1
+#   ;;
+
+# *)
+#   ;;
+
+# esac
+
+########################################
+
+echo "$@"
+echo
+
+./environment.sh $@ --run "$COMMAND"
+
+
+
+{-# START_FILE build.sh #-}
+#!/bin/bash
+set -e
+########################################
+
+# e.g.
+#
+# ./build.sh
+#
+# ./build.sh new
+# ./build.sh old
+#
+# ./build.sh 802
+# ./build.sh js
+#
+# ./build.sh --argstr compiler ghc802
+# ./build.sh --argstr compiler ghcjs
+#
+# ./build.sh old 841 --arg isProfiled true 
+# ./build.sh new js  --arg isProfiled true 
+#
+# ./build.sh  --arg withHoogle true  --arg isProfiled true  --arg isTested true  --arg isBenchmarked true  --arg isDocumented true  --arg isHyperlinked true  --arg isDwarf true  --argstr whichLinker gold  --argstr whichObjectLibrary static
+#
+#
+
+########################################
+
+DEFAULT_COMMAND="cabal new-build"
+
+COMMAND="$DEFAULT_COMMAND"
+
+########################################
+
+# aliases for cabal new-versus-old:
+
+case "$1" in
+
+new)
+  COMMAND="cabal new-build"
+  shift 1
+  ;;
+
+old)
+  COMMAND="cabal build"
+  shift 1
+  ;;
+
+*)
+  ;;
+esac
+
+########################################
+
+echo "$@"
+echo
+
+./environment.sh $@ --run "$COMMAND"
+
+
+
+{-# START_FILE install.sh #-}
+
+# e.g.
+# 
+# Using install prefix: /nix/store/ky3684j19g301fwzy7yi53h0z8qmizqm-spiros-0.2
+#
+# Executables installed in:
+# /nix/store/<hash>-spiros-0.2/bin
+#
+# Libraries installed in:
+# /nix/store/<hash>-spiros-0.2/lib/ghc-8.2.2/spiros-0.2
+#
+# Dynamic Libraries installed in:
+# /nix/store/<hash>-spiros-0.2/lib/ghc-8.2.2/x86_64-linux-ghc-8.2.2
+#
+# Private executables installed in:
+# /nix/store/<hash>-spiros-0.2/libexec/x86_64-linux-ghc-8.2.2/spiros-0.2
+#
+# Data files installed in:
+# /nix/store/<hash>-spiros-0.2/share/x86_64-linux-ghc-8.2.2/spiros-0.2
+#
+# Documentation installed in:
+# /nix/store/<hash>-spiros-0.2/share/doc/x86_64-linux-ghc-8.2.2/spiros-0.2
+#
+# Configuration files installed in:
+# /nix/store/<hash>-spiros-0.2/etc
+#
+
+
+{-# START_FILE shell.nix #-}
 { nixpkgs ? import <nixpkgs> {}
 
+, packageDotNix ? ./nix/{{name}}.nix # ./.
+
 , compiler ? "default"
+/* =
+"ghc7103"
+"ghc802"
+"ghc822"
+"ghc841"
+"ghcHEAD"
+"ghc7103Binary"
+"ghc821Binary"
+"ghcjs"
+"ghcjsHEAD"
+"integer-simple"
+*/
 
-, withProfiling ? false
-, withHoogle    ? false 
+, integer-simple ? false
+/* =
+false
+true
+*/
 
-, doTest        ? false
-, doBenchmark   ? false
+, withHoogle  ? false 
+#, withLLVM    ? false
+
+, isProfiled    ? false
+, isTested      ? false
+, isBenchmarked ? false
+, isDocumented  ? false
+, isHyperlinked ? true
+, isDwarf       ? false
+
+, whichObjectLibrary ? "default"
+/* = 
+"static" 
+"shared"
+*/
+
+, whichLinker ? "default"
+/* = 
+"gold" 
+*/
 
 , development   ? true
 }:
 
 /* Usage:
+
+nix-shell --argstr compiler ...
+ghc7103
+ghc802
+ghc822
+ghc841
+ghcHEAD
+ghc7103Binary
+ghc821Binary
+ghcjs
+ghcjsHEAD       
+integer-simple
+
+
 
   nix-shell
   cabal configure 
@@ -1019,12 +2212,82 @@ let
 ### "IMPORTS"
 
 inherit (nixpkgs) pkgs;
-inherit (pkgs)    fetchFromGitHub;
+inherit (pkgs)    stdenv;
+# "import" utilities
+inherit (pkgs)       fetchFromGitHub;
+inherit (stdenv.lib) optionalAttrs;
 
 lib = import "${nixpkgs.path}/pkgs/development/haskell-modules/lib.nix" { pkgs = nixpkgs; };
-haskell = nixpkgs.haskell.lib;
-#haskell = lib;
-hs = pkgs.haskell.lib; #TODO rm
+haskell = pkgs.haskell.lib; 
+
+/* attrNames pkgs.haskell.lib;
+=
+addBuildDepend             :: ? -> ?
+addBuildDepends            :: ? -> ?
+addBuildTool               :: ? -> ?
+addBuildTools              :: ? -> ?
+addExtraLibraries          :: ? -> ?
+addExtraLibrary            :: ? -> ?
+addPkgconfigDepend         :: ? -> ?
+addPkgconfigDepends        :: ? -> ?
+addSetupDepend             :: ? -> ?
+addSetupDepends            :: ? -> ?
+appendConfigureFlag        :: ? -> ?
+appendPatch                :: ? -> ?
+appendPatches              :: ? -> ?
+buildFromSdist             :: ? -> ?
+buildStackProject          :: ? -> ?
+buildStrictly              :: ? -> ?
+checkUnusedPackages        :: ? -> ?
+controlPhases              :: ? -> ?
+disableCabalFlag           :: ? -> ?
+disableDeadCodeElimination :: ? -> ?
+disableHardening           :: ? -> ?
+disableLibraryProfiling    :: ? -> ?
+disableSharedExecutables   :: ? -> ?
+disableSharedLibraries     :: ? -> ?
+disableStaticLibraries     :: ? -> ?
+doBenchmark                :: ? -> ?
+doCheck                    :: ? -> ?
+doCoverage                 :: ? -> ?
+doDistribute               :: ? -> ?
+doHaddock                  :: ? -> ?
+doHyperlinkSource          :: ? -> ?
+doJailbreak                :: ? -> ?
+doStrip                    :: ? -> ?
+dontBenchmark              :: ? -> ?
+dontCheck                  :: ? -> ?
+dontCoverage               :: ? -> ?
+dontDistribute             :: ? -> ?
+dontHaddock                :: ? -> ?
+dontHyperlinkSource        :: ? -> ?
+dontJailbreak              :: ? -> ?
+dontStrip                  :: ? -> ?
+enableCabalFlag            :: ? -> ?
+enableDWARFDebugging       :: ? -> ?
+enableDeadCodeElimination  :: ? -> ?
+enableLibraryProfiling     :: ? -> ?
+enableSharedExecutables    :: ? -> ?
+enableSharedLibraries      :: ? -> ?
+enableStaticLibraries      :: ? -> ?
+extractBuildInputs         :: ? -> ?
+failOnAllWarnings          :: ? -> ?
+getHaskellBuildInputs      :: ? -> ?
+ghcInfo                    :: ? -> ?
+justStaticExecutables      :: ? -> ?
+linkWithGold               :: ? -> ?
+makePackageSet             :: ? -> ?
+markBroken                 :: ? -> ?
+markBrokenVersion          :: ? -> ?
+overrideCabal              :: ? -> ?
+overrideSrc                :: ? -> ?
+packageSourceOverrides     :: ? -> ?
+removeConfigureFlag        :: ? -> ?
+sdistTarball               :: ? -> ?
+shellAware                 :: ? -> ?
+triggerRebuild             :: ? -> ?
+
+*/
 
 in
 ########################################
@@ -1033,12 +2296,24 @@ let
 ### UTILITIES
 
 skipTests       = haskell.dontCheck; 
+jailbreak       = haskell.doJailbreak;
 dropUpperBounds = haskell.doJailbreak;
 
-cabal2nixResult = options: src:
-  nixpkgs.runCommand "cabal2nixResult" {
+#:: String -> Path -> 
+execCabal2nix = options: src:
+  nixpkgs.runCommand "cabal2nix" {
     buildCommand = ''
       cabal2nix ${options} file://"${src}" >"$out"
+    '';
+    buildInputs = with nixpkgs; [
+      cabal2nix
+    ];
+  } "";
+
+execCabal2nixSubpath = subpath: src:
+  nixpkgs.runCommand "cabal2nix" {
+    buildCommand = ''
+      cabal2nix --subpath "${subpath}" file://"${src}" >"$out"
     '';
     buildInputs = with nixpkgs; [
       cabal2nix
@@ -1054,118 +2329,119 @@ let
 # "megarepos" which have multiple packages as subdirectories.
 repositories = {
 
-  reflex-dom = fetchFromGitHub {
-    owner           = "reflex-frp";
-    repo            = "reflex-dom"; 
-    rev             = "212dca4b7ff323dca423f2dd934341bdee7ea2c5";
-    sha256          = "0wv8xwr4bv2zb8qz3kf7nq2ixjg2hmyccxppgpwis3wmjai89frk";
-  };
-
 };
 
 # 
 sources = {
-
-  reflex = fetchFromGitHub {
-    owner           = "reflex-frp";
-    repo            = "reflex";
-    rev             = "8e0177ff28c25436452dba1222cbf8d1a20424fd";
-    fetchSubmodules = true;
-    sha256          = "1f0xhwq4wvf5c6w8qhvpcn30jaxxq29s2x3iy8bml3a65fpvj0sh";
-  };
-
-# PROBLEM
-# Warning:
-#     This package indirectly depends on multiple versions of the same package. This is very likely to cause a compile failure.
-#       package haskell-src-meta (haskell-src-meta-0.8.0.1-1HfhwjlpuugEHqUXKk8ROg) requires haskell-src-exts-1.19.1-GkJUFo8Rp3b1KlAdoTXU6c
-#       package reflex (reflex-0.5) requires haskell-src-exts-1.20.1-835K5nW7Qg0K3DUFrUYhiW
-# 
-# SOLUTION
-# -f-use-template-haskell 
-#   if flag(use-template-haskell)
-#     cpp-options: -DUSE_TEMPLATE_HASKELL
-#     build-depends:
-#       dependent-sum >= 0.3 && < 0.5,
-#       haskell-src-exts >= 1.16 && < 1.21,
-#       haskell-src-meta >= 0.6 && < 0.9,
-#       template-haskell >= 2.9 && < 2.13
-#     exposed-modules:
-#       Reflex.Dynamic.TH
-#     other-extensions: TemplateHaskell
-
-  # TODO `subdir ? null`
-  reflex-dom = fetchFromGitHub {
-    owner           = "reflex-frp";
-    repo            = "reflex-dom"; 
-    rev             = "212dca4b7ff323dca423f2dd934341bdee7ea2c5";
-    #fetchSubmodules = true;
-    sha256          = "0wv8xwr4bv2zb8qz3kf7nq2ixjg2hmyccxppgpwis3wmjai89frk";
-  };
-
-#   # TODO `subdir ? null`
-#   reflex-dom = fetchFromGitHub {
-#     owner           = "reflex-frp";
-#     repo            = "reflex-dom/reflex-dom"; # lol
-#     rev             = "212dca4b7ff323dca423f2dd934341bdee7ea2c5";
-# #    fetchSubmodules = true;
-#     sha256          = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
-#   };
-
-    # This is where to put the output from nix-prefetch-git
-    #
-    # This is based on the results o
-    #   nix-prefetch-git http://github.com/ekmett/mtl
-    #
-    # For general git fetching:
-    #
-    # mtl = fetchgit {
-    #   url = "http://github.com/ekmett/mtl";
-    #   rev = "f75228f7a750a74f2ffd75bfbf7239d1525a87fe";
-    #   sha256= "032s8g8j4djx7y3f8ryfmg6rwsmxhzxha2qh1fj15hr8wksvz42a";
-    # };
-    #
-    # Or, more efficient for github repos:
-    #
-    # mtl = fetchFromGitHub {
-    #   owner = "ekmett";
-    #   repo = "mtl";
-    #   rev = "f75228f7a750a74f2ffd75bfbf7239d1525a87fe";
-    #   sha256= "032s8g8j4djx7y3f8ryfmg6rwsmxhzxha2qh1fj15hr8wksvz42a";
-    # };
 };
 
 in
 ########################################
 let
 
+customDerivationOptions = 
+    { enableLibraryProfiling = isProfiled; 
+      doCheck                = isTested; 
+      doBenchmark            = isBenchmarked; 
+      doHaddock              = isDocumented;
+      doHyperlinkSource      = isDocumented && isHyperlinked;
+      enableDWARFDebugging   = isDwarf;
+    } //
+    ( if   (whichObjectLibrary == "shared") 
+      then { enableSharedLibraries  = true; 
+           }
+      else 
+      if   (whichObjectLibrary == "static")
+      then { enableStaticLibraries  = true; 
+           }
+      else
+      if   (whichObjectLibrary == "both") # TODO
+      then { enableSharedLibraries  = true;
+             enableStaticLibraries  = true; 
+           }
+      else 
+      if   (whichObjectLibrary == "default")
+      then {}
+      else {} # TODO
+    ) // 
+    optionalAttrs (whichLinker == "gold") 
+      { linkWithGold = true;
+      }
+ ;
+
+####################
+
+hooglePackagesOverride = self: super:
+  {
+    ghcWithPackages = self.ghc.withPackages;
+
+    ghc = super.ghc //
+      { withPackages = super.ghc.withHoogle; 
+      };
+  };
+
+####################
+
+customMkDerivation = self: super: args:
+  super.mkDerivation
+    (args // customDerivationOptions);
+
+####################
+
+# llvmPackagesOverride = self: super:
+#   {
+#     ghcWithPackages = self.ghc.withPackages;
+
+#     ghc = super.ghc //
+#       { withPackages = super.ghc.llvmPackages; #TODO
+#       };
+#   };
+
 ### COMPILERS
 
-haskellPackagesWithCompiler = 
-  if compiler == "default"
+haskellPackagesWithCompiler1 = 
+  if   compiler == "default" # `integer-simple` is ignored
   then pkgs.haskellPackages
+  else 
+  if   integer-simple
+  then pkgs.haskell.packages.integer-simple.${compiler}
   else pkgs.haskell.packages.${compiler};
 
-haskellPackagesWithProfiling = 
-  if withProfiling
-  then haskellPackagesWithCompiler.override {
-         overrides = self: super: {
-           mkDerivation = args: super.mkDerivation (args // { enableLibraryProfiling = true; });
-         };
+haskellPackagesWithCustomPackages2 =
+  if   withHoogle
+  then haskellPackagesWithCompiler1.override {
+         overrides = hooglePackagesOverride;
        }
-  else haskellPackagesWithCompiler;
-                 
-haskellPackagesWithHoogle =
-  if withHoogle
-  then haskellPackagesWithProfiling.override {
-         overrides = self: super: {
-           ghc = super.ghc // { withPackages = super.ghc.withHoogle; };
-           ghcWithPackages = self.ghc.withPackages;
-         };
-       }
-  else haskellPackagesWithProfiling;
+  else haskellPackagesWithCompiler1;
+
+haskellPackagesWithCustomDerivation3 = 
+  haskellPackagesWithCustomPackages2.override {
+    overrides = self: super: {
+      mkDerivation = customMkDerivation self super;
+    };
+  };
+
+# the last referenced, below
+# TODO scoping
+customizedHaskellPackages = haskellPackagesWithCustomDerivation3;
+
+/*
+nix-repl> haskell.packages._
+
+haskell.packages.ghc7103
+haskell.packages.ghc821Binary
+haskell.packages.ghcHEAD
+haskell.packages.integer-simple
+haskell.packages.ghc7103Binary
+haskell.packages.ghc822
+haskell.packages.ghcjs
+haskell.packages.ghc802
+haskell.packages.ghc841
+haskell.packages.ghcjsHEAD       
+
+*/
 
 in
-
 ########################################
 ### Haskell Dependencies...
 let
@@ -1179,14 +2455,30 @@ NOTES
 * `cabal2nix` / `hackage` / `github2nix`: 
    They call `cabal2nix`, which generates the `default.nix`, so they don't require the given directory to be a valid `nix` package. 
 
+TYPES
+(in pseudo-typed-nix)
+
+type Dependencies = { (Derivation | _) }
+
+nix  : Path -> Dependencies -> Derivation
+nix_ : Path ->              -> Derivation
+
+hackage  : String/Name -> String/Version -> Dependencies -> Derivation
+hackage_ : String/Name -> String/Version ->              -> Derivation                       
+
+...
+
 */
-myHaskellOverlaysWith = self: super: let
+myHaskellOverlaysWith = pkgs: self: super: let
 #myHaskellOverlaysWith = pkgs: self: super: let
 
- local      = path:
+ nixWith    = path:
               self.callPackage path; 
 
- github     = o:
+ localWith  = path:
+              self.callPackage path; 
+
+ githubWith = o:
               self.callPackage (pkgs.fetchFromGitHub o); 
 
              # o ::
@@ -1197,65 +2489,44 @@ myHaskellOverlaysWith = self: super: let
              #        sha256          :: String
              #      } 
 
- cabal2nix  = name: source: 
+ cabal2nixWith = name: source: 
               self.callCabal2nix name source;
 
- hackage    = name: version:
+ hackageWith = name: version:
               self.callHackage name version;
 
- github2nix = o:
+ github2nixWith = o:
               cabal2nix o.repo (pkgs.fetchFromGitHub o); 
 
  # override the package without overriding any dependencies
- local_      = path:           local      path         {};
- github_     = o:              github     o            {};
- cabal2nix_  = name: source:   cabal2nix  name source  {};
- hackage_    = name: version:  hackage    name version {};
- github2nix_ = o:              github2nix o            {};
+ nix         = path:           nixWith        path         {};
+ local       = path:           localWith      path         {};
+ github      = o:              githubWith     o            {};
+ cabal2nix   = name: source:   cabal2nixWith  name source  {};
+ hackage     = name: version:  hackageWith    name version {};
+ github2nix  = o:              github2nixWith o            {};
+
+ #
+ haskell = pkgs.haskell.lib; 
+ dependsOn = package: dependencies: 
+  haskell.addBuildDepends package dependencies;
 
  in
+
+ # let 
+ # reflex_dom = (import repositories.reflex-dom) self pkgs;
+ # in
 
  {
    ########################################
    # Add Haskell Packages Below           #
-   ######################################## 
+   ########################################
 
-    spiros = github2nix_ {
-      owner  = "sboosali";
-      repo   = "spiros";
-      rev    = "f6c86509cfa1b198c5deb4b89b3dadf6184ea1d0"; 
-      sha256 = "0bvxgp1mvlpwzr9qdpjs20qs4i813wnhrsl3nq25r8v68x6fblhk";
-    };
-      # NOTE
-      # latest needs ghc-8.2.2
-      # rev "2b7517f27242863ba153bc045dd269b348df05aa" 
+  spiros = local ../spiros;
 
- /* 
+  vinyl = skipTests super.vinyl; 
 
-  # You can use `callHackage` and `callCabal2nix` 
-  # to bump package versions or build them from GitHub. 
-  # e.g.
-
-    spiros = self.spiros_loose;
-
-    spiros_loose   = skipTests (dropUpperBounds self.spiros_github);
-    spiros_local   = local ../spiros {
-    };
-    spiros_hackage = hackage "spiros" "0.0.0" {
-    };
-    spiros_github  = github2nix {
-      owner  = "sboosali";
-      repo   = "spiros";
-      rev    = "f6c86509cfa1b198c5deb4b89b3dadf6184ea1d0"; 
-      # "2b7517f27242863ba153bc045dd269b348df05aa" 
-      # latest needs ghc-8.2.2
-      sha256 = 
-         "0bvxgp1mvlpwzr9qdpjs20qs4i813wnhrsl3nq25r8v68x6fblhk";
-    } {
-    };
- */
-
-};
+ };
 
 in
 ########################################
@@ -1263,50 +2534,10 @@ let
 
 ### OTHER OVERRIDES
  
-modifiedHaskellPackages = haskellPackagesWithHoogle.override {
-  overrides = self: super: {
-
-
-     # reflex     =
-     #   self.callPackage (cabal2nixResult "-f-use-template-haskell" sources.reflex) {
-     #  };
-
-     # #NOTE `reflex-dom` and `reflex-dom-core` are in the same github repo, called `reflex-dom`
-     # reflex-dom-core =
-     #   self.callPackage (cabal2nixResult "--subpath reflex-dom-core" sources.reflex-dom) {
-     #     inherit (self) reflex;
-     #   };
-
-     # reflex-dom =
-     #   self.callPackage (cabal2nixResult "--subpath reflex-dom -f-use-warp -fbuild-examples" sources.reflex-dom) {
-     #     inherit (self) reflex reflex-dom-core;
-     #   };
-
-     # jsaddle-warp =
-     #   hs.dontCheck super.jsaddle-warp;
-     #   #
-     #   # Setup: Encountered missing dependencies:
-     #   # doctest >=0.10.1 && <0.12, websockets >=0.9.5.0 && <0.11
-
-     # websockets = 
-     #  self.callHackage "websockets" "0.10.0.0" {};
-
-     # exception-transformers =
-     #   hs.dontCheck super.exception-transformers;
-     #  #       # Setup: Encountered missing dependencies:
-     #  #       # HUnit >=1.2 && <1.6
-     #  #       # builder for ‘/nix/store/365zv27f15qplgd6gd58fa8v26x2gg5z-exception-transformers-0.4.0.5.drv’ failed with exit code 1
-
-     #  # Add various dependencies here.
-     #  #
-     #  # Local dependencies:
-     #  # my-dependency = self.callPackage ./deps/my-dependency {};
-     #  #
-     #  # Local dependencies with tests disabled:
-     #  # my-dependency = lib.dontCheck (self.callPackage ./deps/my-dependency {});
-     #  #
-     #  # Git dependencies:
-     #  # mtl = self.callPackage (cabal2nixResult sources.mtl) {};
+modifiedHaskellPackages = customizedHaskellPackages.override {
+#  overrides = self: super: {
+  overrides = self: super:
+    myHaskellOverlaysWith pkgs self super // {
   };
 };
 
@@ -1315,49 +2546,56 @@ in
 let
 
 ### DERIVATION / ENVIRONMENT
-  
-installationDerivation = modifiedHaskellPackages.callPackage ./. {};
+
+# theNixFile = ./.;
+
+installationDerivation = modifiedHaskellPackages.callPackage
+ packageDotNix {};
 
 # development environment
 # for `nix-shell --pure`
-developmentDerivation = hs.linkWithGold 
-    (hs.addBuildDepends installationDerivation developmentPackages);
+developmentDerivation = (haskell.addBuildDepends installationDerivation
+ developmentPackages);
 
-developmentPackages = developmentHaskellPackages
-                   # ++ developmentEmacsPackages 
-                   ++ developmentSystemPackages;
+developmentPackages
+  = developmentHaskellPackages
+ # ++ developmentEmacsPackages 
+ ++ developmentSystemPackages;
 
 developmentSystemPackages = with pkgs; [
-  
+ #   
  cabal-install
-
+ # 
  coreutils
  inotify-tools
-  
+ #   
  emacs
  git
-
+ # 
 ];
 
 developmentHaskellPackages = with modifiedHaskellPackages; [
-  
+ #   
  # ghcid
  # ghc-mod
-
- stylish-haskell
- hasktags
- present
- hlint
+ # 
+ # 
  hoogle
+ # 
+ hasktags
+ hlint
+ # 
+ present
+ stylish-haskell
  hindent
-  
+ #   
 ];
 
- # developmentHaskellPackages = with Packages; [
+ # developmentEmacsHaskellPackages = with Packages; [
  #    dante
  #  ];
 
-environment = hs.shellAware developmentDerivation;
+environment = haskell.shellAware developmentDerivation;
    # if pkgs.lib.inNixShell then drv.env else drv;
 
 in
@@ -1369,4 +2607,3 @@ environment
 /*
 
 */
-
