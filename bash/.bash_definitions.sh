@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# set -u 
+# which will cause any unset argument reference to immediately fail the script.
+
 ########################################
 ## NOTES
 # this file is "pure", it only declares aliases and functions.
@@ -65,6 +69,13 @@ alias dn='cd ~/.nixpkgs'
 # alias d='cd '
 # alias d='cd '
 
+# cat
+function copy-file() {
+  FILE="${1:?}"
+  cat "$FILE" | xclip -selection clipboard
+  cat "$FILE"
+}
+
 # grep
 alias p="grep -E -i -n --color=auto"
 alias pf="grep -F"
@@ -96,6 +107,7 @@ alias xb='xbrightness'
 alias xbr='xbrightness 65535'
 
 # workflow
+alias open='xdg-open'
 alias xd='xdotool'
 alias xw='wmctrl'
 alias xo='xdg-open'
@@ -556,13 +568,19 @@ function hd () {
 function new-haskell-project () (
     set -e
 
-    PACKAGE="$1"
-    MODULE="$2"
-    _FILEPATH="$3"
+    PACKAGE="${1}"
+    MODULE="${2}"
+    _FILEPATH="${3}"
+    IDENTIFIER="${4}"
 
-    MESSAGE='h-new PACKAGE MODULE FILEPATH''\n''e.g. h-new workflow-core Workflow.Core Workflow/Core'
+    # PACKAGE="${1:?}"
+    # MODULE="${2:?}"
+    # _FILEPATH="${3:?}"
+    # IDENTIFIER="${4:?}"
 
-    if [ "$#" -ne 3 ]; then
+    MESSAGE='new-haskell-project PACKAGE MODULE FILEPATH IDENTIFIER ''\n''e.g. new-haskell-project validation-warning Validation.Warning Validation/Warning validation_warning'
+
+    if [ "$#" -ne 4 ]; then
         echo -e "$MESSAGE"
 	return 1
         # NOTE `return` v `exit`?
@@ -582,7 +600,7 @@ function new-haskell-project () (
     echo "$TEMPLATE"
     echo
 
-    stack new "$PACKAGE" "$TEMPLATE" -p module:"$MODULE" -p filepath:"$_FILEPATH" || true # ignore failure
+    stack new "$PACKAGE" "$TEMPLATE" -p module:"$MODULE" -p filepath:"$_FILEPATH" -p identifier:"$IDENTIFIER" || true # ignore failure
     # -p synopsis:"$SYNOPSIS"
 
     if ! cd "$PACKAGE"; then
@@ -603,10 +621,10 @@ function new-haskell-project () (
     STRING_INTO_2="$(echo "$STRING_FROM_2" | sed 's/-/_/g')"
     sed -i  s/"$STRING_FROM_2"/"$STRING_INTO_2"/g "$PACKAGE.cabal"
 
-    NIX_DEFAULT_FILE="$PACKAGE-default.nix"
+    NIX_DEFAULT_FILE="nix/$PACKAGE.nix"
     cabal2nix .         > "$NIX_DEFAULT_FILE"
 
-    NIX_SHELL_FILE="$PACKAGE-shell.nix"
+    NIX_SHELL_FILE="nix/shell.nix"
     cabal2nix . --shell > "$NIX_SHELL_FILE" 
 
     # SC2035
@@ -646,7 +664,21 @@ function new-haskell-project () (
     git push -u origin master
 )
 
-alias hnew=new-haskell-project
+function prefetch-github () {
+
+URL="${1:?}"
+
+NAME=$(basename "$URL")
+
+FILE="$NAME.json"
+
+nix-prefetch-git "$URL" > "$FILE"
+
+cat "$FILE"
+
+}
+
+# alias hnew=new-haskell-project
 
 # To generate a Nix build expression for it, change into the project’s top-level directory and run the command:
 # $ cabal2nix . >foo.nix
@@ -660,46 +692,56 @@ alias hnew=new-haskell-project
 function c2n() { 
  echo 'cabal2nix $@ . > default.nix'
  cabal2nix . "$@" > default.nix
+ cat default.nix
 }
 
-function h2n() {
+function c2l() { 
+ echo 'cabal2nix --shell $@ . > shell.nix'
+ cabal2nix --shell . "$@" > shell.nix
+ cat shell.nix
+ nix-shell --run ''
+}
+
+
+# function h2n() {
  
- cabal2nix . > package.nix
- # package.nix gets overwritten
- # default.nix and shell.nix don't get overwritten, if present
+#  cabal2nix . > package.nix
+#  # package.nix gets overwritten
+#  # default.nix and shell.nix don't get overwritten, if present
 
- if [[ ! -f default.nix ]]; then
- cat <<EOF > default.nix
-{ nixpkgs ? import <nixpkgs> {}, compiler ? "ghc822" }:
-nixpkgs.pkgs.haskell.packages.\${compiler}.callPackage ./package.nix { }
-EOF
- fi
+#  if [[ ! -f default.nix ]]; then
+#  cat <<EOF > default.nix
+# { nixpkgs ? import <nixpkgs> {}, compiler ? "ghc822" }:
+# nixpkgs.pkgs.haskell.packages.\${compiler}.callPackage ./package.nix { }
+# EOF
+#  fi
 
- if [[ ! -f shell.nix ]]; then  # `-f` caveat: http://stackoverflow.com/questions/638975/how-do-i-tell-if-a-regular-file-does-not-exist-in-bash
- cat <<EOF > shell.nix
-{ nixpkgs ? import <nixpkgs> {}, compiler ? "default" }:
+#  if [[ ! -f shell.nix ]]; then  # `-f` caveat: http://stackoverflow.com/questions/638975/how-do-i-tell-if-a-regular-file-does-not-exist-in-bash
+#  cat <<EOF > shell.nix
+# { nixpkgs ? import <nixpkgs> {}, compiler ? "default" }:
 
-let
+# let
 
-  inherit (nixpkgs) pkgs;
+#   inherit (nixpkgs) pkgs;
 
-  f = import ./default.nix;
-  ps = {
-    # spiros = ~/spiros; # TODO absolute
-  };
+#   f = import ./default.nix;
+#   ps = {
+#     # spiros = ~/spiros; # TODO absolute
+#   };
 
-  haskellPackages = if compiler == "default"
-                       then pkgs.haskellPackages
-                       else pkgs.haskell.packages.\${compiler};
+#   haskellPackages = if compiler == "default"
+#                        then pkgs.haskellPackages
+#                        else pkgs.haskell.packages.\${compiler};
 
-  drv = haskellPackages.callPackage f ps;
+#   drv = haskellPackages.callPackage f ps;
 
-in
+# in
 
-  if pkgs.lib.inNixShell then drv.env else drv
-EOF
- fi
-}
+#   if pkgs.lib.inNixShell then drv.env else drv
+# EOF
+#  fi
+# }
+
 
 # { ps ? (import <nixpkgs> {}).pkgs, mkDerivation
 # , array, base, containers, deepseq, doctest, ghc-prim
@@ -1080,11 +1122,13 @@ EOF
 # alias red="xrandr --output 0x42 --crtc 0 --gamma "
 # xrandr -d :0 --output eDP-1-1 --gamma "1:1:1" # restore default
 # xrandr -d :0 --output eDP-1-1 --gamma "1:1:1"
+
 alias red="redshift -O 1000" # one-shot, 1000K
-alias un-red="redshift -x" #
-alias white="redshift -x" # 
+alias scarlet="redshift -O 1500" # one-shot
 alias orange="redshift -O 2000" # one-shot
 alias yellow="redshift -O 3000" # one-shot
+alias white="redshift -x" # 
+alias un-red="redshift -x" #
 
 ########################################
 # ephemeral/specialized stuff

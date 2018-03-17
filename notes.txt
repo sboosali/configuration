@@ -1,4 +1,46 @@
 ----------------
+e.g.
+
+$ nix-channel --update
+...
+$ nix-env -u --always
+upgrading ‘git-2.15.1’ to ‘git-2.16.1’
+...
+$ ls /nix/var/nix/gcroots/auto/*
+$ nix-collect-garbage 
+...
+deleting ‘/nix/store/trash’
+deleting unused links...
+note: currently hard linking saves -0.00 MiB
+134635 store paths deleted, 130 GiB freed
+
+$ nix-env --list-generations
+1
+...
+222
+$ nix-env --dry-run --delete-generations 30d 
+would remove generation 158
+...
+would remove generation 1
+$ nix-env           --delete-generations 30d
+...
+$ nix-collect-garbage 
+deleting ‘/nix/store/hp9acnrs58i8iiklf2528r8k3f220g8p-user-environment’
+deleting ‘/nix/store/n64fhsgirprnb8a0abbj0v3gl6v9g4mx-user-environment’
+...
+deleting ‘/nix/store/trash’
+deleting unused links...
+note: currently hard linking saves -0.00 MiB
+1289 store paths deleted, 5673.84 MiB freed
+
+
+
+--------------------
+
+
+
+
+--------------------
 xbindkeys
 
 Version 1.6.0 : 

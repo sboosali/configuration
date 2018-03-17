@@ -19,7 +19,7 @@
         # GIT_EDITOR -> core.editor -> VISUAL -> EDITOR
 	# editor = emacsclient
 
-	pager =
+	pager = less
         # blank means no pager
 
 	whitespace = trailing-space

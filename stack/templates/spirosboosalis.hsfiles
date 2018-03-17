@@ -70,34 +70,34 @@ flag examples
 
 -- You can disable the doctests test suite with -f-test-doctest.
 flag test-doctest
-  default:     False
+  default:     True 
   description: Run the doctests (with the eponymous `doctest`), called the `test documentation` unit (in this cabal file). 
   manual:      True
 
 -- You can disable the HUnit test suite with -f-test-unit. 
 flag test-unit
-  default:     False
+  default:     True 
   description: Run the unit tests, called the `test unit` unit (in this cabal file).  
   manual:      True
 
 -- You can disable the QuickCheck test suite with -f-test-unit. 
 flag test-properties
-  default:     False
+  default:     True 
   description: Run the property tests (i.e. QuickCheck), called the `test properties` unit (in this cabal file).  
   manual:      True
 
-flag test-static
-  default: False
-  description: Whether to build the `static` test modules; i.e. the fact that they type check correctly is the test, there's nothing (necessarily) "dynamic" that is tested by running. 
-  manual: True
+-- flag test-static
+--   default: True 
+--   description: Whether to build the `static` test modules; i.e. the fact that they type check correctly is the test, there's nothing (necessarily) "dynamic" that is tested by running. 
+--   manual: True
 
--- flag test-macros
---   default: False
---   description: Run any macro tests (i.e. TemplateHaskell), called the `test templates` unit (in this cabal file).  
---   manual:  True
+flag test-macros
+  default: False
+  description: Run any macro tests (i.e. TemplateHaskell), called the `test templates` unit (in this cabal file).  
+  manual:  True
 
 flag bench-speed
-  default:     False
+  default:     True
   description: Execute the benchmarks (which may take a long time).
   manual:      True
 
@@ -421,7 +421,7 @@ set -e
 
 ./test.sh
 
-./bench.sh    || true
+./benchmark.sh    || true
 ./haddock.sh  || true
 ########################################
 
@@ -541,10 +541,10 @@ set -e
 source ./new-haddock.sh
 ########################################
 
-{-# START_FILE bench.sh #-}
+{-# START_FILE benchmark.sh #-}
 #!/bin/sh
 ########################################
-time nix-shell --run 'cabal bench'
+time nix-shell --run 'cabal new-bench'
 ########################################
 
 {-# START_FILE repl.sh #-}
@@ -903,7 +903,7 @@ import "spiros" Prelude.Spiros
 
 ----------------------------------------
 
-{-# START_FILE examples/Examples_{{identifier}} #-}
+{-# START_FILE examples/Examples_{{identifier}}.hs #-}
 -- {-# LANGUAGE  #-}
 -- {-# LANGUAGE OverloadedStrings #-}
 -- {-# LANGUAGE OverloadedLists #-}
@@ -915,10 +915,10 @@ module Examples_{{identifier}}
   ( module Example.{{module}}
   ) where
 ----------------------------------------
--- import Example.{{module}}
+import Example.{{module}}
 
 
-{-# START_FILE examples/Example/{{filepath}} #-}
+{-# START_FILE examples/Example/{{filepath}}.hs #-}
 {-# OPTIONS_GHC -fno-warn-missing-signatures #-}
     -- to test inference
 
@@ -983,18 +983,25 @@ import "tasty-hunit" Test.Tasty.HUnit
 
 ----------------------------------------
 
-  testCase "Example test case" $ do
-    -- assertion no. 1 (passes)
-    2 + 2 @?= 4
-    -- assertion no. 2 (fails)
-    assertBool "the list is not empty" $ null [1]
-    -- assertion no. 3 (would have failed, but won't be executed because
-    -- the previous assertion has already failed)
-    "foo" @?= "bar"
+tests :: TestTree
+tests = testCase "Example unit test" $ do
+  assertion
+
+assertion :: Assertion
+assertion = do 
+
+    2 + 2      @?= (4 :: Int)   -- `actual`   on left
+    
+    (6 :: Int) @=? 3 + 3        -- `expected` on left
+    
+    assertBool "the list is not empty" $ null []
 
 ----------------------------------------
 
 {-NOTES
+
+
+testCase :: TestName -> Assertion -> TestTree
 
 
 -- | Asserts that the specified actual value is equal to the expected value
@@ -1275,33 +1282,6 @@ Why not let Haskell/git do automatic conversion on Windows? Well, for instance, 
 
 -}
 
-
-{-# START_FILE test/{{filepath}}/StaticTests.hs #-}
-{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
-
-{-# LANGUAGE PackageImports #-}
--- {-# LANGUAGE OverloadedStrings #-}
--- {-# LANGUAGE OverloadedLists #-}
-import qualified StaticTests.Example
-----------------------------------------
-main :: IO () 
-main = do
-  StaticTests.Example.main
-----------------------------------------
-
-{-# START_FILE test/{{filepath}}/StaticTests/Example.hs #-}
-{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
-
-{-# LANGUAGE PackageImports #-}
--- {-# LANGUAGE OverloadedStrings #-}
--- {-# LANGUAGE OverloadedLists #-}
-
-module StaticTests.Example where
--- import {{module}}
-----------------------------------------
-
-----------------------------------------
-
 {-# START_FILE test/TemplateHaskellTests.hs #-}
 {-# OPTIONS_GHC -fno-warn-missing-signatures #-}
 
@@ -1376,7 +1356,7 @@ import qualified Example.{{module}} as Example
 main = do
    Example.{{module}}.main
 
-{-# START_FILE benchmarks/Speed.hs #-}
+{-# START_FILE benchmark/Speed.hs #-}
 {-# OPTIONS_GHC -fno-warn-missing-signatures #-}
 
 {-# LANGUAGE PackageImports #-}
@@ -1442,6 +1422,7 @@ temporary/
 TODO
 
 # Haskell
+.styx/
 cabal.project.local
 dist-newstyle/
 dist/
