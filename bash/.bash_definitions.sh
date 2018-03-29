@@ -157,9 +157,30 @@ function se () {
 # rm
 alias rm="rm -f"
 alias rr="rm -rf"
-alias rt='rm -f *~ .*~ \#*\# .\#* matlab_crash_dump.* java.log.* *.pyc *.class __pycache__/*.pyc *.agdai *.hi *.hout *.o'
-alias rmr=rr #TODO
-alias rmt=rt #TODO
+#
+# alias rmr=rr #TODO
+# alias rmt=rt #TODO
+#
+#alias rta='rm -f *~ .*~ \#*\# .\#* matlab_crash_dump.* java.log.* *.pyc *.class __pycache__/*.pyc *.agdai *.hi *.hout *.o'
+#alias rtr='rm -fr *~ .*~ \#*\# .\#* matlab_crash_dump.* java.log.* *.pyc *.class __pycache__/*.pyc *.agdai *.hi *.hout *.o'
+#
+
+# remove temporary files recursively
+# emacs temp files: '*~ .*~ \#*\# .\#*'
+function rt() {
+ find .  -type f  \( -name '*~'  -o  -name '\#*\#'  -o  -name '.\#*' \)  -print  -delete
+
+ # print whatever's deleted
+
+ # If your OS isn't Linux, replace -delete by -exec rm {} +.
+
+ # find . -name \*~ | xargs rm
+}
+
+# `rtr` dry-run
+function rtr-dry() {
+ find .  -type f  \( -name '*~' -o -name '\#*\#' -o -name '.\#*' \)  -print
+}
 
 # chmod
 alias c7="chmod 700"
@@ -292,9 +313,11 @@ alias ni="nix-env -i"
 alias nu="nix-env --uninstall"
 alias nua="nix-env -u '*'"
 
+alias nix-build="nix-build --show-trace"
 alias nb="nix-build"
 alias nbe="nix-build ~/.nixpkgs/environment.nix" #TODO home.nix
 
+alias nix-shell="nix-shell --show-trace"
 alias nl="nix-shell"
 alias nlp="nix-shell --pure"
 alias nlr="nix-shell --run"
@@ -315,7 +338,27 @@ alias nxx="nix-instantiate --expr" # nxx 'import ./"$1" {}'
            # file names of Nix expressions. 
 # alias nx1="nix-instantiate --eval" # eval unary with defaults
 # alias nx2="nix-instantiate --eval" # eval binary with defaults
-alias nx1="nix-instantiate --eval" # eval unary with defaults
+#alias nx1="nix-instantiate --eval" # eval unary with defaults
+
+# function nx1() { 
+#  NIX_FILE="${1-?}"
+#  #NIX_FILES="${@}"
+#  # nix-instantiate --strict --expr "(import ./${NIX_FILE} {})"
+#  # nix-instantiate --strict --eval "${NIX_FILES}"
+#  nix-instantiate --strict --expr "let f = import ./${NIX_FILE}; x = {}; y = f x; in builtins.trace y y"
+# }
+
+function nx1() {
+ nix-instantiate --strict --expr "let f = import ./${1?}; x = {}; y = f x; in builtins.trace y y"
+}
+
+       # --eval
+       #     Just parse and evaluate the input files, and print the resulting values on standard output. No instantiation of store
+       #     derivations takes place.
+       #
+       # --expr / -E
+       #     Interpret the command line arguments as a list of Nix expressions to be parsed and evaluated, rather than as a list of
+       #     file names of Nix expressions. (nix-instantiate, nix-build and nix-shell only.)
 
 alias ns="nix-store"
 alias nsr='nix-store --query --references'
@@ -330,7 +373,7 @@ alias npu="nix-prefetch-url"
 #alias n="nix-"
 
 function nq() {
- nix-env -qa \* -P | grep -F -i "$1";
+ nix-env --system-filter "x86_64-linux" -qa \* -P | grep -F -i "$1";
 }
 
 function nql() {
@@ -338,8 +381,10 @@ function nql() {
  # local
 } 
 
+#TODO `arch`-`uname`
+#e.g. --system-filter "x86_64-linux"
 function nia() {
- nix-env -f "<nixpkgs>" -i -A "$@"
+ nix-env -f "<nixpkgs>" --system-filter "x86_64-linux" -i -A "$@"
 }
 
 function nih() {
@@ -361,6 +406,31 @@ function nqe() {
 alias nix-make-shell='cabal2nix *.cabal --sha256=0 --shell > shell.nix'
 alias nix-make-default='cabal2nix *.cabal > default.nix'
 
+function nix-install-haskell() {
+ nix-env -f "<nixpkgs>" -i -A "haskellPackages.${1:?}"
+}
+
+
+function nix-prefetch-all-cabal-hashes() {
+
+ URL=https://github.com/commercialhaskell/all-cabal-hashes/archive/current-hackage.tar.gz
+
+ NOW=$(date '+%Y-%m-%d-%Hh%M')
+ NAME="_all-cabal-hashes_$NOW"
+
+ echo
+ echo '[URL]'
+ echo $URL
+ echo
+ echo '[NAME]'
+ echo $NAME
+ echo
+ 
+ nix-prefetch-url --name $NAME --unpack --print-path $URL
+
+}
+
+
 # OLD
 #  echo 'c = (import /etc/nixos/configuration.nix) { inherit (p) pkgs config lib; }'
 function nr () {
@@ -378,6 +448,7 @@ h  = p.haskell.lib
 :a builtins
 :a nixpkgs
 :a nixpkgs.lib
+spiros = hs.spiros
 
 EOF
 
@@ -552,6 +623,95 @@ function hd () {
 
 #     # open sources/$MODULE/Example.hs
 # }
+
+
+
+function new-haskell-project-simple () (
+    set -e
+
+    PACKAGE="${1}"
+    MODULE="${2}"
+    _FILEPATH="${3}"
+    IDENTIFIER="${4}"
+
+    # PACKAGE="${1:?}"
+    # MODULE="${2:?}"
+    # _FILEPATH="${3:?}"
+    # IDENTIFIER="${4:?}"
+
+    MESSAGE='new-haskell-project-simple PACKAGE MODULE FILEPATH IDENTIFIER ''\n''e.g. new-haskell-project validation-warning Validation.Warning Validation/Warning validation_warning'
+
+    if [ "$#" -ne 4 ]; then
+        echo -e "$MESSAGE"
+	return 1
+        # NOTE `return` v `exit`?
+        # `return`, in the subshell-defined-function, still seems to work.
+    fi
+
+    TEMPLATE_NAME=spirosboosalis-simple
+    LOCAL_TEMPLATE=~/.stack/templates/"$TEMPLATE_NAME".hsfiles
+    REMOTE_TEMPLATE=https://raw.githubusercontent.com/sboosali/config/master/stack/templates/"$TEMPLATE_NAME".hsfiles
+    if [ -f "$LOCAL_TEMPLATE" ]; then
+	TEMPLATE="$LOCAL_TEMPLATE"
+    else
+	TEMPLATE="$REMOTE_TEMPLATE"
+    fi
+
+    echo
+    echo "[TEMPLATE]"
+    echo "$TEMPLATE"
+    echo
+
+    stack new "$PACKAGE" "$TEMPLATE" -p module:"$MODULE" -p filepath:"$_FILEPATH" -p identifier:"$IDENTIFIER" || true # ignore failure
+    # -p synopsis:"$SYNOPSIS"
+
+    if ! cd "$PACKAGE"; then
+        echo -e "$MESSAGE"
+	return 1
+    fi
+
+    mkdir -p ignore/
+    mkdir -p release/
+    # mkdir -p /
+
+    NIX_DEFAULT_FILE="$PACKAGE.nix"
+    cabal2nix . > "$NIX_DEFAULT_FILE"
+
+    NIX_SHELL_FILE="shell.$PACKAGE.nix"
+    cabal2nix . --shell > "$NIX_SHELL_FILE" 
+
+    # SC2035
+    chmod 700 ./*.sh
+
+    echo
+    echo "========================================"
+    echo "[Building Everything...]"
+    echo "========================================"
+    echo
+
+    # try to open a tab in the default browser to create a GitHub repository,
+    # during the build (which should take a minute)
+    GITHUB_URL=https://github.com/new
+    xdg-open "$GITHUB_URL" 2>/dev/null || open "$GITHUB_URL" 2>/dev/null || true # ignore failure
+
+    nix-shell "$NIX_SHELL_FILE" --arg doTest true --run 'cabal new-configure --enable-tests --enable-benchmarks'
+
+    ./build.sh   || true
+    ./test.sh    || true
+    ./haddock.sh || true
+
+    echo
+    echo "========================================"
+    echo "[Initializing Repository...]"
+    echo "========================================"
+    echo
+    git init
+    git add .
+    git commit -m '1st'
+    git remote add origin "git@github.com:sboosali/$PACKAGE".git
+    git push -u origin master
+)
+
 
 # New project scaffolding
 # 
@@ -1086,6 +1246,18 @@ function git-merge-repos () {
 # git remote remove $_TEMPORARY 
 # }
 
+# decompress a tarball, i.e. `.tar.gz`
+# 
+# https://askubuntu.com/questions/25347/what-command-do-i-need-to-unzip-extract-a-tar-gz-file
+# 
+# f: this must be the last flag of the command, and the tar file must be immediately after. It tells tar the name and path of the compressed file.
+# z: tells tar to decompress the archive using gzip
+# x: tar can collect files or extract them. x does the latter.
+# v: makes tar talk a lot. Verbose output shows you all the files being extracted.
+# 
+function un-tarball() {
+ tar -xvz -f "$@"
+}
 
 # unzip each zip file into its own folder
 function unzip-each () {
