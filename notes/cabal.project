@@ -1,0 +1,26 @@
+----------------------------------------
+
+packages:
+ Cabal/
+ cabal-install/
+
+-- Uncomment to allow picking up extra local unpacked deps:
+--optional-packages: */
+
+----------------------------------------
+
+constraints:
+   unix >= 2.7.1.0
+ , cabal-install +lib +monolithic
+
+program-options
+package Cabal
+  ghc-options: -fno-ignore-asserts
+package cabal-install
+  ghc-options: -fno-ignore-asserts
+
+-- Remove after hackage-repo-tool release
+allow-newer:
+  hackage-repo-tool:optparse-applicative
+
+----------------------------------------
