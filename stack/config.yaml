@@ -9,7 +9,7 @@
 templates:
   params:
 
-    author-email:    samboosalis@gmail.com
+    author-email:    "Spiros Boosalis <samboosalis@gmail.com>"
     author-name:     Spiros Boosalis
     github-username: sboosali
     copyright:       2018 Spiros Boosalis
@@ -27,7 +27,7 @@ default-template: ~/.stack/templates/spirosboosalis.hsfiles
 
 nix:
   enable: false 
-  pure:   true
+  pure:   false
   packages:
   - zlib
   # shell-file: shell.nix

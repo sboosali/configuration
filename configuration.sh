@@ -70,6 +70,8 @@ function safe-link () {
      # echo "removing ${OUTPUT}"
      # rm -r "${OUTPUT:?}"
 
+     echo "${OUTPUT} exists"
+       
      # ^ 
      # ''-e "${file}" fails if the symlink exists but its target does not exist.''
      # ''-L returns true if the "file" exists and is a symbolic link (the linked file may or may not exist). You want -f (returns true if file exists and is a regular file) or maybe just -e (returns true if file exists regardless of type).''
@@ -180,6 +182,7 @@ safe-link ./bash/.git-prompt.sh                    ~/.git-prompt.sh
 safe-link ./cabal/config.yaml                      ~/.cabal/config                         
 safe-link ./stack/config.yaml                      ~/.stack/config.yaml                     
 safe-link ./stack/templates/spirosboosalis.hsfiles ~/.stack/templates/spirosboosalis.hsfiles  
+safe-link ./stack/templates/spirosboosalis-simple.hsfiles ~/.stack/templates/spirosboosalis-simple.hsfiles  
 
 safe-link ./xbindkeys/.xbindkeysrc.scm             ~/.xbindkeysrc.scm                      
 safe-link ./xmodmap/.Xmodmap                       ~/.Xmodmap                              

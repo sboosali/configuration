@@ -12,7 +12,7 @@ description:
  .
  TODO
  . 
- See the source of "{{module}}.Example" for an example.
+ For an example, see the source of "Example.{{module}}" (either through the @source@ link in the haddocks, or in the @examples/@ directory of the project). 
  .
  Quickstart:
  .
@@ -36,8 +36,9 @@ license:             BSD3
 license-file:        LICENSE
 stability:           provisional
 tested-with:
+  -- GHC == 8.0.2
   GHC == 8.2.2
--- GHC == 8.0.2
+  -- GHC == 8.4.2
 
 -- PVP
 -- https://wiki.haskell.org/Package_versioning_policy
@@ -57,9 +58,18 @@ extra-source-files:
 -- data-files:
 --   data/
 
+----------------------------------------
+
 source-repository head
   type:     git
-  location: https://github.com/{{github-username}}/{{name}}
+  location: git://github.com/{{github-username}}/{{name}}.git
+  -- location: https://github.com/{{github-username}}/{{name}}
+
+-- source-repository this
+--   type:     git
+--   location: https://github.com/{{github-username}}/{{name}}/tree/v0.0
+  -- update the `source-repository` for `this` package version on every release? 
+  -- (i.e. every hackage upload or metadata revision)
 
 ----------------------------------------
 -- FLAGS
@@ -115,14 +125,26 @@ flag dump-splices
 -- LIBRARY
 
 library
- hs-source-dirs:      sources
+ hs-source-dirs: sources
 
  ghc-options:
+
+  --------------------
+  -- warning groups
+  --------------------
+
   -Wall
   -Wcompat
 
-  -- disable
+  --------------------
+  -- disabled warnings
+  --------------------
+
   -Wno-unticked-promoted-constructors
+
+  --------------------
+  -- enabled warnings
+  --------------------
 
   -- enable
   -Wincomplete-uni-patterns
@@ -130,66 +152,136 @@ library
   -Widentities
   -Wmissing-methods
 
-  -- raise a warning into an error
-  -- -Werror=missing-fields
+  --------------------
+  -- typed-holes
+  --------------------
 
   -- use `typed-holes`, not `undefined`, during development
+
   -fdefer-typed-holes
   -Wtyped-holes
 
- default-language:   Haskell2010
+  --------------------
+  -- (miscellaneous warnings)
+  --------------------
 
- -- NOTE -XNoImplicitPrelude 
+  -- raise a warning into an error
+  -- -Werror=missing-fields
+
+ default-language: Haskell2010
+
  default-extensions:
+
+   --------------------
+   -- "controversial"
+   --------------------
    NoImplicitPrelude
+   -- NOTE thus every module implicitly has -XNoImplicitPrelude
+   
+   --------------------
    -- deriving
-   AutoDeriveTypeable DeriveDataTypeable DeriveGeneric DeriveFunctor DeriveFoldable DeriveTraversable DeriveLift StandaloneDeriving
+   --------------------
+   AutoDeriveTypeable
+   DeriveDataTypeable
+   DeriveGeneric
+   DeriveFunctor
+   DeriveFoldable
+   DeriveTraversable
+   DeriveLift
+   StandaloneDeriving
+
+   --------------------
    -- syntax
-   PackageImports LambdaCase EmptyCase TypeOperators PostfixOperators BangPatterns KindSignatures NamedFieldPuns RecordWildCards TupleSections MultiWayIf DoAndIfThenElse EmptyDataDecls InstanceSigs
+   --------------------
+   PackageImports
+   LambdaCase
+   EmptyCase
+   TypeOperators
+   PostfixOperators
+   BangPatterns
+   KindSignatures
+   NamedFieldPuns
+   RecordWildCards
+   TupleSections
+   MultiWayIf
+   DoAndIfThenElse
+   EmptyDataDecls
+   InstanceSigs
+   
+   --------------------
    -- typeclasses
-   MultiParamTypeClasses FlexibleContexts FlexibleInstances TypeFamilies FunctionalDependencies
+   --------------------
+   MultiParamTypeClasses
+   FlexibleContexts
+   FlexibleInstances
+   TypeFamilies
+   FunctionalDependencies
+
+   --------------------
    -- patterns
-   ViewPatterns PatternSynonyms
-   -- (miscellaneous)
+   --------------------
+   ViewPatterns
+   PatternSynonyms
+
+   --------------------
+   -- (miscellaneous extensions)
+   --------------------
    ScopedTypeVariables
 
  other-extensions:
-  -- macros
-  TemplateHaskell
-  -- QuasiQuotes
-  -- syntax (of literals)
-  OverloadedStrings OverloadedLists
-  -- RebindableSyntax
-  -- kinds
-  -- DataKinds ConstraintKinds
-  -- harmful to inference
-  -- GADTs RankNTypes
-  -- (miscellaneous)
 
- if impl(ghc >= 8.2)
-    ghc-options: -Wcpp-undef
-    -- for `base-feature-macros`
+   --------------------
+   -- macros
+   --------------------
+   TemplateHaskell
+   -- QuasiQuotes
+
+   --------------------
+   -- syntax (of literals)
+   --------------------
+   OverloadedStrings
+   OverloadedLists
+
+   --------------------
+   -- (miscellaneous extensions)
+   --------------------
+   -- RebindableSyntax
+   -- kinds
+   -- DataKinds ConstraintKinds
+   -- harmful to inference
+   -- GADTs RankNTypes
+   -- (miscellaneous)
+
+ -- if impl(ghc >= 8.2)
+ --    ghc-options: -Wcpp-undef
+ --    -- for `base-feature-macros`
 
  exposed-modules:
                  {{module}}
                  {{module}}.Types
                  {{module}}.Core
                  {{module}}.Derived
-                 {{module}}.Example
+
  other-modules:
                  {{module}}.Extra
                  -- Paths_{{identifier}}
--- autogen-modules:
+
+ -- autogen-modules:
                  -- Paths_{{identifier}}
 
  if flag(examples)
-    hs-source-dirs: examples
+    hs-source-dirs: 
+      examples
     exposed-modules:
       Examples_{{identifier}}
       Example.{{module}}
 
  build-depends:
--- boot libraries / standard library
+
+ --------------------
+ -- boot libraries / "standard" library
+ --------------------
+
     base >=4.7 && <5
   , text 
   , bytestring
@@ -197,20 +289,35 @@ library
   , mtl
   , containers
 
--- mine 
+  --------------------
+  -- my packages
+  -- (sboosali on github, sboo on hackage)
+  --------------------
+
   , spiros >=0.2
   -- , enumerate >=0.2 
 
--- extended standard library 
+  --------------------
+  -- "extended" standard library 
+  --------------------
+
   , deepseq
   , hashable
   , unordered-containers
 
--- ekmett 
+  --------------------
+  -- ekmett 
+  --------------------
+
   , exceptions
   , lens
 
--- other packages 
+  --------------------
+  -- (miscellaneous packages)
+  --------------------
+
+  -- ,
+
 
 ----------------------------------------
 -- TESTS...
@@ -236,7 +343,6 @@ test-suite doctest
 
 ----------------------------------------
 
--- $ stack test unit
 test-suite unit
  if !flag(test-unit)
     buildable: False
@@ -261,7 +367,6 @@ test-suite unit
 
 ----------------------------------------
 
--- $ stack test properties 
 test-suite properties 
  if !flag(test-properties)
     buildable: False
@@ -334,7 +439,6 @@ test-suite properties
 ----------------------------------------
 -- BENCHMARKS
 
--- $ stack bench 
 benchmark speed
  if !flag(bench-speed)
     buildable: False
@@ -826,62 +930,6 @@ import {{module}}.Core()
 
 ----------------------------------------
 
-{-# START_FILE sources/{{filepath}}/Example.hs #-}
-{-# OPTIONS_GHC -fno-warn-missing-signatures #-} 
-    -- to test inference
-
--- {-# LANGUAGE  #-}
--- {-# LANGUAGE OverloadedStrings #-}
--- {-# LANGUAGE OverloadedLists #-}
-
-{-| This module provides an example program. 
-Please read the source too <https://hackage.haskell.org/package/{{name}}/docs/src/{{module}}-Example.html (direct Hackage link)>. 
-
-Being a @library@ module, it's typechecked with the package, 
-and thus should always build.
-
-Only public interfaces are imported (i.e. no @.Internal@s),
-and there are minimal other dependencies. 
-
-'main' is executed by the @{{name}}-example@ executable. 
-
--}
-module {{module}}.Example where
-
-import {{module}}()
-
-import System.Environment
-
-import Prelude
-
-----------------------------------------
-
-{-|
-
-Running:
-
-@
-cabal build && cabal run example-{{name}}
-@
-
-@
-stack build && stack exec -- example-{{name}}
-@
-
--}
-main :: IO ()
-main = do
- arguments <- getArgs >>= \case
-  [s] -> return (s)
-  _ -> return ("")
- mainWith arguments
-
-mainWith s = do
- putStrLn s
- putStrLn "({{module}}.Example...)"
-
-----------------------------------------
-
 {-# START_FILE sources/{{filepath}}/Extra.hs #-}
 -- {-# LANGUAGE  #-}
 -- {-# LANGUAGE OverloadedStrings #-}
@@ -916,17 +964,26 @@ module Examples_{{identifier}}
   ) where
 ----------------------------------------
 import Example.{{module}}
-
+----------------------------------------
 
 {-# START_FILE examples/Example/{{filepath}}.hs #-}
-{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-} 
     -- to test inference
 
 -- {-# LANGUAGE  #-}
 -- {-# LANGUAGE OverloadedStrings #-}
 -- {-# LANGUAGE OverloadedLists #-}
 
-{-| 
+{-| This module provides a simple example program. 
+
+
+Being a @library@ module, it's typechecked with the package, 
+and thus should always build.
+
+Only public interfaces are imported (i.e. no @.Internal@s),
+all required language extensions are listed within this module,
+and there are minimal other dependencies. 
+
 
 Doctests:
 
@@ -934,15 +991,65 @@ Doctests:
 TODO
 @
 
-(Please see the source too)
+Please read the source too <https://hackage.haskell.org/package/{{name}}/docs/src/{{module}}-Example.html (direct Hackage link)>. 
+
+
+Executable:
+
+'main' is executed by the @{{name}}-example@ executable. 
+
 
 -}
-module Example.{{module}} where
+module {{module}}.Example where
 
--- import {{module}} 
+import {{module}}()
 
--- import "spiros" Prelude.Spiros
-import "base"   Prelude
+import System.Environment
+
+import "base" Prelude
+
+----------------------------------------
+-- Main
+
+{-|
+
+Running...
+
+
+@cabal@ (old):
+
+@
+cabal build && cabal run example-{{name}}
+@
+
+
+@cabal@ (new):
+
+@
+cabal new-build && ./dist-newstyle/<...>/example-{{name}}
+@
+
+
+@stack@:
+
+@
+stack build && stack exec -- example-{{name}}
+@
+
+-}
+main :: IO ()
+main = do
+ arguments <- getArgs >>= \case
+  [s] -> return (s)
+  _ -> return ("")
+ mainWith arguments
+
+mainWith s = do
+ putStrLn s
+ putStrLn "({{module}}.Example...)"
+
+----------------------------------------
+-- Example
 
 ----------------------------------------
 
@@ -1354,7 +1461,7 @@ main = do
 -- {-# LANGUAGE  #-}
 import qualified Example.{{module}} as Example
 main = do
-   Example.{{module}}.main
+   Example.main
 
 {-# START_FILE benchmark/Speed.hs #-}
 {-# OPTIONS_GHC -fno-warn-missing-signatures #-}
@@ -1458,7 +1565,7 @@ TAGS
 
 
 {-# START_FILE LICENSE #-}
-Copyright {{author-name}} (c) 2017
+Copyright {{author-name}} (c) 2018
 
 All rights reserved.
 
@@ -1734,17 +1841,17 @@ set -e
 
 # e.g.
 #
-# ./build.sh
+# ./environment.sh
 #
-# ./build.sh 802
-# ./build.sh js
+# ./environment.sh 802
+# ./environment.sh js
 #
-# ./build.sh --argstr compiler ghc802
-# ./build.sh --argstr compiler ghcjs
+# ./environment.sh --argstr compiler ghc802
+# ./environment.sh --argstr compiler ghcjs
 #
-# ./build.sh js --arg isProfiled true 
+# ./environment.sh js --arg isProfiled true 
 #
-# ./build.sh  --arg withHoogle true  --arg isProfiled true  --arg isTested true  --arg isBenchmarked true  --arg isDocumented true  --arg isHyperlinked true  --arg isDwarf true  --argstr whichLinker gold  --argstr whichObjectLibrary static
+# ./environment.sh  --arg withHoogle true  --arg isProfiled true  --arg isTested true  --arg isBenchmarked true  --arg isDocumented true  --arg isHyperlinked true  --arg isDwarf true  --argstr whichLinker gold  --argstr whichObjectLibrary static
 #
 #
 
@@ -2087,32 +2194,37 @@ echo
 
 
 {-# START_FILE install.sh #-}
-
+#!/bin/bash
+set -e
+########################################
+nix-build --show-trace shell.nix
+########################################
 # e.g.
 # 
-# Using install prefix: /nix/store/ky3684j19g301fwzy7yi53h0z8qmizqm-spiros-0.2
+# Using install prefix: /nix/store/<hash>-<name>-<version>
 #
 # Executables installed in:
-# /nix/store/<hash>-spiros-0.2/bin
+# /nix/store/<hash>-<name>-<version>/bin
 #
 # Libraries installed in:
-# /nix/store/<hash>-spiros-0.2/lib/ghc-8.2.2/spiros-0.2
+# /nix/store/<hash>-<name>-<version>/lib/<compiler>/<name>-<version>
 #
 # Dynamic Libraries installed in:
-# /nix/store/<hash>-spiros-0.2/lib/ghc-8.2.2/x86_64-linux-ghc-8.2.2
+# /nix/store/<hash>-<name>-<version>/lib/<compiler>/<arch>-<os>-<compiler>
 #
 # Private executables installed in:
-# /nix/store/<hash>-spiros-0.2/libexec/x86_64-linux-ghc-8.2.2/spiros-0.2
+# /nix/store/<hash>-<name>-<version>/libexec/<arch>-<os>-<compiler>/<name>-<version>
 #
 # Data files installed in:
-# /nix/store/<hash>-spiros-0.2/share/x86_64-linux-ghc-8.2.2/spiros-0.2
+# /nix/store/<hash>-<name>-<version>/share/<arch>-<os>-<compiler>/<name>-<version>
 #
 # Documentation installed in:
-# /nix/store/<hash>-spiros-0.2/share/doc/x86_64-linux-ghc-8.2.2/spiros-0.2
+# /nix/store/<hash>-<name>-<version>/share/doc/<arch>-<os>-<compiler>/<name>-<version>
 #
 # Configuration files installed in:
-# /nix/store/<hash>-spiros-0.2/etc
+# /nix/store/<hash>-<name>-<version>/etc
 #
+########################################
 
 
 {-# START_FILE shell.nix #-}
@@ -2381,6 +2493,7 @@ customMkDerivation = self: super: args:
 ### COMPILERS
 
 haskellPackagesWithCompiler1 = 
+
   if   compiler == "default" # `integer-simple` is ignored
   then pkgs.haskellPackages
   else 

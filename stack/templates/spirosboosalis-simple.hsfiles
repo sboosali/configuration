@@ -1,0 +1,1114 @@
+{-# START_FILE {{name}}.cabal #-}
+name:                {{name}}
+version:             0.0.0
+cabal-version:       >=1.24
+
+----------------------------------------
+
+build-type:          Simple 
+category:            Data 
+synopsis:            {{synopsis}} 
+description:         
+ .
+ TODO
+ . 
+
+homepage:            http://github.com/{{github-username}}/{{name}}#readme
+bug-reports:         http://github.com/{{github-username}}/{{name}}/issues
+author:              {{author-name}}
+maintainer:          {{author-email}}
+copyright:           {{copyright}}
+license:             BSD3
+license-file:        LICENSE
+stability:           provisional
+tested-with:
+  -- GHC == 7.10.3
+  -- GHC == 8.0.2
+  GHC == 8.2.2
+  -- GHC == 8.4.1
+
+----------------------------------------
+
+extra-source-files:
+  README.md
+  NOTES.md
+  -- stack.yaml
+
+-- data-files:
+--   data/
+
+----------------------------------------
+
+source-repository head
+  type:     git
+  location: git://github.com/{{github-username}}/{{name}}.git
+  -- subdir: {{name}}
+
+-- source-repository this
+--   type:     git
+--   location: https://github.com/{{github-username}}/{{name}}/tree/v0.1.0
+-- -- subdir: {{name}}
+-- 
+-- -- Update the `source-repository` for `this` package version on every release
+-- -- (i.e. every hackage upload or metadata revision).  
+-- -- Assuming you've created a git tag with that version, 
+-- -- (e.g. `git tag -a v0.1.0 -m "Hackage Release of Version 0.1.0" && git push origin v0.1.0`). 
+
+----------------------------------------
+-- FLAGS
+
+----------------------------------------
+-- LIBRARY
+
+library
+ hs-source-dirs:
+   sources
+   examples
+
+ ghc-options:
+
+  --------------------
+  -- warning groups
+  --------------------
+
+  -Wall
+
+  --------------------
+  -- disabled warnings
+  --------------------
+
+  -Wno-unticked-promoted-constructors
+
+  --------------------
+  -- enabled warnings
+  --------------------
+
+  -- enable
+  -Wincomplete-uni-patterns
+  -Wincomplete-record-updates
+  -Widentities
+  -Wmissing-methods
+  -fwarn-tabs
+ 
+  --------------------
+  -- typed-holes
+  --------------------
+
+  -- use `typed-holes`, not `undefined`, during development
+
+  -fdefer-typed-holes
+  -Wtyped-holes
+
+  --------------------
+  -- (miscellaneous warnings)
+  --------------------
+
+  -- raise a warning into an error
+  -- -Werror=missing-fields
+
+
+ if impl(ghc >= 8.0)
+    ghc-options:
+
+        --------------------
+        -- warning groups
+        --------------------     
+        -Wcompat
+      
+        --------------------
+        -- enabled warnings
+        --------------------
+        -Wnoncanonical-monad-instances
+        -Wnoncanonical-monadfail-instances
+
+        --------------------
+
+ default-language: Haskell2010
+
+ default-extensions:
+
+   --------------------
+   -- "controversial"
+   --------------------
+   NoImplicitPrelude
+   -- NOTE thus every module implicitly has -XNoImplicitPrelude
+   
+   --------------------
+   -- deriving
+   --------------------
+   AutoDeriveTypeable
+   DeriveDataTypeable
+   DeriveGeneric
+   DeriveFunctor
+   DeriveFoldable
+   DeriveTraversable
+   DeriveLift
+   StandaloneDeriving
+
+   --------------------
+   -- syntax
+   --------------------
+   PackageImports
+   LambdaCase
+   EmptyCase
+   TypeOperators
+   PostfixOperators
+   BangPatterns
+   KindSignatures
+   NamedFieldPuns
+   RecordWildCards
+   TupleSections
+   MultiWayIf
+   DoAndIfThenElse
+   EmptyDataDecls
+   InstanceSigs
+   
+   --------------------
+   -- typeclasses
+   --------------------
+   MultiParamTypeClasses
+   FlexibleContexts
+   FlexibleInstances
+   TypeFamilies
+   FunctionalDependencies
+
+   --------------------
+   -- patterns
+   --------------------
+   ViewPatterns
+   PatternSynonyms
+
+   --------------------
+   -- (miscellaneous extensions)
+   --------------------
+   ScopedTypeVariables
+
+ other-extensions:
+
+   --------------------
+   -- macros
+   --------------------
+   TemplateHaskell
+   -- QuasiQuotes
+
+   --------------------
+   -- syntax (of literals)
+   --------------------
+   OverloadedStrings
+   OverloadedLists
+
+   --------------------
+   -- (miscellaneous extensions)
+   --------------------
+   -- RebindableSyntax
+   -- kinds
+   -- DataKinds ConstraintKinds
+   -- harmful to inference
+   -- GADTs RankNTypes
+   -- (miscellaneous)
+
+ exposed-modules:
+   {{module}}
+   {{module}}.Types
+
+   Example.{{module}}
+
+ other-modules:
+   Prelude.{{module}}
+   -- Paths_{{identifier}}
+
+ -- autogen-modules:
+   -- Paths_{{identifier}}
+
+ build-depends:
+
+ --------------------
+ -- boot libraries / "standard" library
+ --------------------
+
+    base >=4.7 && <5
+  , text 
+  , bytestring
+  , transformers
+  , mtl
+  , containers
+
+  --------------------
+  -- my packages
+  -- (sboosali on github, sboo on hackage)
+  --------------------
+
+  , spiros >=0.2
+  -- , enumerate >=0.2 
+
+  --------------------
+  -- "extended" standard library 
+  --------------------
+
+  , deepseq
+  , hashable
+  , unordered-containers
+
+  --------------------
+  -- ekmett 
+  --------------------
+
+  , exceptions
+  , lens
+
+  --------------------
+  -- (miscellaneous packages)
+  --------------------
+
+  -- ,
+
+
+----------------------------------------
+-- TESTS...
+
+----------------------------------------
+
+test-suite doctest
+ if (impl(ghcjs))
+    buildable: False
+
+ hs-source-dirs:      test
+ main-is:             DocTests.hs
+ type:                exitcode-stdio-1.0
+
+ default-language:    Haskell2010
+ ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+
+ build-depends:
+    base
+  , {{name}}
+  , doctest
+
+----------------------------------------
+-- NOTES
+
+-- originally generated from the `spirosboosalis-simple.hsfiles` template, with `stack new`:
+-- 
+-- $ stack new {{name}} https://raw.githubusercontent.com/sboosali/configuration/master/stack/templates/spirosboosalis.hsfiles 
+
+----------------------------------------
+
+{-# START_FILE default.nix #-}
+import ./{{name}}.nix
+
+{-# START_FILE shell.nix #-}
+import ./{{name}}.shell.nix
+
+{-# START_FILE nix-shell.sh #-}
+#!/bin/bash
+set -e
+########################################
+echo
+echo '[ARGUMENTS (one per line)]'
+echo
+printf '%s\n\n' "$@" 
+echo
+
+echo '[nix-shell ...]'
+echo
+
+time nix-shell --show-trace "$@"
+########################################
+
+{-# START_FILE cabal2nix.sh #-}
+#!/bin/bash
+set -e
+########################################
+cabal2nix .         > "./{{name}}.nix"
+########################################
+cabal2nix . --shell > "./shell.{{name}}.nix"
+########################################
+echo
+echo '[default.nix]'
+echo
+cat ./default.nix
+
+echo
+echo '[shell.nix]'
+echo
+cat ./shell.nix
+
+echo
+echo '[{{name}}.nix]'
+echo
+cat ./{{name}}.nix
+
+echo
+echo '[shell.{{name}}.nix]'
+echo
+cat ./shell.{{name}}.nix
+########################################
+./nix-shell.sh --run ""
+########################################
+
+{-# START_FILE configure.sh #-}
+#!/bin/bash
+set -e
+########################################
+./nix-shell.sh --run "cabal new-configure $*" 
+# cabal new-configure "$*" 
+########################################
+
+{-# START_FILE configure.all.sh #-}
+#!/bin/bash
+set -e
+########################################
+./configure.sh all
+# ./configure.sh --enable-tests --enable-benchmarks
+########################################
+
+{-# START_FILE build.sh #-}
+#!/bin/bash
+set -e
+########################################
+./nix-shell.sh --run "cabal new-build $*" 
+########################################
+
+{-# START_FILE test.sh #-}
+#!/bin/bash
+set -e
+########################################
+./nix-shell.sh --run "cabal new-test $*"
+########################################
+
+{-# START_FILE doctest.sh #-}
+#!/bin/bash
+set -e
+########################################
+./test.sh doctest
+########################################
+
+{-# START_FILE haddock.sh #-}
+#!/bin/bash
+set -e
+########################################
+./nix-shell.sh --run "cabal new-haddock --haddock-option=--hyperlinked-source"
+########################################
+
+ARCHITECTURE="x86_64-linux"
+COMPILER="ghc-8.2.2"
+OPEN=xdg-open
+
+PACKAGE="{{name}}"
+VERSION="0.0.0"
+
+"$OPEN" ./dist-newstyle/build/"$ARCHITECTURE/$COMPILER/$PACKAGE-$VERSION"/doc/html/"$PACKAGE"/index.html  >/dev/null 2>&1
+########################################
+
+{-# START_FILE repl.sh #-}
+#!/bin/bash
+########################################
+./nix-shell.sh --run "cabal new-repl {{name}} $*"
+########################################
+
+{-# START_FILE watch.sh #-}
+#!/bin/bash
+########################################
+
+GHCID_FILE=./ghcid.txt
+
+########################################
+
+echo '...' > "$GHCID_FILE"
+# emacsclient "$GHCID_FILE" &
+
+########################################
+
+COMMAND='nix-shell --show-trace --run "cabal new-repl {{name}}"'
+ghcid -o "$GHCID_FILE" --command "$COMMAND"
+
+########################################
+
+{-# START_FILE upload.sh #-}
+#!/bin/bash
+set -e
+########################################
+cabal check
+cabal sdist
+########################################
+#TODO uploading to hackage
+PACKAGE="{{name}}"
+VERSION="0.0.0"
+cabal upload dist/"$PACKAGE"-"$VERSION".tar.gz  
+########################################
+
+{-# START_FILE cabal.config #-}
+profiling:         False
+library-profiling: False
+
+{-# START_FILE Setup.hs #-}
+import Distribution.Simple
+main = defaultMain
+
+{-# START_FILE cabal.project #-}
+packages:
+  ./
+
+{-# START_FILE stack/stack-lts11-nix-local.yaml #-}
+resolver: lts-11.0
+
+nix:
+  enable: true
+  pure:   false
+  packages:
+  - zlib
+
+packages:
+- ./
+
+- ../spiros
+
+extra-deps: []
+
+{-# START_FILE stack/stack-lts11-nix-github.yaml #-}
+resolver: lts-11.0
+
+nix:
+  enable: true
+  pure:   false
+  packages:
+  - zlib
+
+packages:
+- ./
+
+- location:
+    git:    https://github.com/sboosali/spiros
+    commit: e0b3a1e2eee3a44a450444bf36f722a6f14d0376
+  extra-dep: true
+  subdirs: [.] 
+
+extra-deps: []
+
+{-# START_FILE stack/stack-lts11.yaml #-}
+resolver: lts-11.0
+
+packages:
+- ./
+
+extra-deps:
+- spiros-0.2
+
+{-# START_FILE sources/{{filepath}}.hs #-}
+-- {-# LANGUAGE  #-}
+-- {-# LANGUAGE OverloadedStrings #-}
+-- {-# LANGUAGE OverloadedLists #-}
+
+{-| 
+
+@
+
+>> 
+
+@
+
+-}
+module {{module}}
+ ( module {{module}}
+ , module {{module}}.Types
+ ) where
+----------------------------------------
+import Prelude.{{module}}
+
+import {{module}}.Types
+----------------------------------------
+
+----------------------------------------
+
+----------------------------------------
+{-# START_FILE sources/{{filepath}}/Types.hs #-}
+-- {-# LANGUAGE  #-}
+-- {-# LANGUAGE OverloadedStrings #-}
+-- {-# LANGUAGE OverloadedLists #-}
+
+{-| The primary types. 
+
+This module mostly defines types 
+(i.e. @data@, @newtype@, @type@, @class@, @instance@);
+it also defines whatever functions are necessary for those types' instances.
+
+-}
+module {{module}}.Types where
+import Prelude.{{module}}
+
+import "spiros" Prelude.Spiros.Classes
+
+----------------------------------------
+
+----------------------------------------
+
+----------------------------------------
+{-# START_FILE sources/Prelude/{{filepath}}.hs #-}
+-- {-# LANGUAGE  #-}
+
+{-| The package-specific custom prelude, which re-exports 
+another custom ('Prelude.Spiros' from the @spiros@ package). 
+
+-}
+module Prelude.{{module}}
+ ( module Prelude.Spiros
+ -- , module Prelude.{{module}}
+ -- , module X
+ ) where
+
+----------------------------------------
+
+-- import as X
+
+import "spiros" Prelude.Spiros
+
+----------------------------------------
+
+----------------------------------------
+
+{-# START_FILE examples/Example/{{filepath}}.hs #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-} 
+    -- to test inference
+
+-- {-# LANGUAGE  #-}
+-- {-# LANGUAGE OverloadedStrings #-}
+-- {-# LANGUAGE OverloadedLists #-}
+
+{-| This module provides a simple example program. 
+
+
+Being a @library@ module, it's typechecked with the package, 
+and thus should always build.
+
+Only public interfaces are imported (i.e. no @.Internal@s),
+all required language extensions are listed within this module,
+and there are minimal other dependencies. 
+
+
+Doctests:
+
+@
+TODO
+@
+
+Please read the source too <https://hackage.haskell.org/package/{{name}}/docs/src/Example.{{module}}.html (direct Hackage link)>. 
+
+
+-}
+module Example.{{module}} where
+
+-- import {{module}}
+
+import "base" Prelude
+
+----------------------------------------
+
+{-|
+-}
+example = ()
+
+----------------------------------------
+
+{-# START_FILE test/DocTests.hs #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
+
+{-# LANGUAGE PackageImports #-}
+-- {-# LANGUAGE OverloadedStrings #-}
+-- {-# LANGUAGE OverloadedLists #-}
+
+import "doctest" Test.DocTest (doctest)
+
+import "base" System.Environment (getArgs)
+
+----------------------------------------
+
+main :: IO ()
+main = do
+  arguments <- getArgs
+  doctest $ concat
+    [ sources
+    , extensions
+    , headers
+    , arguments
+    ]
+
+----------------------------------------
+
+sources :: [String]
+sources = sources2flags
+  [ "sources/"
+  , "examples/"
+  ] 
+  where
+  sources2flags :: [String] -> [String]
+  sources2flags = id
+
+headers :: [String]
+headers = headers2flags
+  [ "include/"
+  ]
+  where
+  headers2flags :: [String] -> [String]
+  headers2flags = fmap ("-I"++) 
+  -- -I<dir> adds <dir> to the #include search path.
+
+extensions :: [String]
+extensions = extensions2flags "NoImplicitPrelude PackageImports AutoDeriveTypeable DeriveDataTypeable DeriveGeneric DeriveFunctor DeriveFoldable DeriveTraversable LambdaCase EmptyCase TypeOperators PostfixOperators ViewPatterns BangPatterns KindSignatures NamedFieldPuns RecordWildCards TupleSections MultiWayIf DoAndIfThenElse EmptyDataDecls InstanceSigs MultiParamTypeClasses FlexibleContexts FlexibleInstances TypeFamilies FunctionalDependencies ScopedTypeVariables StandaloneDeriving"
+  where
+  extensions2flags :: String -> [String]
+  extensions2flags = fmap ("-X"++) . words
+
+----------------------------------------
+{-
+
+There's two sets of GHC extensions involved when running Doctest:
+
+- The set of GHC extensions that are active when compiling the module code (excluding the doctest examples). The easiest way to specify these extensions is through LANGUAGE pragmas in your source files. (Doctest will not look at your cabal file.)
+
+- The set of GHC extensions that are active when executing the Doctest examples. (These are not influenced by the LANGUAGE pragmas in the file.) The recommended way to enable extensions for Doctest examples is to switch them on like this:
+
+    -- |
+    -- >>> :set -XTupleSections
+    -- >>> fst' $ (1,) 2
+    -- 1
+    fst' :: (a, b) -> a
+    fst' = fst
+
+Alternatively you can pass any GHC options to Doctest, e.g.:
+
+    doctest -XCPP Foo.hs
+
+
+
+sources/Prelude/Spiros/Reexports.hs:2:0: error:
+     fatal error: base-feature-macros.h: No such file or directory
+     #include <base-feature-macros.h>
+
+-}
+----------------------------------------
+
+{-# START_FILE test/golden/{{name}}.golden #-}
+{{name}}
+{-# START_FILE test/GoldenTests.hs #-}
+{-# OPTIONS_GHC -fno-warn-missing-signatures #-}
+
+{-# LANGUAGE PackageImports #-}
+{-# LANGUAGE OverloadedStrings #-}
+
+module GoldenTests where
+----------------------------------------
+
+import "tasty"        Test.Tasty
+import "tasty-golden" Test.Tasty.Golden
+
+import qualified "bytestring" Data.ByteString.Lazy as B
+import           "bytestring" Data.ByteString.Lazy (ByteString)
+
+----------------------------------------
+
+golden_stub :: TestTree
+golden_stub = goldenVsString goldenName goldenFile goldenAction
+ where
+ goldenName   = "golden test (stub)"
+ goldenFile   = "test/golden/{{name}}.golden" 
+ goldenAction = do
+     return "{{name}}"
+
+----------------------------------------
+
+{-NOTES
+
+goldenVsString "golden test (stub)" "test/golden/{{name}}.golden" (return "{{name}}")
+
+
+goldenVsString 
+
+:: TestName	
+test name
+
+-> FilePath	
+path to the «golden» file (the file that contains correct output)
+
+-> IO ByteString	
+action that returns a string
+
+-> TestTree	
+the test verifies that the returned string is the same as the golden file contents
+
+Compare a given string against the golden file contents
+
+
+Note about filenames. They are looked up in the usual way, thus relative names are relative to the processes current working directory. It is common to run tests from the package's root directory (via cabal test or cabal install --enable-tests), so if your test files are under the tests/ subdirectory, your relative file names should start with tests/ (even if your test.hs is itself under tests/, too).
+
+
+
+
+Note about line endings. The best way to avoid headaches with line endings (when running tests both on UNIX and Windows) is to treat your golden files as binary, even when they are actually textual.
+
+This means:
+
+When writing output files from Haskell code, open them in binary mode (see openBinaryFile, withBinaryFile and hSetBinaryMode). This will disable automatic \n -> \r\n conversion on Windows. For convenience, this module exports writeBinaryFile which is just like writeFile but opens the file in binary mode. When using ByteStrings note that Data.ByteString and Data.ByteString.Lazy use binary mode for writeFile, while Data.ByteString.Char8 and Data.ByteString.Lazy.Char8 use text mode.
+Tell your VCS not to do any newline conversion for golden files. For git check in a .gitattributes file with the following contents (assuming your golden files have .golden extension):
+*.golden	-text
+On its side, tasty-golden reads and writes files in binary mode, too.
+
+Why not let Haskell/git do automatic conversion on Windows? Well, for instance, tar will not do the conversion for you when unpacking a release tarball, so when you run cabal install your-package --enable-tests, the tests will be broken.
+
+-}
+
+{-# START_FILE .gitignore #-}
+# my
+ignore/ 
+temporary/ 
+TODO
+
+# Haskell
+.styx/
+cabal.project.local
+dist-newstyle/
+dist/
+cabal-dev
+*.o
+*.hi
+*.chi
+*.chs.h
+.virtualenv
+.hsenv
+ghcid.txt
+.cabal-sandbox/
+cabal.sandbox.config
+cabal.config
+report.html
+.stack-work/
+
+# nix
+result
+result/
+
+# Emacs
+*~
+\#*
+.#*
+\#*\#
+,*
+.*.swp
+.*.swo
+TAGS
+.projectile
+
+# OS X
+.DS_Store
+
+# miscellaneous
+
+{-# START_FILE .gitattributes #-}
+*.golden	binary
+
+{-# START_FILE LICENSE #-}
+Copyright {{author-name}} (c) 2018
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+
+    * Redistributions in binary form must reproduce the above
+      copyright notice, this list of conditions and the following
+      disclaimer in the documentation and/or other materials provided
+      with the distribution.
+
+    * Neither the name of {{author-name}} nor the names of other
+      contributors may be used to endorse or promote products derived
+      from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+{-# START_FILE CHANGELOG.md #-}
+
+0.1
+----
+
+* TODO
+
+{-# START_FILE NOTES.md #-}
+
+========================================
+
+========================================
+
+{-# START_FILE README.md #-}
+[![Build Status](https://secure.travis-ci.org/{{github-username}}/{{name}}.svg)](http://travis-ci.org/{{github-username}}/{{name}})
+[![Hackage](https://img.shields.io/hackage/v/{{name}}.svg)](https://hackage.haskell.org/package/{{name}})
+
+# {{name}}
+
+{{synopsis}} 
+
+## Example
+
+```
+import {{module}}
+
+-- TODO
+```
+
+## Links
+
+[Hackage](https://hackage.haskell.org/package/{{name}})
+
+[Example module source](https://hackage.haskell.org/package/{{name}}/docs/src/Example.{{module}}.html). 
+
+## Development
+
+### Nix
+TODO
+
+### Cabal
+TODO
+
+### Stack
+TODO
+
+
+{-# START_FILE environment.sh #-}
+#!/bin/bash
+set -e
+########################################
+
+# e.g.
+#
+# ./environment.sh
+#
+# ./environment.sh 802
+# ./environment.sh js
+#
+# ./environment.sh --argstr compiler ghc802
+# ./environment.sh --argstr compiler ghcjs
+#
+# ./environment.sh js --arg isProfiled true 
+#
+# ./environment.sh  --arg withHoogle true  --arg isProfiled true  --arg isTested true  --arg isBenchmarked true  --arg isDocumented true  --arg isHyperlinked true  --arg isDwarf true  --argstr whichLinker gold  --argstr whichObjectLibrary static
+#
+#
+
+########################################
+
+# ghc7103, ghc802, ghc822, ghc841, ghcjs
+
+DEFAULT_COMPILER="default"
+# DEFAULT_COMPILER="ghc822"
+
+COMPILER="$DEFAULT_COMPILER"
+#COMPILER="${1}"
+# bash default argument
+
+DEFAULT_INTEGER_SIMPLE=false
+
+INTEGER_SIMPLE="$DEFAULT_INTEGER_SIMPLE"
+
+########################################
+
+# aliases for nixpkgs' compiler identifiers:
+
+case "$1" in
+ 
+7.10|7.10.3)
+  COMPILER="ghc7103"
+  shift 1
+  ;;
+8.0|8.0.2)
+  COMPILER="ghc802"
+  shift 1
+  ;;
+8.2|8.2.2)
+  COMPILER="ghc822"
+  shift 1
+  ;;
+8.4|8.4.1)
+  COMPILER="ghc841"
+  shift 1
+  ;;
+
+7)
+  COMPILER="ghc7103"
+  shift 1
+  ;;
+8)
+  COMPILER="ghc841"
+  shift 1
+  ;;
+
+710|7103)
+  COMPILER="ghc7103"
+  shift 1
+  ;;
+80|802)
+  COMPILER="ghc802"
+  shift 1
+  ;;
+82|822)
+  COMPILER="ghc822"
+  shift 1
+  ;;
+84|841)
+  COMPILER="ghc841"
+  shift 1
+  ;;
+
+HEAD|head)
+  COMPILER="ghcHEAD"
+  shift 1
+  ;;
+
+j|js)
+  COMPILER="ghcjs"
+  shift 1
+  ;;
+
+jHEAD|jhead|jsHEAD|jshead|ghcjshead)
+  COMPILER="ghcjsHEAD"
+  shift 1
+  ;;
+
+i)
+  COMPILER="$DEFAULT_COMPILER"
+  INTEGER_SIMPLE=true
+  shift 1
+  ;;
+
+ghc7103)
+  COMPILER="ghc7103"
+  shift 1
+  ;;
+    
+ghc802)
+  COMPILER="ghc802"
+  shift 1
+  ;;
+    
+ghc822)
+  COMPILER="ghc822"
+  shift 1
+  ;;
+
+ghc841)
+  COMPILER="ghc842"
+  shift 1
+  ;;
+    
+ghc841)
+  COMPILER="ghc842"
+  shift 1
+  ;;
+    
+ghcHEAD)
+  COMPILER="ghcHEAD"
+  shift 1
+  ;;
+    
+ghcjs)
+  COMPILER="ghcjs"
+  shift 1
+  ;;
+    
+ghcjsHEAD)
+  COMPILER="ghcjsHEAD"
+  shift 1
+  ;;
+
+#TODO    
+# integer-simple)
+#   COMPILER="integer-simple"
+#   shift 
+#   ;;
+
+i80|i802|i8.0.2|integer-simple-8.0.2)
+  COMPILER="ghc801"
+  INTEGER_SIMPLE=true
+  shift 1
+  ;;
+
+i82|i822|i8.2.2|integer-simple|integer-simple-8.2.2)
+  COMPILER="ghc822"
+  INTEGER_SIMPLE=true
+  shift 1
+  ;;
+
+i841|i8.4.1|integer-simple-8.4.1)
+  COMPILER="ghc841"
+  INTEGER_SIMPLE=true
+  shift 1
+  ;;
+
+i84|i842|i8.4.2|integer-simple-8.4.2)
+  COMPILER="ghc842"
+  INTEGER_SIMPLE=true
+  shift 1
+  ;;
+
+default)
+  COMPILER="$DEFAULT_COMPILER"
+  shift 1
+  ;;
+
+*)
+  COMPILER="$DEFAULT_COMPILER"
+  ;;
+
+esac
+
+########################################
+
+echo "[COMPILER]" "$COMPILER" 
+echo 
+echo "[OTHER ARGUMENTS]" "$@"
+echo
+
+nix-shell --show-trace --argstr compiler "$COMPILER" --arg integer-simple "$INTEGER_SIMPLE" "$@"
+
+
+{-# START_FILE install.sh #-}
+#!/bin/bash
+set -e
+########################################
+nix-build --show-trace shell.nix
+########################################
+# e.g.
+# 
+# Using install prefix: /nix/store/<hash>-<name>-<version>
+#
+# Executables installed in:
+# /nix/store/<hash>-<name>-<version>/bin
+#
+# Libraries installed in:
+# /nix/store/<hash>-<name>-<version>/lib/<compiler>/<name>-<version>
+#
+# Dynamic Libraries installed in:
+# /nix/store/<hash>-<name>-<version>/lib/<compiler>/<arch>-<os>-<compiler>
+#
+# Private executables installed in:
+# /nix/store/<hash>-<name>-<version>/libexec/<arch>-<os>-<compiler>/<name>-<version>
+#
+# Data files installed in:
+# /nix/store/<hash>-<name>-<version>/share/<arch>-<os>-<compiler>/<name>-<version>
+#
+# Documentation installed in:
+# /nix/store/<hash>-<name>-<version>/share/doc/<arch>-<os>-<compiler>/<name>-<version>
+#
+# Configuration files installed in:
+# /nix/store/<hash>-<name>-<version>/etc
+#
+########################################
