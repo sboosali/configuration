@@ -27,6 +27,23 @@
 # that's assigned to a variable.
 # EOF
 
+# (Function-)Local Variables
+#   
+#   $ help local
+#   local: local [option] name[=value] ...
+#   Define local variables.
+#   
+#   Create a local variable called NAME, and give it VALUE.  OPTION can
+#   be any option accepted by `declare'.
+#   
+#   Local variables can only be used within a function; they are visible
+#   only to the function where they are defined and its children.
+#   
+#   Exit Status:
+#   Returns success unless an invalid option is supplied, an error occurs,
+#   or the shell is not executing a function.
+# 
+
 ########################################
 ## DEFINITIONS 
 
@@ -203,8 +220,10 @@ function filesize () {
 # ~$ : "${UNSET_VAR?Unset variable}"
 # bash: UNSET_VAR: Unset variable
 }
-alias cpr="rsync -arRv" # e.g. cpr stuff backup # ./backup/stuff doesn't exist yet and is created
-alias cprd="rsync -arRv --dry-run" # --exclude ".stack-work" --exclude "dist-newstyle"
+
+# alias cpr="rsync -arRv" # e.g. cpr stuff backup # ./backup/stuff doesn't exist yet and is created
+# alias cprd="rsync -arRv --dry-run" # --exclude ".stack-work" --exclude "dist-newstyle"
+
 alias lnr='readlink -f'
 alias lns='ln -sf' # /path/to/file /path/to/symlink
 # alias pwn="sudo chown -R sboo:users"
@@ -218,7 +237,20 @@ alias show="cat"
 alias get="git"
 alias grab="grep"
 alias processes=ps
-alias synchronize="rsync -av"
+
+alias synchronize="rsync -vihh -x -C -aR"
+    # e.g. 
+    #
+    #      $ cd ~
+    #      $ synchronize haskell/spiros/sources ~/backup
+    #
+    # wildcards work:
+    #
+    #      $ synchronize haskell/commands/commands-spiros/config* ~/backup/
+    #      # includes: config/ config-linux/ config-osx/ config-windows/
+
+alias dry-synchronize="synchronize --dry-run"
+    # 
 
 alias path='echo -e ${PATH//:/\\n}'
 alias now='date +"%T"'
