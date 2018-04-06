@@ -395,8 +395,9 @@ function nx1() {
 alias ns="nix-store"
 alias nsr='nix-store --query --references'
 
-alias ncu="nix-channel --update"
-alias ncux="nix-channel --update nixpkgs"
+alias ncu='nix-channel --update && nix-env --upgrade'
+# "nix-channel --update"
+# alias ncux="nix-channel --update nixpkgs"
 
 alias npg="nix-prefetch-git --quiet"
 alias npu="nix-prefetch-url"
@@ -419,8 +420,14 @@ function nia() {
  nix-env -f "<nixpkgs>" --system-filter "x86_64-linux" -i -A "$@"
 }
 
+# 'h': (default) haskell package
 function nih() {
  nix-env -f "<nixpkgs>" -i -A "haskellPackages.$*"
+}
+
+# 'hc': haskell package, given a haskell compiler
+function nihc() {
+ nix-env -f "<nixpkgs>" -i -A "haskell.packages.${1-?}.${2-?}"
 }
 
 function nie() {
@@ -518,29 +525,44 @@ function nsi () {
 #  stack exec -- "$@" 
 # }
 
-alias hc="cabal configure"
-alias hb="cabal build"
-alias hr="cabal run"
+alias hc="cabal new-configure"
+alias hb="cabal new-build"
+alias hr="cabal new-run" 
 
-alias hcc="cabal configure"
-alias hcb="cabal build"
-
-# Running projects, ghc
+# e.g.
+# 
+# $ h 
+# # cabal new-build all
+# 
+# $ h test
+# # cabal new-test all
+# 
+# $ h test backend
+# # cabal new-test backend
+#
 function h() {
-    PACKAGE="$(basename "$PWD")"
-    # stack build --ghc-options -fno-code
-    # if [ "$?" -ne 0 ]; then
-    # 	return 1;
-    # fi
-    if [ -f build.sh ]; then
-      echo '(./build.sh)'
-      # shellcheck disable=SC1091
-      source build.sh
-    else
-      stack build && _printDiv && stack exec -- example-"$PACKAGE" "$@"
-    fi
-# Running a script the first way runs it as a child process. Sourcing (the second way), on the other way, runs the script as if you entered all its commands into the current shell - if the script sets a variable, it will remain set, if the script exits, your session will exit. See help . for documentation
+ cabal "new-${1:-build}" "${2:-all}"
 }
+
+# alias hcc="cabal configure"
+# alias hcb="cabal build"
+
+# # Running projects, ghc
+# function h() {
+#     PACKAGE="$(basename "$PWD")"
+#     # stack build --ghc-options -fno-code
+#     # if [ "$?" -ne 0 ]; then
+#     # 	return 1;
+#     # fi
+#     if [ -f build.sh ]; then
+#       echo '(./build.sh)'
+#       # shellcheck disable=SC1091
+#       source build.sh
+#     else
+#       stack build && _printDiv && stack exec -- example-"$PACKAGE" "$@"
+#     fi
+# # Running a script the first way runs it as a child process. Sourcing (the second way), on the other way, runs the script as if you entered all its commands into the current shell - if the script sets a variable, it will remain set, if the script exits, your session will exit. See help . for documentation
+# }
 
 function ht() {
     PACKAGE="$(basename "$PWD")"
