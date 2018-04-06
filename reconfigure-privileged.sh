@@ -4,4 +4,13 @@
 
 ###########################################
 
-sudo cp ./nix/global-nix.conf /etc/nix/nix.conf
+sudo cp ./nix/etc/nix.conf /etc/nix/nix.conf
+
+###########################################
+
+echo '[/etc/nix/nix.conf]'
+echo
+cat /etc/nix/nix.conf
+echo
+
+###########################################
