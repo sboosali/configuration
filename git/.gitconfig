@@ -93,7 +93,7 @@
         p = push
         l = pull
         lru = pull --rebase upstream master
-            # for forks
+            # for updating a fork
 
 [push]
 	default = current

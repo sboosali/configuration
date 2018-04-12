@@ -449,6 +449,11 @@ function nix-install-haskell() {
  nix-env -f "<nixpkgs>" -i -A "haskellPackages.${1:?}"
 }
 
+function garbage-collect() {
+ nix-collect-garbage
+ echo
+ disksize
+}
 
 function nix-prefetch-all-cabal-hashes() {
 
@@ -488,6 +493,10 @@ h  = p.haskell.lib
 :a nixpkgs
 :a nixpkgs.lib
 spiros = hs.spiros
+gnome = p.gnome3
+kde   = p.plasma5
+# p.kdeApplications 
+# p.kdeFrameworks
 
 EOF
 
@@ -1253,7 +1262,33 @@ function clone () {
  git branch -a
 }
 
-alias gc="clone sboosali"
+function github-set-upstream() {
+ # after cloning fork
+ local OWNER="${1-?}"
+ local REPOSITORY="${2-?}"
+
+ echo
+ git remote -v
+ 
+ echo
+ git remote add upstream https://github.com/"$OWNER"/"$REPOSITORY".git
+
+ echo
+ git remote -v
+}
+  # $ git remote -v
+  # origin	https://github.com/sboosali/nixpkgs (fetch)
+  # origin	https://github.com/sboosali/nixpkgs (push)
+  # upstream	https://github.com/NixOS/nixpkgs.git (fetch)
+  # upstream	https://github.com/NixOS/nixpkgs.git (push)
+
+function git-rebase-upstream() {
+ # for updating a fork
+ git pull --rebase upstream master
+ # rebase master onto upstream
+}
+
+# alias gcs="clone sboosali"
 
 # submodule
 function git-mod () {
