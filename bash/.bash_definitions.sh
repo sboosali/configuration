@@ -3,6 +3,16 @@
 # set -u 
 # which will cause any unset argument reference to immediately fail the script.
 
+alias restart-gnome="gnome-shell --replace &disown"
+# ^ seems to be always necessary after startup; 
+# otherwise, clicking on the windows bars at the bottom of the screen
+# doesn't switch to those windows
+
+alias restart-xbindkeys="killall xbindkeys || true ; xbindkeys -fg ~/.xbindkeysrc.scm &disown "
+# 
+
+
+
 ########################################
 ## NOTES
 # this file is "pure", it only declares aliases and functions.
@@ -1372,6 +1382,14 @@ EOF
  
  chmod 700 "$FILENAME"
  emacsclient "$FILENAME"
+}
+
+function kill-baloo() {
+
+balooctl status
+balooctl disable
+rm -rf ~/.local/share/baloo
+
 }
 
 ########################################
