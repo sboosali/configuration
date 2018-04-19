@@ -18,6 +18,12 @@ TODO
     # nix-build configuration.nix
     nix-env -i configuration.nix
 
+### `~/.config/`
+
+Symlink some `~/.config` subdirs from `./config/...`'.
+
+
+
 ### 'ln -s` symlinks
 
 this

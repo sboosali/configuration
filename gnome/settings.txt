@@ -1,0 +1,47 @@
+========================================
+DashToDock
+
+download the extension, i.e. DashToDock v62, install via gnome-tweak-tool by importing the `.zip`.
+
+PositionAndSize.PositionOnScreen = Bottom
+PositionAndSize.IconSize = 64dpx
+PositionAndSize.IconSizeFixed(ScrollToReveal) = true
+
+Launchers.Animate = false
+Launchers.IsolateWorkspaces = true
+
+Behavior.ClickAction.ClickActionOnARunningApplication = CycleThroughWindows
+Behavior.ClickAction.ShiftPlusClickActionOnARunningApplication = DisplayWindowsOverview
+
+Appearance.EnableShowWindowsCountersIndicator = true
+Appearance.ShowWindowsCountersIndicator = WhiteDot
+
+
+
+========================================
+gnome-tweak-tool
+
+= ClickMethod
+
+this setting
+
+  KeyboardAndMouse.Touchpad.ClickMethod = fingers
+
+also enables double finger to right click with touch screen.
+
+= WindowScaling
+
+  Windows.HiDPI.WindowScaling = 2
+
+= font size
+
+  Fonts.ScalingFactor = 1.5
+
+and there are four default font sizes, for: Window Titles, Interface, Documents, and Monospace.
+
+= higher-contrast
+
+  Appearence.Theme.Icons = HighContrast
+  Appearence.Theme.GTK+ = HighContrast
+
+========================================

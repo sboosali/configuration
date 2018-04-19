@@ -1,0 +1,7 @@
+{ 
+
+allowUnfree = true; 
+
+# allowBroken = true; 
+
+}
