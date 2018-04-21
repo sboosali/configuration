@@ -1,5 +1,19 @@
-----------------------------------------
+========================================
+http://xahlee.info/linux/linux_xbindkeys_tutorial.html
+
+Reload the config file:
+
+  # make xbindkeys reload config
+  killall -s1 xbindkeys
+
+Start xbindkeys:
+
+  # start xbindkeys daemon
+  xbindkeys -f ~/.xbindkeysrc
+
+
+========================================
 
 $ xbindkeys -p -fg .xbindkeysrc.scm 
 
-----------------------------------------
+========================================

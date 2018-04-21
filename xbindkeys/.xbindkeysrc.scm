@@ -36,6 +36,8 @@
 ;; Start of xbindkeys guile configuration ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (xbindkey '(release "m:0x0" "c:118") 
  "xdotool key --clearmodifiers 'Control_L+0x76'")
 
@@ -52,12 +54,25 @@
 (xbindkey '(release "m:0x0" "c:78") 
  "xdotool key --clearmodifiers 'Control_L+0x7a'")
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (define (transfer)
   ;; seems to work, both from emacs and into emacs
  (run-command" xdotool key --delay 120 --clearmodifiers 'Control_L+c'  'Alt_L+Tab' 'Control_L+v' 'Return' 'Alt_L+Tab'"))
 
 (xbindkey-function '(release "m:0x0" "Pause") 
   (lambda() (transfer)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define (open-google-voice-search)
+  ;; 
+ (run-command "xdg-open 'https://www.google.com'"))
+
+(xbindkey-function '(release "m:0x0" "Escape") 
+  (lambda() (open-google-voice-search)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; (xbindkey '(release "m:0x0" "c:0xff63") 
 ;;  "xdotool key --clearmodifiers 'Control_L+v'")
@@ -80,6 +95,9 @@
 ;; (xbindkey '("m:0x0" "c:78") "C-z")
 
 ;; via `xbindkey -k`
+
+    ;; m:0x0 + c:9
+    ;; Escape
 
     ;; m:0x0 + c:118
     ;; Insert

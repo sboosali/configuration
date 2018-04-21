@@ -1,0 +1,21 @@
+# ~/.xbindkeysrc
+
+# "xdg-open 'https://www.google.com'"
+# chromium
+# m:0x0 + c:75
+# F9
+"google-chrome"
+    m:0x0 + c:75
+    F9
+
+# do Ctrl+c
+"xvkbd -no-jump-pointer -xsendevent -text '\Cc'"
+    F5
+
+# do Ctrl+x
+"xvkbd -no-jump-pointer -xsendevent -text '\Cx'"
+    F6
+
+# do Ctrl+v
+"xvkbd -no-jump-pointer -xsendevent -text '\Cv'"
+    F8
