@@ -4,6 +4,14 @@ My personal configuration (dotfiles, etc)
 Uses `nix`.
 
 
+## Usage
+
+### TODO Startup Scripts
+
+For startup of the system, the display, a terminal, etc. 
+
+
+
 ## Setup
 
 ### get `nix`
@@ -21,8 +29,6 @@ TODO
 ### `~/.config/`
 
 Symlink some `~/.config` subdirs from `./config/...`'.
-
-
 
 ### 'ln -s` symlinks
 

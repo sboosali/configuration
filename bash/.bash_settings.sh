@@ -13,6 +13,14 @@
 # fi
 
 ########################################
+# NIX/NIXPKGS SETTINGS
+
+export NIX_PATH="nixpkgs=$HOME/nixpkgs:nixpkgs=$HOME/.nix-defexpr/channels/nixpkgs"
+
+# export NIX_PATH="nixpkgs=$HOME/nixpkgs:$NIX_PATH"
+
+
+########################################
 ## IMPORTS
 
 if [ -f .git-prompt.sh ]; then

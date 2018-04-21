@@ -18,6 +18,12 @@ ls -l --color=auto ~/.config/argos
 
 ########################################
 
+ln -sf /home/sboo/configuration/xbindkeys/.xbindkeysrc ~/.xbindkeysrc
+
+ls -l --color=auto ~/.*
+
+########################################
+
 # -L file 
 # true if file is a symbolic link
 
