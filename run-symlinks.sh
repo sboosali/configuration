@@ -125,4 +125,6 @@ echo
 
 safe-link-file "argos" "~/.config/argos" 
 
+safe-link-file "x11/xinitrc" "~/.xinitrc"
+
 ########################################
