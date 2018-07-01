@@ -231,8 +231,11 @@ function filesize () {
 # bash: UNSET_VAR: Unset variable
 }
 
-# alias cpr="rsync -arRv" # e.g. cpr stuff backup # ./backup/stuff doesn't exist yet and is created
-# alias cprd="rsync -arRv --dry-run" # --exclude ".stack-work" --exclude "dist-newstyle"
+alias cpr="rsync -arRv"
+# e.g. cpr stuff backup
+# ./backup/stuff doesn't exist yet and is created
+alias cprd="rsync -arRv --dry-run"
+# --exclude ".stack-work" --exclude "dist-newstyle"
 
 alias lnr='readlink -f'
 alias lns='ln -sf' # /path/to/file /path/to/symlink
@@ -335,6 +338,7 @@ alias p2="python2.7"
 # git
 alias g="git"
 alias gl="git status" # mnemonic: git "list"
+alias gp="git push"
 alias gd="git dif"
 alias ga="git amend"
 alias gorc="git status --porcelain | cut -d ' ' -f 3 | tr '\\n' ' '"
@@ -546,7 +550,19 @@ function nsi () {
 
 alias hc="cabal new-configure"
 alias hb="cabal new-build"
-alias hr="cabal new-run" 
+alias hx="cabal new-repl"
+alias hr="cabal new-run"
+#
+alias hca="cabal new-configure all"
+alias hba="cabal new-build all"
+alias hra="cabal new-repl all"
+alias hxa="cabal new-run all -- "
+
+alias hsi="stack install"
+alias hsc="stack configure"
+alias hsb="stack build"
+alias hse="stack exec --"
+alias hsr="stack run"
 
 # e.g.
 # 

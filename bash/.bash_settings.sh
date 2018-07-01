@@ -68,6 +68,13 @@ if [ -d "$HOME/bin" ] ; then
     export PATH="$HOME/bin:$PATH"
 fi
 
+# `stack` installs executables here
+if [ -d "$HOME/.local/bin" ] ; then
+    export PATH="$HOME/.local/bin:$PATH"
+fi
+
+
+
 # # the relative binary directory for nix-build
 # # WARNING a relative path, for a more convenient `nix-build`
 # export PATH=./result/bin:$PATH

@@ -1,0 +1,25 @@
+ls ~/.local//share/gnome-shell/extensions/
+argos@pew.worldwidemann.com
+auto-move-windows@gnome-shell-extensions.gcampax.github.com
+clipboard-indicator@tudmotu.com
+dash-to-dock@micxgx.gmail.com
+extensions@abteil.org
+freon@UshakovVasilii_Github.yahoo.com
+gnome-shell-screenshot@ttll.de
+redshift@tommie-lie.de
+refresh-wifi@kgshank.net
+touchpad-indicator@orangeshirt
+
+ls /usr/share/gnome-shell/extensions/
+alternate-tab@gnome-shell-extensions.gcampax.github.com
+apps-menu@gnome-shell-extensions.gcampax.github.com
+auto-move-windows@gnome-shell-extensions.gcampax.github.com
+drive-menu@gnome-shell-extensions.gcampax.github.com
+launch-new-instance@gnome-shell-extensions.gcampax.github.com
+native-window-placement@gnome-shell-extensions.gcampax.github.com
+places-menu@gnome-shell-extensions.gcampax.github.com
+screenshot-window-sizer@gnome-shell-extensions.gcampax.github.com
+user-theme@gnome-shell-extensions.gcampax.github.com
+window-list@gnome-shell-extensions.gcampax.github.com
+windowsNavigator@gnome-shell-extensions.gcampax.github.com
+workspace-indicator@gnome-shell-extensions.gcampax.github.com

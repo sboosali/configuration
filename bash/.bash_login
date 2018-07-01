@@ -6,3 +6,4 @@
 ########################################
 
 xbindkeys -p -fg ~/.xbindkeysrc.scm 
+if [ -e /home/sboo/.nix-profile/etc/profile.d/nix.sh ]; then . /home/sboo/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer

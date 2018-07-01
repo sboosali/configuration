@@ -95,6 +95,9 @@
         lru = pull --rebase upstream master
             # for updating a fork
 
+        upstream-add = remote add upstrem
+            # e.g. git remote add upstream git@github.com:VinylRecords/Vinyl.git
+
 [push]
 	default = current
 
