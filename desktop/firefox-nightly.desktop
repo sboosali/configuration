@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Version=1.0
+Type=Application
+NoDisplay=true
+Exec=/home/sboo/.nix-profile/bin/firefox %u
+Name=Firefox Nightly

@@ -90,6 +90,7 @@ alias dew='cd ~/.emacs.d-windows'
 alias dc='cd ~/configuration'
 alias dh='cd ~/haskell'
 alias dt='cd ~/temporary'
+alias db='cd ~/backup'
 alias dw='cd ~/Downloads'
 alias dm='cd ~/Documents'
 alias dn='cd ~/.nixpkgs'
@@ -509,15 +510,17 @@ h  = p.haskell.lib
 spiros = hs.spiros
 gnome = p.gnome3
 kde   = p.plasma5
+EOF
+
 # p.kdeApplications 
 # p.kdeFrameworks
-
-EOF
 
   echo
   echo -e "$NIX_REPL_EXAMPLES"
   echo
-  nix-repl
+
+  # nix-repl # Nix v1
+  nix repl   # Nix v2
 }
 
 function nix-where () {
