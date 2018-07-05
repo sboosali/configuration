@@ -11,8 +11,6 @@ alias restart-gnome="gnome-shell --replace &disown"
 alias restart-xbindkeys="killall xbindkeys || true ; xbindkeys -fg ~/.xbindkeysrc.scm &disown "
 # 
 
-
-
 ########################################
 ## NOTES
 # this file is "pure", it only declares aliases and functions.
@@ -183,6 +181,7 @@ function se () {
 }
 
 # rm
+alias r=rm
 alias rm="rm -f"
 alias rr="rm -rf"
 #
@@ -553,8 +552,8 @@ function nsi () {
 
 alias hc="cabal new-configure"
 alias hb="cabal new-build"
-alias hx="cabal new-repl"
-alias hr="cabal new-run"
+alias hr="cabal new-repl"
+alias hx="cabal new-run"
 #
 alias hca="cabal new-configure all"
 alias hba="cabal new-build all"
@@ -564,8 +563,9 @@ alias hxa="cabal new-run all -- "
 alias hsi="stack install"
 alias hsc="stack configure"
 alias hsb="stack build"
-alias hse="stack exec --"
-alias hsr="stack run"
+alias hsr="stack repl"
+alias hsx="stack run --"
+# alias hsx="stack exec --"
 
 # e.g.
 # 
@@ -1409,6 +1409,49 @@ balooctl status
 balooctl disable
 rm -rf ~/.local/share/baloo
 
+}
+
+########################################
+
+function bash-completion--source-something () {
+
+  echo "sourcing ~/.nix-profile/share/bash-completion/completions/$1"
+  echo 
+
+  source ~/.nix-profile/share/bash-completion/completions/$1
+
+}
+
+function bash-completion--source-everything () {
+
+  ##########
+  # _/etc
+
+  echo 'sourcing ~/.nix-profile/etc/bash_completion.d/*'
+
+  COMPLETION_DIRECTORY_ETC=~/.nix-profile/etc/bash_completion.d
+  
+  for COMPLETION_ETC in "$COMPLETION_DIRECTORY_ETC"/*
+  do
+      source "$COMPLETION_ETC" || true
+  done
+
+  ##########
+  # _/share
+  
+  echo 'sourcing ~/.nix-profile/share/bash-completion/completions/*'
+
+  COMPLETION_DIRECTORY_SHARE=~/.nix-profile/share/bash-completion/completions
+  
+  for COMPLETION_SHARE in "$COMPLETION_DIRECTORY_SHARE"/*
+  do
+      source "$COMPLETION_SHARE" || true
+  done
+
+  ##########  
+  # ~/.nix-profile/etc/bash_completion.d/*
+  # ~/.nix-profile/share/bash-completion/completions/*
+  
 }
 
 ########################################

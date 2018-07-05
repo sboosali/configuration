@@ -35,10 +35,55 @@ fi
 PROMPT_COMMAND=""
 
 ########################################
+## LOCALE SETTINGS
+
+LANGUAGE=en_US
+LANG=en_US.UTF-8
+
+#TODO LC_ALL=en_US
+# ^ see <https://askubuntu.com/questions/114759/warning-setlocale-lc-all-cannot-change-locale>
+# $ sudo update-locale LC_ALL=en_US
+
+########################################
 ## BASH COMPLETION SETTINGS
 
-source ~/.nix-profile/etc/bash_completion.d/*             || true
-source ~/.nix-profile/share/bash-completion/completions/* || true
+for COMPLETION in ~/.nix-profile/etc/bash_completion.d/*
+do
+    source "$COMPLETION" || true
+done
+
+####################
+
+# don't wildcard the larger directory, whitelist instead.
+#NOTE too many errors from the completion-scripts of hundreds of random executable's.
+
+##COMPLETION_SCRIPTS=~/.nix-profile/share/bash-completion/completions/*
+
+COMPLETION_DIRECTORY=~/.nix-profile/share/bash-completion/completions
+
+for COMPLETION in "$COMPLETION_DIRECTORY"/{sudo,find,export,declare,ghc,ssh-add,ssh-keygen,xmodmap,xrandr,dconf,curl,ping,dd,gzip,rsync,kill,htop,pkill,pgrep,iconv,dot,feh}
+do
+    source "$COMPLETION" || true
+done
+
+### {sudo,find,ls,export,declare,git,ghc,ghcjs,cabal,clang,gcc,g++,ssh,ssh-add,ssh-keygen,xmodmap,xrandr,xbindkeys,dconf,curl,ping,dd,tar,gzip,7z,rsync,htop,pkill,pgrep,pandoc,iconv,dot,nano,emacs,emacsclient,feh,}
+
+####################
+
+# $ source "$(dirname $(readlink $(which git)))/"../share/git/contrib/completion/git-completion.bash || true
+# ^ custom subdirectory, for `git`.
+#
+# e.g. /nix/store/*git*/bin/../share/git/contrib/completion/git-completion.bash
+# i.e.
+# e.g. /nix/store/*git*/share/git/contrib/completion/git-completion.bash
+# i.e.
+# e.g. _/share/git/contrib/completion/git-completion.bash
+#
+# e.g. ~/.nix-profile/share/bash-completion/completions/ghc
+#
+#
+#
+
 
 ########################################
 ## EDITOR SETTINGS
