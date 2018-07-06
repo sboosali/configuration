@@ -350,19 +350,25 @@ alias gorc="git status --porcelain | cut -d ' ' -f 3 | tr '\\n' ' '"
 ########################################
 ## NIX
 
-alias emacs-nix='./result/bin/emacs -q --load "./init.el"' # relative filepaths
-
-alias nf='nix-env -f"' # e.g. nf "<nixpkgs>"
-alias ne='nix-env -f "<nixpkgs>"'
-alias nea='nix-env -A -f "<nixpkgs>"'
+#
+alias nix-env-unqualified="nix-env" #TODO does the timing of the scoping work?
+alias nix-env-qualified-default='nix-env -f "<nixpkgs>"'
+alias nix-env-qualified-file='nix-env -f "~/nixpkgs"'
+#
+alias nix-env="nix-env -f $HOME/nixpkgs"
+#
+alias ne=nix-env
+alias nea='nix-env -A'
 alias ni="nix-env -i"
 alias nu="nix-env --uninstall"
-alias nua="nix-env -u '*'"
-
+alias nix-install="nix-env -i"
+alias nix-uninstall="nix-env --uninstall"
+# alias nua="nix-env -u '*'"
+#
 alias nix-build="nix-build --show-trace"
 alias nb="nix-build"
 alias nbe="nix-build ~/.nixpkgs/environment.nix" #TODO home.nix
-
+#
 alias nix-shell="nix-shell --show-trace"
 alias nl="nix-shell"
 alias nlp="nix-shell --pure"
@@ -370,7 +376,7 @@ alias nlr="nix-shell --run"
 alias nlrp="nix-shell --pure --run"
 alias nlx="nix-shell --run return"
 alias nlxp="nix-shell --pure --run exit"
-
+#
 alias nix-eval="nix-instantiate --eval"
 alias nx="nix-instantiate --eval"
 alias nxv="nix-instantiate --eval"
@@ -555,6 +561,8 @@ alias hb="cabal new-build"
 alias hr="cabal new-repl"
 alias hx="cabal new-run"
 #
+alias hnba='nix-shell --run "cabal new-build all"'
+#
 alias hca="cabal new-configure all"
 alias hba="cabal new-build all"
 alias hra="cabal new-repl all"
@@ -569,16 +577,33 @@ alias hsx="stack run --"
 
 # e.g.
 # 
-# $ h 
+# $ haskell-nix-build 
+# # nix-shell --run "cabal new-build all"
+# 
+# $ haskell-nix-build backend
+# # nix-shell --run "cabal new-build backend"
+# 
+# also see `haskellPackages.shellFor`
+# 
+# 
+function haskell-nix-build() {
+ nix-shell --run "cabal new-build ${1:-all}"
+}
+
+alias h=haskell-nix-build
+
+# e.g.
+# 
+# $ h2 
 # # cabal new-build all
 # 
-# $ h test
+# $ h2 test
 # # cabal new-test all
 # 
-# $ h test backend
+# $ h2 test backend
 # # cabal new-test backend
 #
-function h() {
+function h2() {
  cabal "new-${1:-build}" "${2:-all}"
 }
 
@@ -1455,7 +1480,55 @@ function bash-completion--source-everything () {
 }
 
 ########################################
+## EMACS
+
+alias emacs-nix='./result/bin/emacs -q --load "./init.el"' # relative filepaths
+
+########################################
 ## X
+
+function get-brightness--via-sysclass () {
+ cat /sys/class/backlight/intel_backlight/brightness
+}
+
+# function screen-dim--via-sysclass () {
+#  echo 500 > /sys/class/backlight/intel_backlight/brightness
+# }
+
+function screen-brighter--via-xdotool () {
+ printf "BRIGHTNESS = %d\n" $(get-brightness--via-sysclass)
+ printf 'BRIGHTENING..\n'
+ # `echo` without newline
+ for i in `seq "${1:-10}"`; do 
+  # repeat <n> times
+  xdotool key XF86MonBrightnessUp
+  # briefly pausing (10ms)
+  sleep 0.050
+  # print ellipsis
+  printf '.'
+ done
+ printf ' BRIGHTENED\n'
+ sleep 0.100
+ # pause briefly after the setting of the brightness before reading the brightness.
+ printf "BRIGHTNESS = %d\n" $(get-brightness--via-sysclass)
+}
+
+function screen-dimmer--via-xdotool () {
+ printf "BRIGHTNESS = %d\n" $(get-brightness--via-sysclass)
+ printf 'DIMMING...'
+ # `echo` without newline
+ for i in `seq "${1:-10}"`; do 
+  # repeat <n> times
+  xdotool key XF86MonBrightnessDown
+  # briefly pausing (10ms)
+  sleep 0.125
+  # print ellipsis
+  printf '.'
+ done
+ sleep 0.50
+ # pause briefly after the setting of the brightness before reading the brightness.
+ printf "BRIGHTNESS = %d\n" $(get-brightness--via-sysclass)
+}
 
 # eDP-1-1 is name of the laptop screen (the first field)
 # "Why is it called eDP? bcause it is an embedded display port style adapter, and not a video graphics array style one."
@@ -1464,12 +1537,28 @@ function bash-completion--source-everything () {
 # xrandr -d :0 --output eDP-1-1 --gamma "1:1:1" # restore default
 # xrandr -d :0 --output eDP-1-1 --gamma "1:1:1"
 
+alias screen-night="screen-brighter--via-xdotool 20 ; redshift -x ; redshift -O 1000 ; xrandr-invert-colors ; screen-dimmer--via-xdotool 10"
+# ^ via: redshift; xrandr-invert-colors; and xdotool (XF86MonBrightnessDown).
+
+#alias screen-day=
+alias screen-white="redshift -x"
+alias screen-red="redshift -x && redshift -O 1000"
+alias screen-scarlet="redshift -x && redshift -O 1500"
+alias screen-orange="redshift -x && redshift -O 2000"
+alias screen-yellow="redshift -x && redshift -O 3000"
+#
+alias qqqqqqqqqq--screen-night="redshift -x ; redshift -O 1000 ; xrandr-invert-colors" # 10 Q's is a prefix to support tab-completion for: holding down for a broad range of times, and then pressing the (adjacent) tab key (plus the enter key).
+#
 alias red="redshift -O 1000" # one-shot, 1000K
 alias scarlet="redshift -O 1500" # one-shot
 alias orange="redshift -O 2000" # one-shot
 alias yellow="redshift -O 3000" # one-shot
 alias white="redshift -x" # 
 alias un-red="redshift -x" #
+
+function screen-set () {
+ redshift -O "${1}00"
+}
 
 ########################################
 # ephemeral/specialized stuff

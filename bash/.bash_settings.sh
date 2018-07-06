@@ -4,7 +4,7 @@
 # this file is "impure";
 # it has effects like overwriting environment variables, spawning daemons, calling `shopt`, etc
 
-# TODO increase portability, just `sh`, not `bash`
+# TODO rm /usr/games /usr/local/games /snap/bin #LOL Ubuntu
 
 # guard executions on whether the executable's present
 # 
@@ -61,7 +61,7 @@ done
 
 COMPLETION_DIRECTORY=~/.nix-profile/share/bash-completion/completions
 
-for COMPLETION in "$COMPLETION_DIRECTORY"/{sudo,find,export,declare,ghc,ssh-add,ssh-keygen,xmodmap,xrandr,dconf,curl,ping,dd,gzip,rsync,kill,htop,pkill,pgrep,iconv,dot,feh}
+for COMPLETION in "$COMPLETION_DIRECTORY"/{sudo,find,export,declare,ssh-add,ssh-keygen,xmodmap,xrandr,dconf,curl,ping,dd,gzip,rsync,kill,htop,pkill,pgrep,iconv,dot,feh}
 do
     source "$COMPLETION" || true
 done
@@ -304,4 +304,3 @@ PS1="\\n\${BRANCH}${YELLOW}\\w${RESET}\$ "
 # PS1="\n$PS1"
 
 #########################################
-##
