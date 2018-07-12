@@ -61,12 +61,19 @@ done
 
 COMPLETION_DIRECTORY=~/.nix-profile/share/bash-completion/completions
 
-for COMPLETION in "$COMPLETION_DIRECTORY"/{sudo,find,export,declare,ssh-add,ssh-keygen,xmodmap,xrandr,dconf,curl,ping,dd,gzip,rsync,kill,htop,pkill,pgrep,iconv,dot,feh}
+COMPLETION_FILES=
+# wmctrl,
+
+#TODO
+# cabal doesn't exist
+# scp errors
+
+for COMPLETION in "$COMPLETION_DIRECTORY"/{sudo,find,export,declare,ssh-add,ssh-keygen,xmodmap,xrandr,dconf,curl,ping,dd,gzip,rsync,kill,htop,pkill,pgrep,pinfo,iconv,dot,feh,stack}
 do
     source "$COMPLETION" || true
 done
 
-### {sudo,find,ls,export,declare,git,ghc,ghcjs,cabal,clang,gcc,g++,ssh,ssh-add,ssh-keygen,xmodmap,xrandr,xbindkeys,dconf,curl,ping,dd,tar,gzip,7z,rsync,htop,pkill,pgrep,pandoc,iconv,dot,nano,emacs,emacsclient,feh,}
+### {sudo,find,ls,export,declare,git,ghc,ghcjs,cabal,clang,gcc,g++,ssh,ssh-add,ssh-keygen,xmodmap,xrandr,xbindkeys,dconf,curl,ping,dd,tar,gzip,7z,rsync,htop,pkill,pgrep,pandoc,iconv,dot,nano,emacs,emacsclient,feh,scp}
 
 ####################
 

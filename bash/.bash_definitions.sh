@@ -62,8 +62,13 @@ function brush () {
 }
 alias t=brush
 
+function cd-ls () {
+ cd $@ && echo '--------------------------------------------------------------------------------' && pwd && echo '--------------------------------------------------------------------------------' && echo && ls
+
+}
+
 # short
-alias d=cd
+alias d=cd-ls
 alias c=cat
 alias n=nano
 #alias r='rm -r'
@@ -76,24 +81,28 @@ alias m=man
 
 # cd
 # d == cd == 'cd ~'
-alias d-="cd -"
-alias d..="cd .."
-alias d...="cd ../.."
-alias d....="cd ../../.."
-alias d.....="cd ../../../.."
-alias d......="cd ../../../../.."
-alias d.......="cd ../../../../../.."
-alias de='cd ~/.emacs.d'
-alias dew='cd ~/.emacs.d-windows'
-alias dc='cd ~/configuration'
-alias dh='cd ~/haskell'
-alias dt='cd ~/temporary'
-alias db='cd ~/backup'
-alias dw='cd ~/Downloads'
-alias dm='cd ~/Documents'
-alias dn='cd ~/.nixpkgs'
-# alias d='cd '
-# alias d='cd '
+alias d-="cd-ls -"
+alias d..="cd-ls .."
+alias d...="cd-ls ../.."
+alias d....="cd-ls ../../.."
+alias d.....="cd-ls ../../../.."
+alias d......="cd-ls ../../../../.."
+alias d.......="cd-ls ../../../../../.."
+alias de='cd-ls ~/.emacs.d'
+alias dew='cd-ls ~/.emacs.d-windows'
+alias dc='cd-ls ~/configuration'
+alias dh='cd-ls ~/haskell'
+alias dt='cd-ls ~/temporary'
+alias db='cd-ls ~/backup'
+alias dw='cd-ls ~/Downloads'
+alias dm='cd-ls ~/Documents'
+alias dn='cd-ls ~/Dropbox/notes'
+#alias dnix='cd-ls ~/.nixpkgs'
+# alias d='cd-ls '
+# alias d='cd-ls '
+
+# find
+alias f.="find ."
 
 # cat
 function copy-file() {
@@ -103,8 +112,10 @@ function copy-file() {
 }
 
 # grep
-alias p="grep -E -i -n --color=auto"
+alias grep="grep -E -i -n --color=auto"
+alias p="grep"
 alias pf="grep -F"
+alias pr="grep -r "
 
 # create parent directories by default
 alias mkdir='mkdir -pv'
@@ -165,6 +176,67 @@ alias ed="emacs --debug-init"
 alias eq="emacs -q"
 alias edq="emacs -q --debug-init"
 alias ec="emacs -q ~/.emacs.d/init.el" # to debug
+alias et="emacs -nw"
+
+function emacs-terminal () {
+
+    # USAGE
+    #
+    # $ emacs-terminal FILE:LINE:COL
+
+    echo '----------------------------------------'
+    echo
+
+    if   [[ ! -z "$1" ]]
+         # ^ are there any arguments? (i.e. is there a first argument?)
+
+    then
+        IFS=':' read -r FILE LINE COLUMN <<< "$1"
+        if   [[ -e "$FILE" ]]
+             # ^ is this a path and does that path exist?    
+        then
+            # ^ parse (e.g.) ./dir/file.txt:10:80
+            echo '[FILE   = ]' "$FILE"
+            echo '[LINE   = ]' "$LINE"
+            echo '[COLUMN = ]' "$COLUMN"
+            echo
+            #
+            if   [[ ! -z "$LINE" && ! -z "$COLUMN" ]]
+            then
+                 shift 1
+                 emacs -nw "+$LINE:$COLUMN" "$FILE" "$@"
+            elif [[ ! -z "$LINE" ]]
+            then
+                 shift 1
+                 emacs -nw "+$LINE" "$FILE" "$@"
+            else
+                 shift 1
+                 emacs -nw "$FILE" "$@"
+            fi
+        else
+            emacs -nw "$@"
+        fi
+
+    else
+        # no command-line arguments
+        emacs -nw . "$@"
+        # ^ open current-directory in `dired`                                                     
+    fi
+
+    echo '----------------------------------------'
+    echo
+
+    ##NOTES                        
+    #                              
+    # $ emacs +LINE:COLUMN FILE    
+    # open FILE at line LINE, column COLUMN
+    #
+    # `shift 1`
+    # pass the rest of the arguments through to the program;
+    # i.e. "@{2..}".
+    # 
+    #
+}
 
 # nano
 alias nb="nano ~/.bashrc && source ~/.bashrc"
@@ -544,6 +616,36 @@ function nsi () {
   LOCATION="$(nix-where "${1:?}")"
   nix-store --query --references "$LOCATION"
 }
+
+########################################
+## X11
+
+function raise-window () {
+ if   command -v wmctrl;
+
+ then _TITLE="${1}"
+      wmctrl -a "${_TITLE}"
+
+ else echo '[ERROR] the `wmctrl` command must be present. you can install it with `nix-env -i wmctrl`.'
+ fi
+}
+
+function raise-emacs () {
+ raise-window "${1:-emacs}"
+}
+
+function raise-browser () {
+ raise-window "${1:-chrome}"
+}
+
+function raise-terminal () {
+ raise-window "${1:-terminal}"
+}
+
+alias raise-editor="raise-emacs"
+
+#  wmctrl  -b add,fullscreen  -a "${_TITLE}"
+
 
 ########################################
 ## HASKELL
@@ -977,6 +1079,99 @@ function c2l() {
  cabal2nix --shell . "$@" > shell.nix
  cat shell.nix
  nix-shell --run ''
+}
+
+function project2nix() { 
+
+ _PACKAGES="$@"
+ _PACKAGE="$1" #TODO array, and loop.
+
+ read -r -d '' DEFAULT_NIX <<EOF
+########################################
+{ nixpkgs       
+   ? import <nixpkgs> { }
+   # ? import ./nixpkgs {}
+
+# , compilerName   ? null  # :: Maybe String 
+# , compilerFlavor ? null  # :: Maybe String
+
+}:
+########################################
+let
+
+projectPacakges = {
+
+ ${_PACKAGE} = ./${_PACKAGE};
+
+};
+
+haskellPackages =
+ nixpkgs.haskellPackages.extend
+  (nixpkgs.haskell.lib.packageSourceOverrides
+    projectPacakges);
+
+in
+########################################
+
+haskellPackages
+
+########################################
+EOF
+ # (^ set variable to heredoc)
+ 
+ read -r -d '' SHELL_NIX <<EOF
+########################################
+arguments@
+{ nixpkgs       
+   ? import <nixpkgs> { }
+
+, system
+   ? builtins.currentSystem
+
+, ...
+}:
+########################################
+let
+
+haskellPackages =
+ (import ./.) { inherit nixpkgs; };
+
+projectEnvironment =
+  haskellPackages.shellFor {
+    withHoogle = true;
+    packages = self: with self;
+      [
+        (${_PACKAGES})
+      ];
+  };
+
+in
+########################################
+
+projectEnvironment
+
+########################################
+EOF
+
+echo
+echo '--------------------------------------------------------------------------------'
+echo '[shell.nix]'
+echo
+echo "$SHELL_NIX" > shell.nix
+cat shell.nix
+
+echo
+echo '--------------------------------------------------------------------------------'
+echo '[default.nix]'
+echo
+echo "$DEFAULT_NIX" > default.nix
+cat default.nix
+
+echo
+echo '--------------------------------------------------------------------------------'
+
+nix-shell shell.nix
+
 }
 
 
@@ -1537,8 +1732,10 @@ function screen-dimmer--via-xdotool () {
 # xrandr -d :0 --output eDP-1-1 --gamma "1:1:1" # restore default
 # xrandr -d :0 --output eDP-1-1 --gamma "1:1:1"
 
-alias screen-night="screen-brighter--via-xdotool 20 ; redshift -x ; redshift -O 1000 ; xrandr-invert-colors ; screen-dimmer--via-xdotool 10"
+alias screen-night-="screen-brighter--via-xdotool 20 ; redshift -x ; redshift -O 1000 ; xrandr-invert-colors"
+alias screen-night-dim="screen-brighter--via-xdotool 20 ; redshift -x ; redshift -O 1000 ; xrandr-invert-colors ; screen-dimmer--via-xdotool 10"
 # ^ via: redshift; xrandr-invert-colors; and xdotool (XF86MonBrightnessDown).
+alias screen-dusk-="screen-brighter--via-xdotool 20 ; redshift -x ; redshift -O 2000 ; xrandr-invert-colors"
 
 #alias screen-day=
 alias screen-white="redshift -x"
@@ -1546,6 +1743,7 @@ alias screen-red="redshift -x && redshift -O 1000"
 alias screen-scarlet="redshift -x && redshift -O 1500"
 alias screen-orange="redshift -x && redshift -O 2000"
 alias screen-yellow="redshift -x && redshift -O 3000"
+alias screen-warm="redshift -x && redshift -O 9000"
 #
 alias qqqqqqqqqq--screen-night="redshift -x ; redshift -O 1000 ; xrandr-invert-colors" # 10 Q's is a prefix to support tab-completion for: holding down for a broad range of times, and then pressing the (adjacent) tab key (plus the enter key).
 #
