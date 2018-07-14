@@ -42,7 +42,7 @@ LANG=en_US.UTF-8
 
 #TODO LC_ALL=en_US
 # ^ see <https://askubuntu.com/questions/114759/warning-setlocale-lc-all-cannot-change-locale>
-# $ sudo update-locale LC_ALL=en_US
+# $ sudo update-locale LC_ALL=en_US 3no this may have caused a bug for gnoom-terminal.
 
 ########################################
 ## BASH COMPLETION SETTINGS
@@ -100,6 +100,9 @@ done
 #    from the GIT_EDITOR environment variable, the core.editor configuration
 #    variable, the VISUAL environment variable, or the EDITOR environment
 #    variable (in that order)."
+
+#TODO
+# wrapper that picks gui-or-no given env-var
 
 if [ -x "$(command -v emacsclient)" ]; then
  export GIT_EDITOR=emacsclient

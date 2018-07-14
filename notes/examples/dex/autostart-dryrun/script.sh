@@ -1,0 +1,1 @@
+dex --autostart--dry-run

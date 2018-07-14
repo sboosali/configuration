@@ -1,0 +1,4 @@
+   System Locale: LANG=en_US.UTF-8
+       VC Keymap: n/a
+      X11 Layout: us
+       X11 Model: pc105

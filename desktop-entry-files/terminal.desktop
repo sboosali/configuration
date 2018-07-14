@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Terminal
+Exec=/home/sboo/.nix-profile/bin/xterm
+Type=Application
+Categories=System;TerminalEmulator;
+Icon=utilities-terminal

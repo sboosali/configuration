@@ -1,12 +1,8 @@
 # ~/.xbindkeysrc
 
-# "xdg-open 'https://www.google.com'"
-# chromium
-# m:0x0 + c:75
-# F9
-"google-chrome"
-    m:0x0 + c:75
-    F9
+# https://wiki.archlinux.org/index.php/Xbindkeys
+
+########################################
 
 # do Ctrl+c
 "xvkbd -no-jump-pointer -xsendevent -text '\Cc'"
@@ -19,3 +15,26 @@
 # do Ctrl+v
 "xvkbd -no-jump-pointer -xsendevent -text '\Cv'"
     F8
+
+########################################
+
+# "xdg-open 'https://www.google.com'"
+# chromium
+# m:0x0 + c:75
+# F9
+"google-chrome"
+    m:0x0 + c:75
+    F9
+
+########################################
+
+# raise windows by application (not position).
+# shortcut: Ctrl+Alt+Shift+<key> (one button on my Keypad).
+
+# "wmctrl -a emacs"
+#     m:0xd + c:26
+#     # Control+Shift+Alt + e
+
+########################################
+
+########################################

@@ -72,11 +72,10 @@ alias d=cd-ls
 alias c=cat
 alias n=nano
 #alias r='rm -r'
-alias l='ls -al'
 alias f=find
 alias g=git
 alias o=echo
-alias m=man
+alias i=man   # "i"nformation
 # alias e="echo" # emacs
 
 # cd
@@ -101,8 +100,20 @@ alias dn='cd-ls ~/Dropbox/notes'
 # alias d='cd-ls '
 # alias d='cd-ls '
 
+# ls
+alias l='ls --almost-all -l'
+alias l='ls --almost-all -l'
+alias l='ls --almost-all -l'
+alias l='ls --almost-all -l'
+
 # find
 alias f.="find ."
+
+function ls-permissions() { find $@ -printf "%p  |  %u  |  %g %m  |  %M \n"; }
+# e.g.
+#   $ ls-permissions /dev/vboxdrv
+#   /dev/vboxdrv  |  root  |  root 600  |  crw------- 
+#
 
 # cat
 function copy-file() {
@@ -112,10 +123,9 @@ function copy-file() {
 }
 
 # grep
-alias grep="grep -E -i -n --color=auto"
-alias p="grep"
-alias pf="grep -F"
-alias pr="grep -r "
+alias  p="grep -i -n --color=auto -E"
+alias pf="grep -i -n --color=auto -F"
+alias pr="grep -i -n --color=auto -E -r"
 
 # create parent directories by default
 alias mkdir='mkdir -pv'
@@ -657,6 +667,16 @@ alias raise-editor="raise-emacs"
 # function he() { 
 #  stack exec -- "$@" 
 # }
+
+# "m"ake
+alias m=make
+#
+alias mc="make check"      # type"c"heck
+alias mb="make build"
+alias mx="make execute"    # "e"xecute
+alias mr="make rebuild"
+alias mf="make configure"  # con"f"igure
+alias mq="make clean"      # "q"lean / "quit"(?) lol
 
 alias hc="cabal new-configure"
 alias hb="cabal new-build"
@@ -1633,6 +1653,65 @@ rm -rf ~/.local/share/baloo
 
 ########################################
 
+function group-exists {
+  if [ $(getent group $1) ]; then
+    echo "[YES] group \`$1\` exists."
+  else
+    echo "[NO] group  \`$1\ does not exist."
+  fi
+}
+
+function group-has-user {
+
+  MESSAGE='group-has-user GROUP [NAME]'
+
+  case "$#" in
+
+        0 )
+            echo '----------------------------------------'
+            echo >&2 "$MESSAGE"
+            echo '----------------------------------------'
+            exit 1
+            ;;
+        
+        1 )
+            GROUP="${1}"
+            USER=$(whoami)
+            ;;
+
+        2 )
+            GROUP="${1}"
+            USER="${2}"
+            ;;
+
+        * )
+            echo '----------------------------------------'
+            echo >&2 "$MESSAGE"
+            echo '----------------------------------------'
+            exit 1
+            ;;
+  esac
+
+  echo '----------------------------------------'
+  echo "[GROUP =] $GROUP"
+  echo "[USER  =] $USER"
+  echo '----------------------------------------'
+
+  if  id --name --groups --zero "$USER" | grep --quiet --null-data --line-regexp --fixed-strings "$GROUP"
+      # ^ `id` outputs null-seperated-values, `grep` splits lines on the null-character.
+  then
+      echo "[MEMBERSHIP =] YES"
+      echo "(User \`$USER' belongs to group \`$GROUP')"
+  else
+      echo "[MEMBERSHIP =] NO"
+      echo "(User \`$USER' does not belong to group \`$GROUP')"
+  fi
+
+  echo '----------------------------------------'
+}
+
+########################################
+
 function bash-completion--source-something () {
 
   echo "sourcing ~/.nix-profile/share/bash-completion/completions/$1"
@@ -1802,4 +1881,9 @@ alias melpa2nix=/nix/store/2g4pm399808pmz6zsd89m2iwahk439vi-emacs2nix-0.1.0.0/bi
 
 #  if [ -z "$__git_ps1" ]; then
 #           ^-- SC2154: __git_ps1 is referenced but not assigned.
+
+  # id --name --groups --zero "$USER" | grep --quiet --null-data --line-regexp --fixed-strings "$GROUP"
+  # # ^ `id` outputs null-seperated-values, `grep` splits lines on the null-character.
+  # MEMBERSHIP="$?"
+  # # ^ TODO safe?
 

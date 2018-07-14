@@ -1,0 +1,1 @@
+['google-chrome.desktop', 'emacs.desktop', 'gnome-terminal.desktop', 'libreoffice-writer.desktop', 'org.gnome.Nautilus.desktop', 'gnome-tweak-tool.desktop', 'gnome-shell-extension-prefs.desktop', 'virtualbox.desktop']

@@ -1,0 +1,17 @@
+[Desktop Entry]
+Exec=/home/sboo/.nix-profile/bin/urxvt
+#TryExec=/home/sboo/.nix-profile/bin/urxvt
+#
+Name=Terminal
+Type=Application
+Categories=System;TerminalEmulator;
+Icon=utilities-terminal
+#
+StartupNotify=true
+# 
+#Actions=New
+#
+
+# [Desktop Action New]
+# Exec=/home/sboo/.nix-profile/bin/urxvt
+# Name=New Terminal
