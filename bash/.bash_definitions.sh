@@ -1630,13 +1630,22 @@ function new-script () {
  
  cat <<EOF > "$FILENAME"
 #!/bin/bash
-set -e
+set -o errexit
+set -o nounset
 ########################################
 
-ARGUMENTS=
+MESSAGE="Usage: {{{ $ ./$FILENAME FILENAME }}}"
+
+FILENAME="${1:?${MESSAGE}}"
 
 ########################################
 
+echo "$FILENAME"
+
+########################################
+## NOTES
+
+########################################
 EOF
  
  chmod 700 "$FILENAME"

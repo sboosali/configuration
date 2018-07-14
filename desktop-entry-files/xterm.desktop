@@ -1,0 +1,26 @@
+########################################
+[Desktop Entry]
+Version=1.0
+
+Name=XTerm
+Type=Application
+
+Exec=xterm
+#Path=/home/sboo/
+
+Terminal=false
+StartupNotify=true
+
+Icon=utilities-terminal
+GenericName=TerminalEmulator
+#Comment=
+Categories=System;TerminalEmulator;
+########################################
+## NOTES
+
+# fixed "always launches when clicked" bug
+
+#
+#Exec=/home/sboo/configuration/applications/terminal/exec.sh
+#Icon=/home/sboo/configuration/applications/terminal/icon.png
+########################################
