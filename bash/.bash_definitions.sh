@@ -100,20 +100,51 @@ alias dn='cd-ls ~/Dropbox/notes'
 # alias d='cd-ls '
 # alias d='cd-ls '
 
-# ls
-alias l='ls --almost-all -l'
-alias l='ls --almost-all -l'
-alias l='ls --almost-all -l'
-alias l='ls --almost-all -l'
+# ls 
+alias l='ls -A'
+alias ll='ls -alF'
+alias la='ls -A'
+alias lc='ls -CF'
 
-# find
+########################################
+
+function find-verbose() {
+ find $@ -printf "%p  |  %u  |  %g %m  |  %M \n"
+ #
+ # e.g.
+ #   $ ls-permissions /dev/vboxdrv
+ #   /dev/vboxdrv  |  root  |  root 600  |  crw------- 
+ #
+}
+
+function find-executables() {
+ find $@ -executable -type f -printf "%M | %p\n"
+}
+
+function find-by-extension() {
+ FILE_EXTENSION="${1:?'[ERROR] missing argument: FILE_EXTENSION'}"
+ find . -type f -name "*.${FILE_EXTENSION}" -printf "| %p\n"
+}
+
+function ls-permissions() {
+ find . -maxdepth 1 -printf "%M | %p\n"
+}
+
+function ls-directories() {
+ echo
+ find . -maxdepth 1 -type d -not -name '.*' -printf "%p\n"
+}
+
+function ls-files() {
+ find . -maxdepth 1 -type f -printf "%M | %p\n"
+}
+
+###alias l='find . -maxdepth 1 -printf "%M | %p\n"'
+ ##OLD: `ls --almost-all -l`
+
 alias f.="find ."
 
-function ls-permissions() { find $@ -printf "%p  |  %u  |  %g %m  |  %M \n"; }
-# e.g.
-#   $ ls-permissions /dev/vboxdrv
-#   /dev/vboxdrv  |  root  |  root 600  |  crw------- 
-#
+########################################
 
 # cat
 function copy-file() {
@@ -131,6 +162,16 @@ alias pr="grep -i -n --color=auto -E -r"
 alias mkdir='mkdir -pv'
 alias md='mkdir -pv'
 
+function mdcd() {
+ ##########
+ MESSAGE="[ERROR] Missing parameter. [USAGE] {{{ mdcd <path> }}}. [ACTION] {{{ mkdir _ && cd _ }}}."
+ ##########
+ DIRECTORY="${1:?${MESSAGE}}"
+ mkdir -pv "$DIRECTORY" || true
+ cd "$DIRECTORY" && ls -lA
+ ##########
+}
+
 # requires: colordiff package
 if [ -x "$(command -v colordiff)" ]; then
   alias diff='colordiff'
@@ -138,11 +179,7 @@ else
   echo '[WARNING] colordiff is not installed, using diff.' >&2
 fi
 
-
-# ls 
-alias ll='ls -alF'
-alias la='ls -A'
-alias lc='ls -CF'
+########################################
 
 # copy/paste
 alias xc='xclip -selection clipboard'
