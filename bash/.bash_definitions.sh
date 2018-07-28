@@ -53,14 +53,24 @@ alias restart-xbindkeys="killall xbindkeys || true ; xbindkeys -fg ~/.xbindkeysr
 # 
 
 ########################################
-## DEFINITIONS 
+## DEFINITIONS: TOUCH / MKDIR
 
 function brush () {
   # synonym for "touch"
   mkdir -p "$(dirname "$1")"
   touch "$1"
 }
+
+function brush-executable () {
+  brush "$1"
+  chmod +x "$1"
+}
+
 alias t=brush
+alias tx=brush-executable
+
+########################################
+## DEFINITIONS: CD
 
 function cd-ls () {
  cd $@ && echo '--------------------------------------------------------------------------------' && pwd && echo '--------------------------------------------------------------------------------' && echo && ls
@@ -95,10 +105,15 @@ alias dt='cd-ls ~/temporary'
 alias db='cd-ls ~/backup'
 alias dw='cd-ls ~/Downloads'
 alias dm='cd-ls ~/Documents'
-alias dn='cd-ls ~/Dropbox/notes'
+alias dn='cd-ls ~/notes'
+alias dx='cd-ls ~/nixpkgs'
 #alias dnix='cd-ls ~/.nixpkgs'
+#alias dn='cd-ls ~/Dropbox/notes'
 # alias d='cd-ls '
 # alias d='cd-ls '
+
+########################################
+## DEFINITIONS: LS
 
 # ls 
 alias l='ls -A'
@@ -107,6 +122,7 @@ alias la='ls -A'
 alias lc='ls -CF'
 
 ########################################
+## DEFINITIONS: FIND
 
 function find-verbose() {
  find $@ -printf "%p  |  %u  |  %g %m  |  %M \n"
@@ -143,6 +159,11 @@ function ls-files() {
  ##OLD: `ls --almost-all -l`
 
 alias f.="find ."
+
+########################################
+## DEFINITIONS: GREP
+
+alias skip-blank-lines="grep -v -e '^[[:space:]]*$'"
 
 ########################################
 
@@ -705,15 +726,25 @@ alias raise-editor="raise-emacs"
 #  stack exec -- "$@" 
 # }
 
+##################################################
 # "m"ake
 alias m=make
-#
-alias mc="make check"      # type"c"heck
-alias mb="make build"
-alias mx="make execute"    # "e"xecute
-alias mr="make rebuild"
+
+alias mb="make build"      # "b"uild
+
 alias mf="make configure"  # con"f"igure
+alias mc="make check"      # type-"c"heck
+alias mr="make repl"       # "r"epl
+alias mp="make compile"    # com"p"ile
+alias mi="make install"    # "i"nstall
+alias mx="make execute"    # "e"xecute
 alias mq="make clean"      # "q"lean / "quit"(?) lol
+#
+alias mw="make watch"      # "w"atch
+alias mt="make tags"       # "t"ags
+#
+
+##################################################
 
 alias hc="cabal new-configure"
 alias hb="cabal new-build"
@@ -1418,6 +1449,23 @@ function show-path () {
  echo "$PATH" | tr ':' '\n'
 }
 
+##################################################
+
+function exec-named() {
+    HELP="[Usage] exec-named NAME COMMAND"
+    NAME=${1:?"provide a NAME argument; $HELP"}
+    COMMAND=${2:?"provide a COMMAND argument; $HELP"}
+    bash -c "exec -a '$NAME' '$COMMAND' &"
+}
+
+function kill-named() {
+    HELP="[Usage] kill-named NAME"
+    NAME=${1:?"provide a NAME argument; $HELP"}
+    pkill -f "$NAME"
+}
+
+##################################################
+
 # needs curl
 function download {
     URL="$1"
@@ -1686,7 +1734,7 @@ echo "$FILENAME"
 EOF
  
  chmod 700 "$FILENAME"
- emacsclient "$FILENAME"
+ emacsclient "$FILENAME" &
 }
 
 function kill-baloo() {
@@ -1823,7 +1871,7 @@ function screen-brighter--via-xdotool () {
   # repeat <n> times
   xdotool key XF86MonBrightnessUp
   # briefly pausing (10ms)
-  sleep 0.050
+  sleep 0.033
   # print ellipsis
   printf '.'
  done
@@ -1841,13 +1889,11 @@ function screen-dimmer--via-xdotool () {
   # repeat <n> times
   xdotool key XF86MonBrightnessDown
   # briefly pausing (10ms)
-  sleep 0.125
+  sleep 0.033
   # print ellipsis
   printf '.'
  done
- sleep 0.50
- # pause briefly after the setting of the brightness before reading the brightness.
- printf "BRIGHTNESS = %d\n" $(get-brightness--via-sysclass)
+ sleep 0.100
 }
 
 # eDP-1-1 is name of the laptop screen (the first field)

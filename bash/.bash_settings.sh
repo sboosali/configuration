@@ -1,5 +1,6 @@
 #!/bin/bash
-#set -e
+#TODO set -e
+########################################
 
 # this file is "impure";
 # it has effects like overwriting environment variables, spawning daemons, calling `shopt`, etc
@@ -15,10 +16,20 @@
 ########################################
 # NIX/NIXPKGS SETTINGS
 
-export NIX_PATH="nixpkgs=$HOME/nixpkgs:nixpkgs=$HOME/.nix-defexpr/channels/nixpkgs"
+export NIX_PATH="nixpkgs=$HOME/nixpkgs:$NIX_PATH"
+# ^ my fork of `nixpkgs`
+# append to the front (not the back) of the path-list to shadow the default locations (nixpkgs "channels" are weird).
+# i.e. the angle-path "nix eval "<nixpkgs>" should (?) evaluate to a `nix-store` path that's equivalent "$HOME/nixpkgs/".
 
-# export NIX_PATH="nixpkgs=$HOME/nixpkgs:$NIX_PATH"
+#export NIX_PATH="nixpkgs=$HOME/nixpkgs:nixpkgs=$HOME/.nix-defexpr/channels/nixpkgs"
 
+########################################
+## IMPORTS
+
+export CONFIGURATION="$HOME/configuration"
+# ^ location of my personal configuration ("dotfiles").
+# it's a single subdirectory to simplify version-control, including of this file itself
+# (though this complicates synchronization", i.e. symlinking things (`ln -sf`) all across the filesystem.)
 
 ########################################
 ## IMPORTS
@@ -106,8 +117,11 @@ done
 
 if [ -x "$(command -v emacsclient)" ]; then
  export GIT_EDITOR=emacsclient
- export VISUAL=emacsclient
+#export VISUAL=emacsclient
  export EDITOR=emacsclient
+ export ALTERNATE_EDITOR=nano
+ # ^ for when an Emacs Server isn't running 
+ #   (or available, if i'm messing with my `init.el`).
 fi
 
 ########################################
@@ -123,12 +137,10 @@ if [ -d "$HOME/bin" ] ; then
     export PATH="$HOME/bin:$PATH"
 fi
 
-# `stack` installs executables here
-if [ -d "$HOME/.local/bin" ] ; then
-    export PATH="$HOME/.local/bin:$PATH"
-fi
-
-
+## # `stack` installs executables here
+## if [ -d "$HOME/.local/bin" ] ; then
+##     export PATH="$HOME/.local/bin:$PATH"
+## fi
 
 # # the relative binary directory for nix-build
 # # WARNING a relative path, for a more convenient `nix-build`
