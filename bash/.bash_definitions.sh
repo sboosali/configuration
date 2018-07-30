@@ -1935,6 +1935,10 @@ function screen-set () {
 #TODO rm
 alias melpa2nix=/nix/store/2g4pm399808pmz6zsd89m2iwahk439vi-emacs2nix-0.1.0.0/bin/melpa2nix 
 
+alias dpkg-uninstall="sudo dpkg --force-remove-reinstreq --purge"
+# apt list --upgradeable 
+
+
 ########################################
 # notes about shellcheck
 

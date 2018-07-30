@@ -1,0 +1,9 @@
+[Keyboard]
+KeyboardRepeating=0
+NumLock=1
+RepeatDelay=175
+RepeatRate=40
+
+[Mouse]
+cursorSize=0
+cursorTheme=breeze_cursors
