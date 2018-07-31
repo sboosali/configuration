@@ -13,7 +13,6 @@
 # when you run a script, the current shell makes a new shell to run that script in. 
 # to exec a script in the current shell, you must source it (i.e. `source ./run.sh`, not `./run.sh`)
 
-
 ########################################
 ## INITIAL
 
@@ -22,6 +21,21 @@ case $- in
     *i*) ;;
       *) return;;
 esac
+
+########################################
+## HACKS
+
+export LD_PRELOAD=
+
+# silences an obnoxious and spurious error-message:
+#    
+#     ERROR: ld.so: object 'libgtk3-nocsd.so.0' from LD_PRELOAD cannot be preloaded (cannot open shared object file): ignored.
+#
+# before, the value was:
+#
+#     $ echo $LD_PRELOAD
+#     libgtk3-nocsd.so.0
+#
 
 ########################################
 ## IMPORTS
@@ -61,16 +75,27 @@ fi
 
 echo '========================================'
 echo
-echo '[PATH]' 
+echo '[$DESKTOP_SESSION]'
+echo "$DESKTOP_SESSION"
+      # e.g. plasma
+echo
+echo '[`lsb_release`]'
+      lsb_release -a
+      # e.g.
+      #     Description: Ubuntu 18.04.1 LTS
+echo
+echo '========================================'
+echo
+echo '[$PATH]' 
 echo "$PATH" | tr ':' '\n'
 echo
-echo '[SHELL]'
+echo '[$SHELL]'
 echo "$SHELL" 
-# e.g. /bin/bash
+      # e.g. /bin/bash
 echo
-echo '[TERM]'
+echo '[$TERM]'
 echo "$TERM" 
-# e.g. xterm-256color
+      # e.g. xterm-256color
 echo
 echo '========================================'
 

@@ -269,7 +269,40 @@ PROMPT_COMMAND="my_prompt_command; $PROMPT_COMMAND"
 #  fi
 # }
 
-#NOTE
+########################################
+# Per-DesktopEnvironment
+
+function desktop-settings-for-only-plasma() {
+    return
+}
+
+function desktop-settings-for-only-gnome() {
+    return
+
+function desktop-settings-for-only-unknown() {
+    return
+}
+
+case "$DESKTOP_SESSION" in
+     # ^ for conditioning on the current desktop environment.
+     # failable: e.g. "default" or "ubuntu" isn't informative.
+
+    "plasma")
+        desktop-settings-for-only-plasma
+        ;;
+     
+    "gnome")
+        desktop-settings-for-only-gnome
+        ;;
+
+    *)
+        desktop-settings-for-only-unknown
+        ;;
+
+esac
+
+########################################
+###NOTES
 
 # this sets the prompt to show the current directory
 # later settings should preserve this as an infix:
@@ -324,5 +357,15 @@ PS1="\\n\${BRANCH}${YELLOW}\\w${RESET}\$ "
 # source ~/bin/git-prompt.sh
 # PS1='\w$(__git_ps1 " (%s)") \$ '
 # PS1="\n$PS1"
+
+#NOTE
+#
+# function definitions with empty bodies don't work in bash;
+# thus, we need a placeholder, like the return keyword or a semicolon.
+#
+
+#NOTE
+#
+# 
 
 #########################################
