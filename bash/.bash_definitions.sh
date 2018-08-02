@@ -311,11 +311,14 @@ alias nb="nano ~/.bashrc && source ~/.bashrc"
 
 # Reloading
 # mnemonic: "s" for sourcing
-alias sbr="source ~/.bashrc"
-alias sbd="source ~/.bash_definitions.sh" # should be idempotent
-alias sba="source ~/.aliases"             # should be idempotent
-alias sbs="source ~/.bash_settings.sh"
-alias sbp="source ~/.profile"
+alias sbr="source ~/.bashrc"              # bash{R}c.
+alias sbp="source ~/.profile"             # {P}rofile
+#
+alias sbd="source ~/.bash_definitions.sh" # {D}efinition. should be idempotent.
+alias sba="source ~/.aliases"             # {A}alias.     should be idempotent.
+alias sbs="source ~/.bash_settings.sh"    # {S}etting
+#
+
 function se () {
     (cd ~/.emacs.d && nix-build emacs.nix && ./result/bin/emacs --debug-init)
 }
@@ -727,12 +730,15 @@ alias raise-editor="raise-emacs"
 # }
 
 ##################################################
-# "m"ake
-alias m=make
+# Make / Makefiles
 
+alias m="make"             # "m"ake
+#
 alias mb="make build"      # "b"uild
-
+#
+alias ml="make shell"      # shel"l"
 alias mf="make configure"  # con"f"igure
+#
 alias mc="make check"      # type-"c"heck
 alias mr="make repl"       # "r"epl
 alias mp="make compile"    # com"p"ile
@@ -1929,6 +1935,15 @@ function screen-set () {
  redshift -O "${1}00"
 }
 
+##################################################
+# DIRENV #########################################
+##################################################
+
+alias v=direnv           # diren[v]
+alias va="direnv allow"  # [a]llow
+
+# $ direnv allow
+
 ########################################
 # ephemeral/specialized stuff
 
@@ -1938,8 +1953,7 @@ alias melpa2nix=/nix/store/2g4pm399808pmz6zsd89m2iwahk439vi-emacs2nix-0.1.0.0/bi
 alias dpkg-uninstall="sudo dpkg --force-remove-reinstreq --purge"
 # apt list --upgradeable 
 
-
-########################################
+##################################################
 # notes about shellcheck
 
 # ^-- SC2142: Aliases can't use positional parameters. Use a function.
@@ -1983,3 +1997,4 @@ alias dpkg-uninstall="sudo dpkg --force-remove-reinstreq --purge"
   # MEMBERSHIP="$?"
   # # ^ TODO safe?
 
+##################################################

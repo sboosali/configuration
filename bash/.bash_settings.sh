@@ -102,7 +102,6 @@ done
 #
 #
 
-
 ########################################
 ## EDITOR SETTINGS
 
@@ -272,16 +271,11 @@ PROMPT_COMMAND="my_prompt_command; $PROMPT_COMMAND"
 ########################################
 # Per-DesktopEnvironment
 
-function desktop-settings-for-only-plasma() {
-    return
-}
+function desktop-settings-for-only-plasma() { return; }
 
-function desktop-settings-for-only-gnome() {
-    return
+function desktop-settings-for-only-gnome() { return; }
 
-function desktop-settings-for-only-unknown() {
-    return
-}
+function desktop-settings-for-only-unknown() { return; }
 
 case "$DESKTOP_SESSION" in
      # ^ for conditioning on the current desktop environment.
@@ -368,4 +362,16 @@ PS1="\\n\${BRANCH}${YELLOW}\\w${RESET}\$ "
 #
 # 
 
+#########################################
+# DIRENV ################################
+#########################################
+
+eval "$(direnv hook bash)"
+# ^
+#
+# > Ensure `direnv` appears *after* other shell extensions that manipulate the prompt, e.g. `git-prompt`.
+#
+# https://direnv.net/
+
+#########################################
 #########################################
