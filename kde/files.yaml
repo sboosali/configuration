@@ -1,4 +1,4 @@
-directory: /usr/share/kubuntu-default-settings/kf5-settings/kf5-settings
+directory: /usr/share/kubuntu-default-settings/kf5-settings/
 
 files:
 - breezerc

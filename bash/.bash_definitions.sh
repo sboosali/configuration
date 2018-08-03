@@ -3,15 +3,8 @@
 # set -u 
 # which will cause any unset argument reference to immediately fail the script.
 
-alias restart-gnome="gnome-shell --replace &disown"
-# ^ seems to be always necessary after startup; 
-# otherwise, clicking on the windows bars at the bottom of the screen
-# doesn't switch to those windows
-
-alias restart-xbindkeys="killall xbindkeys || true ; xbindkeys -fg ~/.xbindkeysrc.scm &disown "
-# 
-
-########################################
+############################################################
+############################################################
 ## NOTES
 # this file is "pure", it only declares aliases and functions.
 # like .bash_aliases plus .bash_functions
@@ -52,7 +45,8 @@ alias restart-xbindkeys="killall xbindkeys || true ; xbindkeys -fg ~/.xbindkeysr
 #   or the shell is not executing a function.
 # 
 
-########################################
+############################################################
+############################################################
 ## DEFINITIONS: TOUCH / MKDIR
 
 function brush () {
@@ -69,7 +63,8 @@ function brush-executable () {
 alias t=brush
 alias tx=brush-executable
 
-########################################
+############################################################
+############################################################
 ## DEFINITIONS: CD
 
 function cd-ls () {
@@ -112,7 +107,8 @@ alias dx='cd-ls ~/nixpkgs'
 # alias d='cd-ls '
 # alias d='cd-ls '
 
-########################################
+############################################################
+############################################################
 ## DEFINITIONS: LS
 
 # ls 
@@ -121,7 +117,8 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias lc='ls -CF'
 
-########################################
+############################################################
+############################################################
 ## DEFINITIONS: FIND
 
 function find-verbose() {
@@ -160,12 +157,14 @@ function ls-files() {
 
 alias f.="find ."
 
-########################################
+############################################################
+############################################################
 ## DEFINITIONS: GREP
 
 alias skip-blank-lines="grep -v -e '^[[:space:]]*$'"
 
-########################################
+############################################################
+############################################################
 
 # cat
 function copy-file() {
@@ -200,7 +199,9 @@ else
   echo '[WARNING] colordiff is not installed, using diff.' >&2
 fi
 
-########################################
+###########################################################
+#############################################################
+## Clipboard / Editor
 
 # copy/paste
 alias xc='xclip -selection clipboard'
@@ -323,6 +324,10 @@ function se () {
     (cd ~/.emacs.d && nix-build emacs.nix && ./result/bin/emacs --debug-init)
 }
 
+############################################################
+############################################################
+# Remove
+
 # rm
 alias r=rm
 alias rm="rm -f"
@@ -335,22 +340,9 @@ alias rr="rm -rf"
 #alias rtr='rm -fr *~ .*~ \#*\# .\#* matlab_crash_dump.* java.log.* *.pyc *.class __pycache__/*.pyc *.agdai *.hi *.hout *.o'
 #
 
-# remove temporary files recursively
-# emacs temp files: '*~ .*~ \#*\# .\#*'
-function rt() {
- find .  -type f  \( -name '*~'  -o  -name '\#*\#'  -o  -name '.\#*' \)  -print  -delete
-
- # print whatever's deleted
-
- # If your OS isn't Linux, replace -delete by -exec rm {} +.
-
- # find . -name \*~ | xargs rm
-}
-
-# `rtr` dry-run
-function rtr-dry() {
- find .  -type f  \( -name '*~' -o -name '\#*\#' -o -name '.\#*' \)  -print
-}
+############################################################
+############################################################
+# Miscellaneous Builtins/Programs
 
 # chmod
 alias c7="chmod 700"
@@ -478,8 +470,9 @@ alias gpumeminfo='grep -i --color memory /var/log/Xorg.0.log'
 alias p3="python3"
 alias p2="python2.7"
 
-########################################
-## 
+############################################################
+############################################################
+## GIT
 
 # git
 alias g="git"
@@ -494,10 +487,35 @@ alias gorc="git status --porcelain | cut -d ' ' -f 3 | tr '\\n' ' '"
 # alias clean-emacs='remove "${1:?}".~ .\#"${1:?}"'
 
 
-alias f.="find ."
+############################################################
+############################################################
+# Temporary Directories/File
+# (By Name/Extension)
 
+function find-temporaries () {
+ # dry-run for `rm-temporaries`
+ find .  -type f  \( -name '*~' -o -name '\#*\#' -o -name '.\#*' \)  -print  $@
+}
 
-########################################
+function rm-temporaries() {
+ # remove temporary files recursively
+ # emacs temp files: '*~ .*~ \#*\# .\#*'
+
+ find-temporaries -delete
+
+ # print whatever's deleted
+
+ # If your OS isn't Linux, replace -delete by -exec rm {} +.
+
+ # find . -name \*~ | xargs rm
+}
+
+alias ft=find-temporaries
+
+alias rt=rm-temporaries
+
+############################################################
+############################################################
 ## NIX
 
 #
@@ -695,7 +713,22 @@ function nsi () {
   nix-store --query --references "$LOCATION"
 }
 
-########################################
+function prefetch-github () {
+
+URL="${1:?}"
+
+NAME=$(basename "$URL")
+
+FILE="$NAME.json"
+
+nix-prefetch-git "$URL" > "$FILE"
+
+cat "$FILE"
+
+}
+
+############################################################
+############################################################
 ## X11
 
 function raise-window () {
@@ -724,8 +757,8 @@ alias raise-editor="raise-emacs"
 
 #  wmctrl  -b add,fullscreen  -a "${_TITLE}"
 
-
-########################################
+############################################################
+############################################################
 ## HASKELL
 
 ## haskell
@@ -736,7 +769,8 @@ alias raise-editor="raise-emacs"
 #  stack exec -- "$@" 
 # }
 
-##################################################
+############################################################
+############################################################
 # Make / Makefiles
 
 alias m="make"             # "m"ake
@@ -757,7 +791,9 @@ alias mw="make watch"      # "w"atch
 alias mt="make tags"       # "t"ags
 #
 
-##################################################
+############################################################
+############################################################
+# Haskell
 
 alias hc="cabal new-configure"
 alias hb="cabal new-build"
@@ -943,8 +979,6 @@ function hd () {
 
 #     # open sources/$MODULE/Example.hs
 # }
-
-
 
 function new-haskell-project-simple () (
     set -e
@@ -1144,20 +1178,6 @@ function new-haskell-project () (
     git push -u origin master
 )
 
-function prefetch-github () {
-
-URL="${1:?}"
-
-NAME=$(basename "$URL")
-
-FILE="$NAME.json"
-
-nix-prefetch-git "$URL" > "$FILE"
-
-cat "$FILE"
-
-}
-
 # alias hnew=new-haskell-project
 
 # To generate a Nix build expression for it, change into the project’s top-level directory and run the command:
@@ -1274,7 +1294,6 @@ echo '--------------------------------------------------------------------------
 nix-shell shell.nix
 
 }
-
 
 # function h2n() {
  
@@ -1432,8 +1451,9 @@ EOF
 fi
 }
  
-########################################
-## MORE DEFINITIONS
+############################################################
+############################################################
+## Formatting in Bash
 
 function _printDiv () {
   printf '\n\n'
@@ -1441,17 +1461,21 @@ function _printDiv () {
   printf '\n\n'
 }
 
-# function dog {
-#  SEP="--------------------------------------------------------"
-#  while read file; do
-#      if [ -f "$file" ]; then
-#          echo -e "\n"$SEP
-#          echo "$file"
-#          echo -e $SEP"\n"
-#          cat "$file"
-#      fi
-#  done
-# }
+function dog {
+    THICK_SEPARATOR="========================================================"
+    THIN_SEPARATOR="--------------------------------------------------------"
+    for FILE in "$@"
+    do
+        if [ -f "$FILE" ]
+        then
+            echo -e "\n${THICK_SEPARATOR}"
+            echo "$FILE"
+            echo -e "${THIN_SEPARATOR}\n"
+            cat "$FILE"
+        fi
+    done
+    echo -e "\n${THICK_SEPARATOR}"
+} # ^ `cat` each `FILE` argument.
 
 function show-variable () {
  echo "$1" | tr ':' '\n'
@@ -1462,7 +1486,9 @@ function show-path () {
  echo "$PATH" | tr ':' '\n'
 }
 
-##################################################
+############################################################
+############################################################
+# Process stuff
 
 function exec-named() {
     HELP="[Usage] exec-named NAME COMMAND"
@@ -1477,7 +1503,9 @@ function kill-named() {
     pkill -f "$NAME"
 }
 
-##################################################
+############################################################
+############################################################
+## Miscellaneous
 
 # needs curl
 function download {
@@ -1537,6 +1565,10 @@ function extension {
  EXTENSION="${FILEPATH##*.}"
  echo "$EXTENSION"
 }
+
+############################################################
+############################################################
+## SSH
 
 # https://www.gnupg.org/documentation/manuals/gnupg/Invoking-GPG_002dAGENT.html
 GPG_TTY=$(tty)
@@ -1602,8 +1634,9 @@ function ssha () {
 # ssh-ident is an utility that can manage ssh-agent on your behalf and load identities as necessary. It adds keys only once as they are needed, regardless of how many terminals, ssh or login sessions that require access to an ssh-agent.
 # alias ssh='ssh-ident' # TODO
 
-########################################
-## GIT 
+############################################################
+############################################################
+## Git / GitHub 
 
 function blame {
  FILE="$1"
@@ -1758,7 +1791,9 @@ rm -rf ~/.local/share/baloo
 
 }
 
-########################################
+############################################################
+############################################################
+# Linux Groups/Users
 
 function group-exists {
   if [ $(getent group $1) ]; then
@@ -1817,7 +1852,9 @@ function group-has-user {
   echo '----------------------------------------'
 }
 
-########################################
+############################################################
+############################################################
+# BashCompletion
 
 function bash-completion--source-something () {
 
@@ -1860,13 +1897,15 @@ function bash-completion--source-everything () {
   
 }
 
-########################################
+############################################################
+############################################################
 ## EMACS
 
 alias emacs-nix='./result/bin/emacs -q --load "./init.el"' # relative filepaths
 
-########################################
-## X
+############################################################
+############################################################
+## SCREEN COLOR/BRIGHTNESS MANIPULATION (X11)
 
 function get-brightness--via-sysclass () {
  cat /sys/class/backlight/intel_backlight/brightness
@@ -1889,8 +1928,8 @@ function screen-brighter--via-xdotool () {
   printf '.'
  done
  printf ' BRIGHTENED\n'
- sleep 0.100
- # pause briefly after the setting of the brightness before reading the brightness.
+ sleep 0.017
+ # pause briefly after the setting the brightness, before reading the brightness.
  printf "BRIGHTNESS = %d\n" $(get-brightness--via-sysclass)
 }
 
@@ -1901,12 +1940,15 @@ function screen-dimmer--via-xdotool () {
  for i in `seq "${1:-10}"`; do 
   # repeat <n> times
   xdotool key XF86MonBrightnessDown
-  # briefly pausing (10ms)
+  # briefly pausing
   sleep 0.033
   # print ellipsis
   printf '.'
  done
- sleep 0.100
+ printf ' DIMMED\n'
+ sleep 0.017
+ # pause briefly after the setting the brightness, before reading the brightness.
+ printf "BRIGHTNESS = %d\n" $(get-brightness--via-sysclass)
 }
 
 # eDP-1-1 is name of the laptop screen (the first field)
@@ -1916,19 +1958,19 @@ function screen-dimmer--via-xdotool () {
 # xrandr -d :0 --output eDP-1-1 --gamma "1:1:1" # restore default
 # xrandr -d :0 --output eDP-1-1 --gamma "1:1:1"
 
-alias screen-night-="screen-brighter--via-xdotool 20 ; redshift -x ; redshift -O 1000 ; xrandr-invert-colors"
+alias screen-night="screen-brighter--via-xdotool 20 ; redshift -x ; redshift -O 1000 ; xrandr-invert-colors"
 alias screen-night-dim="screen-brighter--via-xdotool 20 ; redshift -x ; redshift -O 1000 ; xrandr-invert-colors ; screen-dimmer--via-xdotool 10"
 # ^ via: redshift; xrandr-invert-colors; and xdotool (XF86MonBrightnessDown).
-alias screen-dusk-="screen-brighter--via-xdotool 20 ; redshift -x ; redshift -O 2000 ; xrandr-invert-colors"
+alias screen-dusk="screen-brighter--via-xdotool 20 ; redshift -x ; redshift -O 2000 ; xrandr-invert-colors"
+alias screen-day="redshift -x ; xrandr-invert-colors"
 
-#alias screen-day=
 alias screen-white="redshift -x"
 alias screen-red="redshift -x && redshift -O 1000"
 alias screen-scarlet="redshift -x && redshift -O 1500"
 alias screen-orange="redshift -x && redshift -O 2000"
 alias screen-yellow="redshift -x && redshift -O 3000"
 alias screen-warm="redshift -x && redshift -O 9000"
-#
+
 alias qqqqqqqqqq--screen-night="redshift -x ; redshift -O 1000 ; xrandr-invert-colors" # 10 Q's is a prefix to support tab-completion for: holding down for a broad range of times, and then pressing the (adjacent) tab key (plus the enter key).
 #
 alias red="redshift -O 1000" # one-shot, 1000K
@@ -1943,7 +1985,7 @@ function screen-set () {
 }
 
 ##################################################
-# DIRENV #########################################
+# DirEnv #########################################
 ##################################################
 
 alias v=direnv           # diren[v]
@@ -1951,8 +1993,21 @@ alias va="direnv allow"  # [a]llow
 
 # $ direnv allow
 
-########################################
-# ephemeral/specialized stuff
+############################################################
+############################################################
+## Restarting Services
+
+alias restart-gnome="gnome-shell --replace &disown"
+# ^ seems to be always necessary after startup; 
+# otherwise, clicking on the windows bars at the bottom of the screen
+# doesn't switch to those windows
+
+alias restart-xbindkeys="killall xbindkeys || true ; xbindkeys -fg ~/.xbindkeysrc.scm &disown "
+# 
+
+############################################################
+############################################################
+# Ephemeral/Specialized Stuff
 
 #TODO rm
 alias melpa2nix=/nix/store/2g4pm399808pmz6zsd89m2iwahk439vi-emacs2nix-0.1.0.0/bin/melpa2nix 
@@ -1960,8 +2015,9 @@ alias melpa2nix=/nix/store/2g4pm399808pmz6zsd89m2iwahk439vi-emacs2nix-0.1.0.0/bi
 alias dpkg-uninstall="sudo dpkg --force-remove-reinstreq --purge"
 # apt list --upgradeable 
 
-##################################################
-# notes about shellcheck
+############################################################
+############################################################
+# NOTES About ShellCheck
 
 # ^-- SC2142: Aliases can't use positional parameters. Use a function.
 # ^-- SC2086: Double quote to prevent globbing and word splitting.
@@ -2004,4 +2060,5 @@ alias dpkg-uninstall="sudo dpkg --force-remove-reinstreq --purge"
   # MEMBERSHIP="$?"
   # # ^ TODO safe?
 
-##################################################
+############################################################
+############################################################
