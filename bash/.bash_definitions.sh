@@ -478,6 +478,9 @@ alias gpumeminfo='grep -i --color memory /var/log/Xorg.0.log'
 alias p3="python3"
 alias p2="python2.7"
 
+########################################
+## 
+
 # git
 alias g="git"
 alias gl="git status" # mnemonic: git "list"
@@ -489,6 +492,10 @@ alias gorc="git status --porcelain | cut -d ' ' -f 3 | tr '\\n' ' '"
 # # cleaning TODO
 # alias clean-haskell="remove \"$1\".{dyn_hi,dyn_o,hi,o}"
 # alias clean-emacs='remove "${1:?}".~ .\#"${1:?}"'
+
+
+alias f.="find ."
+
 
 ########################################
 ## NIX
