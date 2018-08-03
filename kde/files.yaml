@@ -1,0 +1,9 @@
+directory: /usr/share/kubuntu-default-settings/kf5-settings/kf5-settings
+
+files:
+- breezerc
+- dolphinrc
+- jukrc
+- klaunchrc
+- kwinrc
+- plasmarc
