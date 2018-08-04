@@ -1,11 +1,9 @@
+##################################################
 
+# nixpkgs/
 
-
-
-#TODO
 Documents/
 "VirtualBox VMs"
-nixpkgs/
 haskell/ghc/
 haskell/ghcjs/
 melpa/
@@ -15,25 +13,32 @@ guest_*
 .nv/
 .dropbox-dist/
 
-
-
-
-
+##################################################
 
 .sboo/
 backups/
 temporary/
 
-.config/*
+##################################################
 
+.dbus/
+  # ^ "Permission denied"
+.cache/dconf
+  # ^ "Permission denied"
+
+.config/*
 .local/*
 
 *.cache
+
 .cabal/store/
 .cabal/logs/
+.cabal/packages/
 .stack/
 
 .git/
+
+##################################################
 
 *.o
 *.hi
@@ -49,6 +54,8 @@ dist/
 .styx/
 .cabal-sandbox/
 
+##################################################
+
 *~
 \#*
 .\#*
@@ -58,5 +65,9 @@ dist/
 .*.swo
 *.save
 
+##################################################
+
 result-*/
 result/
+
+##################################################

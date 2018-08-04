@@ -357,13 +357,14 @@ function dirsize () {
  # du --total --dereference --human-readable "$@"
  # #  dereference all symbolic links
 }
+
 function filesize () {
  # shellcheck disable=
  du -h "${@:?}" | cut -f1
-# https://unix.stackexchange.com/questions/208184/issue-an-error-when-using-empty-shell-variables
-# e.g.
-# ~$ : "${UNSET_VAR?Unset variable}"
-# bash: UNSET_VAR: Unset variable
+ # https://unix.stackexchange.com/questions/208184/issue-an-error-when-using-empty-shell-variables
+ # e.g.
+ # ~$ : "${UNSET_VAR?Unset variable}"
+ # bash: UNSET_VAR: Unset variable
 }
 
 alias cpr="rsync -arRv"
