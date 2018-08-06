@@ -379,6 +379,9 @@ alias lns='ln -sf' # /path/to/file /path/to/symlink
 alias yt='youtube-dl -f 22' # needs youtube-dl
 # alias unzip="7z x" # needs 7z
 
+#
+alias w=disown  # diso{W}n
+
 # Natural Language Commands
 alias list="ls -1aFG"
 alias remove="rm -f"
@@ -1959,6 +1962,8 @@ function screen-dimmer--via-xdotool () {
 # xrandr -d :0 --output eDP-1-1 --gamma "1:1:1" # restore default
 # xrandr -d :0 --output eDP-1-1 --gamma "1:1:1"
 
+alias screen-invert="xrandr-invert-colors"
+
 alias screen-night="screen-brighter--via-xdotool 20 ; redshift -x ; redshift -O 1000 ; xrandr-invert-colors"
 alias screen-night-dim="screen-brighter--via-xdotool 20 ; redshift -x ; redshift -O 1000 ; xrandr-invert-colors ; screen-dimmer--via-xdotool 10"
 # ^ via: redshift; xrandr-invert-colors; and xdotool (XF86MonBrightnessDown).
@@ -1971,6 +1976,12 @@ alias screen-scarlet="redshift -x && redshift -O 1500"
 alias screen-orange="redshift -x && redshift -O 2000"
 alias screen-yellow="redshift -x && redshift -O 3000"
 alias screen-warm="redshift -x && redshift -O 9000"
+
+alias xi=screen-invert # {X}11-{I}nvert
+alias xn=screen-night  # {X}11-{N}ight
+alias xd=screen-day    # {X}11-{D}ay
+alias xr=screen-red    # {X}11-{R}ed
+alias xw=screen-white  # {X}11-{W}hite
 
 alias qqqqqqqqqq--screen-night="redshift -x ; redshift -O 1000 ; xrandr-invert-colors" # 10 Q's is a prefix to support tab-completion for: holding down for a broad range of times, and then pressing the (adjacent) tab key (plus the enter key).
 #
