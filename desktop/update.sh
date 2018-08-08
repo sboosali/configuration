@@ -2,7 +2,9 @@
 set -eu
 ########################################
 
-FILEPATH="xterm".desktop
+NAME="${1:-emacs}"
+
+FILEPATH="${NAME}".desktop
 
 ########################################
 
@@ -10,11 +12,14 @@ desktop-file-validate ./desktop-entry-files/"$FILEPATH"
 
 ########################################
 
-cp ./desktop-entry-files/"$FILEPATH" ~/.local/share/applications/"$FILEPATH"
+cp ./desktop-entry-files/"$FILEPATH" "$HOME"/.local/share/applications/"$FILEPATH"
+
+# e.g.
+#      ln -sf /home/sboo/.local/share/applications/emacs.desktop /home/sboo/configuration/desktop-entry-files/emacs.desktop
 
 ########################################
 
-dconf read /org/gnome/shell/favorite-apps
+#TODO KDE: dconf read /org/gnome/shell/favorite-apps
 
 #TODO dconf write /org/gnome/shell/favorite-apps "['google-chrome.desktop', 'emacs.desktop', 'xterm-terminal.desktop', 'libreoffice-writer.desktop', 'org.gnome.Nautilus.desktop', 'gnome-tweak-tool.desktop', 'gnome-shell-extension-prefs.desktop', 'virtualbox.desktop']"
 

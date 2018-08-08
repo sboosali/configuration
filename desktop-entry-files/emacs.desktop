@@ -1,0 +1,20 @@
+##################################################
+[Desktop Entry]
+Version=1.0
+Type=Application
+
+Exec=/home/sboo/.emacs.d/result/bin/emacs -q --load /home/sboo/.emacs.d/init.el --no-desktop
+Path=/home/sboo/.emacs.d
+
+Name=emacs
+Icon=emacs.png
+StartupWMClass=Emacs
+StartupNotify=false
+Encoding=UTF-8
+
+##################################################
+
+#TODO Name=emacs-sboo
+#TODO Exec=/home/sboo/.nix-profile/bin/emacs-sboo
+
+##################################################
