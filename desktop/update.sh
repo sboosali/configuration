@@ -14,9 +14,6 @@ desktop-file-validate ./desktop-entry-files/"$FILEPATH"
 
 cp ./desktop-entry-files/"$FILEPATH" "$HOME"/.local/share/applications/"$FILEPATH"
 
-# e.g.
-#      ln -sf /home/sboo/.local/share/applications/emacs.desktop /home/sboo/configuration/desktop-entry-files/emacs.desktop
-
 ########################################
 
 #TODO KDE: dconf read /org/gnome/shell/favorite-apps

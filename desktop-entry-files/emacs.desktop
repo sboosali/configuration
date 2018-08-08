@@ -7,12 +7,16 @@ Exec=/home/sboo/.emacs.d/result/bin/emacs -q --load /home/sboo/.emacs.d/init.el 
 Path=/home/sboo/.emacs.d
 
 Name=emacs
-Icon=emacs.png
+Icon=emacs
 StartupWMClass=Emacs
 StartupNotify=false
-Encoding=UTF-8
 
 ##################################################
+
+# `Icon=emacs.png`
+#
+# ^ `desktop-file-validate` demands no extension,
+# unless it's an absolute-filepath.
 
 #TODO Name=emacs-sboo
 #TODO Exec=/home/sboo/.nix-profile/bin/emacs-sboo
