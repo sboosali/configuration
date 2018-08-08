@@ -2005,6 +2005,51 @@ alias va="direnv allow"  # [a]llow
 
 # $ direnv allow
 
+
+##################################################
+# ssh-agent ######################################
+##################################################
+
+##########
+# (1) 
+# Start the ssh-agent in the background:
+
+# $ eval "$(ssh-agent -s)"
+#
+# NOTE see
+#    ./.bash_settings.sh
+#
+
+# ^ e.g. stdout:
+#     Agent pid 59566
+
+##########
+# (2) 
+# Add your SSH private key to the ssh-agent.
+
+alias sboo-ssh-add="ssh-add ~/.ssh/id_rsa"
+
+#TODO 
+#PRIVATE_KEY_FILENAME=id_rsa
+#ssh-add -K ~/.ssh/"${PRIVATE_KEY_FILENAME}"
+# ^ `-K` is OSX-only.
+
+##########
+# NOTES: ssh-agent
+
+# `ssh-agent` it's a program that runs in the background, and keeps your key loaded into memory, so that you don't need to enter your passphrase every time you need to use the key.
+#
+#
+
+# $ ssh-add -l
+# e.g.
+#      4096 SHA256:pW34+/3i9OON5bFkv/qZ5jBRddAfXv5qMXiBko+fWZ8 /home/sboo/.ssh/id_rsa (RSA)
+#
+
+# See
+#    - https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/
+# 
+
 ############################################################
 ############################################################
 ## Restarting Services
