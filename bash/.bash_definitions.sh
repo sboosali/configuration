@@ -134,6 +134,15 @@ function find-executables() {
  find $@ -executable -type f -printf "%M | %p\n"
 }
 
+function find-relevant () {
+    # `find` only "relevant" files, i.e. skipping
+    # some build directories (like `dist-newstyle/`)
+    # and hidden directories (like `.git/`).
+    find $@  -type f  \( -path '.git' -o -path '.stack-work' -o -path 'dist' -o -path 'dist-*' \) -prune  -o -print
+    # -a -not -path './'
+    #TODO
+}
+
 function find-by-extension() {
  FILE_EXTENSION="${1:?'[ERROR] missing argument: FILE_EXTENSION'}"
  find . -type f -name "*.${FILE_EXTENSION}" -printf "| %p\n"
@@ -156,6 +165,8 @@ function ls-files() {
  ##OLD: `ls --almost-all -l`
 
 alias f.="find ."
+
+alias f-="find-relevant ."
 
 ############################################################
 ############################################################

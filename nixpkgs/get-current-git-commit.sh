@@ -1,0 +1,1 @@
+echo $(cd ~/nixpkgs && git rev-parse --verify HEAD)
