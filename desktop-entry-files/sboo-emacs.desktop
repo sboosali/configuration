@@ -1,0 +1,48 @@
+##################################################
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=emacs-sboo #TODO 
+
+Exec=/home/sboo/.emacs.d/result/bin/emacs --no-init-file --load /home/sboo/.emacs.d/init.el --no-desktop --maximized --name=Emacs/Sboo
+Path=/home/sboo/.emacs.d
+
+Icon=emacs #TODO 
+StartupWMClass=Emacs
+StartupNotify=true #TODO 
+
+Actions=Debug #,Minimal
+
+[Desktop Action Debug]
+Name=Debug Emacs Config
+Exec=/home/sboo/.emacs.d/result/bin/emacs --no-init-file --debug-init --find-file=/home/sboo/.emacs.d/init.el --no-splash --name=Emacs/Debug
+
+# [Desktop Action Minimal]
+# Name=Minimal
+# Exec=/home/sboo/.emacs.d/result/bin/emacs --no-init-file --load /home/sboo/.emacs.d/init.el --no-desktop
+
+
+##################################################
+
+# `Icon=emacs.png`
+#
+# ^ `desktop-file-validate` demands no extension,
+# unless it's an absolute-filepath.
+
+#TODO Name=emacs-sboo
+#TODO Exec=/home/sboo/.nix-profile/bin/emacs-sboo
+# ^ from `nix-install emacs-sboo.nix`
+
+# #TODO
+# TryExec=sboo-emacs
+# Exec=sboo-emacs --no-init-file --load /home/sboo/.emacs.d/init.el --no-desktop
+# Path=/home/sboo/.emacs.d
+
+# Name=emacs
+# Icon=emacs #TODO 
+# StartupWMClass=Emacs
+# StartupNotify=false #TODO 
+
+# Categories=System;TerminalEmulator;
+
+##################################################
