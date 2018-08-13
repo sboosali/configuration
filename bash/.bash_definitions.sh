@@ -225,9 +225,10 @@ alias xbr='xbrightness 65535'
 
 # workflow
 alias open='xdg-open'
+alias xo='xdg-open'
+# 
 alias xd='xdotool'
 alias xw='wmctrl'
-alias xo='xdg-open'
 function open () {
   xdg-open &disown
 }
@@ -686,22 +687,23 @@ function nr () {
 
 nixpkgs = import <nixpkgs> {}
 b  = builtins
-p  = nixpkgs
-c  = p.config
-l  = p.lib
-ps = p.pkgs
+c  = nixpkgs.config
+l  = nixpkgs.lib
+ps = nixpkgs.pkgs
 hs = ps.haskellPackages
-h  = p.haskell.lib
-:a builtins
+h  = nixpkgs.haskell.lib
 :a nixpkgs
 :a nixpkgs.lib
-spiros = hs.spiros
-gnome = p.gnome3
-kde   = p.plasma5
+kde    = nixpkgs.plasma5
+sboo   = nixpkgs.sboo
+sbooHaskell = nixpkgs.sboo.haskellPackages
+:i sbooHaskell.enumerate
 EOF
 
 # p.kdeApplications 
 # p.kdeFrameworks
+# gnome = p.gnome3
+# spiros = hs.spiros
 
   echo
   echo -e "$NIX_REPL_EXAMPLES"
@@ -1479,7 +1481,10 @@ function _printDiv () {
 function dog {
     THICK_SEPARATOR="========================================================"
     THIN_SEPARATOR="--------------------------------------------------------"
-    for FILE in "$@"
+
+    FILES="${@:-$(ls ./.)}" #TODO
+    
+    for FILE in "${FILES}"
     do
         if [ -f "$FILE" ]
         then
@@ -1992,7 +1997,7 @@ alias xi=screen-invert # {X}11-{I}nvert
 alias xn=screen-night  # {X}11-{N}ight
 alias xd=screen-day    # {X}11-{D}ay
 alias xr=screen-red    # {X}11-{R}ed
-alias xw=screen-white  # {X}11-{W}hite
+alias xw=screen-white  # {X}11-{W}hite #TODO xw=wmctrl
 
 alias qqqqqqqqqq--screen-night="redshift -x ; redshift -O 1000 ; xrandr-invert-colors" # 10 Q's is a prefix to support tab-completion for: holding down for a broad range of times, and then pressing the (adjacent) tab key (plus the enter key).
 #

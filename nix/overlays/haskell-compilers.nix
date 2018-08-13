@@ -7,10 +7,19 @@ ghcs = super.buildEnv
    name             = "GHCs";
    ignoreCollisions = true;
    paths            = [
-                        self.haskell.compiler.ghc843
+                        self.haskell.compiler.ghc843 
                         self.haskell.compiler.ghc861
                         self.haskell.compiler.ghcjs
                       ];
+                      # ^
+                      # first item in `paths` is the unqualified executable;
+                      # i.e. `ghc` is `ghc-8.4.3`.
+                      #
+                      # [problem] error "have the same priority ; use 'nix-env --set-flag priority NUMBER INSTALLED_PKGNAME' to change the priority of one of the conflicting packages"
+                      # even with `buildEnv.ignoreCollisions = true`.
+                      #
+                      # [solution] 
+                      #
  };
 
 sboo =
