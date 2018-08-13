@@ -1,6 +1,18 @@
-!
-! 
-!
-clear lock
-clear control
-add control = Caps_Lock Control_L Control_R
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!! 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+! remove Lock = Caps_Lock
+! remove Control = Control_L
+! keysym Control_L = Caps_Lock
+! keysym Caps_Lock = Control_L
+! add Lock = Caps_Lock
+! add Control = Control_L
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!! Notes
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! clear Lock
+! clear Control
+! add Control = Caps_Lock Control_L Control_R
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
