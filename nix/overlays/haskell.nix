@@ -56,8 +56,7 @@ myHaskellPackages = pkgs: self: super: with self;
 # let self = { haskell = hs-self; packages = ps-self; };
  {
 
-  spiros = super.callCabal2nix "spiros" ~/haskell/spiros {
-  };
+ #TODO spiros = super.callCabal2nix "spiros" ~/haskell/spiros {};
 
  # spiros = self.callPackage ~/haskell/spiros {};
 

@@ -168,6 +168,16 @@ alias f.="find ."
 
 alias f-="find-relevant ."
 
+alias f1="find . -maxdepth 1"
+alias f2="find . -maxdepth 2"
+alias f3="find . -maxdepth 3"
+alias f4="find . -maxdepth 4"
+alias f5="find . -maxdepth 5"
+alias f6="find . -maxdepth 6"
+alias f7="find . -maxdepth 7"
+alias f8="find . -maxdepth 8"
+alias f9="find . -maxdepth 9"
+
 ############################################################
 ############################################################
 ## DEFINITIONS: GREP
@@ -261,6 +271,11 @@ alias et="emacs -nw"
 
 function emacs-terminal () {
 
+    EMACS_FLAGS="-nw"
+    # 
+    #     EMACS_FLAGS=""
+    #     EMACS_FLAGS="-nw"
+
     # USAGE
     #
     # $ emacs-terminal FILE:LINE:COL
@@ -285,22 +300,22 @@ function emacs-terminal () {
             if   [[ ! -z "$LINE" && ! -z "$COLUMN" ]]
             then
                  shift 1
-                 emacs -nw "+$LINE:$COLUMN" "$FILE" "$@"
+                 emacs "${EMACS_FLAGS}" "+$LINE:$COLUMN" "$FILE" "$@"
             elif [[ ! -z "$LINE" ]]
             then
                  shift 1
-                 emacs -nw "+$LINE" "$FILE" "$@"
+                 emacs "${EMACS_FLAGS}" "+$LINE" "$FILE" "$@"
             else
                  shift 1
-                 emacs -nw "$FILE" "$@"
+                 emacs "${EMACS_FLAGS}" "$FILE" "$@"
             fi
         else
-            emacs -nw "$@"
+            emacs "${EMACS_FLAGS}" "$@"
         fi
 
     else
         # no command-line arguments
-        emacs -nw . "$@"
+        emacs "${EMACS_FLAGS}" . "$@"
         # ^ open current-directory in `dired`                                                     
     fi
 
@@ -560,6 +575,8 @@ alias nlr="nix-shell --run"
 alias nlrp="nix-shell --pure --run"
 alias nlx="nix-shell --run return"
 alias nlxp="nix-shell --pure --run exit"
+#
+alias nlhba="nix-shell --run 'cabal new-build all'"
 #
 alias nix-eval="nix-instantiate --eval"
 alias nx="nix-instantiate --eval"
@@ -831,6 +848,29 @@ alias hsr="stack repl"
 alias hsx="stack run --"
 # alias hsx="stack exec --"
 
+# `cabal new-*`
+#
+# with arguments order reversed,
+# i.e., first the PACKAGE, then the COMMAND.
+# 
+# e.g.
+# 
+# $ haskell-build 
+# cabal new-build all
+# 
+# $ haskell-build backend
+# cabal new-build backend
+# 
+# $ haskell-build common test
+# cabal new-test common
+# 
+# 
+function haskell-build() {
+ cabal "new-${2:-build}" "${1:-all}"
+}
+
+alias h=haskell-build
+
 # e.g.
 # 
 # $ haskell-nix-build 
@@ -846,7 +886,7 @@ function haskell-nix-build() {
  nix-shell --run "cabal new-build ${1:-all}"
 }
 
-alias h=haskell-nix-build
+alias hn=haskell-nix-build
 
 # e.g.
 # 
@@ -2070,13 +2110,25 @@ alias sboo-ssh-add="ssh-add ~/.ssh/id_rsa"
 ############################################################
 ## Restarting Services
 
-alias restart-gnome="gnome-shell --replace &disown"
+alias sboo-restart-gnome="gnome-shell --replace &disown"
 # ^ seems to be always necessary after startup; 
 # otherwise, clicking on the windows bars at the bottom of the screen
 # doesn't switch to those windows
 
-alias restart-xbindkeys="killall xbindkeys || true ; xbindkeys -fg ~/.xbindkeysrc.scm &disown "
-# 
+alias sboo-restart-xbindkeys="killall xbindkeys || true ; xbindkeys -fg ~/.xbindkeysrc.scm &disown "
+#
+
+alias sboo-restart-kde="kquitapp5 plasmashell && kstart plasmashell"
+
+#
+# either:
+#
+#   $ killall plasmashell && kstart plasmashell
+#
+# or:
+#
+#   $ kquitapp5 plasmashell && kstart plasmashell
+#
 
 ############################################################
 ############################################################
