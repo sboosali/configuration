@@ -1,19 +1,28 @@
 ##################################################
+##################################################
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=emacs-sboo #TODO 
 
+Name=emacs-sboo
+#^ TODO
+
+TryExec=/home/sboo/.emacs.d/result/bin/emacs
 Exec=/home/sboo/.emacs.d/result/bin/emacs --no-init-file --load /home/sboo/.emacs.d/init.el --no-desktop --maximized --name=Emacs/Sboo
 Path=/home/sboo/.emacs.d
 
-Icon=emacs #TODO 
+Icon=emacs
+#^ TODO 
 StartupWMClass=Emacs
-StartupNotify=true #TODO 
+StartupNotify=true
+#^ TODO 
 
-Actions=Debug #,Minimal
+Actions=debug;
+#^TODO ,Minimal
 
-[Desktop Action Debug]
+##################################################
+[Desktop Action debug]
+
 Name=Debug Emacs Config
 Exec=/home/sboo/.emacs.d/result/bin/emacs --no-init-file --debug-init --find-file=/home/sboo/.emacs.d/init.el --no-splash --name=Emacs/Debug
 
@@ -21,7 +30,7 @@ Exec=/home/sboo/.emacs.d/result/bin/emacs --no-init-file --debug-init --find-fil
 # Name=Minimal
 # Exec=/home/sboo/.emacs.d/result/bin/emacs --no-init-file --load /home/sboo/.emacs.d/init.el --no-desktop
 
-
+##################################################
 ##################################################
 
 # `Icon=emacs.png`
