@@ -698,7 +698,7 @@ function nix-prefetch-all-cabal-hashes() {
 
 # OLD
 #  echo 'c = (import /etc/nixos/configuration.nix) { inherit (p) pkgs config lib; }'
-function nr () {
+function sboo-nix-repl () {
 
  read -r -d '' NIX_REPL_EXAMPLES <<EOF
 
@@ -726,9 +726,16 @@ EOF
   echo -e "$NIX_REPL_EXAMPLES"
   echo
 
+  if   [ -x "$(command -v xdotool)" ]
+  then
+       (sleep 1 && xdotool type --clearmodifiers 'nixpkgs = import <nixpkgs> {}' && xdotool key --clearmodifiers 'Return' && xdotool type --clearmodifiers ':a nixpkgs' && xdotool key --clearmodifiers 'Return') &
+  fi
+  
   # nix-repl # Nix v1
   nix repl   # Nix v2
 }
+
+alias nr=sboo-nix-repl
 
 function nix-where () {
   # obligatorily unary function
