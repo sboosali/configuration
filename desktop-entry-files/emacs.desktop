@@ -1,10 +1,11 @@
-#!/usr/bin/env xdg-open
+##################################################
 ##################################################
 [Desktop Entry]
 Version=1.0
 Type=Application
 
-Exec=/home/sboo/.emacs.d/result/bin/emacs -q --load /home/sboo/.emacs.d/init.el --no-desktop
+TryExec=/home/sboo/.emacs.d/result/bin/emacs
+Exec=/home/sboo/.emacs.d/result/bin/emacs --no-init-file --load /home/sboo/.emacs.d/init.el --no-desktop --maximized --name=Emacs/Sboo
 Path=/home/sboo/.emacs.d
 
 Name=emacs
@@ -12,7 +13,17 @@ Icon=emacs
 StartupWMClass=Emacs
 StartupNotify=false
 
+Actions=debug;
+
 ##################################################
+[Desktop Action debug]
+
+Name=Debug Emacs
+Exec=/home/sboo/.emacs.d/result/bin/emacs --debug-init --no-init-file --find-file=/home/sboo/.emacs.d/init.el --no-splash --name=Emacs/Sboo/Debug
+
+##################################################
+##################################################
+# Notes
 
 # `Icon=emacs.png`
 #
@@ -22,4 +33,5 @@ StartupNotify=false
 #TODO Name=emacs-sboo
 #TODO Exec=/home/sboo/.nix-profile/bin/emacs-sboo
 
+##################################################
 ##################################################

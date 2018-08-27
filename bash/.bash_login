@@ -4,11 +4,13 @@
 
 ########################################
 
-xbindkeys -p -fg ~/.xbindkeysrc.scm
+# if [ -x "$(command -v xbindkeys)" ]; then
+#     xbindkeys -p -fg ~/.xbindkeysrc.scm
+# fi
 
-########################################
+# ########################################
 
-if [ -e /home/sboo/.nix-profile/etc/profile.d/nix.sh ]; then . /home/sboo/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+# if [ -e /home/sboo/.nix-profile/etc/profile.d/nix.sh ]; then . /home/sboo/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 
 ########################################
 ## NOTES

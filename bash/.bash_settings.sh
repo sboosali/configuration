@@ -136,10 +136,10 @@ if [ -d "$HOME/bin" ] ; then
     export PATH="$HOME/bin:$PATH"
 fi
 
-## # `stack` installs executables here
-## if [ -d "$HOME/.local/bin" ] ; then
-##     export PATH="$HOME/.local/bin:$PATH"
-## fi
+# `stack` installs executables here
+if [ -d "$HOME/.local/bin" ] ; then
+    export PATH="$HOME/.local/bin:$PATH"
+fi
 
 # # the relative binary directory for nix-build
 # # WARNING a relative path, for a more convenient `nix-build`
@@ -155,12 +155,12 @@ fi
 shopt -s histappend
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=-1 # infinite # orig 1000
-HISTFILESIZE=-1 # infinite # orig 2000
-# export HISTFILESIZE=HISTSIZE=
-HISTFILE=~/.bash_history_eternal # any `bash --norc` will truncate the default history file
-PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND} ;}history -a; history -c; history -r; "
+export HISTSIZE=-1                       # infinite # orig 1000
+export HISTFILESIZE=-1                   # infinite # orig 2000
+export HISTFILE=~/.bash_history_eternal  # any `bash --norc` will truncate the default history file
+export PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND} ;}history -a; history -c; history -r; "
 # PROMPT_COMMAND="history -a; history -c; history -r; ${PROMPT_COMMAND}"
+# export HISTFILESIZE=HISTSIZE=
 
 # NOTE
 # the PROMPT_COMMAND is run before each prompt is shown, and before PS1 is computed
@@ -259,7 +259,7 @@ my_prompt_command () {
  my_set_branch
 }
 
-PROMPT_COMMAND="my_prompt_command; $PROMPT_COMMAND"
+export PROMPT_COMMAND="my_prompt_command; $PROMPT_COMMAND"
 
 # function my_get_branch {
 #  # unless empty or unset
@@ -366,9 +366,11 @@ PS1="\\n\${BRANCH}${YELLOW}\\w${RESET}\$ "
 # DIRENV ################################
 #########################################
 
-eval "$(direnv hook bash)"
+###TODO eval "$(direnv hook bash)"
+### wrecked my Emacs PATHs.
+
 # ^
-#
+# 
 # > Ensure `direnv` appears *after* other shell extensions that manipulate the prompt, e.g. `git-prompt`.
 #
 # https://direnv.net/
