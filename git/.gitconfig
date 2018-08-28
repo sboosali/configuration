@@ -56,12 +56,12 @@ com          = checkout master
 
 ####################
 # (git diff)
-difference   = diff
-d            = diff
-dm           = diff master
-df           = diff --name-only
-dmf          = diff master --name-only
+d            = "!git --no-pager diff "
+dm           = "!git --no-pager diff              master"
+df           = "!git --no-pager diff  --name-only"
+dmf          = "!git --no-pager diff  --name-only master"
 dc           = "!git --no-pager diff --cached"
+difference   = "!git --no-pager diff "
 
 ####################
 # (git rebase)

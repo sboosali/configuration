@@ -40,6 +40,7 @@ fi
 #-----------------------------------------------#
 
 if [ -x "$(command -v xbindkeys)" ]; then
+    #TODO AND IF X11 IS ON
     xbindkeys --poll-rc
     # xbindkeys -p -fg .xbindkeysrc.scm
 fi

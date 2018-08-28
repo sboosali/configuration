@@ -60,8 +60,6 @@ function brush-executable () {
   chmod +x "$1"
 }
 
-alias t=brush
-alias tx=brush-executable
 
 ############################################################
 ############################################################
@@ -73,49 +71,15 @@ function cd-ls () {
 }
 
 # short
-alias d=cd-ls
-alias c=cat
-alias n=nano
-#alias r='rm -r'
-alias f=find
-alias g=git
-alias o=echo
-alias i=man   # "i"nformation
-# alias e="echo" # emacs
 
 # cd
 # d == cd == 'cd ~'
-alias d-="cd-ls -"
-alias d..="cd-ls .."
-alias d...="cd-ls ../.."
-alias d....="cd-ls ../../.."
-alias d.....="cd-ls ../../../.."
-alias d......="cd-ls ../../../../.."
-alias d.......="cd-ls ../../../../../.."
-alias de='cd-ls ~/.emacs.d'
-alias dew='cd-ls ~/.emacs.d-windows'
-alias dc='cd-ls ~/configuration'
-alias dh='cd-ls ~/haskell'
-alias dt='cd-ls ~/temporary'
-alias db='cd-ls ~/backup'
-alias dw='cd-ls ~/Downloads'
-alias dm='cd-ls ~/Documents'
-alias dn='cd-ls ~/notes'
-alias dx='cd-ls ~/nixpkgs'
-#alias dnix='cd-ls ~/.nixpkgs'
-#alias dn='cd-ls ~/Dropbox/notes'
-# alias d='cd-ls '
-# alias d='cd-ls '
 
 ############################################################
 ############################################################
 ## DEFINITIONS: LS
 
 # ls 
-alias l='ls -A'
-alias ll='ls -alF'
-alias la='ls -A'
-alias lc='ls -CF'
 
 ############################################################
 ############################################################
@@ -161,28 +125,15 @@ function ls-files() {
  find . -maxdepth 1 -type f -printf "%M | %p\n"
 }
 
-###alias l='find . -maxdepth 1 -printf "%M | %p\n"'
  ##OLD: `ls --almost-all -l`
 
-alias f.="find ."
 
-alias f-="find-relevant ."
 
-alias f1="find . -maxdepth 1"
-alias f2="find . -maxdepth 2"
-alias f3="find . -maxdepth 3"
-alias f4="find . -maxdepth 4"
-alias f5="find . -maxdepth 5"
-alias f6="find . -maxdepth 6"
-alias f7="find . -maxdepth 7"
-alias f8="find . -maxdepth 8"
-alias f9="find . -maxdepth 9"
 
 ############################################################
 ############################################################
 ## DEFINITIONS: GREP
 
-alias skip-blank-lines="grep -v -e '^[[:space:]]*$'"
 
 ############################################################
 ############################################################
@@ -195,13 +146,8 @@ function copy-file() {
 }
 
 # grep
-alias  p="grep -i -n --color=auto -E"
-alias pf="grep -i -n --color=auto -F"
-alias pr="grep -i -n --color=auto -E -r"
 
 # create parent directories by default
-alias mkdir='mkdir -pv'
-alias md='mkdir -pv'
 
 function mdcd() {
  ##########
@@ -213,39 +159,21 @@ function mdcd() {
  ##########
 }
 
-# requires: colordiff package
-if [ -x "$(command -v colordiff)" ]; then
-  alias diff='colordiff'
-else
-  echo '[WARNING] colordiff is not installed, using diff.' >&2
-fi
-
 ###########################################################
 #############################################################
 ## Clipboard / Editor
 
 # copy/paste
-alias xc='xclip -selection clipboard'
-alias xp='xclip -selection clipboard -o'
-alias copy='xclip -selection clipboard'
 
 # xbrightness
-alias xb='xbrightness'
-alias xbr='xbrightness 65535'
 
 # workflow
-alias open='xdg-open'
-alias xo='xdg-open'
 # 
-alias xd='xdotool'
-alias xw='wmctrl'
 function open () {
   xdg-open &disown
 }
 
 # keybindings
-alias xm='xmodmap'
-alias xb='xbindkeys'
 
 # e.g.
 # grep '^\S*' 
@@ -261,13 +189,6 @@ function seteditor () {
 function e () { 
  emacsclient "$@" & 
 }
-alias ee="emacsclient"
-alias eb='$EDITOR ~/.bashrc && source ~/.bashrc' # single-quotes for dynamically-scoped EDITOR
-alias ed="emacs --debug-init"
-alias eq="emacs -q"
-alias edq="emacs -q --debug-init"
-alias ec="emacs -q ~/.emacs.d/init.el" # to debug
-alias et="emacs -nw"
 
 function emacs-terminal () {
 
@@ -335,16 +256,10 @@ function emacs-terminal () {
 }
 
 # nano
-alias nb="nano ~/.bashrc && source ~/.bashrc"
 
 # Reloading
 # mnemonic: "s" for sourcing
-alias sbr="source ~/.bashrc"              # bash{R}c.
-alias sbp="source ~/.profile"             # {P}rofile
 #
-alias sbd="source ~/.bash_definitions.sh" # {D}efinition. should be idempotent.
-alias sba="source ~/.aliases"             # {A}alias.     should be idempotent.
-alias sbs="source ~/.bash_settings.sh"    # {S}etting
 #
 
 function se () {
@@ -356,15 +271,8 @@ function se () {
 # Remove
 
 # rm
-alias r=rm
-alias rm="rm -f"
-alias rr="rm -rf"
 #
-# alias rmr=rr #TODO
-# alias rmt=rt #TODO
 #
-#alias rta='rm -f *~ .*~ \#*\# .\#* matlab_crash_dump.* java.log.* *.pyc *.class __pycache__/*.pyc *.agdai *.hi *.hout *.o'
-#alias rtr='rm -fr *~ .*~ \#*\# .\#* matlab_crash_dump.* java.log.* *.pyc *.class __pycache__/*.pyc *.agdai *.hi *.hout *.o'
 #
 
 ############################################################
@@ -372,13 +280,10 @@ alias rr="rm -rf"
 # Miscellaneous Builtins/Programs
 
 # chmod
-alias c7="chmod 700"
 
 # help aliases
-alias lnh="echo 'ln -sf /path/to/file /path/to/symlink'"
 
 # misc
-alias disksize="df -h /"
 function dirsize () {
  du -hcs "$@"
  # du --total --dereference --human-readable "$@"
@@ -394,30 +299,15 @@ function filesize () {
  # bash: UNSET_VAR: Unset variable
 }
 
-alias cpr="rsync -arRv"
 # e.g. cpr stuff backup
 # ./backup/stuff doesn't exist yet and is created
-alias cprd="rsync -arRv --dry-run"
 # --exclude ".stack-work" --exclude "dist-newstyle"
 
-alias lnr='readlink -f'
-alias lns='ln -sf' # /path/to/file /path/to/symlink
-# alias pwn="sudo chown -R sboo:users"
-alias yt='youtube-dl -f 22' # needs youtube-dl
-# alias unzip="7z x" # needs 7z
 
 #
-alias w=disown  # diso{W}n
 
 # Natural Language Commands
-alias list="ls -1aFG"
-alias remove="rm -f"
-alias show="cat"
-alias get="git"
-alias grab="grep"
-alias processes=ps
 
-alias synchronize="rsync -vihh -x -C -aR"
     # e.g. 
     #
     #      $ cd ~
@@ -428,29 +318,15 @@ alias synchronize="rsync -vihh -x -C -aR"
     #      $ synchronize haskell/commands/commands-spiros/config* ~/backup/
     #      # includes: config/ config-linux/ config-osx/ config-windows/
 
-alias dry-synchronize="synchronize --dry-run"
     # 
 
-alias path='echo -e ${PATH//:/\\n}'
-alias now='date +"%T"'
 
-alias reboot='sudo /sbin/reboot'
-alias poweroff='sudo /sbin/poweroff'
-alias halt='sudo /sbin/halt'
-alias shutdown='sudo /sbin/shutdown'
 
 ## pass options to free ##
-alias meminfo='free -m -l -t'
 ## get top process eating memory
-alias psmem='ps auxf | sort -nr -k 4'
-alias psmem10='ps auxf | sort -nr -k 4 | head -10'
 ## get top process eating cpu ##
-alias pscpu='ps auxf | sort -nr -k 3'
-alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
 ## Get server cpu info ##
-alias cpuinfo='lscpu' 
 ## get GPU ram on desktop / laptop##
-alias gpumeminfo='grep -i --color memory /var/log/Xorg.0.log'
 
 # e.g.
 
@@ -494,28 +370,16 @@ alias gpumeminfo='grep -i --color memory /var/log/Xorg.0.log'
 # [     6.678] (==) NVIDIA(0): Disabling shared memory pixmaps
 
 # ps
-# TODO alias psa="ps -o \"command, pid, %mem, %cpu, user, start, \" "
 
 # python
-#alias pi="ipython"
-alias p3="python3"
-alias p2="python2.7"
 
 ############################################################
 ############################################################
 ## GIT
 
 # git
-alias g="git"
-alias gl="git status" # mnemonic: git "list"
-alias gp="git push"
-alias gd="git dif"
-alias ga="git amend"
-alias gorc="git status --porcelain | cut -d ' ' -f 3 | tr '\\n' ' '"
 
 # # cleaning TODO
-# alias clean-haskell="remove \"$1\".{dyn_hi,dyn_o,hi,o}"
-# alias clean-emacs='remove "${1:?}".~ .\#"${1:?}"'
 
 
 ############################################################
@@ -541,57 +405,23 @@ function rm-temporaries() {
  # find . -name \*~ | xargs rm
 }
 
-alias ft=find-temporaries
 
-alias rt=rm-temporaries
 
 ############################################################
 ############################################################
 ## NIX
 
 #
-alias nix-env-unqualified="nix-env" #TODO does the timing of the scoping work?
-alias nix-env-qualified-default='nix-env -f "<nixpkgs>"'
-alias nix-env-qualified-file='nix-env -f "~/nixpkgs"'
 #
-alias nix-env="nix-env -f $HOME/nixpkgs"
 #
-alias ne=nix-env
-alias nea='nix-env -A'
-alias ni="nix-env -i"
-alias nu="nix-env --uninstall"
-alias nix-install="nix-env -i"
-alias nix-uninstall="nix-env --uninstall"
-# alias nua="nix-env -u '*'"
 #
-alias nix-build="nix-build --show-trace"
-alias nb="nix-build"
-alias nbe="nix-build ~/.nixpkgs/environment.nix" #TODO home.nix
 #
-alias nix-shell="nix-shell --show-trace"
-alias nl="nix-shell"
-alias nlp="nix-shell --pure"
-alias nlr="nix-shell --run"
-alias nlrp="nix-shell --pure --run"
-alias nlx="nix-shell --run return"
-alias nlxp="nix-shell --pure --run exit"
 #
-alias nlhba="nix-shell --run 'cabal new-build all'"
 #
-alias nix-eval="nix-instantiate --eval"
-alias nx="nix-instantiate --eval"
-alias nxv="nix-instantiate --eval"
-alias nxp="nix-instantiate --parse"
-alias nxe="nix-instantiate --eval"
-alias nxs="nix-instantiate --eval --strict" 
   # recursively evaluate list elements and attributes
   # NOTE may loop
-alias nxx="nix-instantiate --expr" # nxx 'import ./"$1" {}'
            # Interpret the command line arguments as a list of Nix expressions to be parsed and evaluated, rather than as a list of
            # file names of Nix expressions. 
-# alias nx1="nix-instantiate --eval" # eval unary with defaults
-# alias nx2="nix-instantiate --eval" # eval binary with defaults
-#alias nx1="nix-instantiate --eval" # eval unary with defaults
 
 # function nx1() { 
 #  NIX_FILE="${1-?}"
@@ -613,18 +443,10 @@ function nx1() {
        #     Interpret the command line arguments as a list of Nix expressions to be parsed and evaluated, rather than as a list of
        #     file names of Nix expressions. (nix-instantiate, nix-build and nix-shell only.)
 
-alias ns="nix-store"
-alias nsr='nix-store --query --references'
 
-alias ncu='nix-channel --update && nix-env --upgrade'
 # "nix-channel --update"
-# alias ncux="nix-channel --update nixpkgs"
 
-alias npg="nix-prefetch-git --quiet"
-alias npu="nix-prefetch-url"
 
-#alias n="nix-"
-#alias n="nix-"
 
 function nq() {
  nix-env --system-filter "x86_64-linux" -qa \* -P | grep -F -i "$1";
@@ -663,8 +485,6 @@ function nqe() {
  nix-env -f "<nixpkgs>" -qaP -A emacsPackagesNg.melpaPackages | grep -i "$@"
 }
 
-alias nix-make-shell='cabal2nix *.cabal --sha256=0 --shell > shell.nix'
-alias nix-make-default='cabal2nix *.cabal > default.nix'
 
 function nix-install-haskell() {
  nix-env -f "<nixpkgs>" -i -A "haskellPackages.${1:?}"
@@ -735,7 +555,6 @@ EOF
   nix repl   # Nix v2
 }
 
-alias nr=sboo-nix-repl
 
 function nix-where () {
   # obligatorily unary function
@@ -794,7 +613,6 @@ function raise-terminal () {
  raise-window "${1:-terminal}"
 }
 
-alias raise-editor="raise-emacs"
 
 #  wmctrl  -b add,fullscreen  -a "${_TITLE}"
 
@@ -804,8 +622,6 @@ alias raise-editor="raise-emacs"
 
 ## haskell
 
-# alias hn="stack setup" # "n"ew
-# alias hb="stack build"
 # function he() { 
 #  stack exec -- "$@" 
 # }
@@ -814,46 +630,21 @@ alias raise-editor="raise-emacs"
 ############################################################
 # Make / Makefiles
 
-alias m="make"             # "m"ake
 #
-alias mb="make build"      # "b"uild
 #
-alias ml="make shell"      # shel"l"
-alias mf="make configure"  # con"f"igure
 #
-alias mc="make check"      # type-"c"heck
-alias mr="make repl"       # "r"epl
-alias mp="make compile"    # com"p"ile
-alias mi="make install"    # "i"nstall
-alias mx="make execute"    # "e"xecute
-alias mq="make clean"      # "q"lean / "quit"(?) lol
 #
-alias mw="make watch"      # "w"atch
-alias mt="make tags"       # "t"ags
 #
 
 ############################################################
 ############################################################
 # Haskell
 
-alias hc="cabal new-configure"
-alias hb="cabal new-build"
-alias hr="cabal new-repl"
-alias hx="cabal new-run"
 #
-alias hnba='nix-shell --run "cabal new-build all"'
 #
-alias hca="cabal new-configure all"
-alias hba="cabal new-build all"
-alias hra="cabal new-repl all"
-alias hxa="cabal new-run all -- "
 
-alias hsi="stack install"
-alias hsc="stack configure"
-alias hsb="stack build"
-alias hsr="stack repl"
-alias hsx="stack run --"
-# alias hsx="stack exec --"
+# stack
+
 
 # `cabal new-*`
 #
@@ -876,7 +667,6 @@ function haskell-build() {
  cabal "new-${2:-build}" "${1:-all}"
 }
 
-alias h=haskell-build
 
 # e.g.
 # 
@@ -893,7 +683,6 @@ function haskell-nix-build() {
  nix-shell --run "cabal new-build ${1:-all}"
 }
 
-alias hn=haskell-nix-build
 
 # e.g.
 # 
@@ -910,8 +699,6 @@ function h2() {
  cabal "new-${1:-build}" "${2:-all}"
 }
 
-# alias hcc="cabal configure"
-# alias hcb="cabal build"
 
 # # Running projects, ghc
 # function h() {
@@ -930,10 +717,10 @@ function h2() {
 # # Running a script the first way runs it as a child process. Sourcing (the second way), on the other way, runs the script as if you entered all its commands into the current shell - if the script sets a variable, it will remain set, if the script exits, your session will exit. See help . for documentation
 # }
 
-function ht() {
-    PACKAGE="$(basename "$PWD")"
-    stack build && _printDiv && stack test
-}
+# function ht() {
+#     PACKAGE="$(basename "$PWD")"
+#     stack build && _printDiv && stack test
+# }
 
 # Running projects, ghcjs
 function j() {
@@ -1242,7 +1029,6 @@ function new-haskell-project () (
     git push -u origin master
 )
 
-# alias hnew=new-haskell-project
 
 # To generate a Nix build expression for it, change into the project’s top-level directory and run the command:
 # $ cabal2nix . >foo.nix
@@ -1607,7 +1393,6 @@ function true-absolute-path {
 function absolute-path {
  true-absolute-path "$@"
 }
-alias path=absolute-path
 
 # https://stackoverflow.com/questions/965053/extract-filename-and-extension-in-bash
 #
@@ -1648,7 +1433,6 @@ function ssh-fingerprint () {
  ssh-keygen -E md5 -lf "$1.pub"
 } 
 
-alias sshl='ssh-add -l'
 
 function ssha () {
  _PRIVATE_KEY="$1"
@@ -1699,7 +1483,6 @@ function ssha () {
 #
 # ssh-key with passphrase, with ssh-ident:
 # ssh-ident is an utility that can manage ssh-agent on your behalf and load identities as necessary. It adds keys only once as they are needed, regardless of how many terminals, ssh or login sessions that require access to an ssh-agent.
-# alias ssh='ssh-ident' # TODO
 
 ############################################################
 ############################################################
@@ -1755,7 +1538,6 @@ function git-rebase-upstream() {
  # rebase master onto upstream
 }
 
-# alias gcs="clone sboosali"
 
 # submodule
 function git-mod () {
@@ -1968,7 +1750,6 @@ function bash-completion--source-everything () {
 ############################################################
 ## EMACS
 
-alias emacs-nix='./result/bin/emacs -q --load "./init.el"' # relative filepaths
 
 ############################################################
 ############################################################
@@ -2021,39 +1802,15 @@ function screen-dimmer--via-xdotool () {
 # eDP-1-1 is name of the laptop screen (the first field)
 # "Why is it called eDP? bcause it is an embedded display port style adapter, and not a video graphics array style one."
 # 0x42 is the Identifier from `xrandr --verbose`
-# alias red="xrandr --output 0x42 --crtc 0 --gamma "
 # xrandr -d :0 --output eDP-1-1 --gamma "1:1:1" # restore default
 # xrandr -d :0 --output eDP-1-1 --gamma "1:1:1"
 
-alias screen-invert="xrandr-invert-colors"
 
-alias screen-night="screen-brighter--via-xdotool 20 ; redshift -x ; redshift -O 1000 ; xrandr-invert-colors"
-alias screen-night-dim="screen-brighter--via-xdotool 20 ; redshift -x ; redshift -O 1000 ; xrandr-invert-colors ; screen-dimmer--via-xdotool 10"
 # ^ via: redshift; xrandr-invert-colors; and xdotool (XF86MonBrightnessDown).
-alias screen-dusk="screen-brighter--via-xdotool 20 ; redshift -x ; redshift -O 2000 ; xrandr-invert-colors"
-alias screen-day="redshift -x ; xrandr-invert-colors"
 
-alias screen-white="redshift -x"
-alias screen-red="redshift -x && redshift -O 1000"
-alias screen-scarlet="redshift -x && redshift -O 1500"
-alias screen-orange="redshift -x && redshift -O 2000"
-alias screen-yellow="redshift -x && redshift -O 3000"
-alias screen-warm="redshift -x && redshift -O 9000"
 
-alias xi=screen-invert # {X}11-{I}nvert
-alias xn=screen-night  # {X}11-{N}ight
-alias xd=screen-day    # {X}11-{D}ay
-alias xr=screen-red    # {X}11-{R}ed
-alias xw=screen-white  # {X}11-{W}hite #TODO xw=wmctrl
 
-alias qqqqqqqqqq--screen-night="redshift -x ; redshift -O 1000 ; xrandr-invert-colors" # 10 Q's is a prefix to support tab-completion for: holding down for a broad range of times, and then pressing the (adjacent) tab key (plus the enter key).
 #
-alias red="redshift -O 1000" # one-shot, 1000K
-alias scarlet="redshift -O 1500" # one-shot
-alias orange="redshift -O 2000" # one-shot
-alias yellow="redshift -O 3000" # one-shot
-alias white="redshift -x" # 
-alias un-red="redshift -x" #
 
 function screen-set () {
  redshift -O "${1}00"
@@ -2063,8 +1820,6 @@ function screen-set () {
 # DirEnv #########################################
 ##################################################
 
-alias v=direnv           # diren[v]
-alias va="direnv allow"  # [a]llow
 
 # $ direnv allow
 
@@ -2090,7 +1845,6 @@ alias va="direnv allow"  # [a]llow
 # (2) 
 # Add your SSH private key to the ssh-agent.
 
-alias sboo-ssh-add="ssh-add ~/.ssh/id_rsa"
 
 #TODO 
 #PRIVATE_KEY_FILENAME=id_rsa
@@ -2117,15 +1871,12 @@ alias sboo-ssh-add="ssh-add ~/.ssh/id_rsa"
 ############################################################
 ## Restarting Services
 
-alias sboo-restart-gnome="gnome-shell --replace &disown"
 # ^ seems to be always necessary after startup; 
 # otherwise, clicking on the windows bars at the bottom of the screen
 # doesn't switch to those windows
 
-alias sboo-restart-xbindkeys="killall xbindkeys || true ; xbindkeys -fg ~/.xbindkeysrc.scm &disown "
 #
 
-alias sboo-restart-kde="kquitapp5 plasmashell && kstart plasmashell"
 
 #
 # either:
@@ -2142,9 +1893,7 @@ alias sboo-restart-kde="kquitapp5 plasmashell && kstart plasmashell"
 # Ephemeral/Specialized Stuff
 
 #TODO rm
-alias melpa2nix=/nix/store/2g4pm399808pmz6zsd89m2iwahk439vi-emacs2nix-0.1.0.0/bin/melpa2nix 
 
-alias dpkg-uninstall="sudo dpkg --force-remove-reinstreq --purge"
 # apt list --upgradeable 
 
 ############################################################
@@ -2191,6 +1940,17 @@ alias dpkg-uninstall="sudo dpkg --force-remove-reinstreq --purge"
   # # ^ `id` outputs null-seperated-values, `grep` splits lines on the null-character.
   # MEMBERSHIP="$?"
   # # ^ TODO safe?
+
+############################################################
+############################################################
+
+if [ -f  ~/.aliases ]; then
+  source ~/.aliases
+fi
+
+if [ -f  ~/.bash_aliases.sh ]; then
+  source ~/.bash_aliases.sh
+fi
 
 ############################################################
 ############################################################

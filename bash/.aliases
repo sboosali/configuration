@@ -5,4 +5,286 @@
 
 #########################################
 
-# TODO
+alias c=cat
+alias n=nano
+#alias r='rm -r'
+alias f=find
+alias g=git
+alias o=echo
+alias i=man   # "i"nformation
+# alias e="echo" # emacs
+
+alias d="cd"
+alias d-="cd -"
+alias d..="cd .."
+alias d...="cd ../.."
+alias d....="cd ../../.."
+alias d.....="cd ../../../.."
+alias d......="cd ../../../../.."
+alias d.......="cd ../../../../../.."
+alias de='cd ~/.emacs.d'
+alias dew='cd ~/.emacs.d-windows'
+alias dc='cd ~/configuration'
+alias dh='cd ~/haskell'
+alias dt='cd ~/temporary'
+alias db='cd ~/backup'
+alias dw='cd ~/Downloads'
+alias dm='cd ~/Documents'
+alias dn='cd ~/notes'
+alias dx='cd ~/nixpkgs'
+#alias dnix='cd ~/.nixpkgs'
+#alias dn='cd ~/Dropbox/notes'
+# alias d='cd '
+# alias d='cd '
+
+alias l='ls -A'
+alias ll='ls -alF'
+alias la='ls -A'
+alias lc='ls -CF'
+###alias l='find . -maxdepth 1 -printf "%M | %p\n"'
+
+alias f.="find ."
+alias f-="find-relevant ."
+alias f1="find . -maxdepth 1"
+alias f2="find . -maxdepth 2"
+alias f3="find . -maxdepth 3"
+alias f4="find . -maxdepth 4"
+alias f5="find . -maxdepth 5"
+alias f6="find . -maxdepth 6"
+alias f7="find . -maxdepth 7"
+alias f8="find . -maxdepth 8"
+alias f9="find . -maxdepth 9"
+
+alias skip-blank-lines="grep -v -e '^[[:space:]]*$'"
+alias  p="grep -i -n --color=auto -E"
+alias pf="grep -i -n --color=auto -F"
+alias pr="grep -i -n --color=auto -E -r"
+
+alias mkdir='mkdir -pv'
+alias md='mkdir -pv'
+
+# requires: colordiff package
+if [ -x "$(command -v colordiff)" ]
+then
+    alias diff='colordiff'
+else
+    # alias diff='...'
+    echo '[WARNING] colordiff is not installed, using diff.' >&2
+fi
+
+alias xc='xclip -selection clipboard'
+alias xp='xclip -selection clipboard -o'
+
+alias xb='xbrightness'
+alias xo='xdg-open'
+alias xd='xdotool'
+alias xm='xmodmap'
+alias xb='xbindkeys'
+alias xw='wmctrl'
+
+alias xbr='xbrightness 65535'
+
+alias ee="emacsclient"
+alias eb='$EDITOR ~/.bashrc && source ~/.bashrc' # single-quotes for dynamically-scoped EDITOR
+alias ed="emacs --debug-init"
+alias eq="emacs -q"
+alias edq="emacs -q --debug-init"
+alias ec="emacs -q ~/.emacs.d/init.el" # to debug
+alias et="emacs -nw"
+
+alias nb="nano ~/.bashrc && source ~/.bashrc"
+
+alias sbr="source ~/.bashrc"              # bash{R}c.
+alias sbp="source ~/.profile"             # {P}rofile
+alias sbd="source ~/.bash_definitions.sh" # {D}efinition. should be idempotent.
+alias sba="source ~/.aliases"             # {A}alias.     should be idempotent.
+alias sbs="source ~/.bash_settings.sh"    # {S}etting
+
+alias r=rm
+alias rm="rm -f"
+alias rr="rm -rf"
+# alias rmr=rr #TODO
+# alias rmt=rt #TODO
+#alias rta='rm -f *~ .*~ \#*\# .\#* matlab_crash_dump.* java.log.* *.pyc *.class __pycache__/*.pyc *.agdai *.hi *.hout *.o'
+#alias rtr='rm -fr *~ .*~ \#*\# .\#* matlab_crash_dump.* java.log.* *.pyc *.class __pycache__/*.pyc *.agdai *.hi *.hout *.o'
+
+alias c7="chmod 700"
+
+alias lnh="echo 'ln -sf /path/to/file /path/to/symlink'"
+
+alias disksize="df -h /"
+
+alias cpr="rsync -arRv"
+alias cprd="rsync -arRv --dry-run"
+
+alias lnr='readlink -f'
+alias lns='ln -sf' # /path/to/file /path/to/symlink
+# alias pwn="sudo chown -R sboo:users"
+
+alias yt='youtube-dl -f 22' # needs youtube-dl
+
+# alias unzip="7z x" # needs 7z
+
+alias w=disown  # diso{W}n
+
+alias list="ls -1aFG"
+alias remove="rm -f"
+alias show="cat"
+alias get="git"
+alias grab="grep"
+alias processes=ps
+alias synchronize="rsync -vihh -x -C -aR"
+alias dry-synchronize="synchronize --dry-run"
+alias path='echo -e ${PATH//:/\\n}'
+alias now='date +"%T"'
+alias reboot='sudo /sbin/reboot'
+alias poweroff='sudo /sbin/poweroff'
+alias halt='sudo /sbin/halt'
+alias shutdown='sudo /sbin/shutdown'
+
+alias meminfo='free -m -l -t'
+alias psmem='ps auxf | sort -nr -k 4'
+alias psmem10='ps auxf | sort -nr -k 4 | head -10'
+alias pscpu='ps auxf | sort -nr -k 3'
+alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
+alias cpuinfo='lscpu' 
+alias gpumeminfo='grep -i --color memory /var/log/Xorg.0.log'
+# TODO alias psa="ps -o \"command, pid, %mem, %cpu, user, start, \" "
+
+#alias pi="ipython"
+alias p3="python3"
+alias p2="python2.7"
+
+alias g="git"
+alias gl="git status" # mnemonic: git "list"
+alias gp="git push"
+alias gd="git --no-pager diff"
+alias ga="git amend"
+alias gorc="git status --porcelain | cut -d ' ' -f 3 | tr '\\n' ' '"
+
+# alias clean-haskell="remove \"$1\".{dyn_hi,dyn_o,hi,o}"
+# alias clean-emacs='remove "${1:?}".~ .\#"${1:?}"'
+
+alias ft=find-temporaries
+alias rt=rm-temporaries
+
+alias nix-env-unqualified="nix-env" #TODO does the timing of the scoping work?
+alias nix-env-qualified-default='nix-env -f "<nixpkgs>"'
+alias nix-env-qualified-file='nix-env -f "~/nixpkgs"'
+alias nix-env="nix-env -f $HOME/nixpkgs"
+
+alias ne=nix-env
+alias nea='nix-env -A'
+alias ni="nix-env -i"
+alias nu="nix-env --uninstall"
+alias nix-install="nix-env -i"
+alias nix-uninstall="nix-env --uninstall"
+# alias nua="nix-env -u '*'"
+
+alias nix-build="nix-build --show-trace"
+alias nb="nix-build"
+alias nbe="nix-build ~/.nixpkgs/environment.nix" #TODO home.nix
+
+alias nix-shell="nix-shell --show-trace"
+alias nl="nix-shell"
+alias nlp="nix-shell --pure"
+alias nlr="nix-shell --run"
+alias nlrp="nix-shell --pure --run"
+alias nlx="nix-shell --run return"
+alias nlxp="nix-shell --pure --run exit"
+alias nlhba="nix-shell --run 'cabal new-build all'"
+
+alias nix-eval="nix-instantiate --eval"
+alias nx="nix-instantiate --eval"
+alias nxv="nix-instantiate --eval"
+alias nxp="nix-instantiate --parse"
+alias nxe="nix-instantiate --eval"
+alias nxs="nix-instantiate --eval --strict" 
+alias nxx="nix-instantiate --expr" # nxx 'import ./"$1" {}'
+# alias nx1="nix-instantiate --eval" # eval unary with defaults
+# alias nx2="nix-instantiate --eval" # eval binary with defaults
+#alias nx1="nix-instantiate --eval" # eval unary with defaults
+
+alias ns="nix-store"
+alias nsr='nix-store --query --references'
+
+alias ncu='nix-channel --update && nix-env --upgrade'
+# alias ncux="nix-channel --update nixpkgs"
+
+alias npg="nix-prefetch-git --quiet"
+alias npu="nix-prefetch-url"
+
+#alias n="nix-"
+#alias n="nix-"
+
+alias nix-make-shell='cabal2nix *.cabal --sha256=0 --shell > shell.nix'
+alias nix-make-default='cabal2nix *.cabal > default.nix'
+alias nr=sboo-nix-repl
+
+# alias hn="stack setup" # "n"ew
+# alias hb="stack build"
+
+alias m="make"             # "m"ake
+alias mb="make build"      # "b"uild
+alias ml="make shell"      # shel"l"
+alias mf="make configure"  # con"f"igure
+alias mc="make check"      # type-"c"heck
+alias mr="make repl"       # "r"epl
+alias mp="make compile"    # com"p"ile
+alias mi="make install"    # "i"nstall
+alias mx="make execute"    # "e"xecute
+alias mq="make clean"      # "q"lean / "quit"(?) lol
+alias mw="make watch"      # "w"atch
+alias mt="make tags"       # "t"ags
+
+alias hc="cabal new-configure"  # {c}onfigure
+alias hb="cabal new-build"      # {b}uild
+alias hr="cabal new-repl"       # {r}epl
+alias hx="cabal new-run"        # e{x}ecute
+alias ht="cabal new-test"       # {t}est
+alias hn="cabal new-bench"      # be{n}ch
+
+alias hnba='nix-shell --run "cabal new-build all"'
+
+alias hca="cabal new-configure all"
+alias hba="cabal new-build all"
+alias hra="cabal new-repl all"
+alias hxa="cabal new-run all -- "
+
+alias hsi="stack install"       # 
+alias hsc="stack configure"     # 
+alias hsb="stack build"         # 
+alias hst="stack test"          # 
+alias hsn="stack bench"         # be{n}ch
+alias hsr="stack repl"          # 
+alias hsx="stack run --"        # "run" is like e{x}ecute
+# alias hsx="stack exec --"
+
+alias h=haskell-build
+alias hn=haskell-nix-build
+
+# alias hcc="cabal configure"
+# alias hcb="cabal build"
+# alias hnew=new-haskell-project
+
+alias sshl='ssh-add -l'
+# alias ssh='ssh-ident' # TODO
+# alias gcs="clone sboosali"
+
+alias emacs-nix='./result/bin/emacs -q --load "./init.el"' # relative filepaths
+
+alias v=direnv           # diren[v]
+alias va="direnv allow"  # [a]llow
+
+alias sboo-ssh-add="ssh-add ~/.ssh/id_rsa"
+alias sboo-restart-gnome="gnome-shell --replace &disown"
+alias sboo-restart-xbindkeys="killall xbindkeys || true ; xbindkeys -fg ~/.xbindkeysrc.scm &disown "
+alias sboo-restart-kde="kquitapp5 plasmashell && kstart plasmashell"
+alias melpa2nix=/nix/store/2g4pm399808pmz6zsd89m2iwahk439vi-emacs2nix-0.1.0.0/bin/melpa2nix 
+
+alias dpkg-uninstall="sudo dpkg --force-remove-reinstreq --purge"
+
+alias open='xdg-open'
+alias copy='xclip -selection clipboard'
+
+#########################################

@@ -61,8 +61,14 @@ if [ -f  ~/.aliases ]; then
   source ~/.aliases
 fi
 
+# pure stuff
 if [ -f  ~/.bash_definitions.sh ]; then
   source ~/.bash_definitions.sh
+fi
+
+# pure stuff
+if [ -f  ~/.bash_aliases ]; then
+  source ~/.bash_aliases
 fi
 
 # impure stuff
