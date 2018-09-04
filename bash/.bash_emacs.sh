@@ -77,7 +77,9 @@ if [ -f  ~/.bash_settings.sh ]; then
 fi
 
 ########################################
-## EFFECTS 
+## EFFECTS
+
+# Emacs uses `.bashrc`, and these `echo`es spam `M-x grep`, `M-x compile`, and so on.
 
 # echo '========================================'
 # echo

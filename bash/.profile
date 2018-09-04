@@ -21,10 +21,14 @@ fi
 
 ##################################################
 ##################################################
-## Definitions (Bash-only)
+## Definitions & Aliases (Bash-only)
 
 if [ -f  ~/.bash_definitions.sh ]; then
   source ~/.bash_definitions.sh
+fi
+
+if [ -f  ~/.bash_aliases.sh ]; then
+  source ~/.bash_aliases.sh
 fi
 
 ##################################################

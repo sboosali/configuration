@@ -51,12 +51,14 @@ alias screen-night="screen-brighter--via-xdotool 20 ; redshift -x ; redshift -O 
 alias screen-night-dim="screen-brighter--via-xdotool 20 ; redshift -x ; redshift -O 1000 ; xrandr-invert-colors ; screen-dimmer--via-xdotool 10"
 alias screen-dusk="screen-brighter--via-xdotool 20 ; redshift -x ; redshift -O 2000 ; xrandr-invert-colors"
 
-alias xi=screen-invert # {X}11-{I}nvert
-alias xn=screen-night  # {X}11-{N}ight
-alias xd=screen-day    # {X}11-{D}ay
-alias xu=screen-dusk   # {X}11-D{u}sk
-alias xr=screen-red    # {X}11-{R}ed
-alias xw=screen-white  # {X}11-{W}hite #TODO xw=wmctrl
+alias xsi=screen-invert # {X}11-{I}nvert
+alias xsn=screen-night  # {X}11-{N}ight
+alias xsd=screen-day    # {X}11-{D}ay
+alias xsu=screen-dusk   # {X}11-D{u}sk
+alias xsr=screen-red    # {X}11-{R}ed
+alias xsw=screen-white  # {X}11-{W}hite
+                        #NOTE# xw=wmctrl
+alias xsy=screen-yellow # {X}11-{Y}ellow
 
 alias red="redshift -O 1000" # one-shot, 1000K
 alias scarlet="redshift -O 1500" # one-shot

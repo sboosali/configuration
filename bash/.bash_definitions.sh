@@ -522,25 +522,45 @@ function sboo-nix-repl () {
 
  read -r -d '' NIX_REPL_EXAMPLES <<EOF
 
+''
+##################################################
+''
+
 nixpkgs = import <nixpkgs> {}
-b  = builtins
-c  = nixpkgs.config
-l  = nixpkgs.lib
-ps = nixpkgs.pkgs
-hs = ps.haskellPackages
-h  = nixpkgs.haskell.lib
+b       = builtins
+c       = nixpkgs.config
+l       = nixpkgs.lib
+self    = nixpkgs.pkgs
+
+h    = nixpkgs.haskell.lib
+hs   = nixpkgs.pkgs.haskellPackages
+hs86 = nixpkgs.pkgs.haskell.packages.ghc861
+
+el   = nixpkgs.pkgs.emacs26Packages
+el26 = nixpkgs.pkgs.emacs26Packages
+
+py   = nixpkgs.pkgs.python27Packages
+py27 = nixpkgs.pkgs.python27Packages
+
 :a nixpkgs
 :a nixpkgs.lib
+
+melpaBuild = nixpkgs.pkgs.emacs26Packages.emacsMelpa.melpaBuild
+melpa      = nixpkgs.pkgs.emacs26Packages.emacsMelpa
+
 kde    = nixpkgs.plasma5
+
 sboo   = nixpkgs.sboo
 sbooHaskell = nixpkgs.sboo.haskellPackages
-:i sbooHaskell.enumerate
+
+''
+##################################################
+''
 EOF
 
 # p.kdeApplications 
 # p.kdeFrameworks
-# gnome = p.gnome3
-# spiros = hs.spiros
+# :i sbooHaskell.spiros
 
   echo
   echo -e "$NIX_REPL_EXAMPLES"
@@ -548,11 +568,15 @@ EOF
 
   if   [ -x "$(command -v xdotool)" ]
   then
-       (sleep 1 && xdotool type --clearmodifiers 'nixpkgs = import <nixpkgs> {}' && xdotool key --clearmodifiers 'Return' && xdotool type --clearmodifiers ':a nixpkgs' && xdotool key --clearmodifiers 'Return') &
+      (sleep 1 && xdotool type --clearmodifiers 'nixpkgs = import <nixpkgs> {}' && xdotool key --clearmodifiers 'Return' && xdotool type --clearmodifiers ':a nixpkgs' && xdotool key --clearmodifiers 'Return' && xdotool type --clearmodifiers 'hs = nixpkgs.pkgs.haskellPackages' && xdotool key --clearmodifiers 'Return' && xdotool type --clearmodifiers 'py = nixpkgs.pkgs.pythonPackages' && xdotool key --clearmodifiers 'Return' && xdotool type --clearmodifiers 'el = nixpkgs.pkgs.emacs26Packages' && xdotool key --clearmodifiers 'Return' && xdotool type --clearmodifiers 'kde = nixpkgs.plasma5' && xdotool key --clearmodifiers 'Return' && xdotool type --clearmodifiers 'melpa = nixpkgs.pkgs.emacs26Packages.emacsMelpa' && xdotool key --clearmodifiers 'Return') &
+     # ^ [template]
+     #   && xdotool type --clearmodifiers ' = nixpkgs.pkgs.' && xdotool key --clearmodifiers 'Return'
+
   fi
   
   # nix-repl # Nix v1
   nix repl   # Nix v2
+
 }
 
 

@@ -235,7 +235,8 @@ alias mi="make install"    # "i"nstall
 alias mx="make execute"    # "e"xecute
 alias mq="make clean"      # "q"lean / "quit"(?) lol
 alias mw="make watch"      # "w"atch
-alias mt="make tags"       # "t"ags
+alias mt="make test"       # "t"est
+alias mz="make clean"       # "z"(?)
 
 alias hc="cabal new-configure"  # {c}onfigure
 alias hb="cabal new-build"      # {b}uild

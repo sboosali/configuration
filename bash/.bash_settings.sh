@@ -84,7 +84,7 @@ do
     source "$COMPLETION" || true
 done
 
-### {sudo,find,ls,export,declare,git,ghc,ghcjs,cabal,clang,gcc,g++,ssh,ssh-add,ssh-keygen,xmodmap,xrandr,xbindkeys,dconf,curl,ping,dd,tar,gzip,7z,rsync,htop,pkill,pgrep,pandoc,iconv,dot,nano,emacs,emacsclient,feh,scp}
+### {sudo,find,ls,export,declare,git,ghc,ghcjs,cabal,clang,gcc,g++,ssh,ssh-add,ssh-keygen,xmodmap,xrandr,xbindkeys,dconf,curl,ping,dd,tar,gzip,7z,rsync,htop,pkill,pgrep,pandoc,iconv,dot,nano,emacs,emacsclient,feh,scp,VBoxManage}
 
 ####################
 
