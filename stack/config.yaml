@@ -1,10 +1,32 @@
 ########################################
 # notes
+########################################
 
 # https://github.com/commercialhaskell/stack/blob/release/doc/yaml_configuration.md
 
 ########################################
+# nix
+########################################
+
+nix:
+  enable: true
+  pure:   false
+
+system-ghc: true
+
+extra-include-dirs:
+  - /home/sboo/.nix-profile/include
+
+extra-lib-dirs:
+  - /home/sboo/.nix-profile/lib
+
+# extra-prog-path:                     #TODO not a field.
+#   - /home/sboo/.nix-profile/bin/
+#   - /home/sboo/.nix-profile/libexec/
+
+########################################
 # templates
+########################################
 
 templates:
   params:
@@ -17,25 +39,7 @@ templates:
     module:          TODO 
     synopsis:        TODO 
 
-default-template: ~/.stack/templates/spirosboosalis.hsfiles
-# https://raw.githubusercontent.com/sboosali/configuration/master/stack/templates/spirosboosalis.hsfiles
+#TODO default-template: ~/.stack/templates/spirosboosalis.hsfiles
 
 ########################################
-# nix
-
-# system-ghc: true
-
-nix:
-  enable: false 
-  pure:   false
-  packages:
-  - zlib
-  # shell-file: shell.nix
-
-extra-include-dirs:
-  - /home/sboo/.nix-profile/include
-
-extra-lib-dirs:
-  - /home/sboo/.nix-profile/lib
-
 ########################################
