@@ -1,5 +1,4 @@
 ##################################################
-##################################################
 [Desktop Entry]
 Version=1.0
 Type=Application
@@ -8,7 +7,7 @@ Name=emacs-sboo
 #^ TODO
 
 TryExec=/home/sboo/.emacs.d/result/bin/emacs
-Exec=/home/sboo/.emacs.d/result/bin/emacs --no-init-file --load /home/sboo/.emacs.d/init.el --no-desktop --maximized --name=Emacs/Sboo
+Exec=/home/sboo/.emacs.d/result/bin/emacs --no-init-file --load /home/sboo/.emacs.d/init.el --no-desktop --maximized --name=SBoo
 Path=/home/sboo/.emacs.d
 
 Icon=emacs
@@ -17,20 +16,21 @@ StartupWMClass=Emacs
 StartupNotify=true
 #^ TODO 
 
-Actions=debug;
+Actions=debug;quiet;
 #^TODO ,Minimal
 
 ##################################################
 [Desktop Action debug]
 
-Name=Debug Emacs Config
-Exec=/home/sboo/.emacs.d/result/bin/emacs --no-init-file --debug-init --find-file=/home/sboo/.emacs.d/init.el --no-splash --name=Emacs/Debug
-
-# [Desktop Action Minimal]
-# Name=Minimal
-# Exec=/home/sboo/.emacs.d/result/bin/emacs --no-init-file --load /home/sboo/.emacs.d/init.el --no-desktop
+Name=Debug Emacs
+Exec=/home/sboo/.emacs.d/result/bin/emacs --debug-init --find-file=/home/sboo/.emacs.d/init.el --no-splash --name=SBoo/Debug
 
 ##################################################
+[Desktop Action quiet]
+
+Name=Quiet Emacs (no « init.el »)
+Exec=/home/sboo/.emacs.d/result/bin/emacs --no-init-file --find-file=/home/sboo/.emacs.d/init.el --no-splash --name=SBoo/Quiet
+
 ##################################################
 
 # `Icon=emacs.png`

@@ -7,6 +7,7 @@ ghcs = super.buildEnv
    name             = "GHCs";
    ignoreCollisions = true;
    paths            = [
+                        self.haskell.compiler.ghc861
                         self.haskell.compiler.ghc843 
                         self.haskell.compiler.ghc861
                         self.haskell.compiler.ghcjs
