@@ -2,24 +2,35 @@ self: super:
 ########################################
 let
 
+ghc = self.haskell.compiler.ghc861;
+
+# ^ this version will be the unqualified executable.
+# i.e. `ghc` is `ghc-8.6.1`.
+
 ghcs = super.buildEnv
  {
    name             = "GHCs";
    ignoreCollisions = true;
-   paths            = [
+   paths            = [ ghc ] ++ [
+   
                         self.haskell.compiler.ghc861
                         self.haskell.compiler.ghc843 
-                        self.haskell.compiler.ghc861
+                        self.haskell.compiler.ghc822
+                        self.haskell.compiler.ghc802
+                        self.haskell.compiler.ghc7103
+                        
+                        #self.haskell.compiler.ghcjs710
                         self.haskell.compiler.ghcjs
                       ];
+                      
                       # ^
-                      # first item in `paths` is the unqualified executable;
-                      # i.e. `ghc` is `ghc-8.4.3`.
+                      # first item in `paths` (i.e. the nix expression `ghc`)
+                      # is the unqualified executable;
                       #
                       # [problem] error "have the same priority ; use 'nix-env --set-flag priority NUMBER INSTALLED_PKGNAME' to change the priority of one of the conflicting packages"
                       # even with `buildEnv.ignoreCollisions = true`.
                       #
-                      # [solution] 
+                      # [solution] TODO
                       #
  };
 

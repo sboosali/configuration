@@ -45,12 +45,13 @@ alias dc='cd ~/configuration'
 alias dh='cd ~/haskell'
 alias dt='cd ~/temporary'
 alias db='cd ~/backup'
-alias dw='cd ~/Downloads'
+alias dw='cd ~/www'
 alias dm='cd ~/Documents'
 alias dn='cd ~/notes'
 alias dx='cd ~/nixpkgs'
 #alias dnix='cd ~/.nixpkgs'
 #alias dn='cd ~/Dropbox/notes'
+#alias dw='cd ~/Downloads'
 # alias d='cd '
 # alias d='cd '
 
@@ -310,12 +311,42 @@ alias hx="cabal new-run"        # e{x}ecute
 alias ht="cabal new-test"       # {t}est
 alias hn="cabal new-bench"      # be{n}ch
 
-alias hnba='nix-shell --run "cabal new-build all"'
-
 alias hca="cabal new-configure all"
 alias hba="cabal new-build all"
 alias hra="cabal new-repl all"
 alias hxa="cabal new-run all -- "
+alias hta="cabal new-test all"
+alias hna="cabal new-bench all"
+
+alias hz="cabal new-clean"           # {z}(?)
+alias hu="cabal new-update"          # {u}pdate
+
+alias hc="cabal new-configure -w ghc --ghc"       # {c}onfigure ghc (default)
+#TODO#alias hc="cabal new-configure -w ghc --compiler=ghc"       # {c}onfigure ghc (default)
+alias hc7="cabal new-configure -w ghc-7.10.3"   # {c}onfigure ghc-{7} (latest)
+alias hc8="cabal new-configure -w ghc-8.6.1"    # {c}onfigure ghc-{8} (latest)
+
+alias hcjs="cabal new-configure -w ghcjs --ghcjs" # {c}onfigure ghcjs
+#TODO#alias hcj7="cabal new-configure -w ghcjs-"
+#TODO#alias hcj8="cabal new-configure -w ghcjs-"
+
+alias hc-7.10="cabal new-configure -w ghc-7.10.3" # {c}onfigure ghc-{7}.{10}._
+alias hc-8.00="cabal new-configure -w ghc-8.0.2"  # {c}onfigure ghc-{8}.{0}._
+alias hc-8.02="cabal new-configure -w ghc-8.2.2"  # {c}onfigure ghc-{8}.{2}._
+alias hc-8.04="cabal new-configure -w ghc-8.4.3"  # {c}onfigure ghc-{8}.{4}._
+alias hc-8.06="cabal new-configure -w ghc-8.6.1"  # {c}onfigure ghc-{8}.{6}._
+#alias hc-8.08="cabal new-configure -w ghc-8.8."  # {c}onfigure ghc-{8}.{}._
+
+alias hc80="cabal new-configure -w ghc-8.0.2"  # {c}onfigure ghc-{8}.{0}
+alias hc82="cabal new-configure -w ghc-8.2.2"  # {c}onfigure ghc-{8}.{2}
+alias hc84="cabal new-configure -w ghc-8.4.3"  # {c}onfigure ghc-{8}.{4}
+alias hc86="cabal new-configure -w ghc-8.6.1"  # {c}onfigure ghc-{8}.{6}
+#TODOalias hc86="cabal new-configure -w ghc-8.6.2"  # {c}onfigure ghc-{8}.{6}
+#alias hc88="cabal new-configure -w ghc-8.8."  # {c}onfigure ghc-{8}.{}
+
+alias hc-7103-to-862="hc8 && time hba ; hc7 && time hba ; hc80 && time hba ; hc82 && time hba ; hc84 && time hba ; hc86 && time hba"
+
+alias hnba='nix-shell --run "cabal new-build all"'
 
 #------------------------------------------------#
 
@@ -382,15 +413,19 @@ alias va="direnv allow"  # [a]llow
 
 ##################################################
 
+alias sboo-emacs="~/.emacs.d/result/bin/emacs &disown"
+
+##alias sboo-emacs="(cd ~/.emacs.d/ && make build && )"
+
 alias sboo-ssh-add="ssh-add ~/.ssh/id_rsa"
 alias sboo-restart-gnome="gnome-shell --replace &disown"
 alias sboo-restart-xbindkeys="killall xbindkeys || true ; xbindkeys -fg ~/.xbindkeysrc.scm &disown "
 alias sboo-restart-kde="kquitapp5 plasmashell && kstart plasmashell"
-alias melpa2nix=/nix/store/2g4pm399808pmz6zsd89m2iwahk439vi-emacs2nix-0.1.0.0/bin/melpa2nix 
-alias dpkg-uninstall="sudo dpkg --force-remove-reinstreq --purge"
 
 ##################################################
 
+alias melpa2nix=/nix/store/2g4pm399808pmz6zsd89m2iwahk439vi-emacs2nix-0.1.0.0/bin/melpa2nix 
+alias dpkg-uninstall="sudo dpkg --force-remove-reinstreq --purge"
 alias yt='youtube-dl -f 22' # needs youtube-dl
 
 # alias unzip="7z x" # needs 7z
