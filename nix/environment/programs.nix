@@ -1,84 +1,183 @@
 ##################################################
-{ nixpkgs }:
+{ nixpkgs
+
+, haskellPackages   ? (nixpkgs.haskellPackages)
+, haskellCompilers  ? (nixpkgs.haskell.compiler)
+
+, emacsPackages     ? (nixpkgs.emacs26Packages)
+, melpaPackages     ? (nixpkgs.emacs26PackagesNg)
+
+}:
 
 ##################################################
-with nixpkgs; [
+let
+##################################################
+
+programs =
+
+  systemPrograms ++ haskellPrograms ++ haskellCompilerPrograms ++ xorgPrograms;
+
+##################################################
+
+haskellCompilerPrograms = with haskellCompilers; [
+
+ghcjs
+
+];
+
+##################################################
+
+haskellPrograms = with haskellPackages; [
+
+ghcid
+git-annex
+
+];
+
+##################################################
+
+systemPrograms = with nixpkgs; [
 
 bash-completion
 cabal-install
 cabal2nix
+#cask
 colordiff
 chromium
-dconf
-dconf-editor
+#dconf-editor
+dex
 dhall
-emacs
-emacs2nix
+#emacs
+emacs26
+#emacs2nix
+#melpa2nix
 expect
 feh
 firefox
 flac
 fltk
-fsnotify
+#fsnotify
 fswatch
 ghc
-ghcid
 gimp
 git
 glib
 google-chrome
+gparted
 graphviz
 htop
 imagemagick
 inotify-tools
 jq
-lens
-libjpeg
-libnotify
-libX11
-libXrandr
-lmdb
 mesa
 nix
-nix-derivation-pretty
+#nix-derivation-pretty
 nix-prefetch-git
 nox
 pandoc
 pocketsphinx
 postgresql
-pulseaudio
 qbittorrent
-rgb
-ShellCheck
+shellcheck
 signal-desktop
 sox
 stack
+tmux
 tree
 unzip
-VirtualBox-GuestAdditions
+#VirtualBox-GuestAdditions
 vlc
 wmctrl
-X11
-x11-xinput
-X11-xshape
+youtube-dl
+
 xautomation
-xbacklight
+#xbacklight
 xbindkeys
 xbrightness
 xcalib
 xclip
-xdg-utils
+xdg_utils
 xdotool
-xinput
+#xinput
 xinput_calibrator
 xkbmon
-xmodmap
-xprop
+#xmodmap
+#xprop
 xrandr-invert-colors
-xsel-unstable
+#xsel-unstable
 xtitle
 xvkbd
-youtube-dl
 
-]
+];
+
 ##################################################
+
+xorgPrograms = with nixpkgs.xorg; [
+
+#rgb
+xprop
+
+];
+
+##################################################
+in
+##################################################
+#
+##################################################
+let
+##################################################
+
+libraries =
+
+  systemLibraries ++ haskellLibraries ++ emacsLibraries;
+
+##################################################
+
+systemLibraries = with nixpkgs; [
+
+libjpeg
+libnotify
+#libX11
+#libXrandr
+lmdb
+
+#X11
+#x11-xinput
+#X11-xshape
+
+];
+
+##################################################
+
+haskellLibraries = with haskellPackages; [
+
+spiros
+lens
+
+];
+
+##################################################
+
+#emacsLibraries = with emacsPackages.melpaStablePackages; [
+
+emacsLibraries = (with emacsPackages; [
+
+#colorThemes
+#haskellMode #NOTE# broken
+xmlRpc
+
+]) ++ (with melpaPackages; [
+
+helm
+use-package
+
+]);
+
+##################################################
+in
+##################################################
+
+programs ++ libraries
+
+##################################################
+

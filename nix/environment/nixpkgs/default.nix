@@ -14,8 +14,6 @@
 ##################################################
 let
 
-#bootstrap = import <nixpkgs> {};
-
 readPrefetchGitJSON = p:
   (builtins.fetchGit
     (builtins.intersectAttrs { url = null; rev = null; }
@@ -28,10 +26,8 @@ let
 
 nixpkgs  = readPrefetchGitJSON ./nixpkgs.json;
 
-config   = {};
-#config   = import ../config;
+config   = import ../config;
 
-#overlays = [];
 overlays = import ../overlays;
 
 in
