@@ -90,26 +90,7 @@ nix-shell "${HOME_MANAGER_URI}" -A install
 echo
 
 ########################################
-# ④  Register ##########################
-########################################
-
-cat >> ~/.profile <<EOF
-
-########################################
-
-export HOME_MANAGER_RC="$HOME"/.nix-profile/etc/profile.d/hm-session-vars.sh
-
-if   [ -e "${HOME_MANAGER_RC}" ]
-then . "${HOME_MANAGER_RC}"
-fi
-
-########################################
-EOF
-
-. ~/.profile
-
-########################################
-# ⑤  Build #############################
+# ④  Build #############################
 ########################################
 
 echo '##############################'
@@ -120,17 +101,52 @@ echo '##############################'
 echo
 home-manager --help
 echo
-echo '##############################'
 
 ########################################
 
 # build the example configuration.
 
-home-manager build
+#TODO# home-manager build
 
-HOME_MANAGER_SWTICH=
+echo '##############################'
+echo
 
-#TODO if [ "$1" ]; then; home-manager switch fi
+HOME_MANAGER_COMMAND="${1:-build}"
+
+echo "${HOME_MANAGER_COMMAND}"
+echo
+
+home-manager "${HOME_MANAGER_COMMAND}"
+
+echo
+
+########################################
+# ⑤  Register ##########################
+########################################
+
+echo '##############################'
+echo
+echo <<EOF
+
+export HOME_MANAGER_RC="\$HOME"/.nix-profile/etc/profile.d/hm-session-vars.sh
+
+if   [ -e "\${HOME_MANAGER_RC}" ]
+then . "\${HOME_MANAGER_RC}"
+fi
+
+EOF
+echo
+
+########################################
+
+export HOME_MANAGER_RC="$HOME"/.nix-profile/etc/profile.d/hm-session-vars.sh
+
+echo '##############################'
+echo
+echo "${HOME_MANAGER_RC}"
+echo
+. "${HOME_MANAGER_RC}"
+echo
 
 ########################################
 # ⑥  _ #################################

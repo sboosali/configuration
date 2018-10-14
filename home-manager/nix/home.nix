@@ -14,6 +14,22 @@
 let
 ########################################
 
+sboo = {
+
+  sanfrancisco = {
+    longitude = "38";
+    latitude  = "122";
+  };
+
+  boston = {
+    longitude = "42";
+    latitude  = "71";
+  };
+
+};
+
+########################################
+
 # = ;
 
 ########################################
@@ -47,7 +63,7 @@ programs.emacs = {
       nix-mode
 
       projectile
-      yasnippets
+      yasnippet
       magit
 
     ];
@@ -76,10 +92,14 @@ programs.firefox = {
 programs.home-manager = {
     enable = true;
 
-    path = ~/.config/nixpkgs/home.nix;
+    path = https://github.com/rycee/home-manager/archive/release-18.03.tar.gz;
 };
 
-#TODO#    path = "$HOME/.config/nixpkgs/home.nix";
+# ^ 
+# 
+# default `programs.home-manager.path` = ''"$HOME"/.config/nixpkgs/home-manager'' (???)
+#
+# 
 
 ########################################
 # ⑤  Services ##########################
@@ -88,7 +108,12 @@ programs.home-manager = {
 services.redshift = {
     enable = true;
 
-    provider = "manual";
+    provider  = "manual";
+    inherit (sboo.boston) longitude latitude;
+
+#    provider  = "manual";
+#    longitude = "42";
+#    latitude  = "71";
 
     temperature.night  = 1000;
     temperature.day    = 20000;
@@ -120,8 +145,6 @@ services.redshift = {
 ########################################
 # ⑥ _ ##################################
 ########################################
-
-
 
 ########################################
 }

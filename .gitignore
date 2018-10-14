@@ -33,5 +33,8 @@ report.html
 TAGS
 .projectile
 
+# etc
+*.swp
+
 # OS X
 .DS_Store
