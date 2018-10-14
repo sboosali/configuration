@@ -1,0 +1,26 @@
+########################################
+
+# %l = local hostname (hostname)
+# %r = remote username ("git")
+# %h = remote hostname ("github.com")
+
+########################################
+
+Host *
+    Port 22
+    ServerAliveInterval 60
+
+
+########################################
+# GitHub as sboosali
+
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/%l_%r@%h_id_rsa
+
+# Host ?
+# Host github.com?
+# Host sboosaliGitHub?
+
+########################################
