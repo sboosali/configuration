@@ -2,7 +2,17 @@
 ##################################################
 
 #NOTE
-# these are portable `sh` (not `bash`) commands
+# these are portable pan-`sh` (not `bash`-only) commands
+
+##################################################
+
+alias needs="command -v"
+
+# ensure an executable is present (POSIX-compatible)
+#
+# i.e. both installed oon the system,
+#      and locateable on the $PATH.
+#
 
 ##################################################
 
@@ -395,6 +405,10 @@ alias copy='xclip -selection clipboard'
 #alias pi="ipython"
 alias p3="python3"
 alias p2="python2.7"
+
+##################################################
+
+alias git-status-subdirs="find . -mindepth 1 -maxdepth 1 -type d -exec sh -c '(echo {} && cd {} && git status -s && echo)' \;"
 
 ##################################################
 
