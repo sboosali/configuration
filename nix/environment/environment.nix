@@ -1,19 +1,24 @@
 ##################################################
 { nixpkgs
-, packages
-, project
+, programs
 }:
 
 ##################################################
+let
 
-nixpkgs.pkgs.buildEnv
+inherit (nixpkgs) pkgs;
+
+in
+##################################################
+
+pkgs.buildEnv
   {
-      name                 = "${project.name}-project-environment";
+      name                 = "sboosali-home-environment";
 
-      paths                 = packages;
+      paths                 = programs;
       pathsToLink           = [ "/" "/bin" "/lib" "/include" ];
 
-      buildInputs           = packages;
+      buildInputs           = programs;
       extraOutputsToInstall = [ "out" "dev" "doc" ];
 
   }
