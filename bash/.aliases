@@ -222,10 +222,29 @@ alias rt=rm-temporaries
 
 ##################################################
 
-alias nix-env-unqualified="nix-env" #TODO does the timing of the scoping work?
-alias nix-env-qualified-default='nix-env -f "<nixpkgs>"'
-alias nix-env-qualified-file='nix-env -f "~/nixpkgs"'
-alias nix-env="nix-env -f $HOME/nixpkgs"
+alias nh=home-manager
+
+# ^ {nh} abbreviates "{n}ix {h}ome-manager"
+
+#------------------------------------------------#
+
+alias nhb="home-manager build"
+alias nhw="home-manager switch"
+alias nhg="home-manager generations"
+alias nhp="home-manager packages"
+
+#alias nh_="home-manager _"
+
+#------------------------------------------------#
+
+alias help-home-manager="home-manager --help"
+
+##################################################
+
+#alias nix-env-unqualified="nix-env" #TODO does the timing of the scoping work? NO 
+#alias nix-env-qualified-default='nix-env -f "<nixpkgs>"'
+#alias nix-env-qualified-file='nix-env -f "~/nixpkgs"'
+#alias nix-env="nix-env -f $HOME/nixpkgs"
 
 #------------------------------------------------#
 
