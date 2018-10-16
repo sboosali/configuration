@@ -1,5 +1,17 @@
+# -*- mode: nix -*-
+
+# Installation:
+#
+# mkdir -p ~/.config/nixpkgs/ && cd ~/.config/nixpkgs/ && ln -sf ~/configuration/home-manager/nix/home.nix home.nix
+#
+
+# See:
+#
+# * https://rycee.gitlab.io/home-manager/options.html
+# * https://github.com/rycee/home-manager#readme
+# * https://nixos.wiki/wiki/Home_Manager
+# * https://rycee.net/posts/2017-07-02-manage-your-home-with-nix.html
 # 
-# cd ~/.config/nixpkgs/ && ln -sf ~/configuration/home-manager/nix/home.nix home.nix
 
 ##################################################
 # ①  Input #######################################
@@ -48,9 +60,16 @@ paths = {
 
 config = {
 
-
+ allowUnfree = true; 
+ allowBroken = false; 
 
 };
+
+##################################################
+
+overlays = [
+
+];
 
 ##################################################
 
@@ -200,7 +219,15 @@ locations = {
 
 ##################################################
 
-obfuscatedEmail = builtins.concatStringsSep "" ["sam" "boosalis" "@" "gmail" "." "com"];
+name = builtins.concatStringsSep " "
+
+  [ "Sam" "Boosalis" ];
+
+email = builtins.concatStringsSep ""
+
+  ["sam" "boosalis" "@" "gmail" "." "com"];
+
+# ^ TODO obfuscate more.
 
 ##################################################
 };
@@ -213,6 +240,11 @@ in
 ##################################################
 
 home.packages = sboo.programs;
+
+##################################################
+
+nixpkgs.config   = sboo.config;
+nixpkgs.overlays = sboo.overlays;
 
 ##################################################
 # ④  Programs ####################################
@@ -238,23 +270,6 @@ programs.emacs = {
 
 ##############################################
 
-programs.firefox = {
-    enable = true;
-
-    #enable = true;
-};
-
-##############################################
-
- programs.git = {
-    enable = true;
-
-    userName  = "Sam Boosalis";
-    userEmail = sboo.obfuscatedEmail;
-};
-
-##############################################
-
 programs.home-manager = {
     enable = true;
 
@@ -266,6 +281,103 @@ programs.home-manager = {
 # default `programs.home-manager.path` = ''"$HOME"/.config/nixpkgs/home-manager'' (???)
 #
 # 
+
+##################################################
+
+programs.bash.enable = true;
+
+##############################################
+
+# programs.chromium.enable = true;
+
+# programs.chromium.extensions = [
+
+#   "gcbommkclmclpchllfjekcdonpmejbdp" 
+#   # ^ https everywhere
+
+#   "cjpalhdlnbpafiamejdnhcphjbkeiagm"
+#   # ^ ublock origin
+
+#   ""
+#   # ^
+# ];
+
+##############################################
+
+programs.firefox = {
+    enable = true;
+
+    #enable = true;
+};
+
+##############################################
+
+programs.git = {
+    enable = true;
+
+    userName  = sboo.name;
+    userEmail = sboo.email;
+};
+
+##################################################
+
+programs.ssh.enable = true;
+
+##############################################
+
+programs.termite.enable = true; 
+
+programs.termite.font = "Monospace 48";
+
+# the Font Description, i.e. Font Family (which should be a monospace font) and Font Size.
+
+programs.termite.clickableUrl = true; 
+
+# Whether Auto-detected URLs can be clicked on to open them in your browser (if a browser is configured or detected.)
+
+programs.termite.dynamicTitle = true; 
+
+
+# Setting dynamic title allows the terminal and the shell to update the terminal's title.
+
+programs.termite.fullscreen = true;
+
+# Enables entering fullscreen mode by pressing F11.
+
+programs.termite.scrollOnKeystroke = true;
+
+# Scroll to the bottom automatically when a key is pressed.
+
+programs.termite.scrollbar = "left";
+
+# position and presence of the scrollbar.
+# Type: null or one of "off", "left", "right"
+
+programs.termite.urgentOnBell = true;
+
+# Sets the window as urgent on the terminal bell.
+
+##################################################
+
+programs.htop.enable = true;
+
+##################################################
+
+programs.texlive = {
+ enable = true;
+
+ extraPackages = tpkgs: 
+  { inherit (tpkgs) 
+    collection-fontsrecommended 
+    algorithms
+    ;
+ };
+
+};
+
+##################################################
+
+programs.command-not-found.enable = true;
 
 ##################################################
 # ⑤  Services ###################################
@@ -311,8 +423,28 @@ services.redshift = {
 # };
 
 ##################################################
-# ⑥ _ ############################################
+# ⑥ Environment #################################
 ##################################################
+
+home.sessionVariables = { 
+
+ EDITOR = "emacs"; 
+
+ GS_OPTIONS = "-sPAPERSIZE=a4";
+
+ SBOO_CONFIGURATION_DIR = ''"$HOME"/configuration'';
+ SBOO_EMACS_DIR = ''"$HOME"/.emacs.d'';
+ SBOO_HASKELL_DIR = ''"$HOME"/haskell'';
+ SBOO_ELISP_DIR = ''"$HOME"/elisp'';
+ SBOO_EMACS = ''"$HOME"/.emacs.d/result/bin/emacs'';
+
+};
+
+##################################################
+
+home.keyboard.options = [ "grp:caps_toggle" "grp_led:scroll" ];
+
+#TODO# home.keyboard.model = "pc104"
 
 ##################################################
 }

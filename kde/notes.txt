@@ -1,0 +1,27 @@
+# KDE/Plasma Notes
+
+
+
+## `kcm-touchpad-list-devices`
+
+```sh
+$ kcm-touchpad-list-devices 
+Name: Virtual core pointer          Type: unknown     Use: Pointer
+Name: Virtual core keyboard         Type: unknown     Use: Keyboard
+Name: Virtual core XTEST pointer    Type: unknown     Use: Extension Pointer
+Name: Virtual core XTEST keyboard   Type: unknown     Use: Extension Keyboard
+Name: Power Button                  Type: KEYBOARD    Use: Extension Keyboard
+Name: Video Bus                     Type: KEYBOARD    Use: Extension Keyboard
+Name: Video Bus                     Type: KEYBOARD    Use: Extension Keyboard
+Name: Power Button                  Type: KEYBOARD    Use: Extension Keyboard
+Name: Sleep Button                  Type: KEYBOARD    Use: Extension Keyboard
+Name: ELAN Touchscreen              Type: TOUCHSCREEN Use: Extension Pointer
+Name: DLL07BF:01 06CB:7A13 Touchpad Type: TOUCHPAD    Use: Extension Pointer
+Name: Intel HID events              Type: KEYBOARD    Use: Extension Keyboard
+Name: AT Translated Set 2 keyboard  Type: KEYBOARD    Use: Extension Keyboard
+Name: Dell WMI hotkeys              Type: KEYBOARD    Use: Extension Keyboard
+Name: Genovation Inc ControlPad24   Type: KEYBOARD    Use: Extension Keyboard
+Name: Genovation Inc ControlPad24   Type: KEYBOARD    Use: Extension Pointer
+```
+
+## 
