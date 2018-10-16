@@ -253,6 +253,13 @@ emacsPackages = epkgs: with epkgs; [
 
 ];
 
+##################################################
+
+colors.white = "rgb(255, 255, 255)";
+colors.black = "rgb(0,   0,   0)";
+
+colors.darkorchid = "rgb(153,50,204)";
+#colors.lightgray = "rgb()";
 
 ##################################################
 
@@ -366,20 +373,41 @@ programs.ssh.enable = true;
 
 ##############################################
 
-programs.termite.enable = true; 
+programs.termite.enable = true;
 
-programs.termite.font = "Monospace 48";
+# ^ TERMite is a terminal-emulator, and is:
+# 
+# * is minimal 
+# * is VTE-based 
+# * has modal UI (i.e. like Vim)
+# * 
+# 
+# See « https://wiki.archlinux.org/index.php/termite ».
 
-# the Font Description, i.e. Font Family (which should be a monospace font) and Font Size.
+# large-font & black-on-white:
+
+programs.termite.font = "Monospace 24";
+
+# the Font Description,
+# i.e. Font Family (which should be a monospace font) and Font Size.
+
+programs.termite.foregroundColor = sboo.colors.black;
+programs.termite.backgroundColor = sboo.colors.white;
+
+# the BackgroundColor
+# should look soft under `xrandr-invert-colors`.
+# (like purple-gray?)
+
+#"rgba(192, 64, 192, 0.95)";
 
 programs.termite.clickableUrl = true; 
 
-# Whether Auto-detected URLs can be clicked on to open them in your browser (if a browser is configured or detected.)
+# Whether Auto-detected URLs can be clicked on,
+# to open them in your browser (if a browser is configured or detected.)
 
 programs.termite.dynamicTitle = true; 
 
-
-# Setting dynamic title allows the terminal and the shell to update the terminal's title.
+# Whether the shell can update the terminal's title.
 
 programs.termite.fullscreen = true;
 
@@ -391,12 +419,32 @@ programs.termite.scrollOnKeystroke = true;
 
 programs.termite.scrollbar = "left";
 
-# position and presence of the scrollbar.
+# Position and presence of the scrollbar.
+#
 # Type: null or one of "off", "left", "right"
 
 programs.termite.urgentOnBell = true;
 
 # Sets the window as urgent on the terminal bell.
+
+programs.termite.allowBold = true;
+
+# Whether the terminal-emulator outputs bold characters,
+# when the stdout outputs the bold escape-sequence.
+
+programs.termite.browser = 
+''${pkgs.xdg_utils}/xdg-open'';
+
+# Set the default browser for opening links. 
+# 
+# If it's not set, $BROWSER is read.
+# If that too isn't set, url hints will be disabled.
+#
+# e.g.:
+#       programs.termite.browser = ''${pkgs.xdg_utils}/xdg-open'';
+#
+
+programs.termite.audibleBell = false;
 
 ##################################################
 
