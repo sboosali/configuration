@@ -11,7 +11,12 @@
 # * https://github.com/rycee/home-manager#readme
 # * https://nixos.wiki/wiki/Home_Manager
 # * https://rycee.net/posts/2017-07-02-manage-your-home-with-nix.html
-# 
+# * 
+
+# See:
+#
+# $ man home-configuration.nix 
+# $
 
 ##################################################
 # ①  Input #######################################
@@ -29,10 +34,9 @@
 }:
 
 ##################################################
-# ②  Utilities ###################################
+# ②  Utilities: Imports ##########################
 ##################################################
 let
-##################################################
 
 inherit (pkgs) lib;
 
@@ -42,7 +46,33 @@ haskellPackages   = (pkgs.haskellPackages);
 
 haskellCompilers  = (pkgs.haskell.compiler);
 
+in
 ##################################################
+# ② Utilities: Nixpkgs ###########################
+##################################################
+let
+
+addBuildInputs = extraBuildInputs: package:
+
+  package.overrideAttrs (old:
+
+    {
+      buildInputs = old.buildInputs ++ extraBuildInputs;
+    });
+
+# ^ e.g.
+#
+# (addBuildInputs [ pkgs.git ] melpaPackages.magit) 
+# 
+# equals:
+#
+# (melpaPackages.magit.overrideAttrs (old: {
+#     buildInputs = old.buildInputs ++ [ pkgs.git ];
+#  }))
+#
+
+##################################################
+
 in
 ##################################################
 # ②  Utilities: sboo #############################
@@ -205,6 +235,25 @@ haskellCompilerPrograms = with haskellCompilers; [
 
 ];
 
+
+##################################################
+
+emacsPackages = epkgs: with epkgs; [
+
+  use-package
+  helm
+
+  haskell-mode
+  nix-mode
+
+  projectile
+  yasnippet
+
+  (addBuildInputs [ pkgs.git ] melpaPackages.magit)
+
+];
+
+
 ##################################################
 
 locations = {
@@ -251,29 +300,17 @@ nixpkgs.overlays = sboo.overlays;
 ##################################################
 
 programs.emacs = {
-    enable = true;
+  enable = true;
 
-    extraPackages = epkgs: with epkgs; [
-
-      use-package
-      helm
-
-      haskell-mode
-      nix-mode
-
-      projectile
-      yasnippet
-      magit
-
-    ];
+  extraPackages = sboo.emacsPackages;
 };
 
 ##############################################
 
 programs.home-manager = {
-    enable = true;
+  enable = true;
 
-    path = sboo.paths.home-manager;
+  path = sboo.paths.home-manager;
 };
 
 # ^ 
@@ -284,9 +321,13 @@ programs.home-manager = {
 
 ##################################################
 
-programs.bash.enable = true;
+# programs.bash = {
 
-##############################################
+#   enable = true;
+
+# };
+
+##################################################
 
 # programs.chromium.enable = true;
 
