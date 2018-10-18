@@ -39,7 +39,11 @@ overlays = [
 
 ##################################################
 
-sboo = import ./home/sboo.nix;
+sboo = import ./home/sboo.nix {};
+
+##################################################
+
+utilities = import ./home/utilities.nix {};
 
 ##################################################
 
@@ -48,57 +52,11 @@ sboo = import ./home/sboo.nix;
 
 in
 ##################################################
-# Utilities ######################################
-##################################################
-let
-
-env = {
-
-  HOME = builtins.getEnv "HOME";
-
-};
-
-##################################################
-
-addBuildInputs = extraBuildInputs: package:
-
-  package.overrideAttrs (old:
-
-    {
-      buildInputs = old.buildInputs ++ extraBuildInputs;
-    });
-
-# ^ e.g.
-#
-# (addBuildInputs [ pkgs.git ] melpaPackages.magit) 
-# 
-# equals:
-#
-# (melpaPackages.magit.overrideAttrs (old: {
-#     buildInputs = old.buildInputs ++ [ pkgs.git ];
-#  }))
-#
-
-##################################################
-
-emacsPackages = epkgs: with epkgs; [
-
-  use-package
-  helm
-
-  haskell-mode
-  nix-mode
-
-  projectile
-  yasnippet
-
-  (addBuildInputs [ pkgs.git ] melpaPackages.magit)
-
-];
-
-in
-##################################################
 # The Home-Manager Configuration #################
+##################################################
+
+with utilities;
+
 ##################################################
 let 
 
@@ -153,11 +111,11 @@ home.packages =
 
 ##################################################
 
-programs.emacs = {
-  enable = true;
-
-  extraPackages = emacsPackages;
-};
+programs.emacs.enable = true;
+programs.emacs.extraPackages =
+  (import ./home/emacs.nix
+          { inherit pkgs utilities;
+          });
 
 ##############################################
 
