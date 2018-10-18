@@ -38,7 +38,15 @@
 ##################################################
 let
 
-inherit (pkgs) lib;
+inherit (pkgs.stdenv) lib;
+
+##################################################
+
+env = {
+
+  HOME = builtins.getEnv "HOME";
+
+};
 
 ##################################################
 
@@ -179,7 +187,7 @@ systemPrograms = with pkgs; [
  vlc
  wmctrl
  youtube-dl
- 
+
  xautomation
  #xbacklight
  xbindkeys
@@ -197,6 +205,8 @@ systemPrograms = with pkgs; [
  #xsel-unstable
  xtitle
  xvkbd
+
+#melpaPackages.ov
 
 ];
 
@@ -286,11 +296,16 @@ email = builtins.concatStringsSep ""
 # ^ TODO obfuscate more.
 
 ##################################################
+
+keys.github = "SpirOS_git@github.com_id_rsa";
+
+##################################################
 };
 
-in
 ##################################################
-{
+
+self = {
+
 ##################################################
 # ③  Packages ####################################
 ##################################################
@@ -328,11 +343,117 @@ programs.home-manager = {
 
 ##################################################
 
-# programs.bash = {
+programs.bash.enable = true;
 
-#   enable = true;
+programs.bash.bashrcExtra = builtins.readFile ../bash/.bashrc;
 
-# };
+# programs.bash.bashrcExtra = lib.mkBefore ''
+# '';
+
+# ^ « .bashrc » extras.
+# 
+# i.e. Extra commands that should be run when initializing an interactive shell.
+
+programs.bash.profileExtra =
+
+  builtins.concatStringsSep "########################################\n\n"
+
+    [ (builtins.readFile ../bash/.profile)
+
+       ''ssh-add ~/.ssh/${sboo.keys.github}
+       ''
+    ];
+
+# ^ « .profile » extras.
+# 
+# i.e. Extra commands that should be run when initializing a login shell.
+
+# ^ « ~/.profile » is executed by the command interpreter for Login Shells.
+#
+# NOTE `bash` ignores « ~/.profile » if either:
+#
+# * « ~/.bash_profile » exists, or
+# * « ~/.bash_login » exists.
+#
+
+  # ^ TODO ${pkgs.ssh}??
+  #      eval "$(${pkgs.ssh}/bin/ssh-agent -s)"
+  #      {pkgs.ssh}/bin/ssh-add ~/.ssh/id_rsa
+
+  # profileExtra = ''
+  #   if ! pgrep -x "gpg-agent" > /dev/null; then
+  #       ${pkgs.gnupg}/bin/gpgconf --launch gpg-agent
+  #   fi
+  # '';
+
+programs.bash.shellOptions =
+  [ "histappend" "checkwinsize" "extglob" "globstar" "checkjobs" ];
+
+# ^ Shell options to set.
+
+programs.bash.shellAliases =
+  (import ./home/shell-aliases.nix
+          { inherit pkgs sboo; });
+
+# ^ Attribute Set mapping aliases (the top-level Attribute Names in this option) either:
+# 
+# * to command strings, or
+# * directly to build outputs.
+
+
+programs.bash.sessionVariables = {};
+
+# ^ Environment variables that will be set for the Bash session.
+
+programs.bash.historyControl = [ "ignoredups" "ignorespace" ];
+
+# ^ 
+# `"ignoredups"`: ignore (consecutive) duplicate commands.
+# `"ignorespace"`: ignore commands that begin with white space.
+
+programs.bash.historyFile = ''"$HOME"/.bash_history'';
+
+# ^ Location of the bash history file.
+
+programs.bash.historyIgnore = [ "ls" "cd" "exit" ];
+
+# ^ List of commands that should not be saved to the history list.
+
+programs.bash.historySize = 100000;
+
+# ^ Number of history lines to keep in memory.
+
+programs.bash.historyFileSize = 1000000;
+
+# ^ Number of history lines to keep on file.
+
+programs.bash.enableAutojump = true;
+
+# ^ Enable the `autojump` navigation tool.
+# 
+# See <https://github.com/wting/autojump>
+
+/*
+```sh
+# `j` aliases `autojump`
+
+$ j foo
+
+# ^ `cd` to any (previously navigated to) directory whose path contains `foo`
+
+$ jc foo 
+
+# ^ `cd` to any child-directory whose path contains `foo`
+
+$ jo foo
+
+# ^ `open` (don't `cd` into) any (previously navigated to) directory whose path contains `foo`
+
+$ jco 
+
+# ^ `jc` + `jo`
+```
+*/
 
 ##################################################
 
@@ -360,16 +481,19 @@ programs.firefox = {
 
 ##############################################
 
-programs.git = {
-    enable = true;
+programs.git =
 
-    userName  = sboo.name;
-    userEmail = sboo.email;
-};
+  (import ./home/git.nix
+          { inherit pkgs sboo; })
+
+   // { enable = true;
+      };
 
 ##################################################
 
-programs.ssh.enable = true;
+programs.ssh = #(import ./home/ssh.nix {inherit pkgs sboo;}) //
+  { enable = true;
+  };
 
 ##############################################
 
@@ -515,19 +639,11 @@ services.redshift = {
 # ⑥ Environment #################################
 ##################################################
 
-home.sessionVariables = { 
-
- EDITOR = "emacs"; 
-
- GS_OPTIONS = "-sPAPERSIZE=a4";
-
- SBOO_CONFIGURATION_DIR = ''"$HOME"/configuration'';
- SBOO_EMACS_DIR = ''"$HOME"/.emacs.d'';
- SBOO_HASKELL_DIR = ''"$HOME"/haskell'';
- SBOO_ELISP_DIR = ''"$HOME"/elisp'';
- SBOO_EMACS = ''"$HOME"/.emacs.d/result/bin/emacs'';
-
-};
+home.sessionVariables =
+  (import ./home/environment-variables.nix
+          { inherit pkgs sboo;
+            xdg = self.xdg;
+          });
 
 ##################################################
 
@@ -536,4 +652,21 @@ home.keyboard.options = [ "grp:caps_toggle" "grp_led:scroll" ];
 #TODO# home.keyboard.model = "pc104"
 
 ##################################################
-}
+
+xdg = {
+
+ configHome = "${env.HOME}/.config";
+ dataHome   = "${env.HOME}/.local/share";
+ cacheHome  = "${env.HOME}/.cache";
+
+} // {
+  enable = true;
+};
+
+##################################################
+};
+
+in
+##################################################
+self
+##################################################
