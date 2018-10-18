@@ -1,25 +1,7 @@
 # -*- mode: nix -*-
 
-# Installation:
-#
-# mkdir -p ~/.config/nixpkgs/ && cd ~/.config/nixpkgs/ && ln -sf ~/configuration/home-manager/nix/home.nix home.nix
-#
-
-# See:
-#
-# * https://rycee.gitlab.io/home-manager/options.html
-# * https://github.com/rycee/home-manager#readme
-# * https://nixos.wiki/wiki/Home_Manager
-# * https://rycee.net/posts/2017-07-02-manage-your-home-with-nix.html
-# * 
-
-# See:
-#
-# $ man home-configuration.nix 
-# $
-
 ##################################################
-# ①  Input #######################################
+# Parameters #####################################
 ##################################################
 
 { pkgs
@@ -34,13 +16,41 @@
 }:
 
 ##################################################
-# ②  Utilities: Imports ##########################
+# Imports ########################################
 ##################################################
 let
 
 inherit (pkgs.stdenv) lib;
 
 ##################################################
+
+config = {
+
+ allowUnfree = true; 
+ allowBroken = false; 
+
+};
+
+##################################################
+
+overlays = [
+
+];
+
+##################################################
+
+sboo = import ./home/sboo.nix;
+
+##################################################
+
+# haskellPackages   = (pkgs.haskellPackages);
+# haskellCompilers  = (pkgs.haskell.compiler);
+
+in
+##################################################
+# Utilities ######################################
+##################################################
+let
 
 env = {
 
@@ -49,16 +59,6 @@ env = {
 };
 
 ##################################################
-
-haskellPackages   = (pkgs.haskellPackages);
-
-haskellCompilers  = (pkgs.haskell.compiler);
-
-in
-##################################################
-# ② Utilities: Nixpkgs ###########################
-##################################################
-let
 
 addBuildInputs = extraBuildInputs: package:
 
@@ -79,177 +79,6 @@ addBuildInputs = extraBuildInputs: package:
 #  }))
 #
 
-in
-##################################################
-# ②  Utilities: sboo #############################
-##################################################
-let sboo = rec {
-##################################################
-
-paths = {
-
-#home-manager = https://github.com/rycee/home-manager/archive/release-18.03.tar.gz;
-
-};
-
-##################################################
-
-config = {
-
- allowUnfree = true; 
- allowBroken = false; 
-
-};
-
-##################################################
-
-overlays = [
-
-];
-
-##################################################
-
-programs = freePrograms
-#       ++ unfreePrograms
-         ;
-
-##################################################
-
-freePrograms = builtins.concatLists [
-
-  systemPrograms
-  haskellPrograms
-  haskellCompilerPrograms
-  xorgPrograms
-
-];
-
-# systemPrograms ++ haskellPrograms ++ haskellCompilerPrograms ++ xorgPrograms;
-
-##################################################
-
-unfreePrograms = with pkgs; [
-
- google-chrome
-
-];
-
-##################################################
-
-systemPrograms = with pkgs; [
-
- bash-completion
- cabal-install
- cabal2nix
- #cask
- colordiff
- #dconf-editor
- dex
- dhall
- #emacs
- #emacs2nix
- #melpa2nix
- expect
- feh
- flac
- fltk
- #fsnotify
- fswatch
- ghc
- gimp
- glib
- gparted
- graphviz
- htop
- imagemagick
- inotify-tools
- jq
- mesa
- ncdu
- #nix
- #nix-derivation-pretty
- nix-bash-completions
- nix-prefetch-git
- nix-prefetch-github
- nix-prefetch-scripts
-#nixfmt
- nox
- openssh
- pandoc
- pocketsphinx
- postgresql
- qbittorrent
- shellcheck
- signal-desktop
- sox
- stack
-#terminfo
- tmux
- tree
- unzip
- #VirtualBox-GuestAdditions
- vlc
- wmctrl
- youtube-dl
-
- xautomation
- #xbacklight
- xbindkeys
- xbrightness
- xcalib
- xclip
- xdg_utils
- xdotool
- #xinput
- xinput_calibrator
- xkbmon
- #xmodmap
- #xprop
- xrandr-invert-colors
- #xsel-unstable
- xtitle
- xvkbd
-
-#melpaPackages.ov
-
-];
-
-# ^ NOTE we must omit the `programs._` programs:
-#
-# * emacs26
-# * git
-# * firefox
-# * ...
-#
-# from the `home.packages = _` programs.
-#
-
-########################################
-
-xorgPrograms = with pkgs.xorg; [
-
- xprop
-
-];
-
-##################################################
-
-haskellPrograms = with haskellPackages; [
-
- ghcid
- git-annex
-
-];
-
-##################################################
-
-haskellCompilerPrograms = with haskellCompilers; [
-
- ghcjs
-
-];
-
-
 ##################################################
 
 emacsPackages = epkgs: with epkgs; [
@@ -267,46 +96,11 @@ emacsPackages = epkgs: with epkgs; [
 
 ];
 
+in
 ##################################################
-
-colors.white = "rgb(255, 255, 255)";
-colors.black = "rgb(0,   0,   0)";
-
-colors.darkorchid = "rgb(153,50,204)";
-#colors.lightgray = "rgb()";
-
+# The Home-Manager Configuration #################
 ##################################################
-
-locations = {
-
-  sanfrancisco.longitude = "38";
-  sanfrancisco.latitude  = "122";
-
-  boston.longitude = "42";
-  boston.latitude  = "71";
-
-};
-
-##################################################
-
-name = builtins.concatStringsSep " "
-
-  [ "Sam" "Boosalis" ];
-
-email = builtins.concatStringsSep ""
-
-  ["sam" "boosalis" "@" "gmail" "." "com"];
-
-# ^ TODO obfuscate more.
-
-##################################################
-
-keys.github = "SpirOS_git@github.com_id_rsa";
-
-##################################################
-};
-
-##################################################
+let 
 
 configFile = path:
 
@@ -323,38 +117,70 @@ dataFile = path:
 self = {
 
 ##################################################
-# ③  Packages ####################################
+
+nixpkgs.config   = config;
+nixpkgs.overlays = overlays;
+
+##############################################
+
+programs.home-manager.enable = true;
+programs.home-manager.path   =
+  https://github.com/rycee/home-manager/archive/release-18.03.tar.gz;
+
+# ^ 
+
 ##################################################
 
-home.packages = sboo.programs;
+home.sessionVariables =
+  (import ./home/environment-variables.nix
+          { inherit pkgs sboo;
+            inherit (self) xdg;
+          });
 
 ##################################################
 
-nixpkgs.config   = sboo.config;
-nixpkgs.overlays = sboo.overlays;
+home.keyboard.options = [ "grp:caps_toggle" "grp_led:scroll" ];
+
+#TODO# home.keyboard.model = "pc104"
 
 ##################################################
-# ④  Programs ####################################
+# Programs:
+
+home.packages =
+  (import ./home/programs.nix
+          { inherit pkgs sboo;
+          });
+
 ##################################################
 
 programs.emacs = {
   enable = true;
 
-  extraPackages = sboo.emacsPackages;
+  extraPackages = emacsPackages;
 };
 
 ##############################################
 
-programs.home-manager = {
-  enable = true;
-  path = https://github.com/rycee/home-manager/archive/release-18.03.tar.gz;
-};
+programs.git =
 
-# ^ 
-# 
-# default `programs.home-manager.path` = ''"$HOME"/.config/nixpkgs/home-manager'' (???)
-#
-# 
+  (import ./home/git.nix
+          { inherit pkgs sboo;
+          })
+
+   // { enable = true;
+      };
+
+##################################################
+
+programs.ssh =
+
+  (import ./home/ssh.nix
+          { inherit pkgs sboo;
+            inherit (self) xdg;
+          })
+
+   // { enable = true;
+      };
 
 ##################################################
 
@@ -453,15 +279,12 @@ programs.bash.profileExtra =
 # * « ~/.bash_login » exists.
 #
 
-  # ^ TODO ${pkgs.ssh}??
-  #      eval "$(${pkgs.ssh}/bin/ssh-agent -s)"
-  #      {pkgs.ssh}/bin/ssh-add ~/.ssh/id_rsa
-
-  # profileExtra = ''
-  #   if ! pgrep -x "gpg-agent" > /dev/null; then
-  #       ${pkgs.gnupg}/bin/gpgconf --launch gpg-agent
-  #   fi
-  # '';
+# ^ TODO 
+# profileExtra = ''
+#   if ! pgrep -x "gpg-agent" > /dev/null; then
+#       ${pkgs.gnupg}/bin/gpgconf --launch gpg-agent
+#   fi
+# '';
 
 programs.bash.shellOptions =
   [ "histappend" "checkwinsize" "extglob" "globstar" "checkjobs" ];
@@ -476,7 +299,6 @@ programs.bash.shellAliases =
 # 
 # * to command strings, or
 # * directly to build outputs.
-
 
 programs.bash.sessionVariables = {};
 
@@ -555,29 +377,6 @@ programs.firefox = {
 
     #enable = true;
 };
-
-##############################################
-
-programs.git =
-
-  (import ./home/git.nix
-          { inherit pkgs sboo;
-          })
-
-   // { enable = true;
-      };
-
-##################################################
-
-programs.ssh =
-
-  (import ./home/ssh.nix
-          { inherit pkgs sboo;
-            inherit (self) xdg;
-          })
-
-   // { enable = true;
-      };
 
 ##############################################
 
@@ -677,8 +476,7 @@ programs.texlive = {
 programs.command-not-found.enable = true;
 
 ##################################################
-# ⑤  Services ###################################
-##################################################
+# Services:
 
 services.redshift = {
     enable = true;
@@ -720,22 +518,7 @@ services.redshift = {
 # };
 
 ##################################################
-# ⑥ Environment #################################
-##################################################
-
-home.sessionVariables =
-  (import ./home/environment-variables.nix
-          { inherit pkgs sboo;
-            inherit (self) xdg;
-          });
-
-##################################################
-
-home.keyboard.options = [ "grp:caps_toggle" "grp_led:scroll" ];
-
-#TODO# home.keyboard.model = "pc104"
-
-##################################################
+# XDG:
 
 xdg = {
 
@@ -750,9 +533,38 @@ xdg = {
 };
 
 ##################################################
+
 };
 
 in
 ##################################################
+
 self
+
+##################################################
+# Notes ##########################################
+##################################################
+
+# Installation:
+#
+# mkdir -p ~/.config/nixpkgs/ && cd ~/.config/nixpkgs/ && ln -sf ~/configuration/home-manager/nix/home.nix home.nix
+#
+
+# See:
+#
+# * https://rycee.gitlab.io/home-manager/options.html
+# * https://github.com/rycee/home-manager#readme
+# * https://nixos.wiki/wiki/Home_Manager
+# * https://rycee.net/posts/2017-07-02-manage-your-home-with-nix.html
+# * 
+
+# See:
+#
+# $ man home-configuration.nix 
+# $
+
+# See:
+#
+# * ../REAMDE.md
+
 ##################################################
