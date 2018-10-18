@@ -1,5 +1,3 @@
-#!/bin/bash
-#TODO set -e
 ########################################
 
 # this file is "impure";
@@ -81,7 +79,10 @@ COMPLETION_FILES=
 
 for COMPLETION in "$COMPLETION_DIRECTORY"/{sudo,find,export,declare,ssh-add,ssh-keygen,xmodmap,xrandr,dconf,curl,ping,dd,gzip,rsync,kill,htop,pkill,pgrep,pinfo,iconv,dot,feh,stack}
 do
-    source "$COMPLETION" || true
+
+    if   [[ -e "$COMPLETION" ]]
+    then source "$COMPLETION" || true
+    fi
 done
 
 ### {sudo,find,ls,export,declare,git,ghc,ghcjs,cabal,clang,gcc,g++,ssh,ssh-add,ssh-keygen,xmodmap,xrandr,xbindkeys,dconf,curl,ping,dd,tar,gzip,7z,rsync,htop,pkill,pgrep,pandoc,iconv,dot,nano,emacs,emacsclient,feh,scp,VBoxManage}
@@ -306,6 +307,9 @@ esac
 YELLOW="\\[$(tput setaf 3)\\]"
 RESET="\\[$(tput sgr0)\\]"
 PS1="\\n\${BRANCH}${YELLOW}\\w${RESET}\$ "
+
+# ^ ERROR(/Warning): « "tput unknown terminal" ».
+#
 
 # PS1="\n(${GREEN}\u${RESET})${YELLOW}\w${RESET}\$ "
 # PS1="\n(${GREEN}\u${RESET})${GREEN}\w${RESET}\$ "

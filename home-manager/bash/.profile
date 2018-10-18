@@ -38,7 +38,9 @@ if   ! pgrep -x "ssh-agent" > /dev/null
 then eval "$(ssh-agent -s)"
 fi
 
-
 ########################################
 
+#TODO export TERMINFO=/usr/lib/terminfo
+
+########################################
 

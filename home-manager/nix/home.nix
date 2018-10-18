@@ -90,7 +90,7 @@ let sboo = rec {
 
 paths = {
 
-  home-manager = https://github.com/rycee/home-manager/archive/release-18.03.tar.gz;
+#home-manager = https://github.com/rycee/home-manager/archive/release-18.03.tar.gz;
 
 };
 
@@ -180,6 +180,7 @@ systemPrograms = with pkgs; [
  signal-desktop
  sox
  stack
+#terminfo
  tmux
  tree
  unzip
@@ -331,8 +332,7 @@ programs.emacs = {
 
 programs.home-manager = {
   enable = true;
-
-  path = sboo.paths.home-manager;
+  path = https://github.com/rycee/home-manager/archive/release-18.03.tar.gz;
 };
 
 # ^ 
@@ -345,7 +345,30 @@ programs.home-manager = {
 
 programs.bash.enable = true;
 
-programs.bash.bashrcExtra = builtins.readFile ../bash/.bashrc;
+programs.bash.bashrcExtra =
+
+  builtins.concatStringsSep "########################################\n\n"
+#TODO${pkgs.terminfo}
+    [ ''
+      export TERMINFO_DIRS="$HOME/.nix-profile/share/terminfo":/lib/terminfo
+      ''
+
+      # ^ « tput » needs « terminfo » to identity « $TERM »
+      # (i.e. the current terminal).
+
+      # ^ TODO :"$TERMINFO"
+      # ^ TODO « "./home-path/share/terminfo/x/xterm-termite" »
+
+      (builtins.readFile ../../bash/.bash_definitions.sh)
+
+      (builtins.readFile ../../bash/.bash_settings.sh)
+
+      ''
+      export LD_PRELOAD=
+      ''
+      # ^ (hacks)
+
+    ];
 
 # programs.bash.bashrcExtra = lib.mkBefore ''
 # '';

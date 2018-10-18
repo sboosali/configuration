@@ -458,10 +458,16 @@ alias sboo-restart-kde="kquitapp5 plasmashell && kstart plasmashell"
 ##################################################
 
 alias melpa2nix=/nix/store/2g4pm399808pmz6zsd89m2iwahk439vi-emacs2nix-0.1.0.0/bin/melpa2nix 
+
 alias dpkg-uninstall="sudo dpkg --force-remove-reinstreq --purge"
+
 alias yt='youtube-dl -f 22' # needs youtube-dl
 
+alias git-status-subdirs="find . -maxdepth 1 -mindepth 1 -type d -exec sh -c '(echo {} && cd {} && git status -s && echo)' \;"
+
 # alias unzip="7z x" # needs 7z
+
+
 
 ##################################################
 ##################################################

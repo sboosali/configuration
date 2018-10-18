@@ -1,0 +1,9 @@
+# (cd /nix/store/*-home-manager-generation/ && find home-path/ | grep terminfo)
+
+./home-path/share/terminfo
+./home-path/share/terminfo/x
+./home-path/share/terminfo/x/xterm-termite
+
+./home-path/lib/ghc-8.4.3/package.conf.d/terminfo-0.4.1.1.conf/...
+./home-path/lib/ghc-8.4.3/terminfo-0.4.1.1/...
+

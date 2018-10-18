@@ -1,4 +1,3 @@
-#!/bin/bash
 
 # set -u 
 # which will cause any unset argument reference to immediately fail the script.
