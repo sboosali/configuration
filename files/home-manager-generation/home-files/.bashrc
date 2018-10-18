@@ -1,0 +1,1 @@
+/nix/store/1qqhf0pvr9wrc0r8a8rk5lck83l24yax-home_file_.bashrc

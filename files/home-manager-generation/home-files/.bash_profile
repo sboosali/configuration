@@ -1,0 +1,1 @@
+/nix/store/4dmp088ws0sqj6ag9vps54k3q2bnpzcy-home_file_.bash_profile

@@ -1,0 +1,1 @@
+/nix/store/gcwp57s4jg1ldjan1qgfx74mr1ss820z-home_file_.profile
