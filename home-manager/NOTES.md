@@ -214,5 +214,28 @@ Links:
 * <https://invisible-island.net/ncurses/man/ncurses.3x.html#h3-TERMINFO>
 * <https://linux.die.net/man/5/terminfo>
 
+## `ssh`
+
+the `openssh` packages provides the `ssh` program (and other `ssh-*` programs):
+
+```nix
+"${pkgs.openssh}/bin/ssh"
+```
+
+```sh
+$ cd /nix/store/*-openssh-*/
+
+$ find -L bin/ -type f -executable
+./bin/ssh-keygen
+./bin/sshd
+./bin/ssh-copy-id
+./bin/ssh
+./bin/scp
+./bin/ssh-keyscan
+./bin/ssh-agent
+./bin/sftp
+./bin/ssh-add
+```
+
 ## 
 

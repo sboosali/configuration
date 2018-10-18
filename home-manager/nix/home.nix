@@ -79,8 +79,6 @@ addBuildInputs = extraBuildInputs: package:
 #  }))
 #
 
-##################################################
-
 in
 ##################################################
 # ②  Utilities: sboo #############################
@@ -170,8 +168,13 @@ systemPrograms = with pkgs; [
  ncdu
  #nix
  #nix-derivation-pretty
+ nix-bash-completions
  nix-prefetch-git
+ nix-prefetch-github
+ nix-prefetch-scripts
+#nixfmt
  nox
+ openssh
  pandoc
  pocketsphinx
  postgresql
@@ -305,6 +308,18 @@ keys.github = "SpirOS_git@github.com_id_rsa";
 
 ##################################################
 
+configFile = path:
+
+  "${self.xdg.configHome}/${path}";
+
+##################################################
+
+dataFile = path:
+
+  "${self.xdg.dataHome}/${path}";
+
+##################################################
+
 self = {
 
 ##################################################
@@ -381,10 +396,49 @@ programs.bash.profileExtra =
 
   builtins.concatStringsSep "########################################\n\n"
 
+       ###########################################
+
     [ (builtins.readFile ../bash/.profile)
 
-       ''ssh-add ~/.ssh/${sboo.keys.github}
+       ###########################################
+
        ''
+       if [ -x "$(command -v ${pkgs.xbindkeys}/bin/xbindkeys)" ] 
+          #TODO and if x11 is active
+       then
+
+           "${pkgs.xbindkeys}/bin/xbindkeys" --poll-rc -f "${configFile "xbindkeysrc"}"
+
+           # ^ Start the « xbindkeys » daemon in the background.
+
+           # ^ « --poll-rc » means: reload the config whenever it changes.
+
+           # ^ « -f _ » means: load the given config ("rc") file.
+           # By default, the config is at « ~/.xbindkeysrc », 
+           # which we've overriden to be under (one of) « $XDG_CONFIG_DIRS ».
+       fi
+       ''
+
+       ###########################################
+
+       ''
+       if [ -x "$(command -v ${pkgs.openssh}/bin/ssh-agent)" ]
+       then
+           eval "$(${pkgs.openssh}/bin/ssh-agent -s)"
+
+           # ^ Start the « ssh-agent » in the background.
+
+           if [ -f "~/.ssh/${sboo.keys.github}" ]
+           then
+               "${pkgs.openssh}/bin/ssh-add" ~/.ssh/${sboo.keys.github}
+           fi
+
+           # ^ Register my GitHub (@sboosali) key, via « ssh-agent ».
+       fi
+       ''
+
+       ###########################################
+
     ];
 
 # ^ « .profile » extras.
@@ -507,16 +561,23 @@ programs.firefox = {
 programs.git =
 
   (import ./home/git.nix
-          { inherit pkgs sboo; })
+          { inherit pkgs sboo;
+          })
 
    // { enable = true;
       };
 
 ##################################################
 
-programs.ssh = #(import ./home/ssh.nix {inherit pkgs sboo;}) //
-  { enable = true;
-  };
+programs.ssh =
+
+  (import ./home/ssh.nix
+          { inherit pkgs sboo;
+            inherit (self) xdg;
+          })
+
+   // { enable = true;
+      };
 
 ##############################################
 
@@ -665,7 +726,7 @@ services.redshift = {
 home.sessionVariables =
   (import ./home/environment-variables.nix
           { inherit pkgs sboo;
-            xdg = self.xdg;
+            inherit (self) xdg;
           });
 
 ##################################################
@@ -681,6 +742,8 @@ xdg = {
  configHome = "${env.HOME}/.config";
  dataHome   = "${env.HOME}/.local/share";
  cacheHome  = "${env.HOME}/.cache";
+
+ configFile."xbindkeysrc".source = ../../xbindkeys/xbindkeysrc;
 
 } // {
   enable = true;

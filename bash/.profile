@@ -59,4 +59,7 @@ if [ -x "$(command -v ssh-agent)" ]; then
 fi
 
 ##################################################
-##################################################source /home/sboo/.nix-profile/etc/profile
+##################################################
+
+#source /home/sboo/.nix-profile/etc/profile
+
