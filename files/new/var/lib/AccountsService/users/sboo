@@ -1,0 +1,21 @@
+[User]
+
+XSession=plasma
+
+# ^ Desktop Manager
+# `plasma.desktop` must exist 
+
+Background=/home/sboo/Pictures/InvertedGreen.jpg
+
+# ^ the background wallpaper.
+
+SystemAccount=false
+
+# ^ "HumanAccount",
+# i.e. the user (this file's namesake) is a human.
+
+[InputSource0]
+xkb=us
+
+# ^ 
+

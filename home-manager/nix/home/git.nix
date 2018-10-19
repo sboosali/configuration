@@ -3,55 +3,18 @@
 
 , sboo
 }:
+
 ##################################################
 {
 
   userName  = sboo.name;
   userEmail = sboo.email;
 
+  aliases = import ./git-aliases.nix { inherit pkgs; };
+
       # signing = {
       #   key = "C144D8F4F19FE630";
       #   signByDefault = true;
-      # };
-
-      # aliases = {
-      #   amend      = "commit --amend -C HEAD";
-      #   authors    = "!\"${pkgs.git}/bin/git log --pretty=format:%aN"
-      #              + " | ${pkgs.coreutils}/bin/sort"
-      #              + " | ${pkgs.coreutils}/bin/uniq -c"
-      #              + " | ${pkgs.coreutils}/bin/sort -rn\"";
-      #   b          = "branch --color -v";
-      #   ca         = "commit --amend";
-      #   changes    = "diff --name-status -r";
-      #   clone      = "clone --recursive";
-      #   co         = "checkout";
-      #   cp         = "cherry-pick";
-      #   dc         = "diff --cached";
-      #   dh         = "diff HEAD";
-      #   ds         = "diff --staged";
-      #   from       = "!${pkgs.git}/bin/git bisect start && ${pkgs.git}/bin/git bisect bad HEAD && ${pkgs.git}/bin/git bisect good";
-      #   ls-ignored = "ls-files --exclude-standard --ignored --others";
-      #   nb         = "!${pkgs.git}/bin/git checkout --track $(${pkgs.git}/bin/git config branch.$(${pkgs.git}/bin/git rev-parse --abbrev-ref HEAD).remote)/$(${pkgs.git}/bin/git rev-parse --abbrev-ref HEAD) -b";
-      #   pr         = "!${pkgs.git}/bin/git push $(${pkgs.git}/bin/git config branch.$(${pkgs.git}/bin/git rev-parse --abbrev-ref HEAD).remote) HEAD:$(${pkgs.git}/bin/git rev-parse --abbrev-ref HEAD) && ${pkgs.git-pull-request}/bin/git-pull-request --target-branch $(${pkgs.git}/bin/git config branch.$(${pkgs.git}/bin/git rev-parse --abbrev-ref HEAD).merge) --target-remote $(${pkgs.git}/bin/git config branch.$(${pkgs.git}/bin/git rev-parse --abbrev-ref HEAD).remote) --no-rebase --no-comment-on-update";
-      #   rc         = "rebase --continue";
-      #   rh         = "reset --hard";
-      #   ri         = "rebase --interactive";
-      #   rs         = "rebase --skip";
-      #   ru         = "remote update --prune";
-      #   snap       = "!${pkgs.git}/bin/git stash"
-      #              + " && ${pkgs.git}/bin/git stash apply";
-      #   snaplog    = "!${pkgs.git}/bin/git log refs/snapshots/refs/heads/"
-      #              + "\$(${pkgs.git}/bin/git rev-parse HEAD)";
-      #   spull      = "!${pkgs.git}/bin/git stash"
-      #              + " && ${pkgs.git}/bin/git pull"
-      #              + " && ${pkgs.git}/bin/git stash pop";
-      #   su         = "submodule update --init --recursive";
-      #   undo       = "reset --soft HEAD^";
-      #   w          = "status -sb";
-      #   wdiff      = "diff --color-words";
-      #   l          = "log --graph --pretty=format:'%Cred%h%Creset"
-      #              + " —%Cblue%d%Creset %s %Cgreen(%cr)%Creset'"
-      #              + " --abbrev-commit --date=relative --show-notes=*";
       # };
 
       # extraConfig = {
