@@ -1,5 +1,11 @@
 ##################################################
 
+alias c="cat"
+
+#------------------------------------------------#
+
+##################################################
+
 alias l="ls -la"
 
 #------------------------------------------------#
@@ -15,7 +21,7 @@ alias f=find
 
 alias ff="find . -type f"
 alias fd="find . -type d"
-alias fe="find . -type f -executable"
+alias fx="find . -type f -executable"
 
 #------------------------------------------------#
 
@@ -274,7 +280,7 @@ alias sboo-emacs="~/.emacs.d/result/bin/emacs &disown"
 
 ##alias sboo-emacs="(cd ~/.emacs.d/ && make build && )"
 
-alias sboo-ssh-add="ssh-add ~/.ssh/id_rsa"
+alias sboo-ssh-add="ssh-add ~/.ssh/$(hostname)_git@github.com_id_rsa"
 alias sboo-restart-gnome="gnome-shell --replace &disown"
 alias sboo-restart-xbindkeys="killall xbindkeys || true ; xbindkeys -fg ~/.xbindkeysrc.scm &disown "
 alias sboo-restart-kde="kquitapp5 plasmashell && kstart plasmashell"
