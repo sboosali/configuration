@@ -1,10 +1,12 @@
-### -*- buffer-read-only: t; -*- 
+#!/bin/bash
+# -*- buffer-read-only: t; -*- 
 
 ########################################
 
 sudo apt update       --assume-yes
 sudo apt upgrade      --assume-yes
 sudo apt dist-upgrade --assume-yes
+sudo apt autoremove   --assume-yes
 
 apt      list         --upgradable
 

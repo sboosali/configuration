@@ -61,3 +61,9 @@ TODO
 see `TODO.nix`
 
 
+## Installation
+
+Scripts for installaling, upgrading, and bootstrapping: TODO
+
+## 
+
