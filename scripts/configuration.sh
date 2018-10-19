@@ -171,8 +171,8 @@ safe-link ./nix/nix-channels.txt                   ~/.nix-channels
 safe-link ./bash/.bashrc                           ~/.bashrc 
 safe-link ./bash/.aliases                          ~/.aliases 
 safe-link ./bash/.profile                          ~/.profile                             
-safe-link ./bash/.bash_definitions.sh              ~/.bash_definitions.sh                    
-safe-link ./bash/.bash_settings.sh                 ~/.bash_settings.sh                       
+safe-link ./bash/bash_definitions              ~/bash_definitions                    
+safe-link ./bash/bash_settings                 ~/bash_settings                       
 safe-link ./bash/.bash_logout                      ~/.bash_logout   
 safe-link ./bash/.bash_login                       ~/.bash_login
 

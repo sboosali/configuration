@@ -1858,7 +1858,7 @@ function screen-set () {
 # $ eval "$(ssh-agent -s)"
 #
 # NOTE see
-#    ./.bash_settings.sh
+#    ./bash_settings
 #
 
 # ^ e.g. stdout:
@@ -1967,13 +1967,13 @@ function screen-set () {
 ############################################################
 ############################################################
 
-if [ -f  ~/.aliases ]; then
-  source ~/.aliases
-fi
+# if [ -f  ~/.aliases ]; then
+#   source ~/.aliases
+# fi
 
-if [ -f  ~/.bash_aliases.sh ]; then
-  source ~/.bash_aliases.sh
-fi
+# if [ -f  ~/.bash_aliases ]; then
+#   source ~/.bash_aliases
+# fi
 
 ############################################################
 ############################################################

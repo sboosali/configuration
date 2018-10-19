@@ -15,8 +15,8 @@ cd ./bash || exit
 
 # everything is checked, even if one fails
 shellcheck -x    .bashrc
-shellcheck       .bash_definitions.sh
-shellcheck       .bash_settings.sh
+shellcheck       bash_definitions
+shellcheck       bash_settings
 shellcheck -s sh .aliases 
 shellcheck       .bash_logout
 

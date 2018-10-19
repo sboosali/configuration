@@ -52,7 +52,7 @@ fi
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
 #NOTE
-# this single alias is here, instead of in .bash_definitions.sh, 
+# this single alias is here, instead of in bash_definitions, 
 # for guaranteeing it gets sourced, and everything can be easily reloaded.
 alias sb="(cd ~ && source .bashrc)"
 
@@ -62,8 +62,8 @@ if [ -f  ~/.aliases ]; then
 fi
 
 # pure stuff
-if [ -f  ~/.bash_definitions.sh ]; then
-  source ~/.bash_definitions.sh
+if [ -f  ~/.bash_definitions ]; then
+  source ~/.bash_definitions
 fi
 
 # pure stuff
@@ -72,8 +72,8 @@ if [ -f  ~/.bash_aliases ]; then
 fi
 
 # impure stuff
-if [ -f  ~/.bash_settings.sh ]; then
-  source ~/.bash_settings.sh
+if [ -f  ~/.bash_settings ]; then
+  source ~/.bash_settings
 fi
 
 ########################################

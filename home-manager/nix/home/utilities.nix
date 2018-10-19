@@ -36,13 +36,27 @@ rec {
  #################################################
 
 importOverlays = path:
+  let
+  importRelative        = n: import (toOverlayFile n);
+  listDirectoryFiles    = d: (lib.attrNames (lib.readDir d));
 
-  map (n: import (path + ("/" + n)))
+  toOverlayFile         = n: (path + ("/" + n));
+  toOverlaySubdirectory = n: (path + ("/" + n + "/default.nix"));
 
-      (filter (n: match ".*\\.nix" n != null
-               || pathExists (path + ("/" + n + "/default.nix")))
+  isNixFile      = n: (lib.match ".*\\.nix" n != null);
+  isNixDirectory = n: (lib.pathExists (toOverlaySubdirectory n));
+  isOverlay      = n: (isNixFile n || isNixDirectory n);
 
-              (attrNames (readDir path)));
+  overlayFilesOrDirectories = listDirectoryFiles path;
+  in
+
+  (map importRelative
+      (lib.filter isOverlay
+        overlayFilesOrDirectories));
+
+  # ^ e.g. « importOverlays ../overlays/ ».
+
+  # ^ :: DirectoryPath -> List (Nixpkgs -> Nixpkgs -> Nixpkgs)
 
  #################################################
 

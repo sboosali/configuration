@@ -1,0 +1,1 @@
+kubuntu-desktop plasma-desktop plasma-workspace plasma-desktop-data plasma-applet-redshift-control sddm xorg xserver-xorg-core xserver-xorg-video-intel 

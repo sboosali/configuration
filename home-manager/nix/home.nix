@@ -16,6 +16,16 @@
 }:
 
 ##################################################
+# Bootstrap ######################################
+##################################################
+let
+
+
+
+##################################################
+
+in
+##################################################
 # Imports ########################################
 ##################################################
 let
@@ -45,7 +55,7 @@ sboo = import ./home/sboo.nix {};
 
 utilities =
   import ./home/utilities.nix
-         { inherit lib };
+         { inherit lib; };
 
 ##################################################
 
@@ -100,7 +110,7 @@ home.sessionVariables =
 
 ##################################################
 
-home.file.".xinitrc".source = ../x11/xinitrc
+home.file = import ./home/files.nix { inherit pkgs; };
 
 ##################################################
 
@@ -115,6 +125,8 @@ home.packages =
   (import ./home/programs.nix
           { inherit pkgs sboo;
           });
+
+home.extraOutputsToInstall = [ "bin" "dev" "doc" "info" ];
 
 ##################################################
 
@@ -155,24 +167,24 @@ programs.bash.bashrcExtra =
 
   builtins.concatStringsSep "########################################\n\n"
 #TODO${pkgs.terminfo}
-    [ ''
+    [ (builtins.readFile ../../bash/aliases)
+
+      ''
       export TERMINFO_DIRS="$HOME/.nix-profile/share/terminfo":/lib/terminfo
       ''
+
+      #(builtins.readFile ../../bash/.bashrc)
 
       # ^ « tput » needs « terminfo » to identity « $TERM »
       # (i.e. the current terminal).
 
       # ^ TODO :"$TERMINFO"
+      # ^ TODO :"$TERMINFO" as sessionVariables that interpolates `{pkgs.termite}/share/terminfo`
       # ^ TODO « "./home-path/share/terminfo/x/xterm-termite" »
-
-      (builtins.readFile ../../bash/.bash_definitions.sh)
-
-      (builtins.readFile ../../bash/.bash_settings.sh)
-
-      ''
-      export LD_PRELOAD=
-      ''
-      # ^ (hacks)
+      
+      (builtins.readFile ../../bash/bash_definitions)
+      (builtins.readFile ../../bash/bash_aliases)
+      (builtins.readFile ../../bash/bash_settings)
 
     ];
 
@@ -189,7 +201,10 @@ programs.bash.profileExtra =
 
        ###########################################
 
-    [ (builtins.readFile ../bash/.profile)
+    [ (builtins.readFile ../../bash/aliases)
+
+      (builtins.readFile ../bash/.profile)
+
 
        ###########################################
 
@@ -256,9 +271,10 @@ programs.bash.shellOptions =
 
 # ^ Shell options to set.
 
-programs.bash.shellAliases =
-  (import ./home/shell-aliases.nix
-          { inherit pkgs sboo; });
+#TODO port over .aliases#
+# programs.bash.shellAliases =
+#   (import ./home/shell-aliases.nix
+#           { inherit pkgs sboo; });
 
 # ^ Attribute Set mapping aliases (the top-level Attribute Names in this option) either:
 # 

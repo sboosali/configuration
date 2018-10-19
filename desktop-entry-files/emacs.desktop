@@ -6,19 +6,19 @@ Version=1.0
 Type=Application
 
 TryExec=emacs
-Exec=emacs --no-desktop --maximized --name=SBoo
+Exec=emacs --maximized --name=SBoo
 Path=/home/sboo/.emacs.d
 
 Icon=emacs   # TODO
 StartupWMClass=Emacs
 StartupNotify=false
 
-Actions=debug;quick;minimal;v25;
+Actions=debug;quick;minimal;v25;nixpkgs
 
 ##################################################
 [Desktop Action debug]
 
-Name=【D】Debug Emacs « --debug-init »
+Name=【D】Debug Emacs « --debug-init ».
 
 TryExec=emacs
 Exec=emacs --debug-init --find-file=~/.emacs.d/init.el --no-splash --name=SBoo/Debug
@@ -27,7 +27,7 @@ Path=/home/sboo/.emacs.d
 ##################################################
 [Desktop Action quick]
 
-Name=【Q】Quick Emacs « --no-init-file »
+Name=【Q】Quick Emacs « --no-init-file ».
 
 TryExec=emacs
 Exec=emacs --quick --find-file=~/.emacs.d/init.el --name=SBoo/Quick
@@ -40,7 +40,7 @@ Path=/home/sboo/.emacs.d
 ##################################################
 [Desktop Action minimal]
 
-Name=【M】Minimal Emacs (builtin packages only)
+Name=【M】Minimal Emacs (builtin packages only).
 
 TryExec=emacs
 Exec=emacs --find-file=~/.emacs.d/init-minimal.el --name=SBoo/Minimal 
@@ -51,11 +51,22 @@ Path=/home/sboo/.emacs.d
 ##################################################
 [Desktop Action v25]
 
-Name=【25】 Emacs 25.3 (not 26.1)
+Name=【25】 Emacs 25.3 (not 26.1).
 
 TryExec=emacs-25.1
-Exec=emacs-25.1 --name=SBoo/Emacs25 --find-file=/home/sboo/.emacs.d/init.el
+Exec=emacs-25.1 --find-file=/home/sboo/.emacs.d/init.el --name=SBoo/Emacs25
 Path=/home/sboo/.emacs.d
+
+##################################################
+[Desktop Action nixpkgs]
+
+Name=【nix】 (Re)Build ELisp Packages (and Emacs itself) via Nixpkgs before Launching.
+
+TryExec=emacs
+Exec=make run
+Path=/home/sboo/.emacs.d
+
+#Exec=emacs --find-file=/home/sboo/.emacs.d/init.el --name=SBoo/Nixpkgs
 
 ##################################################
 # Notes ##########################################

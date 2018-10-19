@@ -23,12 +23,12 @@ fi
 ##################################################
 ## Definitions & Aliases (Bash-only)
 
-if [ -f  ~/.bash_definitions.sh ]; then
-  source ~/.bash_definitions.sh
+if [ -f  ~/.bash_definitions ]; then
+  source ~/.bash_definitions
 fi
 
-if [ -f  ~/.bash_aliases.sh ]; then
-  source ~/.bash_aliases.sh
+if [ -f  ~/.bash_aliases ]; then
+  source ~/.bash_aliases
 fi
 
 ##################################################

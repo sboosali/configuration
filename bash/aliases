@@ -1,208 +1,32 @@
-#!/bin/sh
 ##################################################
 
-#NOTE
-# these are portable pan-`sh` (not `bash`-only) commands
+alias l="ls -la"
+
+#------------------------------------------------#
+
+alias la="ls -a"
+alias ll="ls -l"
 
 ##################################################
-
-alias needs="command -v"
-
-# ensure an executable is present (POSIX-compatible)
-#
-# i.e. both installed oon the system,
-#      and locateable on the $PATH.
-#
-
-##################################################
-
-alias c=cat
-
-alias n=nano
-
-#alias r='rm -r'
 
 alias f=find
 
-alias g=git
-
-alias o=echo
-
-alias i=man   # "i"nformation
-
-# alias e="echo" # emacs
-
-##################################################
-
-alias d="cd"
-
 #------------------------------------------------#
 
-alias d-="cd -"
-
-alias d..="cd .."
-alias d...="cd ../.."
-alias d....="cd ../../.."
-alias d.....="cd ../../../.."
-alias d......="cd ../../../../.."
-alias d.......="cd ../../../../../.."
+alias ff="find . -type f"
+alias fd="find . -type d"
+alias fe="find . -type f -executable"
 
 #------------------------------------------------#
-
-alias de='cd ~/.emacs.d'
-alias dew='cd ~/.emacs.d-windows'
-alias dc='cd ~/configuration'
-alias dh='cd ~/haskell'
-alias dt='cd ~/temporary'
-alias db='cd ~/backup'
-alias dw='cd ~/www'
-alias dm='cd ~/Documents'
-alias dn='cd ~/notes'
-alias dx='cd ~/nixpkgs'
-#alias dnix='cd ~/.nixpkgs'
-#alias dn='cd ~/Dropbox/notes'
-#alias dw='cd ~/Downloads'
-# alias d='cd '
-# alias d='cd '
-
-##################################################
-
-alias l='ls -A'
-
-#------------------------------------------------#
-
-alias ll='ls -alF'
-alias la='ls -A'
-alias lc='ls -CF'
-###alias l='find . -maxdepth 1 -printf "%M | %p\n"'
-
-##################################################
 
 alias f.="find ."
-alias f-="find-relevant ."
-
-#------------------------------------------------#
-
 alias f1="find . -maxdepth 1"
 alias f2="find . -maxdepth 2"
 alias f3="find . -maxdepth 3"
-alias f4="find . -maxdepth 4"
-alias f5="find . -maxdepth 5"
-alias f6="find . -maxdepth 6"
-alias f7="find . -maxdepth 7"
-alias f8="find . -maxdepth 8"
-alias f9="find . -maxdepth 9"
-
-##################################################
-
-alias  p="grep -i -n --color=auto -E"
 
 #------------------------------------------------#
 
-alias pf="grep -i -n --color=auto -F"
-alias pr="grep -i -n --color=auto -E -r"
-
-#------------------------------------------------#
-
-alias skip-blank-lines="grep -v -e '^[[:space:]]*$'"
-
 ##################################################
-
-alias md='mkdir -pv'
-
-alias mkdir='mkdir -pv'
-
-##################################################
-
-# requires: colordiff package
-if  [ -x "$(command -v colordiff)" ]
-then
-    alias diff='colordiff'
-# else
-#     # alias diff='...'
-#     echo '[WARNING] colordiff is not installed, using diff.' >&2
-fi
-
-##################################################
-
-alias ee="emacsclient"
-alias eb='$EDITOR ~/.bashrc && source ~/.bashrc' # single-quotes for dynamically-scoped EDITOR
-alias ed="emacs --debug-init"
-alias eq="emacs -q"
-alias edq="emacs -q --debug-init"
-alias ec="emacs -q ~/.emacs.d/init.el" # to debug
-alias et="emacs -nw"
-
-#------------------------------------------------#
-
-alias nb="nano ~/.bashrc && source ~/.bashrc"
-
-alias sbr="source ~/.bashrc"              # bash{R}c.
-alias sbp="source ~/.profile"             # {P}rofile
-alias sbd="source ~/.bash_definitions.sh" # {D}efinition. should be idempotent.
-alias sba="source ~/.aliases"             # {A}alias.     should be idempotent.
-alias sbs="source ~/.bash_settings.sh"    # {S}etting
-
-##################################################
-
-alias r=rm
-
-#------------------------------------------------#
-
-alias rm="rm -f"
-alias rr="rm -rf"
-# alias rmr=rr #TODO
-# alias rmt=rt #TODO
-#alias rta='rm -f *~ .*~ \#*\# .\#* matlab_crash_dump.* java.log.* *.pyc *.class __pycache__/*.pyc *.agdai *.hi *.hout *.o'
-#alias rtr='rm -fr *~ .*~ \#*\# .\#* matlab_crash_dump.* java.log.* *.pyc *.class __pycache__/*.pyc *.agdai *.hi *.hout *.o'
-
-##################################################
-
-alias w=disown  # diso{W}n
-
-##################################################
-
-alias list="ls -1aFG"
-alias remove="rm -f"
-alias show="cat"
-alias get="git"
-alias grab="grep"
-alias processes=ps
-alias synchronize="rsync -vihh -x -C -aR"
-alias dry-synchronize="synchronize --dry-run"
-alias path='echo -e ${PATH//:/\\n}'
-alias now='date +"%T"'
-alias reboot='sudo /sbin/reboot'
-alias poweroff='sudo /sbin/poweroff'
-alias halt='sudo /sbin/halt'
-alias shutdown='sudo /sbin/shutdown'
-
-alias c7="chmod 700"
-
-alias lnh="echo 'ln -sf /path/to/file /path/to/symlink'"
-
-alias disksize="df -h /"
-
-alias cpr="cp -arv"
-
-alias lnr='readlink -f'
-alias lns='ln -sf' # /path/to/file /path/to/symlink
-# alias pwn="sudo chown -R sboo:users"
-
-##################################################
-
-alias meminfo='free -m -l -t'
-alias psmem='ps auxf | sort -nr -k 4'
-alias psmem10='ps auxf | sort -nr -k 4 | head -10'
-alias pscpu='ps auxf | sort -nr -k 3'
-alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
-alias cpuinfo='lscpu' 
-alias gpumeminfo='grep -i --color memory /var/log/Xorg.0.log'
-# TODO alias psa="ps -o \"command, pid, %mem, %cpu, user, start, \" "
-
-##################################################
-
-alias g="git"
 
 #------------------------------------------------#
 

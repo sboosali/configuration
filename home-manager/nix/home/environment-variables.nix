@@ -35,6 +35,8 @@
  SBOO_ELISP_DIR         = ''"$HOME"/elisp'';
 #SBOO_EMACS             = ''"$HOME"/.emacs.d/result/bin/emacs'';
 
+ #TERMINFO_DIRS=''"${pkgs.termite}/share/terminfo":/lib/terminfo'';
+ LD_PRELOAD = ""; # HACK
 }
 ##################################################
 

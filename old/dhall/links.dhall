@@ -8,8 +8,8 @@ in let links =
    [ { o = "~/.bashrc" ,                                 i = "./bash/.bashrc"                           }
    , { o = "~/.aliases" ,                                i = "./bash/.aliases"                          }
    , { o = "~/.profile" ,                                i = "./bash/.profile"                          }
-   , { o = "~/.bash_definitions.sh" ,                       i = "./bash/.bash_definitions.sh"                 }
-   , { o = "~/.bash_settings.sh" ,                          i = "./bash/.bash_settings.sh"                    }
+   , { o = "~/bash_definitions" ,                       i = "./bash/bash_definitions"                 }
+   , { o = "~/bash_settings" ,                          i = "./bash/bash_settings"                    }
    , { o = "~/.bash_logout" ,                            i = "./bash/.bash_logout"                      }
 
    , { o = "~/.gitconfig" ,                              i = "./git/.gitconfig"                         }
