@@ -222,16 +222,16 @@ alias rt=rm-temporaries
 
 ##################################################
 
-alias nh=home-manager
+alias nm=home-manager
 
-# ^ {nh} abbreviates "{n}ix {h}ome-manager"
+# ^ {nm} abbreviates "{n}ix home-{m}anager"
 
 #------------------------------------------------#
 
-alias nhb="home-manager build"
-alias nhw="home-manager switch"
-alias nhg="home-manager generations"
-alias nhp="home-manager packages"
+alias nmb="home-manager build"
+alias nmw="home-manager switch"
+alias nmg="home-manager generations"
+alias nmp="home-manager packages"
 
 #alias nh_="home-manager _"
 

@@ -237,5 +237,186 @@ $ find -L bin/ -type f -executable
 ./bin/ssh-add
 ```
 
+## `xbindkeys`
+
+XBindKeys Daemon:
+
+```sh
+$ xbindkeys --file       ~/.xbindkeysrc     &disown
+$ xbindkeys --file-guile ~/.xbindkeysrc.scm &disown 
+```
+
+```man
+-f,  --file         Use an alternative rc file
+-fg, --file-guile   Use an alternative guile configuration file
+```
+
+## `emacs`
+
+```sh
+$ emacs --daemon
+```
+
+`--daemon` launches an emacs daemon: 
+
+- starting the server,
+- running any elisp init files, and then 
+- detaching into the background.
+
+## `KDE Plamsa`
+
+### `$ systemsettings5`
+
+TODO mv settings-via-ui into `home.nix`.
+
+#### `Settings > Fonts > Fonts`
+
+Fonts (Family & Size):
+
+* General: 
+* FixedWidth: 
+* Small: 
+* Toolbar: 
+* Menu: 
+* WindowTitle: 
+
+(the defaults are all 9 or 10, which are illegible on high-resolution monitors).
+
+## LightDM
+
+### LightDM: Before Reconfiguration (after Installation)
+
+```sh
+$ find /etc/rc2.d
+
+/etc/rc2.d
+/etc/rc2.d/S01uuidd
+/etc/rc2.d/S02anacron
+/etc/rc2.d/S05plymouth
+/etc/rc2.d/S05grub-common
+/etc/rc2.d/S04cups-browsed
+/etc/rc2.d/S05rc.local
+/etc/rc2.d/README
+/etc/rc2.d/S03lightdm
+/etc/rc2.d/S01apport
+/etc/rc2.d/S02sddm
+/etc/rc2.d/S02kerneloops
+/etc/rc2.d/S01lvm2-lvmetad
+/etc/rc2.d/S04cups
+/etc/rc2.d/S02cron
+/etc/rc2.d/S03bluetooth
+/etc/rc2.d/S02acpid
+/etc/rc2.d/S03avahi-daemon
+/etc/rc2.d/S02irqbalance
+/etc/rc2.d/S02whoopsie
+/etc/rc2.d/S01rsyslog
+/etc/rc2.d/S02smartmontools
+/etc/rc2.d/S01unattended-upgrades
+/etc/rc2.d/S04saned
+/etc/rc2.d/S05ondemand
+/etc/rc2.d/S02rsync
+/etc/rc2.d/S02dbus
+/etc/rc2.d/S02thermald
+/etc/rc2.d/S02speech-dispatcher
+/etc/rc2.d/S01lvm2-lvmpolld
+/etc/rc2.d/S01tlp
+```
+
+```sh
+$ find /etc/lightdm/
+
+/etc/lightdm/
+/etc/lightdm/users.conf
+/etc/lightdm/lightdm.conf
+/etc/lightdm/lightdm.conf.d
+```
+
+```sh
+$ cat /etc/lightdm/lightdm.conf
+
+[Seat:*]
+autologin-guest=false
+autologin-user=sboo
+autologin-user-timeout=0
+```
+
+```sh
+$ systemctl status lightdm.service
+
+● lightdm.service - Light Display Manager
+   Loaded: loaded (/lib/systemd/system/lightdm.service; enabled; vendor preset: enabled)
+  Drop-In: /lib/systemd/system/display-manager.service.d
+           └─xdiagnose.conf
+   Active: active (running) since Sun 2018-10-14 22:07:52 PDT; 3 days ago
+     Docs: man:lightdm(1)
+  Process: 1330 ExecStartPre=/bin/sh -c [ "$(basename $(cat /etc/X11/default-display-manager 2>/dev/null))" = "lightdm" ] (code=exited, status=0/SUCCESS)
+ Main PID: 1335 (lightdm)
+   CGroup: /system.slice/lightdm.service
+           ├─1335 /usr/sbin/lightdm
+           └─1350 /usr/lib/xorg/Xorg -core :0 -seat seat0 -auth /var/run/lightdm/root/:0 -nolisten tcp vt7 -novtswitch
+
+Oct 14 22:07:51 SpirOS systemd[1]: Starting Light Display Manager...
+Oct 14 22:07:52 SpirOS systemd[1]: Started Light Display Manager.
+Oct 14 22:07:52 SpirOS lightdm[1454]: pam_unix(lightdm-autologin:session): session opened for user sboo by (uid=0)
+```
+
+```sh
+$ dm-tool --help
+
+Usage:
+  dm-tool [OPTION...] COMMAND [ARGS...] - Display Manager tool
+
+Options:
+  -h, --help        Show help options
+  -v, --version     Show release version
+  --session-bus     Use session D-Bus
+
+Commands:
+  switch-to-greeter                                    Switch to the greeter
+  switch-to-user USERNAME [SESSION]                    Switch to a user session
+  switch-to-guest [SESSION]                            Switch to a guest session
+  lock                                                 Lock the current seat
+  list-seats                                           List the active seats
+  add-nested-seat [--fullscreen|--screen DIMENSIONS]   Start a nested display
+  add-local-x-seat DISPLAY_NUMBER                      Add a local X seat
+  add-seat TYPE [NAME=VALUE...]                        Add a dynamic seat
+```
+
+```sh
+$ dm-tool list-seats 
+
+Seat0
+  CanSwitch=true
+  HasGuestAccount=true
+  Session0
+    UserName='sboo'
+```
+
+```sh
+$ lsb_release -rd
+
+Description: Ubuntu 16.04.5 LTS
+Release:     16.04
+```
+
+
+### LightDM: After Configuration
+
+Add `user-session=plasma` under `SeatDefaults` to `/etc/lightdm/lightdm.conf`:
+
+```sh
+$ cat /etc/lightdm/lightdm.conf
+
+[Seat:*]
+autologin-guest=false
+autologin-user=sboo
+autologin-user-timeout=0
+
+[SeatDefaults]
+user-session=plasma
+```
+
+where `/usr/share/xsessions/plasma.desktop` must exist.
+
 ## 
 

@@ -1,6 +1,6 @@
 ########################################
 
-pkgs: self: super: 
+pkgs:
 
 ########################################
 # Imports
@@ -15,52 +15,14 @@ inherit (pkgs)
 inherit (stdenv)
         lib mkDerivation;
 
-########################################
-
-myEmacsPackageOverrides
-  = (import ./overrides.nix) pkgs; #TODO
-
 in
 ########################################
-# Utilities: Nix
+# "Exports" ############################
 ########################################
-let
-
-addBuildInputs =  extraBuildInputs: package:
-
-  package.overrideAttrs (old:
-    { buildInputs = old.buildInputs ++ extraBuildInputs;
-     }));
-
-# ^
-#
-# e.g.
-#
-# (addBuildInputs [ pkgs.git ] melpaPackages.magit) 
-# 
-# equals:
-#
-# (melpaPackages.magit.overrideAttrs(old: {
-#         buildInputs = old.buildInputs ++ [ pkgs.git ];
-#       }))
-#
-
+{
 ########################################
 
-in
-########################################
-# Utilities: Emacs
-########################################
-let
-
-withPatches = pkg: patches:
-
-  lib.overrideDerivation pkg 
-    (attrs: { inherit patches; });
-
-########################################
-
-compileEmacsFiles = pkgs.callPackage ./emacs/builder.nix; #TODO
+compileEmacsFiles = pkgs.callPackage ./builder.nix; #TODO
 
 ########################################
 
@@ -73,7 +35,12 @@ compileLocalFile = name:
 
 ########################################
 
-fetchFromEmacsWiki = pkgs.callPackage ({ fetchurl, name, sha256 }:
+fetchFromEmacsWiki = pkgs.callPackage
+
+  ({ fetchurl
+   , name
+   , sha256
+   }:
 
   fetchurl {
     inherit sha256;
@@ -82,13 +49,13 @@ fetchFromEmacsWiki = pkgs.callPackage ({ fetchurl, name, sha256 }:
 
 ########################################
 
-compileEmacsWikiFile
+compileEmacsWikiFile =
 
-  = { name
-    , sha256
-    , buildInputs ? []
-    , patches     ? []
-    }:
+  { name
+  , sha256
+  , buildInputs ? []
+  , patches     ? []
+  }:
 
   compileEmacsFiles {
     inherit name buildInputs patches;
@@ -96,33 +63,5 @@ compileEmacsWikiFile
   };
 
 ########################################
-
-mkEmacsPackages = emacs:
-
-  (self.emacsPackagesNgGen emacs).overrideScope (mkEmacsOverlay emacs);
-
-########################################
-
-mkEmacsOverlay = emacs:
-                 super: self: 
-
-  pkgs.lib.fix
-    (pkgs.lib.extends
-       myEmacsPackageOverrides
-        (_: super.melpaPackages
-             // { inherit emacs;
-                  inherit (super) melpaBuild;
-                  }));
-
-# ^ NOTE: nested overlay.
-# the `self` and `super` of `mkEmacsOverlay` shadow their namesakes
-# of this file (`./overlays/emacs/utilities.nix`),
-# (which is itself an overlay).
-
-in
-########################################
-{
-
-
 }
 ########################################

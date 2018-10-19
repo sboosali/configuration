@@ -7,7 +7,7 @@ let
 ########################################
 
 myEmacsPackageOverrides =
-  import ./overlays/emacs/overrides.nix pkgs;
+  import ./overrides.nix pkgs;
 
 ########################################
 

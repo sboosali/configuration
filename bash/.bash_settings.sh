@@ -276,6 +276,8 @@ function desktop-settings-for-only-plasma() { return; }
 
 function desktop-settings-for-only-gnome() { return; }
 
+function desktop-settings-for-only-ubuntu() { return; }
+
 function desktop-settings-for-only-unknown() { return; }
 
 case "$DESKTOP_SESSION" in
@@ -288,6 +290,10 @@ case "$DESKTOP_SESSION" in
      
     "gnome")
         desktop-settings-for-only-gnome
+        ;;
+
+    "ubuntu")
+        desktop-settings-for-only-ubuntu
         ;;
 
     *)

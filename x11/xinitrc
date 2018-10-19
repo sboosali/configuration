@@ -1,38 +1,16 @@
 ########################################
-# `xmodmap`
+
+setxkbmap -option 'ctrl:nocaps'
+
+# ^ Use Caps Lock as Control key.
+
+########################################
 
 xmodmap ~/.Xmodmap
 
 ########################################
-# `xbindkeys`
 
 xbindkeys --file ~/.xbindkeysrc  &disown
 
-
 ########################################
-# `emacsclient`
 
-# emacs --daemon
-
-########################################
-# NOTES
-
-# [XBindKeys Daemon]
-#
-# $ xbindkeys --file       ~/.xbindkeysrc     &disown
-# $ xbindkeys --file-guile ~/.xbindkeysrc.scm &disown 
-# 
-# -f,  --file         Use an alternative rc file
-# -fg, --file-guile   Use an alternative guile configuration file
-
-# [Emacs Daemon]
-# 
-# $ emacs --daemon
-# 
-# ^ launches an emacs in daemon mode: 
-# - starting the server,
-# - running any elisp init files, and then 
-# - detaching into the background.
-# 
-
-########################################

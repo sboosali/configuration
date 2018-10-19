@@ -43,7 +43,9 @@ sboo = import ./home/sboo.nix {};
 
 ##################################################
 
-utilities = import ./home/utilities.nix {};
+utilities =
+  import ./home/utilities.nix
+         { inherit lib };
 
 ##################################################
 
@@ -77,13 +79,14 @@ self = {
 ##################################################
 
 nixpkgs.config   = config;
-nixpkgs.overlays = overlays;
+nixpkgs.overlays = overlays; #TODO ../overlays
 
 ##############################################
 
 programs.home-manager.enable = true;
 programs.home-manager.path   =
   https://github.com/rycee/home-manager/archive/release-18.09.tar.gz;
+  # ../../submodules/home-manager/
 
 # ^ 
 
@@ -94,6 +97,10 @@ home.sessionVariables =
           { inherit pkgs sboo;
             inherit (self) xdg;
           });
+
+##################################################
+
+home.file.".xinitrc".source = ../x11/xinitrc
 
 ##################################################
 
