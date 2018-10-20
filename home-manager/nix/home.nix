@@ -337,19 +337,19 @@ $ jco
 
 ##################################################
 
-# programs.chromium.enable = true;
+programs.chromium.enable = true;
 
-# programs.chromium.extensions = [
+programs.chromium.extensions = [
 
-#   "gcbommkclmclpchllfjekcdonpmejbdp" 
-#   # ^ https everywhere
+  "gcbommkclmclpchllfjekcdonpmejbdp" 
+  # ^ https everywhere
 
-#   "cjpalhdlnbpafiamejdnhcphjbkeiagm"
-#   # ^ ublock origin
+  "cjpalhdlnbpafiamejdnhcphjbkeiagm"
+  # ^ ublock origin
 
-#   ""
-#   # ^
-# ];
+  ""
+  # ^
+];
 
 ##############################################
 
@@ -508,6 +508,12 @@ xdg = {
  cacheHome  = "${env.HOME}/.cache";
 
  configFile."xbindkeysrc".source = ../../xbindkeys/xbindkeysrc;
+
+#configFile."fonts/iosevka".source    = ../../fonts/iosevka;
+#configFile."fonts/iosevka".recursive = true;
+
+ configFile."fonts".source    = ../../fonts;
+ configFile."fonts".recursive = true;
 
 } // {
   enable = true;
