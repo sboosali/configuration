@@ -20,10 +20,6 @@
 ##################################################
 let
 
-
-
-##################################################
-
 in
 ##################################################
 # Imports ########################################
@@ -129,18 +125,30 @@ home.packages =
 home.extraOutputsToInstall = [ "bin" "dev" "doc" "info" ];
 
 ##################################################
+# XDG:
 
-programs.emacs.enable = true;
-programs.emacs.extraPackages =
-  (import ./home/emacs.nix
+xdg =
+  (import ./xdg { inherit env;
+                })
+   // { enable = true;
+      };
+
+##################################################
+
+programs.emacs =
+
+  (import ./emacs
           { inherit pkgs utilities;
-          });
+          })
 
-##############################################
+   // { enable = true;
+      };
+
+##################################################
 
 programs.git =
 
-  (import ./home/git.nix
+  (import ./git
           { inherit pkgs sboo;
           })
 
@@ -161,179 +169,15 @@ programs.ssh =
 
 ##################################################
 
-programs.bash.enable = true;
+programs.bash =
 
-programs.bash.bashrcExtra =
+  (import ./bash
+          { inherit pkgs sboo;
+            inherit (self) xdg;
+          })
 
-  builtins.concatStringsSep "########################################\n\n"
-#TODO${pkgs.terminfo}
-    [ (builtins.readFile ../../bash/aliases)
-
-      ''
-      export TERMINFO_DIRS="$HOME/.nix-profile/share/terminfo":/lib/terminfo
-      ''
-
-      #(builtins.readFile ../../bash/.bashrc)
-
-      # ^ « tput » needs « terminfo » to identity « $TERM »
-      # (i.e. the current terminal).
-
-      # ^ TODO :"$TERMINFO"
-      # ^ TODO :"$TERMINFO" as sessionVariables that interpolates `{pkgs.termite}/share/terminfo`
-      # ^ TODO « "./home-path/share/terminfo/x/xterm-termite" »
-      
-      (builtins.readFile ../../bash/bash_definitions)
-      (builtins.readFile ../../bash/bash_aliases)
-      (builtins.readFile ../../bash/bash_settings)
-
-    ];
-
-# programs.bash.bashrcExtra = lib.mkBefore ''
-# '';
-
-# ^ « .bashrc » extras.
-# 
-# i.e. Extra commands that should be run when initializing an interactive shell.
-
-programs.bash.profileExtra =
-
-  builtins.concatStringsSep "########################################\n\n"
-
-       ###########################################
-
-    [ (builtins.readFile ../../bash/aliases)
-
-      (builtins.readFile ../bash/.profile)
-
-
-       ###########################################
-
-       ''
-       if [ -x "$(command -v ${pkgs.xbindkeys}/bin/xbindkeys)" ] 
-          #TODO and if x11 is active
-       then
-
-           "${pkgs.xbindkeys}/bin/xbindkeys" --poll-rc -f "${configFile "xbindkeysrc"}"
-
-           # ^ Start the « xbindkeys » daemon in the background.
-
-           # ^ « --poll-rc » means: reload the config whenever it changes.
-
-           # ^ « -f _ » means: load the given config ("rc") file.
-           # By default, the config is at « ~/.xbindkeysrc », 
-           # which we've overriden to be under (one of) « $XDG_CONFIG_DIRS ».
-       fi
-       ''
-
-       ###########################################
-
-       ''
-       if [ -x "$(command -v ${pkgs.openssh}/bin/ssh-agent)" ]
-       then
-           eval "$(${pkgs.openssh}/bin/ssh-agent -s)"
-
-           # ^ Start the « ssh-agent » in the background.
-
-           if [ -f "~/.ssh/${sboo.keys.github}" ]
-           then
-               "${pkgs.openssh}/bin/ssh-add" ~/.ssh/${sboo.keys.github}
-           fi
-
-           # ^ Register my GitHub (@sboosali) key, via « ssh-agent ».
-       fi
-       ''
-
-       ###########################################
-
-    ];
-
-# ^ « .profile » extras.
-# 
-# i.e. Extra commands that should be run when initializing a login shell.
-
-# ^ « ~/.profile » is executed by the command interpreter for Login Shells.
-#
-# NOTE `bash` ignores « ~/.profile » if either:
-#
-# * « ~/.bash_profile » exists, or
-# * « ~/.bash_login » exists.
-#
-
-# ^ TODO 
-# profileExtra = ''
-#   if ! pgrep -x "gpg-agent" > /dev/null; then
-#       ${pkgs.gnupg}/bin/gpgconf --launch gpg-agent
-#   fi
-# '';
-
-programs.bash.shellOptions =
-  [ "histappend" "checkwinsize" "extglob" "globstar" "checkjobs" ];
-
-# ^ Shell options to set.
-
-#TODO port over .aliases#
-# programs.bash.shellAliases =
-#   (import ./home/shell-aliases.nix
-#           { inherit pkgs sboo; });
-
-# ^ Attribute Set mapping aliases (the top-level Attribute Names in this option) either:
-# 
-# * to command strings, or
-# * directly to build outputs.
-
-programs.bash.sessionVariables = {};
-
-# ^ Environment variables that will be set for the Bash session.
-
-programs.bash.historyControl = [ "ignoredups" "ignorespace" ];
-
-# ^ 
-# `"ignoredups"`: ignore (consecutive) duplicate commands.
-# `"ignorespace"`: ignore commands that begin with white space.
-
-programs.bash.historyFile = ''"$HOME"/.bash_history'';
-
-# ^ Location of the bash history file.
-
-programs.bash.historyIgnore = [ "ls" "cd" "exit" ];
-
-# ^ List of commands that should not be saved to the history list.
-
-programs.bash.historySize = 100000;
-
-# ^ Number of history lines to keep in memory.
-
-programs.bash.historyFileSize = 1000000;
-
-# ^ Number of history lines to keep on file.
-
-programs.bash.enableAutojump = true;
-
-# ^ Enable the `autojump` navigation tool.
-# 
-# See <https://github.com/wting/autojump>
-
-/*
-```sh
-# `j` aliases `autojump`
-
-$ j foo
-
-# ^ `cd` to any (previously navigated to) directory whose path contains `foo`
-
-$ jc foo 
-
-# ^ `cd` to any child-directory whose path contains `foo`
-
-$ jo foo
-
-# ^ `open` (don't `cd` into) any (previously navigated to) directory whose path contains `foo`
-
-$ jco 
-
-# ^ `jc` + `jo`
-```
-*/
+   // { enable = true;
+      };
 
 ##################################################
 
@@ -347,7 +191,7 @@ programs.chromium.extensions = [
   "cjpalhdlnbpafiamejdnhcphjbkeiagm"
   # ^ ublock origin
 
-  ""
+  #""
   # ^
 ];
 
@@ -440,11 +284,19 @@ programs.htop.enable = true;
 
 ##################################################
 
+programs.feh = {
+ enable = true;
+};
+ 
+##################################################
+
 programs.texlive = {
  enable = true;
 
  extraPackages = tpkgs: 
-  { inherit (tpkgs) 
+  { inherit (tpkgs)
+    resumecls
+    resumemac
     collection-fontsrecommended 
     algorithms
     ;
@@ -497,41 +349,6 @@ services.redshift = {
 #    enable = true;
 #
 # };
-
-##################################################
-# XDG:
-
-xdg = {
-
- configHome = "${env.HOME}/.config";
- dataHome   = "${env.HOME}/.local/share";
- cacheHome  = "${env.HOME}/.cache";
-
-
-##################################################
-
- configFile."xbindkeysrc".source = ../../xbindkeys/xbindkeysrc;
-
-#TODO# configFile = import ./home/xdg.nix { inherit pkgs; };
-
- configFile."fontconfig".source    = ../../fonts;
- configFile."fontconfig".recursive = true;
-
-# ^
-# $ echo $FONTCONFIG_PATH
-# /home/sboo/.config/fontconfig
-
-#configFile."fonts/iosevka".source    = ../../fonts/iosevka;
-#configFile."fonts/iosevka".recursive = true;
-
-#configFile."fonts".source    = ../../fonts;
-#configFile."fonts".recursive = true;
-
-} // (
-  import ./home/xdg.nix {}
-) // {
-  enable = true;
-};
 
 ##################################################
 

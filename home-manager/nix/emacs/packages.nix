@@ -1,18 +1,18 @@
 ##################################################
 { pkgs
-
-#, sboo
-
 , utilities
 }:
+
+##################################################
+epkgs:
+
 ##################################################
 
 with utilities;
 
 ##################################################
-let
 
-emacsPackages = epkgs: with epkgs; [
+with epkgs; [
 
   use-package
   helm
@@ -25,9 +25,5 @@ emacsPackages = epkgs: with epkgs; [
 
   (addBuildInputs [ pkgs.git ] melpaPackages.magit)
 
-];
-
-in
-##################################################
-emacsPackages
+]
 ##################################################

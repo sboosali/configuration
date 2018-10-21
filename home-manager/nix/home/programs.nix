@@ -65,7 +65,8 @@ systemPrograms = with pkgs; [
  imagemagick
  inotify-tools
  jq
- mesa
+ #mesa
+ nano
  ncdu
  #nix
  #nix-derivation-pretty

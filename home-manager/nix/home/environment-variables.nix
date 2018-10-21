@@ -9,14 +9,14 @@
 {
  CABAL_CONFIG       = "${xdg.configHome}/cabal/config";
 
- #FONTCONFIG_PATH = "${xdg.configHome}/fontconfig:/etc/fonts";
+ #FONTCONFIG_PATH    = "${xdg.configHome}/fontconfig:/etc/fonts";
  #FONTCONFIG_FILE    = "${xdg.configHome}/fontconfig/fonts.conf";
 
  EMACSVER           = "26";
  GHCVER             = "82";
  GHCPKGVER          = "822";
 
- ALTERNATE_EDITOR   = "${pkgs.vim}/bin/vi";
+ ALTERNATE_EDITOR   = "${pkgs.nano}/bin/nano";
 # EMACS_SERVER_FILE  = "/tmp/emacsclient.server";
 #COLUMNS            = "100";
 # EDITOR             = "${pkgs.emacs26}/bin/emacsclient -s /tmp/emacs501/server -a nano";
