@@ -507,15 +507,29 @@ xdg = {
  dataHome   = "${env.HOME}/.local/share";
  cacheHome  = "${env.HOME}/.cache";
 
+
+##################################################
+
  configFile."xbindkeysrc".source = ../../xbindkeys/xbindkeysrc;
+
+#TODO# configFile = import ./home/xdg.nix { inherit pkgs; };
+
+ configFile."fontconfig".source    = ../../fonts;
+ configFile."fontconfig".recursive = true;
+
+# ^
+# $ echo $FONTCONFIG_PATH
+# /home/sboo/.config/fontconfig
 
 #configFile."fonts/iosevka".source    = ../../fonts/iosevka;
 #configFile."fonts/iosevka".recursive = true;
 
- configFile."fonts".source    = ../../fonts;
- configFile."fonts".recursive = true;
+#configFile."fonts".source    = ../../fonts;
+#configFile."fonts".recursive = true;
 
-} // {
+} // (
+  import ./home/xdg.nix {}
+) // {
   enable = true;
 };
 

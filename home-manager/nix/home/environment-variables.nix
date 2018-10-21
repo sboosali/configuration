@@ -9,18 +9,17 @@
 {
  CABAL_CONFIG       = "${xdg.configHome}/cabal/config";
 
- # FONTCONFIG_PATH    = "${pkgs.fontconfig.out}/etc/fonts";
- FONTCONFIG_PATH    = "${xdg.configHome}/fontconfig";
- FONTCONFIG_FILE    = "${xdg.configHome}/fontconfig/fonts.conf";
+ #FONTCONFIG_PATH = "${xdg.configHome}/fontconfig:/etc/fonts";
+ #FONTCONFIG_FILE    = "${xdg.configHome}/fontconfig/fonts.conf";
 
  EMACSVER           = "26";
  GHCVER             = "82";
  GHCPKGVER          = "822";
 
  ALTERNATE_EDITOR   = "${pkgs.vim}/bin/vi";
- EMACS_SERVER_FILE  = "/tmp/emacsclient.server";
+# EMACS_SERVER_FILE  = "/tmp/emacsclient.server";
 #COLUMNS            = "100";
- EDITOR             = "${pkgs.emacs26}/bin/emacsclient -s /tmp/emacs501/server -a vi";
+# EDITOR             = "${pkgs.emacs26}/bin/emacsclient -s /tmp/emacs501/server -a nano";
  EMAIL              = "${sboo.email}";
 
  GRAPHVIZ_DOT       = "${pkgs.graphviz}/bin/dot";

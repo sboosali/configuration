@@ -8,6 +8,13 @@
 ##################################################
 {
 
+"ga," = "git add .";
+"gau" = "git add -u";
+
+"gc"  = "git commit";
+"gcm" = "git commit -m";
+"gc." = "git commit -m .";
+
 alert = ''notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e 's/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//')"'';
 
 # ^ « notify-send »:
