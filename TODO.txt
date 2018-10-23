@@ -1,0 +1,77 @@
+
+
+
+
+
+Locking a channel or property is as simple as creating a configuration file and setting either (and only either) the “locked” or “unlocked” attribute on <channel> or <property> elements that should be restricted. This configuration file should be placed in a system location that is read by the daemon (see “File locations” above).
+
+Both the “locked” and “unlocked” attributes take a semicolon-separated list of system user and group names. User names should be entered as-is, and group names should be entered with an “@” symbol prepended to the group name.
+
+The “locked” attribute specifies users and groups who may not modify the property. The “unlocked” attribute specifies users and groups who may modify the property, with other users locked out. Only one of the two attributes may be specified for a particular channel or property. If both are present, the “unlocked” attribute is used, and the “locked” attribute is ignored.
+
+Note that <channel> locking locks all properties under that channel, but <property> locking locks only the property with the “locked” or “unlocked” attribute; none of the sub-properties are locked unless they also contain a “locked” or “unlocked” attribute.
+
+
+git clone https://github.com/Fuco1/Elsa.git somewhere to your computer.
+Add (depends-on "elsa") to Cask file of your project
+Run cask link elsa <path-to-elsa-repo>
+cask exec elsa <file-to-analyse> to analyse the file. Currently only one file at a time can be analysed.
+
+
+
+
+
+Xfce does not have a shortcut to kill a window, for example when a program freezes.
+
+With xorg-xkill, use xkill to interactively kill a window. For the currently active window, use xdotool:
+
+$ xdotool getwindowfocus windowkill
+
+
+
+
+
+~/.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml. Most of the settings will be set to "empty" if they haven't been changed, otherwise they'll be set to the value. For example, the DPI is set with <property name="DPI" type="int" value="96"/> under Xft, while the font is set to a string with <property name="FontName" type="string" value="Noto Sans 11"/> under Gtk
+
+
+
+
+
+
+2014-03-20: Go into Settings->Emerald Theme Manager, select the theme you're using and edit it.  You can make the title bar bigger, if you need, and adjust the size of the buttons on it.  I haven't played around with it, so I don't know if the changes take effect right away, or if you have to log out and back in to have everything change, but you should be able to see the difference inside Emerald before you exit.
+
+
+also there exist some unit-doubled GTK2-themes that will give you fake-hidpi for GTK2...
+
+https://forum.xfce.org/viewtopic.php?id=7734
+
+
+Also just to show a fake HIDPI example, you can see thunar (doubled GTK2 fake HiDPI theme) and Pluma(GTK3). gtk2 font dpi size is 192px and the icon sizes are doubled eg:
+
+xfconf-query -c xsettings -p /Gtk/IconSizes -s "gtk-menu=32,32:gtk-small-toolbar=48,48:gtk-large-toolbar=48,48:gtk-dnd=96,96:gtk-button=48,48:gtk-dialog=96,96:gtk-panel=48,48:panel-applications-menu=48,48:panel-tasklist-menu=64,64:panel-menu=48,48:panel-directory-menu=48,48:panel-launcher-menu=48,48:panel-window-menu=48,48:panel-menu-bar=48,48:ev-icon-size-annot-window=32,32:webkit-media-button-size=48,48"
+
+
+
+
+
+
+
+
+
+
+
+R
+emove the `"XkbOptions"` line from `xorg.conf`; add this to Xfce's autostart:
+
+    /usr/bin/setxkbmap -option "ctrl:nocaps" 
+
+
+which turns the Caps Lock key into an additional Ctrl key.
+
+
+
+
+    (define-key key-translation-map (kbd "ESC") (kbd "C-g"))
+
+
+
