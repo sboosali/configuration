@@ -45,13 +45,17 @@ overlays = [
 
 ##################################################
 
-sboo = import ./home/sboo.nix {};
-
-##################################################
-
 utilities =
   import ./home/utilities.nix
          { inherit lib; };
+
+##################################################
+
+sboo = import ./home/sboo.nix { inherit (utilities) env; };
+
+##################################################
+
+haskell = import ./haskell { inherit pkgs; };
 
 ##################################################
 
@@ -110,19 +114,22 @@ home.file = import ./home/files.nix { inherit pkgs; };
 
 ##################################################
 
-home.keyboard.options = [ "grp:caps_toggle" "grp_led:scroll" ];
+home.keyboard.options = [ "ctrl:nocaps" ];
+
+# ^ « grp:caps_switch »:
+# Caps Lock (while pressed), Alt+Caps Lock does the original capslock action.
 
 #TODO# home.keyboard.model = "pc104"
 
 ##################################################
 # Programs:
 
-home.packages =
-  (import ./home/programs.nix
-          { inherit pkgs sboo;
-          });
+home.packages
+   = (import ./home/programs.nix { inherit pkgs sboo; })
+  ++ [ haskell.ghcs
+     ];
 
-home.extraOutputsToInstall = [ "bin" "dev" "doc" "info" ];
+home.extraOutputsToInstall = [ "bin" "dev" "man" "info" "doc" ];
 
 ##################################################
 # XDG:
@@ -172,12 +179,20 @@ programs.ssh =
 programs.bash =
 
   (import ./bash
-          { inherit pkgs sboo;
+          { inherit pkgs sboo env;
             inherit (self) xdg;
           })
 
    // { enable = true;
       };
+
+##############################################
+
+programs.firefox = {
+    enable = true;
+
+    #enable = true;
+};
 
 ##################################################
 
@@ -194,14 +209,6 @@ programs.chromium.extensions = [
   #""
   # ^
 ];
-
-##############################################
-
-programs.firefox = {
-    enable = true;
-
-    #enable = true;
-};
 
 ##############################################
 

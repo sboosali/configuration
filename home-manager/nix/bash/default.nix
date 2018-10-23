@@ -2,6 +2,7 @@
 { pkgs
 , xdg
 , sboo
+, env
 }:
 
 ##################################################
@@ -39,7 +40,7 @@ in
 # * « ~/.bash_login » exists.
 #
 
- bashrcExtra = import ./bash-interactive-rc.nix { inherit bashUtilities; };
+ bashrcExtra = import ./bash-interactive-rc.nix { inherit env bashUtilities; };
 
 # ^ « .bashrc » extras.
 # 

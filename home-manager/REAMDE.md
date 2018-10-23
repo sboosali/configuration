@@ -1,149 +1,117 @@
-# Notes
+# `@sboosali`'s `home-manager` Configuration
 
-Notes about my `home-manager` configuration and about `nixpkgs`.
+## Dependencies
 
-## Links
 
-overlays/emacs.nix (jwiegley/nix-config)>
 
-<https://github.com/jwiegley/nix-config/blob/master/overlays/emacs/builder.nix emacs/builder.nix (jwiegley/nix-config)>
+### non-`nixpkgs` Dependencies
 
-## `lib/fixed-points.nix`
+#### `Paper` Icons & Themes
 
-https://github.com/NixOS/nixpkgs/blob/18.09/lib/fixed-points.nix
+Install:
 
-### `lib.fix`
-
-Type: 
-
-```haskell
-fix :: (a -> a) -> a
+```sh
+sudo add-apt-repository -u ppa:snwh/ppa
+sudo apt-get install paper-icon-theme
 ```
 
-Definition:
+```sh
+$ cd ./usr/share/icons/Paper
 
-```nix
-fix = f: 
+$ find . -type f -name '*.theme'
 
-  let x = f x
-  in  x;
+./cursor.theme
+./index.theme
+
+$ find . -type f -name '*.png' | wc -l
+6744
 ```
 
-`fix f` "resolves" the fixed point of `f`
+Load:
 
-`f` is an "endormorphism" (i.e. `f :: a -> a`)
-
-often, `f` is a "package extension"; an AttributeSet that "expects its final, non-recursive representation as an argument". e.g.:
-
-```nix
-f = self:
-
-  { foo = "foo"; 
-    bar = "bar"; 
-    foobar = self.foo + self.bar; 
-  }
+```sh
+$ xfce4-appearance-settings &
 ```
 
-the FixedPointProperty for a function `f` is `f x = x`.
+### 
 
-`(fix f)` satisfies the FixedPointProperty for **any** "appropriate" function `f`, i.e. `(fix f) x = x`... where "appropriate" means its recursion is coherent under `fix`, i.e. that `(fix f)` terminates.
 
-> Nix repeatedly evaluates this recursion until all references to `self` have been resolved. Once `self` gets resolved, the final result can be returned, and the FixedPointProperty `f x = x` holds:
+## Files
 
-     nix-repl> fix f
-     { bar = "bar"; foo = "foo"; foobar = "foobar"; }
+### `xfce` config files
 
-### `lib.extends`
+```sh
+$ cd ~/.config/xfce4/xfconf/xfce-perchannel-xml
 
-Type: 
-
-```haskell
-extends :: (a -> a -> a) 
-        -> (a -> a) 
-        -> (a -> a) 
+$ find .
+.
+./xfce4-power-manager.xml
+./xfce4-desktop.xml
+./thunar.xml
+./xfwm4.xml
+./xfce4-mime-settings.xml
+./xfce4-keyboard-shortcuts.xml
+./keyboards.xml
+./keyboard-layout.xml
+./xsettings.xml
+./xfce4-session.xml
+./xfce4-settings-manager.xml
+./xfce4-panel.xml
+./displays.xml
+./accessibility.xml
+./xfce4-settings-editor.xml
 ```
 
-Definition (`nixpkgs`):
+`xsettings.xml` stores, for example, the `DPI` setting.
 
-```nix
-extends = f: rattrs: self: let super = rattrs self; in super // f self super;
+### Fonts
+
+#### `Iosevka`
+
+<https://be5invis.github.io/Iosevka/>
+
+the `Iosevka` font is an open-source font for programs; it's fixed-width, with tall (visually-distinct) capitals.
+
+Installation:
+
+```sh
+$ wget https://github.com/be5invis/Iosevka/releases/download/v2.0.1/01-iosevka-2.0.1.zip
+
+# TODO
 ```
 
-Definition (mine):
-
-```nix
-extends = k: f:
-          self:
-
-  let super = f self;
-      x     = k self super;
-  in 
-  
-  super // x
+Files:
 
 ```
-
-Inputs:
-
-* `f :: AttrSet -> AttrSet` is called an **"override"** or a "recursive attribute-set" (or, when the attributes represent packages, a "recursive package-set").
-* `k :: AttrSet -> AttrSet -> AttrSet` is called an **"overlay"**.
-
-NOTE the `f` in `(extends _ f)` and `(fix f)` share the same type:
-
-```haskell
-k :: a -> a -> a
-f :: a -> a
+iosevka-bolditalic.ttf
+iosevka-boldoblique.ttf
+iosevka-bold.ttf
+iosevka-extrabolditalic.ttf
+iosevka-extraboldoblique.ttf
+iosevka-extrabold.ttf
+iosevka-extralightitalic.ttf
+iosevka-extralightoblique.ttf
+iosevka-extralight.ttf
+iosevka-heavyitalic.ttf
+iosevka-heavyoblique.ttf
+iosevka-heavy.ttf
+iosevka-italic.ttf
+iosevka-lightitalic.ttf
+iosevka-lightoblique.ttf
+iosevka-light.ttf
+iosevka-mediumitalic.ttf
+iosevka-mediumoblique.ttf
+iosevka-medium.ttf
+iosevka-oblique.ttf
+iosevka-regular.ttf
+iosevka-semibolditalic.ttf
+iosevka-semiboldoblique.ttf
+iosevka-semibold.ttf
+iosevka-thinitalic.ttf
+iosevka-thinoblique.ttf
+iosevka-thin.ttf
 ```
 
-as does the (saturated) `(extends _ _)` itself:
+### 
 
-```haskell
-extends k   :: (a -> a) -> (a -> a)
 
-extends k f :: a -> a
-```
-
-NOTE `fix` and `extends` "resolve" recurisve-packages and multiple overlays into non-recurisve packages. i.e. given:
-
-```haskell
-f           :: (a -> a)
-extends k   :: (a -> a) -> (a -> a)
-fix         :: (a -> a) -> a
-```
-
-we evaluate to:
-
-```haskell
-     extends k f  :: a -> a
-fix (extends k f) :: a
-
-fix (extends k2 (extends k1 f)) :: a
-```
-
-Read `extends` as an infix operator and with arguments flipped. 
-i.e. read `(extends f _)` as `"g extends f"` (this mimics the `Java` syntax).
-Why flipped? For cascading multiple `extends`, e.g.:
-
-```nix
-g = extends k3
-      (extends k2
-        (extends k1 
-          f))
-```
-
-> Modify the contents of an explicitly recursive attribute set in a way that
-> honors `self`-references. This is accomplished with a function
->
->     g = self: super: { foo = super.foo + " + "; }
->
-> that has access to the unmodified input (`super`) as well as the final
-> non-recursive representation of the attribute set (`self`). 
->
-> `extends` differs from the native `//` operator insofar as that it's
-> applied *before* references to `self` are resolved:
->
->     nix-repl> fix (extends g f)
->     { bar = "bar"; foo = "foo + "; foobar = "foo + bar"; }
-> 
-
-## 

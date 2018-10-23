@@ -16,16 +16,13 @@
 
  #################################################
 
- ".local/share/applications/emacs.desktop".source = ../../../desktop-entry-files/emacs.desktop;
-
- #################################################
-
  ".fonts".source    = ../../../fonts;
  ".fonts".recursive = true;
 
  #################################################
 
-#".xinitrc".source = ../../../x11/xinitrc;
+# ".xinitrc".source     = ./xinitrc.nix;
+# ".xinitrc".executable = true;
 
 }
 ##################################################

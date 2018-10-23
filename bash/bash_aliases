@@ -1,5 +1,7 @@
 #!/bin/bash
 
+### -*- mode: conf-unix; -*-
+
 # NOTE
 # these aliases reference `bash` (i.e. non-`sh`) commands,
 # and many reference functions defined in `bash_definitions`.

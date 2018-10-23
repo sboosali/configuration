@@ -1,20 +1,22 @@
 ##################################################
-{ #lib
+{ env
+# , lib
 }:
+
 ##################################################
 
 rec {
  #################################################
  
- paths = {};
+ # paths = {};
  
  #################################################
  
  colors.white = "rgb(255, 255, 255)";
  colors.black = "rgb(0,   0,   0)";
  
- colors.darkorchid = "rgb(153,50,204)";
- #colors.lightgray = "rgb()";
+ #colors.darkorchid = "rgb(153,50,204)";
+ #colors.lightgray  = "rgb()";
  
  #################################################
  
@@ -29,20 +31,24 @@ rec {
  };
  
  #################################################
- 
+
  name = builtins.concatStringsSep " "
  
-   [ "Sam" "Boosalis" ];
- 
+   [ firstname lastname ];
+
  email = builtins.concatStringsSep ""
  
-   ["sam" "boosalis" "@" "gmail" "." "com"];
- 
+   [ firstname lastname "@" "gmail.com" ];
+
+ firstname = "Sam";
+
+ lastname  = "Boosalis";
+
  # ^ TODO obfuscate more.
- 
+
  #################################################
  
- keys.github = "SpirOS_git@github.com_id_rsa";
- 
+ keys.github = "${env.HOSTNAME}_git@github.com_id_rsa";
+
  ################################################
 }

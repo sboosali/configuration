@@ -111,6 +111,8 @@ systemPrograms = with pkgs; [
  #xsel-unstable
  xtitle
  xvkbd
+ xkbd
+ #xkeyboard-config
 
 #melpaPackages.ov
 

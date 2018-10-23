@@ -10,35 +10,47 @@
 
 bashUtilities.concatBashScripts
 
-    [ (builtins.readFile ../../../bash/aliases)
+    [ (builtins.readFile ../../bash/profile.sh)
 
-      #(builtins.readFile ../../../bash/.profile)
+       ###########################################
+
+      (builtins.readFile ../../../bash/aliases)
+      (builtins.readFile ../../../bash/bash_definitions)
+      (builtins.readFile ../../../bash/bash_aliases)
+
+       ###########################################
+
+       # ''
+       # #-----------------------------------------------#
+       # # xbindkeys ------------------------------------#
+       # #-----------------------------------------------#
+
+       # if [ -x "$(command -v ${pkgs.xbindkeys}/bin/xbindkeys)" ] 
+       #    #TODO and if x11 is active
+       # then
+
+       # if   ! pgrep -x "xbindkeys" > /dev/null
+       # then "${pkgs.xbindkeys}/bin/xbindkeys" --poll-rc -f "${xdg.configHome}/xbindkeys/.xbindkeysrc"
+       # fi
+
+       #     # ^ Start the « xbindkeys » daemon in the background.
+
+       #     # ^ « --poll-rc » means: reload the config whenever it changes.
+
+       #     # ^ « -f _ » means: load the given config ("rc") file.
+       #     # By default, the config is at « ~/.xbindkeysrc », 
+       #     # which we've overriden to be under (one of) « $XDG_CONFIG_DIRS ».
+
+       # fi
+       # ''
 
        ###########################################
 
        ''
-       if [ -x "$(command -v ${pkgs.xbindkeys}/bin/xbindkeys)" ] 
-          #TODO and if x11 is active
-       then
+       #-----------------------------------------------#
+       # ssh-agent ------------------------------------#
+       #-----------------------------------------------#
 
-       if   ! pgrep -x "xbindkeys" > /dev/null
-       then "${pkgs.xbindkeys}/bin/xbindkeys" --poll-rc -f "${xdg.configHome}/xbindkeys/.xbindkeysrc"
-       fi
-
-           # ^ Start the « xbindkeys » daemon in the background.
-
-           # ^ « --poll-rc » means: reload the config whenever it changes.
-
-           # ^ « -f _ » means: load the given config ("rc") file.
-           # By default, the config is at « ~/.xbindkeysrc », 
-           # which we've overriden to be under (one of) « $XDG_CONFIG_DIRS ».
-
-       fi
-       ''
-
-       ###########################################
-
-       ''
        if [ -x "$(command -v ${pkgs.openssh}/bin/ssh-agent)" ]
        then
 

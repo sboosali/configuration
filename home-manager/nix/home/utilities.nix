@@ -8,10 +8,11 @@ rec {
  
  env = {
  
-   HOME = builtins.getEnv "HOME";
- 
+   HOME     = builtins.getEnv "HOME";
+   HOSTNAME = builtins.getEnv "HOSTNAME";
+
  };
- 
+
  #################################################
  
  addBuildInputs = extraBuildInputs: package:

@@ -1,3 +1,5 @@
+### -*- mode: conf-unix; -*-
+
 ##################################################
 
 alias c="cat"
@@ -16,19 +18,6 @@ alias ll="ls -l"
 ##################################################
 
 alias f=find
-
-#------------------------------------------------#
-
-alias ff="find . -type f"
-alias fd="find . -type d"
-alias fx="find . -type f -executable"
-
-#------------------------------------------------#
-
-alias f.="find ."
-alias f1="find . -maxdepth 1"
-alias f2="find . -maxdepth 2"
-alias f3="find . -maxdepth 3"
 
 #------------------------------------------------#
 
@@ -58,8 +47,14 @@ alias nm=home-manager
 
 #------------------------------------------------#
 
-alias nmb="home-manager build"
-alias nmw="home-manager switch"
+alias nmb='NIX_PATH=nixpkgs=/home/sboo/.nix-defexpr/channels/nixpkgs home-manager -f "$HOME/configuration/home-manager/nix/home.nix" build'
+alias nmw='NIX_PATH=nixpkgs=/home/sboo/.nix-defexpr/channels/nixpkgs home-manager -f "$HOME/configuration/home-manager/nix/home.nix" switch'
+
+#alias nmb="home-manager build"
+#alias nmw="home-manager switch"
+
+#------------------------------------------------#
+
 alias nmg="home-manager generations"
 alias nmp="home-manager packages"
 
@@ -227,37 +222,12 @@ alias hsx="stack run --"        # "run" is like e{x}ecute
 # alias hnew=new-haskell-project
 
 ##################################################
-
-alias xb='xbrightness'
-alias xo='xdg-open'
-alias xd='xdotool'
-alias xm='xmodmap'
-alias xb='xbindkeys'
-alias xw='wmctrl'
-
-#------------------------------------------------#
-
-alias xc='xclip -selection clipboard'
-alias xp='xclip -selection clipboard -o'
-
-#------------------------------------------------#
-
-alias xbr='xbrightness 65535'
-
-#------------------------------------------------#
-
-alias open='xdg-open'
-alias copy='xclip -selection clipboard'
-
-##################################################
-
 #alias pi="ipython"
 alias p3="python3"
 alias p2="python2.7"
 
 ##################################################
 
-alias git-status-subdirs="find . -mindepth 1 -maxdepth 1 -type d -exec sh -c '(echo {} && cd {} && git status -s && echo)' \;"
 
 ##################################################
 
@@ -287,17 +257,10 @@ alias sboo-restart-kde="kquitapp5 plasmashell && kstart plasmashell"
 
 ##################################################
 
-alias melpa2nix=/nix/store/2g4pm399808pmz6zsd89m2iwahk439vi-emacs2nix-0.1.0.0/bin/melpa2nix 
-
 alias dpkg-uninstall="sudo dpkg --force-remove-reinstreq --purge"
-
-alias yt='youtube-dl -f 22' # needs youtube-dl
 
 alias git-status-subdirs="find . -maxdepth 1 -mindepth 1 -type d -exec sh -c '(echo {} && cd {} && git status -s && echo)' \;"
 
 # alias unzip="7z x" # needs 7z
 
-
-
-##################################################
 ##################################################

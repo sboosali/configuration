@@ -1,9 +1,7 @@
 ##################################################
 { pkgs
-
 , sboo
-
-, xdg 
+, xdg
 }:
 ##################################################
 {
@@ -12,19 +10,15 @@
  #FONTCONFIG_PATH    = "${xdg.configHome}/fontconfig:/etc/fonts";
  #FONTCONFIG_FILE    = "${xdg.configHome}/fontconfig/fonts.conf";
 
- EMACSVER           = "26";
- GHCVER             = "82";
- GHCPKGVER          = "822";
-
  ALTERNATE_EDITOR   = "${pkgs.nano}/bin/nano";
 # EMACS_SERVER_FILE  = "/tmp/emacsclient.server";
-#COLUMNS            = "100";
+# COLUMNS            = "100";
 # EDITOR             = "${pkgs.emacs26}/bin/emacsclient -s /tmp/emacs501/server -a nano";
  EMAIL              = "${sboo.email}";
 
  GRAPHVIZ_DOT       = "${pkgs.graphviz}/bin/dot";
  GS_OPTIONS         = "-sPAPERSIZE=a4";
- LC_CTYPE           = "en_US.UTF-8";
+ #TODOLC_CTYPE           = "en_US.UTF-8";
  LESS               = "-FRSXM";
 #PS1                = "\\D{%H:%M} \\h:\\W $ ";
 
@@ -33,6 +27,10 @@
  SBOO_HASKELL_DIR       = ''"$HOME"/haskell'';
  SBOO_ELISP_DIR         = ''"$HOME"/elisp'';
 #SBOO_EMACS             = ''"$HOME"/.emacs.d/result/bin/emacs'';
+
+ GHCVER             = "84";
+ GHCPKGVER          = "843";
+ EMACSVER           = "26";
 
  #TERMINFO_DIRS=''"${pkgs.termite}/share/terminfo":/lib/terminfo'';
  LD_PRELOAD = ""; # HACK
