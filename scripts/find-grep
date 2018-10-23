@@ -1,0 +1,7 @@
+#!/bin/bash
+set -eu
+
+QUERY="${1:?\<\<\< $0 QUERY \>\>\>}"
+
+find . -type f -exec grep --color=auto -i -n -C 0 "$QUERY" \{} /dev/null \;
+

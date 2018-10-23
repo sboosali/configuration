@@ -7,6 +7,22 @@
 }:
 
 ##################################################
+let
+
+scripts-directory = builtins.toString ../../../scripts;
+
+# ^ reanders as absolute filepath.
+#
+# why `toString`?
+# because interpolating a path is different than interpolating a string;
+#
+# in particular, "« ${../../../scripts}" »:
+# doesn't equal « /home/sboo/configuration/scripts »,
+# it equals « "/nix/store/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-scripts" ».
+#
+
+in
+##################################################
 
 bashUtilities.concatBashScripts
 
@@ -43,6 +59,12 @@ bashUtilities.concatBashScripts
 
        # fi
        # ''
+
+       ###########################################
+
+       ''
+       export PATH="$PATH":"${scripts-directory}"
+       ''
 
        ###########################################
 
