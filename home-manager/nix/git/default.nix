@@ -10,7 +10,9 @@
   userName  = sboo.name;
   userEmail = sboo.email;
 
-  aliases = import ./git-aliases.nix { inherit pkgs; };
+  aliases     = import ./git-aliases.nix { inherit pkgs; };
+
+  extraConfig = import ./git-config.nix  { inherit pkgs; };
 
       # signing = {
       #   key = "C144D8F4F19FE630";

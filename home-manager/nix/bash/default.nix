@@ -51,10 +51,10 @@ in
 
 # ^ Shell options to set.
 
-#TODO port over .aliases#
-#  shellAliases =
-#   (import ./home/shell-aliases.nix
-#           { inherit pkgs sboo; });
+ shellAliases =
+  (import ./shell-aliases.nix
+          { inherit pkgs sboo env;
+          });
 
 # ^ Attribute Set mapping aliases (the top-level Attribute Names in this option) either:
 # 

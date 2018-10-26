@@ -2,6 +2,7 @@
 { pkgs
 
 , sboo
+, env
 
 # , xdg 
 }:
@@ -20,18 +21,73 @@ git         = ''${pkgs.git}/bin/git'';
 xclip       = ''${pkgs.xclip}/bin/xclip'';
 xdotool     = ''${pkgs.xdotool}/bin/xdotool'';
 wmctrl      = ''${pkgs.wmctrl}/bin/wmctrl'';
-xdg         = ''${pkgs.xdg_utils}/bin/xdg-open'';
 xbrightness = ''${pkgs.xbrightness}/bin/xbrightness'';
 xbindkeys   = ''${pkgs.xbindkeys}/bin/xbindkeys'';
-#xmodmap     = ''${pkgs.xmodmap}/bin/xmodmap'';
+#xmodmap    = ''${pkgs.xmodmap}/bin/xmodmap'';
+
+xrandr               = ''${xrandr}/bin/xrandr'';
+xrandr-invert-colors = ''${pkgs.xrandr-invert-colors}/bin/xrandr-invert-colors'';
+
+xdg-open     = ''${pkgs.xdg_utils}/bin/xdg-open'';
+# xdg-mime     = ''${pkgs.xdg_utils}/bin/xdg-mime'';
+# xdg-settings = ''${pkgs.xdg_utils}/bin/xdg-settings'';
 
 xprop       = ''${pkgs.xorg.xprop}/bin/xprop'';
 
-cabal       = ''${pkgs.cabal-install}/bin/cabal'';
+redshift   = ''${pkgs.redshift}/bin/redshift'';
+
+cabal      = ''${pkgs.cabal-install}/bin/cabal'';
+
+##################################################
+
+NIX_PROFILE = "~/.nix-profile";
+NIXPKGS     = "${env.HOME}/nixpkgs";
+
+#NixProfile = "${env.HOME}/.nix-profile";
+#NixProfile = "${env.HOME}/.nix-profile";
 
 in
 ##################################################
 {
+
+ #################################################
+
+ d = "cd";
+
+ #-----------------------------------------------#
+
+ "d-"       = "cd -";
+
+ "d.."      = "cd ..";
+ "d..."     = "cd ../..";
+ "d...."    = "cd ../../..";
+ "d....."   = "cd ../../../..";
+ "d......"  = "cd ../../../../..";
+ "d......." = "cd ../../../../../..";
+
+ #-----------------------------------------------#
+
+ "de" = "cd ~/.emacs.d";
+ "dc" = "cd ~/configuration";
+ "dh" = "cd ~/haskell";
+ "dn" = "cd ~/notes";
+
+ "dw" = "cd ~/Downloads";
+ "dm" = "cd ~/Documents";
+ "dr" = "cd ~/Dropbox";
+
+ "dt" = "cd ~/temporary";
+ "dk" = "cd ~/backup";
+
+ "dx"  = ''cd ${NIXPKGS}'';
+ "dxp" = ''cd ${NIX_PROFILE}'';
+
+ "dxb" = ''cd ${NIX_PROFILE}/bin'';
+ "dxe" = ''cd ${NIX_PROFILE}/etc'';
+ "dxs" = ''cd ${NIX_PROFILE}/share'';
+ "dxl" = ''cd ${NIX_PROFILE}/lib'';
+ "dxi" = ''cd ${NIX_PROFILE}/include'';
+#"dx" = ''cd ${NIX_PROFILE}/'';
 
  #################################################
 
@@ -81,16 +137,16 @@ in
  
  #-----------------------------------------------#
 
- ff   = ''${find} . -type f'';
- fd   = ''${find} . -type d'';
- fx   = ''${find} . -type f -executable'';
+ ff   = ''${find} -L . -type f'';
+ fd   = ''${find} -L . -type d'';
+ fx   = ''${find} -L . -type f -executable'';
 
  #-----------------------------------------------#
 
- "f." = ''${find} .'';
- f1   = ''${find} . -maxdepth 1'';
- f2   = ''${find} . -maxdepth 2'';
- f3   = ''${find} . -maxdepth 3'';
+ "f." = ''${find} -L .'';
+ f1   = ''${find} -L . -maxdepth 1'';
+ f2   = ''${find} -L . -maxdepth 2'';
+ f3   = ''${find} -L . -maxdepth 3'';
 
  #################################################
 
@@ -98,14 +154,49 @@ in
 
  #-----------------------------------------------#
 
- "ga," = "${git} add .";
- "gau" = "${git} add -u";
+ gl  = "${git} status";                                     # MNEMONIC: "«l»ist"
+                                                            # NOTE "gs" would shadow GhostScript. 
+
+ #-----------------------------------------------#
+
+ "ga."  = "${git} add .";
+ "ga.." = "${git} add ..";
+ "gau"  = "${git} add -u";
 
  #-----------------------------------------------#
 
  "gc"  = "${git} commit";
  "gcm" = "${git} commit -m";
  "gc." = "${git} commit -m .";
+
+ #-----------------------------------------------#
+
+ gp   = "${git} push";
+ gpac = "${git} add . && ${git} commit -m . && ${git} push";# MNEMONIC: «P»ush after «A»dding and «C»ommiting
+
+ #-----------------------------------------------#
+
+ gll  = "${git} pull";                                      # MNEMONIC: pu«l»«l»
+ glru = "${git} pull --rebase upstream master";             # MNEMONIC: pu«l»l «R»ebase «U»pstream
+
+ #-----------------------------------------------#
+
+ gd   = "${git} --no-pager diff";
+
+ #-----------------------------------------------#
+
+ gr   = "${git} remote";
+ grau = "${git} remote add upstrem";                        # MNEMONIC: «R»emote «A»dd «U»pstream
+
+ #-----------------------------------------------#
+
+ gza = "${git} reset        HEAD --" ;                      # MNEMONIC: ctrl-«z» your «A»dd
+ gzc = "${git} reset --soft HEAD~1";                        # MNEMONIC: ctrl-«z» your «C»ommit
+
+ #-----------------------------------------------#
+
+ gorc = "${git} status --porcelain | cut -d ' ' -f 3 | tr '\\n' ' '";
+ #TODO ga   = "${git} amend";
 
  #################################################
 
@@ -129,11 +220,56 @@ in
  xb   = ''${xbrightness}'';
  xbr  = ''${xbrightness} 65535'';
  #-----------------------------------------------#
- xb   = ''${xbindkeys}'';
+ xbk  = ''${xbindkeys}'';
  #-----------------------------------------------#
  #xm   = ''xmodmap''
  #-----------------------------------------------#
+
  #################################################
+
+ screen-invert  = "${xrandr-invert-colors}";
+
+ screen-white   = "${redshift} -x";
+
+ screen-scarlet = "${redshift} -x && ${redshift} -O 1500";
+ screen-red     = "${redshift} -x && ${redshift} -O 1000";
+ screen-orange  = "${redshift} -x && ${redshift} -O 2000";
+ screen-yellow  = "${redshift} -x && ${redshift} -O 3000";
+
+ screen-day     = "${redshift} -x ; ${xrandr-invert-colors}";
+ screen-warm    = "${redshift} -x && ${redshift} -O 9000";
+
+ #-----------------------------------------------#
+
+ xsi = "screen-invert";                                     # MNEMONIC {X}11-{I}nvert
+
+ xsw = "screen-white";                                      # MNEMONIC {X}11-{W}hite
+                                                            # NOTE     xw=wmctrl
+ xsr = "screen-red";                                        # MNEMONIC {X}11-{R}ed
+ xso = "screen-orange";                                     # MNEMONIC {X}11-{O}range
+ xsy = "screen-yellow";                                     # MNEMONIC {X}11-{Y}ellow
+
+ xsn = "screen-night";                                      # MNEMONIC {X}11-{N}ight
+ xsd = "screen-day";                                        # MNEMONIC {X}11-{D}ay
+ xsu = "screen-dusk";                                       # MNEMONIC {X}11-D{u}sk
+
+ #-----------------------------------------------#
+
+ red        = "redshift -O 1000";                           # one-shot, 1000K
+ scarlet    = "redshift -O 1500";                           # one-shot
+ orange     = "redshift -O 2000";                           # one-shot
+ yellow     = "redshift -O 3000";                           # one-shot
+ white      = "redshift -x";                                # 
+ un-red     = "redshift -x";                                #
+
+ #-----------------------------------------------#
+
+# alias red ="xrandr --output 0x42 --crtc 0 --gamma "
+# alias screen-night="screen-brighter--via-xdotool 20 ; ${redshift} -x ; ${redshift} -O 1000 ; xrandr-invert-colors"
+# alias screen-night-dim="screen-brighter--via-xdotool 20 ; ${redshift} -x ; ${redshift} -O 1000 ; xrandr-invert-colors ; screen-dimmer--via-xdotool 10"
+# alias screen-dusk="screen-brighter--via-xdotool 20 ; ${redshift} -x ; ${redshift} -O 2000 ; xrandr-invert-colors"
+
+ #-----------------------------------------------#
 
  #################################################
 
@@ -165,9 +301,9 @@ in
 
  #################################################
 
- yt = ''${pkgs.youtube-dl}/bin/youtube-dl -f 22''
+ yt = ''${pkgs.youtube-dl}/bin/youtube-dl -f 22'';
 
- melpa2nix = ''${pkgs.emacs2nix}/bin/melpa2nix'';
+ #TODO melpa2nix = ''${pkgs.emacs2nix}/bin/melpa2nix'';
 
  #################################################
 

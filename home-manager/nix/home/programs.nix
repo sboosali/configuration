@@ -21,9 +21,12 @@ let
 sbooPrograms = super.buildEnv
  {
    name                  = "sboo-programs";
+
    paths                 = programs;
+   pathsToLink           = [ "/" "/bin" ];
+   extraOutputsToInstall = [ "out" "bin" "man" "info" ];
+
    ignoreCollisions      = true;
-   extraOutputsToInstall = [ "bin" "man" "info" ];
  };
 
 ##################################################
@@ -90,7 +93,7 @@ systemPrograms = with self; [
  #nix
  #nix-derivation-pretty
  nix-bash-completions
- nix-prefetch-git
+ #nix-prefetch-git            # subsumed within « nix-prefetch-scripts ».
  nix-prefetch-github
  nix-prefetch-scripts
 #nixfmt

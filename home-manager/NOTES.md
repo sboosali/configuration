@@ -703,6 +703,24 @@ $ find -L ./bin -type f | sort
 ./bin/xargs
 ```
 
+## `xdg-utils`
+
+```sh
+$ cd /nix/store/*-xdg-utils-1.1.3
+
+$ find -L ./bin -type f | sort
+
+./bin/xdg-desktop-icon
+./bin/xdg-desktop-menu
+./bin/xdg-email
+./bin/xdg-icon-resource
+./bin/xdg-mime
+./bin/xdg-open
+./bin/xdg-screensaver
+./bin/xdg-settings
+```
+
+
 ## Locales
 
 Register your locale via `locale-gen` and `/etc/locale.gen`:

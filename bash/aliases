@@ -25,12 +25,6 @@ alias f=find
 
 #------------------------------------------------#
 
-alias gl="git status" # mnemonic: git "list"
-alias gp="git push"
-alias gd="git --no-pager diff"
-alias ga="git amend"
-alias gorc="git status --porcelain | cut -d ' ' -f 3 | tr '\\n' ' '"
-
 ##################################################
 
 # alias clean-haskell="remove \"$1\".{dyn_hi,dyn_o,hi,o}"

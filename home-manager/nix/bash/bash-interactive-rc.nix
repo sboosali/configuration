@@ -13,7 +13,9 @@ in
 
 bashUtilities.concatBashScripts
 
-    [ (builtins.readFile ../../bash/bashrc.sh)
+    [ ''### -*- mode: conf-unix; -*-''
+
+      (builtins.readFile ../../bash/bashrc.sh)
 
       ''
       export TERMINFO_DIRS="${NIX_PROFILE}/share/terminfo":/lib/terminfo

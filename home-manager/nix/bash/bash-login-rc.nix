@@ -26,7 +26,9 @@ in
 
 bashUtilities.concatBashScripts
 
-    [ (builtins.readFile ../../bash/profile.sh)
+    [ ''### -*- mode: conf-unix; -*-''
+
+      (builtins.readFile ../../bash/profile.sh)
 
        ###########################################
 

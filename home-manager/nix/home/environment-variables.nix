@@ -4,7 +4,21 @@
 , xdg
 }:
 ##################################################
+let
+
+NIX_PROFILE = "~/.nix-profile";
+
+env = {
+
+ PKG_CONFIG_PATH = builtins.getEnv "PKG_CONFIG_PATH";
+ TERMINFO_DIRS   = builtins.getEnv "TERMINFO_DIRS";
+
+};
+
+in
+##################################################
 {
+
  CABAL_CONFIG       = "${xdg.configHome}/cabal/config";
 
  #FONTCONFIG_PATH    = "${xdg.configHome}/fontconfig:/etc/fonts";
@@ -22,18 +36,31 @@
  LESS               = "-FRSXM";
 #PS1                = "\\D{%H:%M} \\h:\\W $ ";
 
+ #################################################
+
+ GHCVER             = "84";
+ GHCPKGVER          = "843";
+ EMACSVER           = "26";
+
+ #################################################
+
  SBOO_CONFIGURATION_DIR = ''"$HOME"/configuration'';
  SBOO_EMACS_DIR         = ''"$HOME"/.emacs.d'';
  SBOO_HASKELL_DIR       = ''"$HOME"/haskell'';
  SBOO_ELISP_DIR         = ''"$HOME"/elisp'';
 #SBOO_EMACS             = ''"$HOME"/.emacs.d/result/bin/emacs'';
 
- GHCVER             = "84";
- GHCPKGVER          = "843";
- EMACSVER           = "26";
+ #################################################
 
- #TERMINFO_DIRS=''"${pkgs.termite}/share/terminfo":/lib/terminfo'';
+ PKG_CONFIG_PATH = ''${NIX_PROFILE}/lib/pkgconfig'';
+
+#PKG_CONFIG_PATH = ''${NIX_PROFILE}/lib/pkgconfig:${env.PKG_CONFIG_PATH}''; #TODO getEnv = null vs ""
+#TERMINFO_DIRS   = ''"${pkgs.termite}/share/terminfo":/lib/terminfo:${env.TERMINFO_DIRS}''
+
+ #################################################
+
  LD_PRELOAD = ""; # HACK
+
 }
 
 #TODO
