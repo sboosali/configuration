@@ -7,12 +7,31 @@
 , haskellCompilers  ? (pkgs.haskell.compiler)
 
 }:
+
 ##################################################
 let
 
-programs = freePrograms
-#       ++ unfreePrograms
-         ;
+self  = pkgs;
+super = pkgs;
+
+in
+##################################################
+let
+
+sbooPrograms = super.buildEnv
+ {
+   name                  = "sboo-programs";
+   paths                 = programs;
+   ignoreCollisions      = true;
+   extraOutputsToInstall = [ "bin" "man" "info" ];
+ };
+
+##################################################
+
+programs =
+     freePrograms
+ #++ unfreePrograms
+     ;
 
 ##################################################
 
@@ -29,7 +48,7 @@ freePrograms = builtins.concatLists [
 
 ##################################################
 
-unfreePrograms = with pkgs; [
+unfreePrograms = with self; [
 
  google-chrome
 
@@ -37,7 +56,7 @@ unfreePrograms = with pkgs; [
 
 ##################################################
 
-systemPrograms = with pkgs; [
+systemPrograms = with self; [
 
  bash-completion
  cabal-install
@@ -81,6 +100,7 @@ systemPrograms = with pkgs; [
  pocketsphinx
  postgresql
  qbittorrent
+ redshift
  shellcheck
  signal-desktop
  sox
@@ -130,7 +150,7 @@ systemPrograms = with pkgs; [
 
 ########################################
 
-xorgPrograms = with pkgs.xorg; [
+xorgPrograms = with self.xorg; [
 
  xprop
 
@@ -155,5 +175,5 @@ haskellCompilerPrograms = with haskellCompilers; [
 
 in
 ##################################################
-programs
+sbooPrograms
 ##################################################

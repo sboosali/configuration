@@ -35,6 +35,13 @@
  #TERMINFO_DIRS=''"${pkgs.termite}/share/terminfo":/lib/terminfo'';
  LD_PRELOAD = ""; # HACK
 }
+
+#TODO
+# The problem can occur on Gentoo Linux too. Summarizing the workaround:
+# (once) env -u LANG -u LC_MESSAGES -u LC_TIME -u LC_NUMERIC nix-env -iA nixpkgs.glibcLocales
+# (in shell init) export LOCALE_ARCHIVE=$HOME/.nix-profile/lib/locale/locale-archive
+# https://github.com/NixOS/nix/issues/599
+
 ##################################################
 
 # ^ « $ man emacsclient »:

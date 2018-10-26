@@ -124,12 +124,13 @@ home.keyboard.options = [ "ctrl:nocaps" ];
 ##################################################
 # Programs:
 
-home.packages
-   = (import ./home/programs.nix { inherit pkgs sboo; })
-  ++ [ haskell.ghcs
-     ];
+home.packages = [
 
-home.extraOutputsToInstall = [ "bin" "dev" "man" "info" "doc" ];
+  (import ./home/programs.nix  { inherit pkgs sboo; })
+  (import ./home/libraries.nix { inherit pkgs; })
+  haskell.ghcs
+
+];
 
 ##################################################
 # XDG:
@@ -340,6 +341,12 @@ services.redshift = {
     # ^ fraction.
     # min 0.1 (dim, 10%), max 1.0 (bright, 100%).
 };
+
+##################################################
+
+#services.network-manager-applet.enable = true;
+
+# ^ for wifi password input.
 
 ##################################################
 
