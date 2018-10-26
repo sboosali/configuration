@@ -1510,8 +1510,8 @@ function ssha () {
 # ssh-ident is an utility that can manage ssh-agent on your behalf and load identities as necessary. It adds keys only once as they are needed, regardless of how many terminals, ssh or login sessions that require access to an ssh-agent.
 
 ############################################################
-############################################################
 ## Git / GitHub 
+############################################################
 
 function blame {
  FILE="$1"
@@ -1608,6 +1608,16 @@ function git-merge-repos () {
 # git merge --allow-unrelated-histories $_TEMPORARY/master # or whichever branch you want to merge
 # git remote remove $_TEMPORARY 
 # }
+
+############################################################
+
+############################################################
+
+############################################################
+
+############################################################
+## Decompression
+############################################################
 
 # decompress a tarball, i.e. `.tar.gz`
 # 
