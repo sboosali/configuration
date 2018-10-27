@@ -3,6 +3,73 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+PROBLEM 1:
+
+    (process:17674): Gtk-WARNING **: 00:37:38.583: Locale not supported by C library.
+    	Using the fallback 'C' locale.
+    
+    (-emacs-wrapped:17674): Gtk-WARNING **: 00:37:38.605: Theme parsing error: gtk-keys.css:108:18: The 'gtk-key-bindings' property has been renamed to '-gtk-key-bindings'
+    
+    (-emacs-wrapped:17674): Gtk-WARNING **: 00:37:38.605: Theme parsing error: gtk-keys.css:112:18: The 'gtk-key-bindings' property has been renamed to '-gtk-key-bindings'
+    
+    (-emacs-wrapped:17674): Gtk-WARNING **: 00:37:38.605: Theme parsing error: gtk-keys.css:116:18: The 'gtk-key-bindings' property has been renamed to '-gtk-key-bindings'
+    
+    (-emacs-wrapped:17674): Gtk-WARNING **: 00:37:38.605: Theme parsing error: gtk-keys.css:120:18: The 'gtk-key-bindings' property has been renamed to '-gtk-key-bindings'
+    
+    (-emacs-wrapped:17674): Gtk-CRITICAL **: 00:37:39.733: gtk_distribute_natural_allocation: assertion 'extra_space >= 0' failed
+    
+
+PROBLEM 2:
+
+    perl: warning: Setting locale failed.
+    perl: warning: Please check that your locale settings:
+    	LANGUAGE = "en_US",
+    	LC_ALL = (unset),
+    	LC_CTYPE = "en_US.UTF-8",
+    	LANG = "en_US.UTF-8"
+        are supported and installed on your system.
+    perl: warning: Falling back to the standard locale ("C").
+
+
+WORKAROUND:
+
+nix-env -iA nixpkgs.glibcLocales
+
+Then add the following to the end of your .bashrc:
+
+export LOCALE_ARCHIVE="$(readlink ~/.nix-profile/lib/locale)/locale-archive"
+
+Then restart your shell, and reinstall the package if needed. Not sure how to do the latter correctly - I went for the nuclear option by removing the store paths and running a repair, but that might have undesirable consequences. Perhaps @edolstra can clarify on the correct way to do this?
+
+I don't know whether this workaround affects non-Nix stuff - as far as I can tell, $LOCALE_ARCHIVE is a Nix thing.
+
+<https://github.com/NixOS/nixpkgs/issues/8398>
+
+
+
+
+
+
+
+
+
+
+
+
+
 Locking a channel or property is as simple as creating a configuration file and setting either (and only either) the “locked” or “unlocked” attribute on <channel> or <property> elements that should be restricted. This configuration file should be placed in a system location that is read by the daemon (see “File locations” above).
 
 Both the “locked” and “unlocked” attributes take a semicolon-separated list of system user and group names. User names should be entered as-is, and group names should be entered with an “@” symbol prepended to the group name.

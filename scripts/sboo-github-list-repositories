@@ -5,14 +5,18 @@ set -eu
 # Dependencies ###################################
 ##################################################
 
-command -v curl
-command -v jq
+command -v curl  >/dev/null
+command -v jq    >/dev/null
+
+# command -v curl  >/dev/null 2>/dev/null 
+# command -v jq    >/dev/null 2>/dev/null 
 
 ##################################################
 # Arguments ######################################
 ##################################################
 
 Github_MyUsername="${1:-sboosali}"
+WhichPage="${PAGE:-1}"
 
 ##################################################
 # Variables ######################################
@@ -21,7 +25,9 @@ Github_MyUsername="${1:-sboosali}"
 Github_Hostname="https://api.github.com"
 Github_Path_ListMyRepositories="users/${Github_MyUsername}/repos"
 
-Github_URL="${Github_Hostname}/${Github_Path_ListMyRepositories}"
+Github_Queries="per_page=100&page=${WhichPage}"
+
+Github_URL="${Github_Hostname}/${Github_Path_ListMyRepositories}?${Github_Queries}"
 Json_Query='.[].name'
 
 ##################################################
@@ -36,7 +42,11 @@ Json_Query='.[].name'
 # echo ----------------------------------------
 # echo 
 
-curl "${Github_URL}" | jq "${Json_Query}"
+curl --silent "${Github_URL}" | jq --raw-output "${Json_Query}"
+
+# ^ NOTE « curl » exits with « 6 » when the network isn't present.
+#   BUT, the command-piping (i.e. « | ») hides the exit code,
+#   succeeding instead (i.e. exit-code « 0 »).
 
 # echo 
 # echo ----------------------------------------
