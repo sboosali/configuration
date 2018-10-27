@@ -128,7 +128,8 @@ home.packages = [
 
   (import ./home/programs.nix  { inherit pkgs sboo; })
   (import ./home/libraries.nix { inherit pkgs; })
-  haskell.ghcs
+  haskell.compilers
+  haskell.packages
 
 ];
 

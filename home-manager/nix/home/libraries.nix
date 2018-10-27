@@ -31,7 +31,9 @@ systemLibraries = with pkgs; [
  zlib.static
  
  flac
- 
+
+ fltk
+
 ];
 
 in

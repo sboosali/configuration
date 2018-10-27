@@ -64,19 +64,13 @@ systemPrograms = with self; [
  bash-completion
  cabal-install
  cabal2nix
- #cask
  colordiff
- #dconf-editor
  dex
  dhall
- #emacs
- #emacs2nix
- #melpa2nix
  expect
  feh
  flac
  fltk
- #fsnotify
  fswatch
  ghc
  gimp
@@ -87,16 +81,12 @@ systemPrograms = with self; [
  imagemagick
  inotify-tools
  jq
- #mesa
+ #mdless
  nano
  ncdu
- #nix
- #nix-derivation-pretty
  nix-bash-completions
- #nix-prefetch-git            # subsumed within « nix-prefetch-scripts ».
  nix-prefetch-github
  nix-prefetch-scripts
-#nixfmt
  nox
  openssh
  pandoc
@@ -108,36 +98,45 @@ systemPrograms = with self; [
  signal-desktop
  sox
  stack
-#terminfo
  tmux
  tree
  unzip
- #VirtualBox-GuestAdditions
  vlc
  wmctrl
- youtube-dl
-
  xautomation
- #xbacklight
  xbindkeys
  xbrightness
  xcalib
  xclip
  xdg_utils
  xdotool
- #xinput
  xinput_calibrator
+ xkbd
  xkbmon
- #xmodmap
- #xprop
  xrandr-invert-colors
- #xsel-unstable
  xtitle
  xvkbd
- xkbd
- #xkeyboard-config
+ youtube-dl
 
-#melpaPackages.ov
+ #nixfmt
+ #terminfo
+ #VirtualBox-GuestAdditions
+ #cask
+ #dconf-editor
+ #emacs
+ #emacs2nix
+ #fsnotify
+ #melpa2nix
+ #mesa
+ #nix
+ #nix-derivation-pretty
+ #nix-prefetch-git            # subsumed within « nix-prefetch-scripts ».
+ #xbacklight
+ #xinput
+ #xkeyboard-config
+ #xmodmap
+ #xprop
+ #xsel-unstable
 
 ];
 
@@ -165,6 +164,8 @@ haskellPrograms = with haskellPackages; [
 
  ghcid
  git-annex
+ # cmark
+ # cmark-gfm
 
 ];
 
