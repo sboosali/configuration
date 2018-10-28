@@ -94,11 +94,12 @@ nixpkgs.overlays = overlays; #TODO ../overlays
 ##############################################
 
 programs.home-manager.enable = true;
-programs.home-manager.path   =
-  https://github.com/rycee/home-manager/archive/release-18.09.tar.gz;
-  # ../../submodules/home-manager/
+programs.home-manager.path   = toString ../../submodules/home-manager;
 
 # ^ 
+
+# https://github.com/rycee/home-manager/archive/release-18.09.tar.gz;
+# ../../submodules/home-manager/
 
 ##################################################
 

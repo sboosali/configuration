@@ -1,6 +1,6 @@
-[submodule "wild-bind/wild-bind"]
-	path = wild-bind/wild-bind
-	url = https://github.com/debug-ito/wild-bind
 [submodule "home-manager"]
 	path = submodules/home-manager
 	url = https://github.com/rycee/home-manager/
+[submodule "wild-bind"]
+	path = submodules/wild-bind
+	url = https://github.com/debug-ito/wild-bind
