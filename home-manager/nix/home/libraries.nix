@@ -25,15 +25,16 @@ sbooLibraries = super.buildEnv
 
 ##################################################
 
-libraries = systemLibraries ++ x11Libraries ++ fltkLibraries
- ;
+libraries =
+  systemLibraries ++
+  x11Libraries    ++
+  fltkhsLibraries ;
 
 ##################################################
 
 systemLibraries = with pkgs; [
 
  flac
- fltk
  openssl
  zlib
  zlib.static
@@ -45,6 +46,22 @@ systemLibraries = with pkgs; [
 x11Libraries = with pkgs.xlibs; [
 
 ];
+
+##################################################
+
+fltkhsLibraries = [ fltkhsFLTK ] ++ fltkLibraries;
+
+##################################################
+
+fltkhsFLTK = super.buildEnv
+ {
+   name                  = "sboo-fltk";
+
+   paths                 = with pkgs; [ fltk ];
+   pathsToLink           = [ "/" "/src" "/lib" "/include" "/include/FL" "/FL" "GL/" ];
+   extraOutputsToInstall = [ "out" "dev" ];
+
+ };
 
 ##################################################
 
