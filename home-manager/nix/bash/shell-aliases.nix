@@ -115,6 +115,16 @@ in
 
  #################################################
 
+ r = "rm -f";
+
+ # ^ « rm »
+
+ #-----------------------------------------------#
+
+ rr = "rm -fr";
+
+ #################################################
+
  md="${mkdir} -p";
 
  # ^ « mkdir »
@@ -147,6 +157,47 @@ in
  f1   = ''${find} -L . -maxdepth 1'';
  f2   = ''${find} -L . -maxdepth 2'';
  f3   = ''${find} -L . -maxdepth 3'';
+
+ #################################################
+
+ p = "grep -i -n -C 0";
+
+  # ^ « grep »
+
+  # ^
+  # -i, --ignore-case         ignore case distinctions
+  # -l, --files-with-matches  print only names of FILEs containing matches
+  # -n, --line-number         print line number with output lines
+
+  # ^
+  # « -C 0 » is a "trick" which prints dividors ("--") between matches.
+  # « grep OPTIONS PATTTEN /dev/null FILENAME » is a hack which forces the filename to be printed,
+  # but such interspered arguments, it can't be in the alias.
+
+ #-----------------------------------------------#
+
+  pr = "grep -i -n -C 0 --dereference-recursive";
+  pv = "grep -i -n -C 0 --invert-match";
+  pw = "grep -i -n -C 0 --word-regexp";
+  pl = "grep -i -n -C 0 --line-regexp";
+
+  # ^
+  # -v, --invert-match        select non-matching lines
+  # -w, --word-regexp         force PATTERN to match only whole words
+  # -x, --line-regexp         force PATTERN to match only whole lines
+
+ #-----------------------------------------------#
+
+ pf = "grep -i -n -C 0 --fixed-strings";
+ pe = "grep -i -n -C 0 --extended-regexp";
+ pp = "grep -i -n -C 0 --perl-regexp";
+ pg = "grep -i -n -C 0 --basic-regexp";
+
+  # ^
+  # -E, --extended-regexp     PATTERN is an extended regular expression (ERE)
+  # -F, --fixed-strings       PATTERN is a set of newline-separated strings
+  # -G, --basic-regexp        PATTERN is a basic regular expression (BRE)
+  # -P, --perl-regexp         PATTERN is a Perl regular expression
 
  #################################################
 

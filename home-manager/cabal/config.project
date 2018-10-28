@@ -26,8 +26,7 @@ extra-prog-path: /home/sboo/.cabal/bin
 
 --------------------------------------------------
 
-nix:           True
-deterministic: True
+-- nix: False
 
 extra-lib-dirs:     /home/sboo/.nix-profile/lib/
 
@@ -38,9 +37,13 @@ extra-prog-path:    /home/sboo/.nix-profile/libexec/
 
 --------------------------------------------------
 
-documentation: False
+deterministic: True
+relocatable:   True
 
-relocatable: False
+--------------------------------------------------
+
+documentation: True
+
 
 --------------------------------------------------
 

@@ -1201,5 +1201,138 @@ program-default-options
 --------------------------------------------------
 ```
 
+## `autoconf`
+
+e.g. a fragment:
+
+```ac
+
+# FIXME: Replace `main' with a function in `-lGL':
+AC_CHECK_LIB([GL], [main])
+# FIXME: Replace `main' with a function in `-lGLU':
+AC_CHECK_LIB([GLU], [main])
+# FIXME: Replace `main' with a function in `-lX11':
+AC_CHECK_LIB([X11], [main])
+# FIXME: Replace `main' with a function in `-lXext':
+AC_CHECK_LIB([Xext], [main])
+# FIXME: Replace `main' with a function in `-lXft':
+AC_CHECK_LIB([Xft], [main])
+# FIXME: Replace `main' with a function in `-lXinerama':
+AC_CHECK_LIB([Xinerama], [main])
+# FIXME: Replace `main' with a function in `-ldl':
+AC_CHECK_LIB([dl], [main])
+# FIXME: Replace `main' with a function in `-lfltk':
+AC_CHECK_LIB([fltk], [main])
+# FIXME: Replace `main' with a function in `-lfltk_gl':
+AC_CHECK_LIB([fltk_gl], [main])
+# FIXME: Replace `main' with a function in `-lfltk_images':
+AC_CHECK_LIB([fltk_images], [main])
+# FIXME: Replace `main' with a function in `-lfontconfig':
+AC_CHECK_LIB([fontconfig], [main])
+# FIXME: Replace `main' with a function in `-ljpeg':
+AC_CHECK_LIB([jpeg], [main])
+# FIXME: Replace `main' with a function in `-lm':
+AC_CHECK_LIB([m], [main])
+# FIXME: Replace `main' with a function in `-lpng':
+AC_CHECK_LIB([png], [main])
+# FIXME: Replace `main' with a function in `-lpthread':
+AC_CHECK_LIB([pthread], [main])
+# FIXME: Replace `main' with a function in `-lz':
+AC_CHECK_LIB([zlib], [main])
+```
+
+## `git submodule`
+
+```sh
+git submodule init
+git submodule update
+git submodule add    -b       release-18.09
+git submodule update --remote
+```
+
+track a tag within a submodule (e.g. `remotes/origin/release-18.09`):
+
+```sh
+$ git branch -a
+* master
+  remotes/origin/master
+  ...
+  remotes/origin/release-18.09
+  
+$ git reset --hard release-18.09
+Error: unknown revision or path
+
+$ git fetch --tags origin release-18.09:release-18.09 
+ * [new branch]      release-18.09 -> release-18.09
+
+$ git checkout release-18.09
+
+$ git branch -a
+  master
+* release-18.09
+  remotes/origin/master
+  ...
+  remotes/origin/release-18.09
+
+```
+
+## `grep`
+
+
+```man
+$ grep --help 
+
+Usage: grep [OPTION]... PATTERN [FILE]...
+
+Search for PATTERN in each FILE or standard input.
+
+PATTERN is, by default, a basic regular expression (BRE).
+
+Example: grep -i 'hello world' menu.h main.c
+
+  -E, --extended-regexp     PATTERN is an extended regular expression (ERE)
+  -F, --fixed-strings       PATTERN is a set of newline-separated strings
+  -G, --basic-regexp        PATTERN is a basic regular expression (BRE)
+  -P, --perl-regexp         PATTERN is a Perl regular expression
+
+  -f, --file=FILE           obtain PATTERN from FILE
+  -r, --recursive           like --directories=recurse
+  -R, --dereference-recursive  likewise, but follow all symlinks
+
+  -i, --ignore-case         ignore case distinctions
+  -w, --word-regexp         force PATTERN to match only whole words
+  -x, --line-regexp         force PATTERN to match only whole lines
+
+  -l, --files-with-matches  print only names of FILEs containing matches
+      --color[=WHEN],
+      --colour[=WHEN]       use markers to highlight the matching strings;
+                            WHEN is 'always', 'never', or 'auto'
+
+  -v, --invert-match        select non-matching lines
+```
+
+```sh
+```
+
+## `fltk` dependencies via `nix`
+
+e.g.:
+
+```
+  /nix/store/6m54pia6wmc7bqp8d3n2vc1y5zpwa50x-fontconfig-2.12.6.tar.bz2
+  /nix/store/8va3grszpm0dl7x6qkygqkvrfcgk5gjd-openssl-1.0.2p.tar.gz
+  /nix/store/amwvfrpyj7wsin337l7rsa1sghiwh9yg-libjpeg-turbo-1.5.3.tar.gz
+  /nix/store/c9i9ls6xm6jxsmd7gxf46dz7s9d9ga55-libXext-1.3.3.tar.bz2
+  /nix/store/ghd006s9ssci1s6vqz01hf379dxzcby9-fltk-1.3.4-source.tar.gz
+  /nix/store/glnk048cqva0ig8yrjfw140z2r2v18b4-stdenv-linux
+  /nix/store/k6ihv2lh5czvam355r93dl1zw5pn7dsj-freeglut-3.0.0.tar.gz
+  /nix/store/lbd3i8bpm9y5pf2nbjcd81lk5jqrnn7v-flac-1.3.2.tar.xz
+  /nix/store/mji9isc0n4b0dsx2ykyw79ri7lvmr0cf-libXft-2.3.2.tar.bz2
+  /nix/store/nmizffdcmizgflkmhn8yr3zvw2g1q1hx-libX11-1.6.6.tar.bz2
+  /nix/store/nn1ci56h0q4iwp28sjdpd26y159da28s-libpng-1.6.34.tar.xz
+  /nix/store/qwqiq956mf0r28szgh22sfbx1wmhl100-libXinerama-1.1.4.tar.bz2
+  /nix/store/rrzja19jbqxbfryp2zchb2ma5h041rxh-zlib-1.2.11.tar.gz
+```
+
 ## 
 

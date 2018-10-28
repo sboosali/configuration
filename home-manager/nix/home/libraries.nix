@@ -16,8 +16,8 @@ sbooLibraries = super.buildEnv
  {
    name                  = "sboo-libraries";
 
-   paths                 = systemLibraries;
-   pathsToLink           = [ "/" "/lib" "/include" ];
+   paths                 = libraries;
+   pathsToLink           = [ "/" "/src" "/lib" "/include" ];
    extraOutputsToInstall = [ "out" "dev" "doc" "devdoc" "man" "info" ];
 
    #ignoreCollisions      = true;
@@ -25,16 +25,63 @@ sbooLibraries = super.buildEnv
 
 ##################################################
 
+libraries = systemLibraries ++ x11Libraries ++ fltkLibraries
+ ;
+
+##################################################
+
 systemLibraries = with pkgs; [
 
+ flac
+ fltk
+ openssl
  zlib
  zlib.static
- 
- flac
-
- fltk
 
 ];
+
+##################################################
+
+x11Libraries = with pkgs.xlibs; [
+
+];
+
+##################################################
+
+fltkLibraries = with pkgs; [
+
+ xlibsWrapper
+
+ xlibs.libX11
+ xlibs.libXext
+ xlibs.libXft
+ xlibs.libXinerama
+
+ xlibs.libX11.dev
+ xlibs.libXext.dev
+ xlibs.libXft.dev
+ xlibs.libXinerama.dev
+
+ libjpeg
+ libpng
+ fontconfig
+
+ libjpeg.dev
+ libpng.dev
+ fontconfig.dev
+
+#m
+#pthread
+ zlib
+
+ freeglut
+ libGLU_combined
+
+ pkgconfig
+ 
+];
+
+# ^ See « https://github.com/NixOS/nixpkgs/blob/release-18.09/pkgs/development/libraries/fltk/default.nix ».
 
 in
 ##################################################

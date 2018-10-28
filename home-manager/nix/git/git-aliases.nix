@@ -109,7 +109,40 @@ in
   recommit     = "commit -c ORIG_HEAD";
 
   ######################################
-  
+
+  upstream-set    = "remote add upstream";
+
+  # ^ e.g.:
+  #
+  # $ git remote add upstream https://github.com/NixOS/nixpkgs.git
+  #
+
+  upstream-get    = "remote -v show upstream";
+
+  # ^ e.g.:
+  #
+  # $ git remote -v
+  # origin	https://github.com/sboosali/nixpkgs (fetch)
+  # origin	https://github.com/sboosali/nixpkgs (push)
+  # upstream	https://github.com/NixOS/nixpkgs.git (fetch)
+  # upstream	https://github.com/NixOS/nixpkgs.git (push)
+  #
+  # $ git remote -v show upstream
+  # * remote upstream
+  #   Fetch URL: https://github.com/NixOS/nixpkgs.git
+  #   Push  URL: https://github.com/NixOS/nixpkgs.git
+  #   HEAD branch: master
+  #   Remote branches:
+  #     ...
+  #     release-18.09                    new (next fetch will store in remotes/upstream)
+  #     ...
+  #   Local ref configured for 'git push':
+  #     master pushes to master (local out of date)
+  #
+
+  upstream-rebase = "pull --rebase upstream master";
+
+  # ^ for updating a fork (rebase master onto upstream).
 
   ######################################
 

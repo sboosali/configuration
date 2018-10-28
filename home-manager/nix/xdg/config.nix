@@ -5,7 +5,8 @@
 ########################################
 {
 
- "cabal/config".source = ../../cabal/config.project;
+ "cabal/config".source      = ../../cabal/config.project;
+#"stack/config.yaml".source = ../../../stack/config.yaml;
 
  "xbindkeys/.xbindkeysrc".source = ../../../xbindkeys/xbindkeysrc;
 

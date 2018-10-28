@@ -44,6 +44,7 @@ freePrograms = builtins.concatLists [
   haskellPrograms
   haskellCompilerPrograms
   xorgPrograms
+  x11Programs
 
 ];
 
@@ -150,10 +151,21 @@ systemPrograms = with self; [
 # from the `home.packages = _` programs.
 #
 
+##################################################
+
+x11Programs = with pkgs.xlibs; [
+
+ xbacklight
+
+];
+
 ########################################
 
 xorgPrograms = with self.xorg; [
 
+ xinput
+ xmessage
+ xmodmap
  xprop
 
 ];
@@ -163,9 +175,8 @@ xorgPrograms = with self.xorg; [
 haskellPrograms = with haskellPackages; [
 
  ghcid
+ hpack
  git-annex
- # cmark
- # cmark-gfm
 
 ];
 
