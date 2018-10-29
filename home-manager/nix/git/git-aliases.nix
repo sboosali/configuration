@@ -47,14 +47,31 @@ in
   changes    = "diff --name-status -r";
 
   ######################################
-  clone      = "clone --recursive";
   co         = "checkout";
+  com        = "checkout master";
+  cou        = "checkout upstream";
+
+  ######################################
+
+  clone      = "clone --recursive";
+
   cp         = "cherry-pick";
 
   ######################################
   dc         = "diff --cached";
   dh         = "diff HEAD";
   ds         = "diff --staged";
+
+  ######################################
+
+  f          = "fetch";
+  ft         = "fetch --tags";
+
+  fm          = "fetch        master";
+  ftm         = "fetch --tags master";
+
+  fu          = "fetch        upstream";
+  ftu         = "fetch --tags upstream";
 
   ######################################
   from       = "!${git} bisect start && ${git} bisect bad HEAD && ${git} bisect good";

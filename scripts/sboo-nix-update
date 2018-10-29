@@ -1,0 +1,25 @@
+#!/bin/bash
+set -eu
+
+CHANNEL="${1:-nixpkgs-unstable}"
+NAME="${2:-''}"
+
+nix-channel --list
+
+nix-channel --add https://nixos.org/channels/"${CHANNEL}" ${NAME}
+
+nix-channel --list
+
+nix-channel --update
+
+# See: < https://nixos.org/channels/ >.
+
+# e.g.:
+#
+# $ sboo-nix-update nixos-18.09
+#
+# $ nix-channel --add https://nixos.org/channels/nixos-18.09 && nix-channel --list && nix-channel --update
+#
+#   nixos-18.09 https://nixos.org/channels/nixos-18.09
+#   nixpkgs https://nixos.org/channels/nixpkgs-unstable
+

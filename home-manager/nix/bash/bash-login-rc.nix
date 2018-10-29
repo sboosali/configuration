@@ -9,9 +9,9 @@
 ##################################################
 let
 
-scripts-directory = builtins.toString ../../../scripts;
+sboo-scripts-directory = builtins.toString ../../../scripts;
 
-# ^ reanders as absolute filepath.
+# ^ renders as absolute filepath.
 #
 # why `toString`?
 # because interpolating a path is different than interpolating a string;
@@ -20,6 +20,8 @@ scripts-directory = builtins.toString ../../../scripts;
 # doesn't equal « /home/sboo/configuration/scripts »,
 # it equals « "/nix/store/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-scripts" ».
 #
+
+cabal-scripts-directory = builtins.toString ~/.cabal/bin;
 
 in
 ##################################################
@@ -65,7 +67,7 @@ bashUtilities.concatBashScripts
        ###########################################
 
        ''
-       export PATH="$PATH":"${scripts-directory}"
+       export PATH="${sboo-scripts-directory}":"${cabal-scripts-directory}":"$PATH"
        ''
 
        ###########################################
