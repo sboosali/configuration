@@ -137,6 +137,11 @@ home.packages = [
 ];
 
 ##################################################
+# Fonts:
+
+fonts.fontconfig.enableProfileFonts = true;
+
+##################################################
 # XDG:
 
 xdg =

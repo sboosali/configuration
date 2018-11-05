@@ -40,29 +40,7 @@ bashUtilities.concatBashScripts
 
        ###########################################
 
-       # ''
-       # #-----------------------------------------------#
-       # # xbindkeys ------------------------------------#
-       # #-----------------------------------------------#
-
-       # if [ -x "$(command -v ${pkgs.xbindkeys}/bin/xbindkeys)" ] 
-       #    #TODO and if x11 is active
-       # then
-
-       # if   ! pgrep -x "xbindkeys" > /dev/null
-       # then "${pkgs.xbindkeys}/bin/xbindkeys" --poll-rc -f "${xdg.configHome}/xbindkeys/.xbindkeysrc"
-       # fi
-
-       #     # ^ Start the « xbindkeys » daemon in the background.
-
-       #     # ^ « --poll-rc » means: reload the config whenever it changes.
-
-       #     # ^ « -f _ » means: load the given config ("rc") file.
-       #     # By default, the config is at « ~/.xbindkeysrc », 
-       #     # which we've overriden to be under (one of) « $XDG_CONFIG_DIRS ».
-
-       # fi
-       # ''
+      (import ./x11-rc.nix { inherit pkgs xdg; })
 
        ###########################################
 

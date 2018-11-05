@@ -33,7 +33,7 @@ sbooPrograms = super.buildEnv
 
 programs =
      freePrograms
- #++ unfreePrograms
+  ++ unfreePrograms
      ;
 
 ##################################################
@@ -54,7 +54,9 @@ freePrograms = builtins.concatLists [
 
 unfreePrograms = with self; [
 
- google-chrome
+ idea  # "IntelliJ IDEA"
+
+#google-chrome
 
 ];
 

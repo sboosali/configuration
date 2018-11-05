@@ -14,7 +14,12 @@ mkdir       = ''${pkgs.coreutils}/bin/mkdir'';
 find        = ''${pkgs.findutils}/bin/find'';
 xargs       = ''${pkgs.findutils}/bin/xargs'';
 
+nix-shell   = "nix-shell"; #TODO# ''${pkgs.nix}/bin/nix-shell''
+ #TODO3 or... keep "dynamic" (not lexical) to use the same nix that must be installed for home-manager to evaluate this very file
+
 tar         = "tar"; #TODO# ''${pkgs.tar}/bin/tar'';
+
+grep         = "grep"; #TODO# ''${pkgs.??}/bin/grep'';
 
 git         = ''${pkgs.git}/bin/git'';
 
@@ -160,7 +165,7 @@ in
 
  #################################################
 
- p = "grep -i -n -C 0";
+ p = "${grep} -i -n -C 0";
 
   # ^ « grep »
 
@@ -176,10 +181,10 @@ in
 
  #-----------------------------------------------#
 
-  pr = "grep -i -n -C 0 --dereference-recursive";
-  pv = "grep -i -n -C 0 --invert-match";
-  pw = "grep -i -n -C 0 --word-regexp";
-  pl = "grep -i -n -C 0 --line-regexp";
+  pr = "${grep} -i -n -C 0 --dereference-recursive";
+  pv = "${grep} -i -n -C 0 --invert-match";
+  pw = "${grep} -i -n -C 0 --word-regexp";
+  pl = "${grep} -i -n -C 0 --line-regexp";
 
   # ^
   # -v, --invert-match        select non-matching lines
@@ -188,10 +193,10 @@ in
 
  #-----------------------------------------------#
 
- pf = "grep -i -n -C 0 --fixed-strings";
- pe = "grep -i -n -C 0 --extended-regexp";
- pp = "grep -i -n -C 0 --perl-regexp";
- pg = "grep -i -n -C 0 --basic-regexp";
+ pf = "${grep} -i -n -C 0 --fixed-strings";
+ pe = "${grep} -i -n -C 0 --extended-regexp";
+ pp = "${grep} -i -n -C 0 --perl-regexp";
+ pg = "${grep} -i -n -C 0 --basic-regexp";
 
   # ^
   # -E, --extended-regexp     PATTERN is an extended regular expression (ERE)
@@ -323,6 +328,86 @@ in
  #-----------------------------------------------#
 
  #################################################
+
+ h = "${cabal} new-build all";   # build {a}ll
+
+ #-----------------------------------------------#
+
+ hc = "${cabal} new-configure";  # {c}onfigure
+ hb = "${cabal} new-build";      # {b}uild
+ hr = "${cabal} new-repl";       # {r}epl
+ hx = "${cabal} new-run";        # e{x}ecute
+ ht = "${cabal} new-test";       # {t}est
+ hn = "${cabal} new-bench";      # be{n}ch
+
+ hz = "${cabal} new-clean";      # {z}(?)
+ hu = "${cabal} new-update";     # {u}pdate
+
+ #-----------------------------------------------#
+
+ hca = "${cabal} new-configure all";
+ hba = "${cabal} new-build all";
+ hra = "${cabal} new-repl all";
+ hxa = "${cabal} new-run all -- ";
+ hta = "${cabal} new-test all";
+ hna = "${cabal} new-bench all";
+
+ #-----------------------------------------------#
+
+ "hc-" = "${cabal} new-configure -w ghc --ghc";          # {c}onfigure ghc (default)
+ hc7   = "${cabal} new-configure -w ghc-7.10.3 --ghc";   # {c}onfigure ghc-{7} (latest)
+ hc8   = "${cabal} new-configure -w ghc-8.6.1 --ghc";    # {c}onfigure ghc-{8} (latest)
+
+ #TODO#hc = "${cabal} new-configure -w ghc --compiler=ghc";       # {c}onfigure ghc (default)
+
+ #-----------------------------------------------#
+
+ hcjs = "${cabal} new-configure -w ghcjs --ghcjs"; # {c}onfigure ghcjs
+
+ #TODO#alias hcj7="cabal new-configure -w ghcjs-"
+ #TODO#alias hcj8="cabal new-configure -w ghcjs-"
+
+ #-----------------------------------------------#
+
+ "hc-7.10" = "${cabal} new-configure -w ghc-7.10.3 --ghc"; # {c}onfigure ghc-{7}.{10}._
+ "hc-8.00" = "${cabal} new-configure -w ghc-8.0.2 --ghc";  # {c}onfigure ghc-{8}.{0}._
+ "hc-8.02" = "${cabal} new-configure -w ghc-8.2.2 --ghc";  # {c}onfigure ghc-{8}.{2}._
+ "hc-8.04" = "${cabal} new-configure -w ghc-8.4.3 --ghc";  # {c}onfigure ghc-{8}.{4}._
+ "hc-8.06" = "${cabal} new-configure -w ghc-8.6.1 --ghc";  # {c}onfigure ghc-{8}.{6}._
+
+ #TODO# hc-8.08 = "${cabal} new-configure -w ghc-8.8. --ghc";  # {c}onfigure ghc-{8}.{}._
+
+ #-----------------------------------------------#
+
+ hc80 = "${cabal} new-configure -w ghc-8.0.2 --ghc";  # {c}onfigure ghc-{8}.{0}
+ hc82 = "${cabal} new-configure -w ghc-8.2.2 --ghc";  # {c}onfigure ghc-{8}.{2}
+ hc84 = "${cabal} new-configure -w ghc-8.4.3 --ghc";  # {c}onfigure ghc-{8}.{4}
+ hc86 = "${cabal} new-configure -w ghc-8.6.1 --ghc";  # {c}onfigure ghc-{8}.{6}
+
+ #TODOalias hc86="cabal new-configure -w ghc-8.6.2 --ghc"  # {c}onfigure ghc-{8}.{6}
+ #hc88 = "${cabal} new-configure -w ghc-8.8. --ghc";  # {c}onfigure ghc-{8}.{}
+
+ #-----------------------------------------------#
+
+ "hc-7-thru-8-build" = "hc8 && time hba ; hc7 && time hba ; hc80 && time hba ; hc82 && time hba ; hc84 && time hba ; hc86 && time hba";
+
+ "hc-7-thru-8-test" = "hc8 && time hta ; hc7 && time hta ; hc80 && time hta ; hc82 && time hta ; hc84 && time hta ; hc86 && time hta";
+
+ #-----------------------------------------------#
+
+ hnba = ''${nix-shell} --run "${cabal} new-build all"'';
+
+ #################################################
+
+ #-----------------------------------------------#
+
+ #################################################
+
+ #-----------------------------------------------#
+
+ #################################################
+
+ #-----------------------------------------------#
 
  #################################################
 
