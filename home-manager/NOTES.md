@@ -1334,5 +1334,30 @@ e.g.:
   /nix/store/rrzja19jbqxbfryp2zchb2ma5h041rxh-zlib-1.2.11.tar.gz
 ```
 
-## 
+## Home-Manager `fontconfig`
+
+<https://github.com/rycee/home-manager/blob/release-18.09/modules/misc/fontconfig.nix>
+
+Signature:
+
+`fonts.fontconfig.enableProfileFonts`
+
+> Configure fontconfig to discover fonts installed through home.packages and nix-env.
+> Note, this is only necessary on non-NixOS systems. 
+    
+Definition:
+
+```
+    xdg.configFile."fontconfig/conf.d/10-nix-profile-fonts.conf".text = ''
+
+      <?xml version='1.0'?>
+      <!DOCTYPE fontconfig SYSTEM 'fonts.dtd'>
+
+      <fontconfig>
+        <dir>${config.home.profileDirectory}/lib/X11/fonts</dir>
+        <dir>${config.home.profileDirectory}/share/fonts</dir>
+      </fontconfig>
+
+    '';
+```
 

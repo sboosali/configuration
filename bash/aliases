@@ -148,54 +148,6 @@ alias mz="make clean"       # "z"(?)
 
 ##################################################
 
-alias h="cabal new-build all"   # build {a}ll
-
-#------------------------------------------------#
-
-alias hc="cabal new-configure"  # {c}onfigure
-alias hb="cabal new-build"      # {b}uild
-alias hr="cabal new-repl"       # {r}epl
-alias hx="cabal new-run"        # e{x}ecute
-alias ht="cabal new-test"       # {t}est
-alias hn="cabal new-bench"      # be{n}ch
-
-alias hca="cabal new-configure all"
-alias hba="cabal new-build all"
-alias hra="cabal new-repl all"
-alias hxa="cabal new-run all -- "
-alias hta="cabal new-test all"
-alias hna="cabal new-bench all"
-
-alias hz="cabal new-clean"           # {z}(?)
-alias hu="cabal new-update"          # {u}pdate
-
-alias hc="cabal new-configure -w ghc --ghc"       # {c}onfigure ghc (default)
-#TODO#alias hc="cabal new-configure -w ghc --compiler=ghc"       # {c}onfigure ghc (default)
-alias hc7="cabal new-configure -w ghc-7.10.3"   # {c}onfigure ghc-{7} (latest)
-alias hc8="cabal new-configure -w ghc-8.6.1"    # {c}onfigure ghc-{8} (latest)
-
-alias hcjs="cabal new-configure -w ghcjs --ghcjs" # {c}onfigure ghcjs
-#TODO#alias hcj7="cabal new-configure -w ghcjs-"
-#TODO#alias hcj8="cabal new-configure -w ghcjs-"
-
-alias hc-7.10="cabal new-configure -w ghc-7.10.3" # {c}onfigure ghc-{7}.{10}._
-alias hc-8.00="cabal new-configure -w ghc-8.0.2"  # {c}onfigure ghc-{8}.{0}._
-alias hc-8.02="cabal new-configure -w ghc-8.2.2"  # {c}onfigure ghc-{8}.{2}._
-alias hc-8.04="cabal new-configure -w ghc-8.4.3"  # {c}onfigure ghc-{8}.{4}._
-alias hc-8.06="cabal new-configure -w ghc-8.6.1"  # {c}onfigure ghc-{8}.{6}._
-#alias hc-8.08="cabal new-configure -w ghc-8.8."  # {c}onfigure ghc-{8}.{}._
-
-alias hc80="cabal new-configure -w ghc-8.0.2"  # {c}onfigure ghc-{8}.{0}
-alias hc82="cabal new-configure -w ghc-8.2.2"  # {c}onfigure ghc-{8}.{2}
-alias hc84="cabal new-configure -w ghc-8.4.3"  # {c}onfigure ghc-{8}.{4}
-alias hc86="cabal new-configure -w ghc-8.6.1"  # {c}onfigure ghc-{8}.{6}
-#TODOalias hc86="cabal new-configure -w ghc-8.6.2"  # {c}onfigure ghc-{8}.{6}
-#alias hc88="cabal new-configure -w ghc-8.8."  # {c}onfigure ghc-{8}.{}
-
-alias hc-7103-to-862="hc8 && time hba ; hc7 && time hba ; hc80 && time hba ; hc82 && time hba ; hc84 && time hba ; hc86 && time hba"
-
-alias hnba='nix-shell --run "cabal new-build all"'
-
 #------------------------------------------------#
 
 alias hsi="stack install"       # 
