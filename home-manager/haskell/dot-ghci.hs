@@ -1,41 +1,51 @@
 --- « .ghci » -*- eval: (progn (dante-mode -1) (flycheck-mode -1)) -*-
 
 --------------------------------------------------
--- Settings --------------------------------------
+-- Settings (1/2) --------------------------------
 --------------------------------------------------
 
 :set prompt "λ> "
+
+--------------------------------------------------
+-- Imports (1/3) ---------------------------------
+--------------------------------------------------
+
+import qualified Prelude
+
+--------------------------------------------------
+-- Message ---------------------------------------
+--------------------------------------------------
+
+Prelude.putStrLn "---------------------------------------"
+Prelude.putStrLn ""
+Prelude.putStrLn "~/.ghci"
+Prelude.putStrLn ""
+Prelude.putStrLn ":set"
+Prelude.putStrLn ""
+Prelude.putStrLn ":type"
+Prelude.putStrLn ""
+Prelude.putStrLn ":info"
+Prelude.putStrLn ""
+Prelude.putStrLn ":reload"
+Prelude.putStrLn ""
+Prelude.putStrLn ":sprint"
+Prelude.putStrLn ""
+Prelude.putStrLn ":{"
+Prelude.putStrLn "let f 0 = False" 
+Prelude.putStrLn "    f x = True"
+Prelude.putStrLn ":}"
+Prelude.putStrLn ""
+Prelude.putStrLn "---------------------------------------"
+
+--------------------------------------------------
+-- Settings (2/2) --------------------------------
+--------------------------------------------------
 
 -- show type of evaluated expressions
 :set +t
 
 -- enable multiline with :{ ... :}
 :set +m
-
---------------------------------------------------
--- Message ---------------------------------------
---------------------------------------------------
-
-putStrLn "---------------------------------------"
-putStrLn ""
-putStrLn "~/.ghci"
-putStrLn ""
-putStrLn ":set"
-putStrLn ""
-putStrLn ":type"
-putStrLn ""
-putStrLn ":info"
-putStrLn ""
-putStrLn ":reload"
-putStrLn ""
-putStrLn ":sprint"
-putStrLn ""
-putStrLn ":{"
-putStrLn "let f 0 = False" 
-putStrLn "    f x = True"
-putStrLn ":}"
-putStrLn ""
-putStrLn "---------------------------------------"
 
 --------------------------------------------------
 -- Extensions ------------------------------------
@@ -77,7 +87,7 @@ putStrLn "---------------------------------------"
 :set -XOverloadedStrings
 
 --------------------------------------------------
--- Imports ---------------------------------------
+-- Imports (2/3) ---------------------------------
 --------------------------------------------------
 
 -- Base Modules:
@@ -105,7 +115,7 @@ type LazyByteString   = BL.ByteString
 type StrictByteString = BS.ByteString
 
 --------------------------------------------------
--- Imports ---------------------------------------
+-- Imports (3/3) ---------------------------------
 --------------------------------------------------
 
 -- :set -package text
@@ -145,4 +155,5 @@ type StrictByteString = BS.ByteString
 -- let pasteCode_loop = do { l <- getLine; if l == "\^D" then return () else do appendFile "temporary.hs" (l++"\n"); loop }
 -- :def pasteCode (\_ -> pasteCode_loop >> return ":load temporary.hs")
 
---------------------------------------------------λ> λ> 
+--------------------------------------------------
+--------------------------------------------------

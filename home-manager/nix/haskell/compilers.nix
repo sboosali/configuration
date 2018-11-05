@@ -16,6 +16,10 @@ defaultGHC = self.haskell.compiler.ghc843;
 
 ##################################################
 
+defaultGHCJS = self.haskell.compiler.ghcjs710;
+
+##################################################
+
 GHCs =
   [
     defaultGHC
@@ -24,7 +28,10 @@ GHCs =
     self.haskell.compiler.ghc822 
     self.haskell.compiler.ghc843 
     self.haskell.compiler.ghc861
-    self.haskell.compiler.ghcjs
+
+    # defaultGHCJS
+    # self.haskell.compiler.ghcjs710
+    # self.haskell.compiler.ghcjs
   ];
 
   # ^
