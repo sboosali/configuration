@@ -28,6 +28,7 @@ sbooLibraries = super.buildEnv
 libraries =
   systemLibraries ++
   x11Libraries    ++
+  ghcLibraries    ++
   fltkhsLibraries ;
 
 ##################################################
@@ -99,6 +100,15 @@ fltkLibraries = with pkgs; [
 ];
 
 # ^ See « https://github.com/NixOS/nixpkgs/blob/release-18.09/pkgs/development/libraries/fltk/default.nix ».
+
+##################################################
+
+ghcLibraries = with pkgs; [
+
+ ncurses
+ ncurses.dev
+
+];
 
 in
 ##################################################

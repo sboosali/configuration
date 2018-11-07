@@ -206,19 +206,19 @@ programs.firefox = {
 
 ##################################################
 
-programs.chromium.enable = true;
+# programs.chromium.enable = true;
 
-programs.chromium.extensions = [
+# programs.chromium.extensions = [
 
-  "gcbommkclmclpchllfjekcdonpmejbdp" 
-  # ^ https everywhere
+#   "gcbommkclmclpchllfjekcdonpmejbdp" 
+#   # ^ https everywhere
 
-  "cjpalhdlnbpafiamejdnhcphjbkeiagm"
-  # ^ ublock origin
+#   "cjpalhdlnbpafiamejdnhcphjbkeiagm"
+#   # ^ ublock origin
 
-  #""
-  # ^
-];
+#   #""
+#   # ^
+# ];
 
 ##############################################
 

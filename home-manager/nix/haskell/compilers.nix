@@ -12,31 +12,29 @@ in
 ##################################################
 let
 
-defaultGHC = self.haskell.compiler.ghc844;
+defaultGHC = self.haskell.compiler.ghc843;
 
 ##################################################
 
-defaultGHCJS = self.haskell.compiler.ghcjs710;
+defaultGHCJS = self.haskell.compiler.ghcjs;
 
 ##################################################
 
 GHCs =
+
   [
     defaultGHC
-    self.haskell.compiler.ghc7103               #TODO# removed from 19.03
-    self.haskell.compiler.ghc802                #TODO# removed from 19.03
+    self.haskell.compiler.ghc7103Binary
     self.haskell.compiler.ghc822 
     self.haskell.compiler.ghc844 
     self.haskell.compiler.ghc861
 
     defaultGHCJS
-    # self.haskell.compiler.ghcjs710
-    # self.haskell.compiler.ghcjs
   ];
 
   # ^
   # first item in `paths` is the unqualified executable;
-  # i.e. `ghc` is `ghc-8.4.3`.
+  # i.e. `ghc` is `ghc-8.4.4`.
   #
   # [problem] error "have the same priority ; use 'nix-env --set-flag priority NUMBER INSTALLED_PKGNAME' to change the priority of one of the conflicting packages"
   # even with `buildEnv.ignoreCollisions = true`.
@@ -47,6 +45,7 @@ GHCs =
 ##################################################
 
 environment = super.buildEnv
+
  {
    name                  = "GHCs";
    paths                 = GHCs;
@@ -56,7 +55,9 @@ environment = super.buildEnv
 
 in
 ##################################################
+
 environment
+
 ##################################################
 # Notes ##########################################
 ##################################################
@@ -101,3 +102,23 @@ environment
 #
 
 ##################################################
+
+/*
+
+GHCs =
+  [
+    defaultGHC
+    self.haskell.compiler.ghc7103               #TODO# removed from 19.03
+    self.haskell.compiler.ghc802                #TODO# removed from 19.03
+    self.haskell.compiler.ghc822 
+    self.haskell.compiler.ghc843                # TODO check self.haskell.compiler ? ghc844
+    #self.haskell.compiler.ghc844 
+    self.haskell.compiler.ghc861               # TODO check self.haskell.compiler ? ghc861
+    #self.haskell.compiler.ghc862
+
+    defaultGHCJS
+    # self.haskell.compiler.ghcjs710
+    # self.haskell.compiler.ghcjs
+  ];
+
+*/

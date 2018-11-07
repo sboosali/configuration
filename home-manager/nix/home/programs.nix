@@ -176,10 +176,13 @@ xorgPrograms = with self.xorg; [
 
 haskellPrograms = with haskellPackages; [
 
+ alex
+ 
+ hscolour
+
  ghcid
  hpack
  git-annex
- hscolour
 
 ];
 
