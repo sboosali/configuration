@@ -535,7 +535,7 @@ self    = nixpkgs.pkgs
 
 h    = nixpkgs.haskell.lib
 hs   = nixpkgs.pkgs.haskellPackages
-hs86 = nixpkgs.pkgs.haskell.packages.ghc861
+hs86 = nixpkgs.pkgs.haskell.packages.ghc862
 
 el   = nixpkgs.pkgs.emacs26Packages
 el26 = nixpkgs.pkgs.emacs26Packages

@@ -2,7 +2,7 @@ self: super:
 ########################################
 let
 
-ghc = self.haskell.compiler.ghc861;
+ghc = self.haskell.compiler.ghc862;
 
 # ^ this version will be the unqualified executable.
 # i.e. `ghc` is `ghc-8.6.1`.
@@ -13,8 +13,8 @@ ghcs = super.buildEnv
    ignoreCollisions = true;
    paths            = [ ghc ] ++ [
    
-                        self.haskell.compiler.ghc861
-                        self.haskell.compiler.ghc843 
+                        self.haskell.compiler.ghc862
+                        self.haskell.compiler.ghc844 
                         self.haskell.compiler.ghc822
                         self.haskell.compiler.ghc802
                         self.haskell.compiler.ghc7103
@@ -50,7 +50,7 @@ in
 # Notes ################################
 ########################################
 
-# nix-repl> :i buildEnv { name = "ghcs"; ignoreCollisions = true; paths = [haskell.compiler.ghc843 haskell.compiler.ghc861]; }
+# nix-repl> :i buildEnv { name = "ghcs"; ignoreCollisions = true; paths = [haskell.compiler.ghc844 haskell.compiler.ghc862]; }
 #
 # ^ /u/ElvishJerricco:
 # \`nix-env\` treats two packages with the same name but different version suffixes as an upgrade operation. You'll probably need to use \`buildEnv\` to get the both:

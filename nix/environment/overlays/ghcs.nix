@@ -2,7 +2,7 @@ self: super:
 ########################################
 let
 
-defaultGHC = self.haskell.compiler.ghc843;
+defaultGHC = self.haskell.compiler.ghc844;
 
 GHCs =
   [
@@ -10,7 +10,7 @@ GHCs =
     self.haskell.compiler.ghc7103
     self.haskell.compiler.ghc802
     self.haskell.compiler.ghc822 
-    self.haskell.compiler.ghc861
+    self.haskell.compiler.ghc862
     self.haskell.compiler.ghcjs
   ];
 

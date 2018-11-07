@@ -41,8 +41,17 @@ alias nm=home-manager
 
 #------------------------------------------------#
 
-alias nmb='NIX_PATH=nixpkgs=/home/sboo/.nix-defexpr/channels/nixpkgs home-manager -f "$HOME/configuration/home-manager/nix/home.nix" build'
-alias nmw='NIX_PATH=nixpkgs=/home/sboo/.nix-defexpr/channels/nixpkgs home-manager -f "$HOME/configuration/home-manager/nix/home.nix" switch'
+alias nmb='NIX_PATH=nixpkgs=/home/sboo/nixpkgs home-manager -f "$HOME/configuration/home-manager/nix/home.nix" build'
+alias nmw='NIX_PATH=nixpkgs=/home/sboo/nixpkgs home-manager -f "$HOME/configuration/home-manager/nix/home.nix" switch'
+
+# alias nmb='NIX_PATH=nixpkgs=/home/sboo/.nix-defexpr/channels/nixpkgs home-manager -f "$HOME/configuration/home-manager/nix/home.nix" build'
+# alias nmw='NIX_PATH=nixpkgs=/home/sboo/.nix-defexpr/channels/nixpkgs home-manager -f "$HOME/configuration/home-manager/nix/home.nix" switch'
+
+# alias nmb='NIX_PATH=nixpkgs=/home/sboo/nixpkgs home-manager -f "$HOME/configuration/home-manager/nix/home.nix" build'
+# alias nmw='NIX_PATH=nixpkgs=/home/sboo/nixpkgs home-manager -f "$HOME/configuration/home-manager/nix/home.nix" switch'
+
+# alias nmb='home-manager -f "$HOME/configuration/home-manager/nix/home.nix" build'
+# alias nmw='home-manager -f "$HOME/configuration/home-manager/nix/home.nix" switch'
 
 #alias nmb="home-manager build"
 #alias nmw="home-manager switch"

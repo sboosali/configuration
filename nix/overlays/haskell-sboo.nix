@@ -71,13 +71,13 @@ sbooLocalOverrides = sel: sup:
 
   };
 
-haskellPackages = self.haskell.packages.ghc843.extend
+haskellPackages = self.haskell.packages.ghc844.extend
   (self.lib.composeExtensions sbooLocalOverrides sbooOverrides);
 
 sboo =
   {
     inherit haskellPackages;
-    haskell.packages.ghc843 = haskellPackages;
+    haskell.packages.ghc844 = haskellPackages;
   };
 
 in

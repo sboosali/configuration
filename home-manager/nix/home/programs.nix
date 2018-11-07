@@ -42,7 +42,6 @@ freePrograms = builtins.concatLists [
 
   systemPrograms
   haskellPrograms
-  haskellCompilerPrograms
   xorgPrograms
   x11Programs
 
@@ -75,7 +74,7 @@ systemPrograms = with self; [
  flac
  fltk
  fswatch
- ghc
+#ghc                                              # see ../haskell/compilers.nix
  gimp
  glib
  gparted
@@ -88,6 +87,7 @@ systemPrograms = with self; [
  nano
  ncdu
  nix-bash-completions
+ nix-info
  nix-prefetch-github
  nix-prefetch-scripts
  nox
@@ -179,14 +179,7 @@ haskellPrograms = with haskellPackages; [
  ghcid
  hpack
  git-annex
-
-];
-
-##################################################
-
-haskellCompilerPrograms = with haskellCompilers; [
-
- ghcjs
+ hscolour
 
 ];
 

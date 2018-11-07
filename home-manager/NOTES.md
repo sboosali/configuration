@@ -1361,3 +1361,42 @@ Definition:
     '';
 ```
 
+
+## `nixpkgs`
+
+### `nixpkgs/release-18.09`
+
+```
+$ git remote add upstream https://github.com/NixOS/nixpkgs
+
+$ git checkout --track upstream/release-18.09
+```
+
+### `nixpkgs/release-18.09`
+
+```
+$ cd ~ && git clone git@github.com:sboosali/nixpkgs.git && cd nixpkgs
+
+$ git upstream-set https://github.com/NixOS/nixpkgs
+
+$ git fetch --tags upstream
+
+$ git checkout release-18.09
+
+$ git branch
+  master
+* release-18.09
+
+$ git pull --rebase upstream release-18.09
+
+```
+
+### `nixpkgs/release-18.09` && `nixpkgs/release-19.03`
+
+```
+$ curl https://raw.githubusercontent.com/NixOS/nixpkgs/dde2ea4f37c8e404b8f5ef1114ce883741b9e5d8/pkgs/development/compilers/ghc/8.6.2.nix > pkgs/development/compilers/ghc/8.6.2.nix
+
+$ curl https://raw.githubusercontent.com/NixOS/nixpkgs/dde2ea4f37c8e404b8f5ef1114ce883741b9e5d8/pkgs/development/haskell-modules/configuration-ghc-8.6.x.nix > pkgs/development/haskell-modules/configuration-ghc-8.6.x.nix
+```
+
+## 

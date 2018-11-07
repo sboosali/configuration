@@ -16,7 +16,8 @@
 ########################################
 # NIX/NIXPKGS SETTINGS
 
-export NIX_PATH="nixpkgs=$HOME/nixpkgs:$NIX_PATH"
+#TODO# export NIX_PATH="nixpkgs=$HOME/nixpkgs:$NIX_PATH"
+
 # ^ my fork of `nixpkgs`
 # append to the front (not the back) of the path-list to shadow the default locations (nixpkgs "channels" are weird).
 # i.e. the angle-path "nix eval "<nixpkgs>" should (?) evaluate to a `nix-store` path that's equivalent "$HOME/nixpkgs/".

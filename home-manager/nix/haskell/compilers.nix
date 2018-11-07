@@ -12,7 +12,7 @@ in
 ##################################################
 let
 
-defaultGHC = self.haskell.compiler.ghc843;
+defaultGHC = self.haskell.compiler.ghc844;
 
 ##################################################
 
@@ -23,13 +23,13 @@ defaultGHCJS = self.haskell.compiler.ghcjs710;
 GHCs =
   [
     defaultGHC
-    self.haskell.compiler.ghc7103
-    self.haskell.compiler.ghc802
+    self.haskell.compiler.ghc7103               #TODO# removed from 19.03
+    self.haskell.compiler.ghc802                #TODO# removed from 19.03
     self.haskell.compiler.ghc822 
-    self.haskell.compiler.ghc843 
+    self.haskell.compiler.ghc844 
     self.haskell.compiler.ghc861
 
-    # defaultGHCJS
+    defaultGHCJS
     # self.haskell.compiler.ghcjs710
     # self.haskell.compiler.ghcjs
   ];

@@ -103,8 +103,9 @@ up           = !sh -c 'git remote add origin $1 && git fetch origin && git branc
 ####################
 # (Upstream-stuff)
 
-lru          = pull --rebase upstream master
+lru          = pull --rebase upstream
              # ^ for updating a fork
+lrum         = pull --rebase upstream master
 
 upstream-add = remote add upstrem
              # ^ e.g. 
