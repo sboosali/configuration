@@ -4,3 +4,6 @@
 [submodule "wild-bind"]
 	path = submodules/wild-bind
 	url = https://github.com/debug-ito/wild-bind
+[submodule "cabal"]
+	path = submodules/cabal
+	url = https://github.com/haskell/cabal

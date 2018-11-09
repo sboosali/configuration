@@ -177,7 +177,7 @@ xorgPrograms = with self.xorg; [
 haskellPrograms = with haskellPackages; [
 
  alex
- 
+ happy
  hscolour
 
  ghcid
