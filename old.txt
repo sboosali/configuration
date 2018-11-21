@@ -5,6 +5,1154 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##################################################
+{ types ? (import <nixpkgs> {}).lib.types
+}:
+
+##################################################
+# Imports ########################################
+##################################################
+let
+
+
+
+in
+##################################################
+# Utilities ######################################
+##################################################
+let
+
+
+
+in
+##################################################
+# Definitions ####################################
+##################################################
+let
+
+##################################################
+# xfce4-notifyd
+
+# xfce4-notifyd = {
+#   initial-opacity  = mkPercentageOption { example = 0.850000;
+#                                           description = "";
+#                                         };
+#   notify-location  = mkNaturalOption    { example = 2;
+#                                           description = "";
+#                                         };
+#   theme            = mkStringOption     { example = "Greybird";
+#                                           description = "";
+#                                         };
+# };
+
+##################################################
+# thunar-volman
+
+# thunar-volman = {
+#   autobrowse.enabled          = mkEnableOption { default = true; };
+#   autoburn.audio-cd-command   = mkCommandOption { example = ''xfburn -a''; };
+#   autoburn.data-cd-command    = mkCommandOption { example = ''xfburn -d''; };
+#   autoburn.enabled            = mkEnableOption { default = false; };
+#   autoipod.enabled            = mkEnableOption { default = false; };
+#   autokeyboard.enabled        = mkEnableOption { default = false; };
+#   automount-drives.enabled    = mkEnableOption { default = true; };
+#   automount-media.enabled     = mkEnableOption { default = true; };
+#   automouse.enabled           = mkEnableOption { default = false; };
+#   autoopen.enabled            = mkEnableOption { default = false; };
+#   autophoto.enabled           = mkEnableOption { default = false; };
+#   autoplay-audio-cds.command  = mkCommandOption { example = ''parole --device=%d''; };
+#   autoplay-audio-cds.enabled  = mkEnableOption { default = true; };
+#   autoplay-video-cds.command  = mkCommandOption { example = ''parole --device=%d''; };
+#   autoplay-video-cds.enabled  = mkEnableOption { default = true; };
+#   autoprinter.enabled         = mkEnableOption { default = false; };
+#   autorun.enabled             = mkEnableOption { default = false; };
+#   autotablet.enabled          = mkEnableOption { default = false; };
+# };
+
+##################################################
+# xfprint
+
+# xfprint = {
+#   printing-system  = mkStringOption { example = "cups_plugin.so"; description = ""; };
+#   XfPrint.system   = mkStringOption { example = "cups_plugin.so"; description = ""; };
+# };
+
+##################################################
+# parole
+
+# parole = {
+#   parole.plugins   = mkStringOption { example = "parole-mpris2.so"; description = ""; };
+#   video.videosink  = mkStringOption { example = "xvimagesink";      description = ""; };
+# };
+
+##################################################
+# xfce4-settings-editor
+
+#xfce4-settings-editor = {
+#  last.paned-position  180
+#  last.window-height   558
+#  last.window-width    1502
+#};
+
+##################################################
+# displays
+
+displays = {
+
+  Default.eDP1.__value__    = ''1. Sharp Corporation 16"'';
+  Default.eDP1.Active       = true;
+  Default.eDP1.Position.X   = 0;
+  Default.eDP1.Position.Y   = 0;
+  Default.eDP1.Primary      = false;
+  Default.eDP1.Reflection   = 0;
+  Default.eDP1.RefreshRate  = mkFrequencyOption 59.996625;
+  Default.eDP1.Resolution   = [3840 2160]; #3840x2160
+  Default.eDP1.Rotation     = 0;
+
+};
+
+##################################################
+# xfce4-panel
+
+xfce4-panel = {
+
+  configver        = mkNaturalOption { example = 2; description = "Version of this « xfce4-panel » Configuration"; };
+
+  panels           = mkListOptionOf Panel   { example = []; description = "Panels"; };
+  plugins          = mkListOptionOf Plugins { example = []; description = "Plugins"; };
+
+# panels.__value__                         = mkNaturalOption { example = 1; description = "The number of panels"; };
+#
+# panels.panel-0.autohide-behavior         0
+# panels.panel-0.background-alpha          80
+# panels.panel-0.background-style          1
+# panels.panel-0.disable-struts            false
+# panels.panel-0.enter-opacity             100
+# panels.panel-0.leave-opacity             100
+# panels.panel-0.length                    100
+# panels.panel-0.length-adjust             false
+# panels.panel-0.mode                      0
+# panels.panel-0.nrows                     1
+# panels.panel-0.plugin-ids                <<UNSUPPORTED>>
+# panels.panel-0.position                  p=6;x=1920;y=65
+# panels.panel-0.position-locked           false
+# panels.panel-0.size                      128
+# panels.panel-0.span-monitors             false
+
+#   plugins.plugin-1                         = mkStringOption { example = "whiskermenu"; description = ""; };
+#   plugins.plugin-2                         = mkStringOption { example = "tasklist"; description = ""; };
+# plugins.plugin-2.flat-buttons            false
+# plugins.plugin-2.grouping                1
+# plugins.plugin-2.include-all-workspaces  true
+# plugins.plugin-2.show-handle             true
+# plugins.plugin-2.show-labels             false
+# plugins.plugin-2.show-wireframes         true
+# plugins.plugin-2.sort-order              1
+# plugins.plugin-2.window-scrolling        false
+#   plugins.plugin-3                         = mkStringOption { example = "separator"; description = ""; };
+# plugins.plugin-3.expand                  true
+# plugins.plugin-3.style                   2
+#   plugins.plugin-4                         = mkStringOption { example = "systray"; description = ""; };
+# plugins.plugin-4.names-visible           <<UNSUPPORTED>>
+# plugins.plugin-4.show-frame              false
+# plugins.plugin-4.size-max                28
+#   plugins.plugin-5                         = mkStringOption { example = "power-manager-plugin"; description = ""; };
+#   plugins.plugin-6                         = mkStringOption { example = "indicator"; description = ""; };
+# plugins.plugin-6.blacklist               <<UNSUPPORTED>>
+# plugins.plugin-6.known-indicators        <<UNSUPPORTED>>
+#   plugins.plugin-7                         = mkStringOption { example = "separator"; description = ""; };
+# plugins.plugin-7.expand                  false
+# plugins.plugin-7.style                   3
+
+};
+
+##################################################
+# xfce4-settings-manager
+
+# xfce4-settings-manager = {
+# last.window-height  500
+# last.window-width   905
+# };
+
+##################################################
+# xfce4-session
+
+xfce4-session = {
+
+
+};
+
+##################################################
+# xsettings
+
+xsettings = {
+
+  Gtk.ButtonImages               = mkNullableFlagOption "Should buttons have images?" true;
+Gtk.CanChangeAccels            true
+  Gtk.ColorPalette               = mkStringOption { example = "black:white:gray50:red:purple:blue:light blue:green:yellow:orange:lavender:brown:goldenrod4:dodger blue:pink:light green:gray10:gray30:gray75:gray90"; description = ""; };
+  Gtk.CursorThemeName            = mkStringOption { example = "Human"; description = ""; };
+Gtk.CursorThemeSize            36
+Gtk.DecorationLayout           maximize,minimize:menu,close
+  Gtk.FontName                   = mkStringOption { example = "Noto Sans 24"; description = ""; };
+  Gtk.IconSizes                   = mkOption { type = StringOrIconSizes; examples = [ "gtk-menu=32,32:gtk-panel=48,4" { gtk-menu = [ 32 32 ]; gtk-panel = 48; } ]; };
+  Gtk.KeyThemeName               = mkStringOption { example = "TODO"; description = ""; };
+Gtk.MenuBarAccel               
+Gtk.MenuImages                 true
+Gtk.ToolbarIconSize            9
+  Gtk.ToolbarStyle              = mkOption { type = types.nullOr ToolbarStyle; example = "both-horiz"; };
+Net.CursorBlink                true
+Net.CursorBlinkTime            1200
+Net.DndDragThreshold           8
+Net.DoubleClickDistance        5
+Net.DoubleClickTime            400
+Net.EnableEventSounds          false
+Net.EnableInputFeedbackSounds  false
+  Net.IconThemeName              = mkStringOption { example = "Paper"; description = ""; };
+Net.SoundThemeName             default
+  Net.ThemeName                  = mkStringOption { example = "HighContrast"; description = ""; };
+Xfce.LastCustomDPI             96
+Xft.Antialias                  0
+Xft.DPI                        192
+Xft.Hinting                    1
+Xft.HintStyle                  hintslight
+Xft.Lcdfilter                  lcddefault
+Xft.RGBA                       vbgr
+
+};
+
+##################################################
+# keyboard-layout
+
+keyboard-layout = {
+
+
+};
+
+##################################################
+# keyboards
+
+keyboards = {
+
+};
+
+##################################################
+# xfce4-keyboard-shortcuts
+
+xfce4-keyboard-shortcuts = {
+
+};
+
+##################################################
+# xfce4-mime-settings
+
+# xfce4-mime-settings = {
+# last.default-width  558
+# last.mime-width     300
+# last.status-width   75
+# last.window-height  400
+# last.window-width   953
+# };
+
+##################################################
+# xfwm4
+
+xfwm4 = {
+
+  general.activate_action                = mkOption { type = WindowActivateAction; example = "bring"; };
+general.borderless_maximize             true
+general.box_move                        false
+general.box_resize                      false
+  general.button_layout                  = mkOption { type = StringOrWindowButtonsLayout; examples = [ "MHO|C" [ "maximize" "minimize" "menu" null "close" ]]; };  #TODO examples?
+general.button_offset                   0
+general.button_spacing                  0
+general.click_to_focus                  true
+general.cycle_apps_only                 false
+general.cycle_draw_frame                true
+general.cycle_hidden                    true
+general.cycle_minimum                   true
+general.cycle_preview                   true
+general.cycle_tabwin_mode               0
+general.cycle_workspaces                false
+  general.double_click_action            = mkOption { type = WindowClickAction; example = "maximize"; };
+general.double_click_distance           5
+general.double_click_time               400
+  general.easy_click                      = mkStringOption { example = "Alt"; description = ""; };
+general.focus_delay                     250
+general.focus_hint                      true
+general.focus_new                       true
+general.frame_opacity                   100
+general.full_width_title                true
+general.horiz_scroll_opacity            false
+general.inactive_opacity                100
+general.maximized_offset                0
+general.mousewheel_rollup               false
+general.move_opacity                    100
+  general.placement_mode                 = mkOption { type = HorizontalAlignment; example = "center"; };  #TODO type?
+general.placement_ratio                 20
+  general.popup_opacity                  = mkOption { type = Percentage; example = "100"; };
+general.prevent_focus_stealing          false
+general.raise_delay                     250
+general.raise_on_click                  true
+general.raise_on_focus                  false
+general.raise_with_any_button           true
+general.repeat_urgent_blink             false
+general.resize_opacity                  100
+general.scroll_workspaces               false
+general.shadow_delta_height             0
+general.shadow_delta_width              0
+general.shadow_delta_x                  0
+general.shadow_delta_y                  -3
+general.shadow_opacity                  50
+general.show_app_icon                   false
+general.show_dock_shadow                false
+general.show_frame_shadow               true
+general.show_popup_shadow               true
+general.snap_resist                     false
+general.snap_to_border                  true
+general.snap_to_windows                 false
+general.snap_width                      10
+general.sync_to_vblank                  false
+  general.theme                           = mkStringOption { example = "Default-xhdpi"; description = ""; };
+general.tile_on_move                    true
+  general.title_alignment                = mkOption { type = HorizontalAlignment; example = "right"; };
+  general.title_font                      = mkStringOption { example = "Noto Sans Bold 36"; description = ""; };
+general.title_horizontal_offset         0
+general.titleless_maximize              false
+general.title_shadow_active             false
+general.title_shadow_inactive           false
+general.title_vertical_offset_active    0
+general.title_vertical_offset_inactive  0
+general.toggle_workspaces               false
+general.unredirect_overlays             true
+general.urgent_blink                    false
+general.use_compositing                 true
+general.workspace_count                 1
+general.workspace_names                 <<UNSUPPORTED>>
+general.wrap_cycle                      true
+general.wrap_layout                     true
+general.wrap_resistance                 10
+general.wrap_windows                    true
+general.wrap_workspaces                 false
+general.zoom_desktop                    true
+
+};
+
+##################################################
+# thunar
+
+# thunar = {
+# /last-icon-view-zoom-level  THUNAR_ZOOM_LEVEL_NORMAL
+# /last-view                  ThunarIconView
+# /last-window-maximized      true
+# /misc-volume-management     true
+# /shortcuts-icon-size        THUNAR_ICON_SIZE_SMALLEST
+# };
+
+##################################################
+# xfce4-desktop
+
+xfce4-desktop = {
+
+#   backdrop.screen0.monitor0.image-path            = mkStringOption {
+#                                                       example     = "/usr/share/xfce4/backdrops/xubuntu-wallpaper.png";
+#                                                       description = "";
+#                                                     };
+# backdrop.screen0.monitor0.image-show              = true;
+# backdrop.screen0.monitor0.image-style             = 5;
+# backdrop.screen0.monitor0.workspace0.color-style  = 0;
+# backdrop.screen0.monitor0.workspace0.image-style  = 5;
+# backdrop.screen0.monitor0.workspace0.last-image   = mkStringOption {
+#                                                       example     = "/usr/share/xfce4/backdrops/xubuntu-development.png";
+#                                                       description = "";
+#                                                     };
+# backdrop.screen0.monitor1.image-path              = mkStringOption {
+#                                                       example     = "/usr/share/xfce4/backdrops/xubuntu-wallpaper.png";
+#                                                       description = "";
+#                                                     }; 
+# backdrop.screen0.monitor1.image-show              = true;
+# backdrop.screen0.monitor1.image-style             = 5;
+
+desktop-icons.file-icons.show-filesystem          = true;
+desktop-icons.file-icons.show-home                = true;
+desktop-icons.file-icons.show-removable           = true;
+desktop-icons.file-icons.show-trash               = true;
+desktop-icons.font-size                           = 36.000000;
+desktop-icons.icon-size                           = 36;
+desktop-icons.show-hidden-files                   = true;
+desktop-icons.single-click                        = false;
+desktop-icons.style                               = 2;
+desktop-icons.tooltip-size                        = 64.000000;
+desktop-icons.use-custom-font-size                = true;
+desktop-menu.show-icons                           = true;
+last.window-height                                = 1127;
+last.window-width                                 = 1646;
+windowlist-menu.show                              = false;
+
+};
+
+##################################################
+# xfce4-power-manager
+
+xfce4-power-manager = {
+
+xfce4-power-manager.blank-on-ac                        = 5;
+xfce4-power-manager.blank-on-battery                   = 1;
+xfce4-power-manager.brightness-on-battery              = 9;
+xfce4-power-manager.brightness-switch                  = 0;
+xfce4-power-manager.brightness-switch-restore-on-exit  = 0;
+xfce4-power-manager.critical-power-action              = 3;
+xfce4-power-manager.dpms-enabled                       = true;
+xfce4-power-manager.dpms-on-ac-off                     = 15;
+xfce4-power-manager.dpms-on-ac-sleep                   = 10;
+xfce4-power-manager.dpms-on-battery-off                = 3;
+xfce4-power-manager.dpms-on-battery-sleep              = 2;
+xfce4-power-manager.hibernate-button-action            = 3;
+xfce4-power-manager.inactivity-on-ac                   = 240;
+xfce4-power-manager.inactivity-on-battery              = 60;
+xfce4-power-manager.lid-action-on-ac                   = 0;
+xfce4-power-manager.lid-action-on-battery              = 1;
+xfce4-power-manager.lock-screen-suspend-hibernate      = false;
+xfce4-power-manager.logind-handle-lid-switch           = false;
+xfce4-power-manager.power-button-action                = 3;
+xfce4-power-manager.show-tray-icon                     = 1;
+xfce4-power-manager.sleep-button-action                = 3;
+
+};
+
+##################################################
+
+in
+##################################################
+# Exports ########################################
+##################################################
+{
+
+  
+
+}
+##################################################
+# Notes ##########################################
+##################################################
+/*
+
+{ example = ""; escription = ""; }
+
+$ xfconf-query -c xfwm4 -p /general/activate_action -s bring|switch|none
+
+As the name suggests, the “bring” option moves the window requesting to be raised to the current workspace, 
+the “switch” option switches workspaces, 
+and the “none” option takes no action. 
+
+*/
+##################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  fromAttrs = name: value:
+
+    assert (builtins.isString name) "fromAttrs — (« name » :: String)";
+    assert (builtins.isAttrs value) "fromAttrs — (« value » :: Attrs _)";
+
+    let
+    children   = builtins.map _indent_ properties;
+    properties = concatMapAttrs fromNix value;
+
+    _indent_ = indentString { };
+    in
+
+    builtins.concatLists [
+
+      [ ''<property name="${name}" type="empty">'' ]
+      children
+      [ ''</property>'' ]
+
+    ];
+
+  ############################
+
+  /* :: String -> List Atom -> List String
+   *
+   * Atom is anything but a set, list, or function.
+   */
+
+  fromList = name: value:
+
+    assert (builtins.isString name) "fromList — (« name » :: String)";
+    assert (builtins.isList  value) "fromList — (« value » :: List _)";
+
+    let
+    children = builtins.map _indent_ values;
+    values   = builtins.concatMap fromNixAtom value;
+
+    _indent_ = indentString { };
+    in
+
+    builtins.concatLists [
+
+      [ ''<property name="${name}" type="array">'' ]
+      children
+      [ ''</property>'' ]
+
+    ];
+
+  ############################
+
+  /* :: String -> () -> String
+   */
+
+  fromNull = name:
+
+    assert (builtins.isString name) "fromNull — (« name » :: String)";
+
+    asEmptyProperty { inherit name; };
+
+  ############################
+
+  /* :: String -> Bool -> String
+   */
+
+  fromBool = name: value:
+ 
+    assert (builtins.isString name) "fromBool — (« name » :: String)";
+    assert (builtins.isBool value)  "fromBool — (« value » :: Bool)";
+
+   asProperty { 
+      inherit name;
+      type  = "bool";
+      value = asBool value;
+    };
+
+    #NOTE « builtins.toString true » is « "1" » (not « "true" »).
+
+  ############################
+
+  /* :: String -> Int -> String
+   */
+
+  fromInt = name: value:
+
+    assert (builtins.isString name) "fromInt — (« name » :: String)";
+    assert (builtins.isInt value)   "fromInt — (« value » :: Int)";
+
+    asProperty {
+      inherit name;
+      type  = "int";
+      value = builtins.toString value;
+    };
+
+  ############################
+
+  /* :: String -> Float -> String
+   */
+
+  fromFloat = name: value:
+
+    assert (builtins.isString name) "fromFloat — (« name » :: String)";
+    assert (builtins.isFloat value) "fromFloat — (« value » :: Float)";
+
+    asProperty {
+      inherit name;
+      type  = "double";
+      value = builtins.toString value;
+    };
+
+  ############################
+
+  /* :: String -> String -> String
+   */
+
+  fromString = name: value:
+
+    assert (builtins.isString name)  "fromString — (« name » :: String)";
+    assert (builtins.isString value) "fromString — (« value » :: String)";
+
+    asProperty {
+      inherit name value;
+      type = "string";
+    };
+
+  ############################
+
+  #TODO# « uint »
+  #''<property name="${name}" type="uint" value="${x}"/>'';
+
+  ############################
+
+  /* :: () -> String
+   */
+
+  valueFromNull =
+
+    asEmptyValue;
+
+  ############################
+
+  /* :: Bool -> String
+   */
+
+  valueFromBool = value:
+
+    assert (builtins.isBool value) "valueFromBool — (« value » :: Bool)";
+
+    asValue {
+      type  = "bool";
+      value = asBool value;
+    };
+
+    #NOTE « builtins.toString true » is « "1" » (not « "true" »).
+
+  ############################
+
+  /* :: Int -> String
+   */
+
+  valueFromInt = value:
+
+    assert (builtins.isInt value) "valueFromInt — (« value » :: Int)";
+
+    asValue {
+      type  = "int";
+      value = builtins.toString value;
+    };
+
+  ############################
+
+  /* :: Float -> String
+   */
+
+  valueFromFloat = value:
+
+    assert (builtins.isFloat value) "valueFromFloat — (« value » :: Float)";
+
+    asValue {
+      type  = "double";
+      value = builtins.toString value;
+    };
+
+  ############################
+
+  /* :: String -> String
+   */
+
+  valueFromString = value:
+
+    assert (builtins.isString value) "valueFromString — (« value » :: String)";
+
+    asValue {
+      inherit value;
+      type = "string";
+    };
+
+  ############################
+
+  /* :: { ... :: String } -> String
+   */
+
+  asProperty = { name, type, value }:
+
+    ''<property name="${name}" type="${type}" value="${value}"/>'';
+
+  ############################
+
+  /* :: { ... :: String } -> String
+   */
+
+  asEmptyProperty = { name }:
+
+    ''<property name="${name}" type="empty"/>'';
+
+  ############################
+
+  /* :: { ... :: String } -> String
+   */
+
+  asValue = { type, value }:
+
+    ''<value type="${type}" value="${value}"/>'';
+
+    # ^ Values, unlike Properties, are anonymous.
+
+  ############################
+
+  /* :: () -> String
+   */
+
+  asEmptyValue =
+
+    ''<value type="empty"/>'';
+
+  ############################
+
+  /* :: Bool -> String
+   */
+
+  asBool = b:
+
+    assert (builtins.isBool b) "asBool — (« b » :: Bool)";
+
+    if b then "true" else "false";
+
+  ############################
+
+  /* :: { ... :: String } -> String
+   */
+
+  toChannel = { name, properties }:
+
+    "\n" + ''
+    <?xml version="1.0" encoding="UTF-8"?>
+    <channel name="${name}" version="1.0">
+
+    ${properties}
+
+    </channel>
+    '';
+
+  ############################
+
+  /* :: Any -> String
+   */
+
+  wrapped = value:
+
+    toChannel { name       = channel;
+                properties = fromTopLevelAttrs value;
+              };
+
+  ############################
+
+  in
+
+  wrapped properties;
+
+##################################################
+
+/* :: (String -> α -> List β) -> Attrs α -> List β
+ */
+
+concatMapAttrs = f: kvs:
+
+  assert (builtins.isFunction f) "concatMapAttrs — (« f » :: (_ -> ...))";
+  assert (builtins.isAttrs kvs)  "concatMapAttrs — (« kvs » :: Attrs _)";
+
+  (builtins.concatLists (builtins.attrValues (builtins.mapAttrs f kvs)));
+
+##################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* :: String
+ */
+
+defaultIndentiation = "  ";
+
+##################################################
+
+/* :: String
+ */
+
+initialIndentiation = "  ";
+
+##################################################
+
+/* :: [String] -> String
+ *
+ */
+
+unlines = builtins.concatStringsSep "\n";
+
+##################################################
+
+/* :: { indentation? :: String } -> String -> String
+ *
+ */
+
+indentString = { indentation ? defaultIndentiation }:
+               s:
+
+  assert (builtins.isString indentation) "indentString — (« indentation » :: String)";
+  assert (builtins.isString s)           "indentString — (« s » :: String)";
+
+  indentation + s;
+
+# ^ Indent the children of an object or a list,
+# by « indentation » spaces (by default, two spaces).
+
+##################################################
+in
+##################################################
+{
+
+inherit toXfce4XML;
+
+}
+##################################################
+/* Notes
+
+
+--------------------------------------------------
+
+  assert (builtins.isBool b)     " — (« b » :: Bool)";
+
+  assert (builtins.isString k)   " — (« k » :: String)";
+
+  assert (builtins.isAttrs kvs)  " — (« kvs » :: Attrs _)";
+
+  assert (builtins.isFunction f) " — (« f » :: (_ -> ...))";
+
+--------------------------------------------------
+    attr = let 
+           attrFilter = name: value: 
+              name != "_module" && value != null;
+
+--------------------------------------------------
+
+    attr    = let attrFilter = name: value: name != "_module" && value != null;
+    in i: x: libStr.concatStringsSep "\n" (lib.flatten (lib.mapAttrsToList
+      (name: value: lib.optional (attrFilter name value) [
+      (key "\t${i}" name)
+      (fromNix "\t${i}" value)
+    ]) x));
+
+--------------------------------------------------
+
+*/
+##################################################
+/* Old Code
+
+            else abort "Type Error — « fromBool ${key} ${value} »"
+
+*/
+##################################################
+
+
+
+
+
+
+
+##################################################
+{}:
+
+##################################################
+let
+
+xfce4 = import ../../modules/desktops/xfce4/generator.nix {};
+
+##############################
+
+inherit (xfce4) toXfce4XML;
+
+in
+##################################################
+rec {
+
+"xsettings"."large" = toXfce4XML {
+
+  channels   = "xsettings";
+  properties = {
+      Gtk.CanChangeAccels  = true;
+      Gtk.FontName         = "Noto Sans 24";
+      Gtk.ToolbarStyle     = "both-horiz";
+      Gtk.ToolbarIconSize  = 9;
+      Gtk.MenuImages       = true;
+      Gtk.ButtonImages     = true;
+      Gtk.MenuBarAccel     = "";
+      Gtk.CursorThemeSize  = 36;
+      Gtk.DecorationLayout = null;
+      Xft.Antialias        = 0.5;
+  };
+
+};
+
+}
+##################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##################################################
+{}:
+
+##################################################
+let
+##################################################
+
+toXfce4XML = { channel, properties }:
+
+    isFloat = builtins.isFloat or (x: false);
+
+    expr    = indentation: x:  with builtins;
+      if isNull x   then "" else
+      if isBool x   then bool indentation x else
+      if isInt x    then int indentation x else
+      if isString x then str indentation x else
+      if isList x   then list indentation x else
+      if isAttrs x  then attrs indentation x else
+      if isFloat x  then float indentation x else
+      abort ''Type Error — « generators.toXfce4XML (${v}) » — input must have type: null, bool, int, string, list, attrs, float'';
+
+    literal = indentation: x: indentation + x;
+
+    bool    = indentation: x: literal indentation  (if x then "<true/>" else "<false/>");
+    int     = indentation: x: literal indentation "<integer>${toString x}</integer>";
+    str     = indentation: x: literal indentation "<string>${x}</string>";
+    key     = indentation: x: literal indentation "<key>${x}</key>";
+    float   = indentation: x: literal indentation "<real>${toString x}</real>";
+
+    indent  = indentation: expr "\t${indentation}";
+
+    item    = indentation: libStr.concatMapStringsSep "\n" (indent indentation);
+
+    list    = indentation: x: libStr.concatStringsSep "\n" [
+      (literal indentation "<array>")
+      (item indentation x)
+      (literal indentation "</array>")
+    ];
+
+    attrs   = indentation: x: libStr.concatStringsSep "\n" [
+      (literal indentation "<dict>")
+      (attr indentation x)
+      (literal indentation "</dict>")
+    ];
+
+    attr    = let attrFilter = name: value: name != "_module" && value != null;
+    in indentation: x: libStr.concatStringsSep "\n" (lib.flatten (lib.mapAttrsToList
+      (name: value: lib.optional (attrFilter name value) [
+      (key "\t${indentation}" name)
+      (expr "\t${indentation}" value)
+    ]) x));
+
+  ############################
+
+  fromNull = key:
+
+    ''<property name="${key}" type="empty"/>'';
+
+  ############################
+
+  fromBool = key: value:
+
+    let x = if value
+            then "true"
+            else "false"
+    in
+    #NOTE « builtins.toString true » is « "1" » (not « "true" »)
+
+    ''<property name="${key}" type="bool" value="${x}"/>'';
+
+  ############################
+
+  fromInt = key: value:
+
+    let x = builtins.toString value; in
+
+    ''<property name="${key}" type="int" value="${x}"/>'';
+
+  ############################
+
+  #TODO# « uint »
+  #''<property name="${key}" type="uint" value="${x}"/>'';
+
+  ############################
+
+  fromFloat = key: value:
+
+    let x = builtins.toString value; in
+
+    ''<property name="${key}" type="double" value="${x}"/>'';
+
+  ############################
+
+  fromString = key: value:
+
+    ''<property name="${key}" type="string" value="${x}"/>'';
+
+  ############################
+
+  fromObject = key: value:
+
+    let x = go (incrementIndentation indentation) value; in
+
+    ''<property name="${key}" type="empty">
+        ${x}
+      </property>''
+
+  ############################
+
+  incrementIndentation = indentation:
+
+    ''  ${indentation}'';
+
+  ############################
+
+  asValueProperty = { name, type ? "string", value ? "" }:
+
+    ''<property name="${name}" type="${type}" value="${value}"/>'';
+
+  ############################
+
+  asEmptyProperty = { name }:
+
+    ''<property name="${name}" type="empty"/>'';
+
+  ############################
+
+  toChannel = {name, properties}:
+
+    ''<?xml version="1.0" encoding="UTF-8"?>
+      <channel name="${name}" version="1.0">
+
+      ${properties}
+
+      </channel>'';
+
+  ############################
+
+  wrapped = value:
+
+    let initialIndentiation = " "; in
+
+    toChannel { name       = channel;
+              , properties = ${expr initialIndentiation value};
+              };
+
+  in
+
+  wrapped properties
+
+##################################################
+in
+##################################################
+
+toXfce4XML
+
+##################################################
+/* Old Code
+
+            else abort "Type Error — « fromBool ${key} ${value} »"
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ##################################################
 [Desktop Entry]
 
