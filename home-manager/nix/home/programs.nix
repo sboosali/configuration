@@ -78,18 +78,20 @@ systemPrograms = with self; [
  gimp
  glib
  gparted
- graphviz
+ graphviz                       # GraphViz renders « .dot » files.
  htop
  imagemagick
  inotify-tools
  jq
  #mdless
+ multimarkdown
  nano
  ncdu
  nix-bash-completions
  nix-info
  nix-prefetch-github
  nix-prefetch-scripts
+ nixnote2                       # NixNote is an unofficial Evernote client.
  nox
  openssh
  pandoc

@@ -40,7 +40,7 @@ rec {
   Gtk.ButtonImages     = true;
   Gtk.MenuBarAccel     = "";
   Gtk.CursorThemeSize  = 36;
-  Gtk.DecorationLayout = [["maximize", "minimize"], ["menu", "close"]];
+  Gtk.DecorationLayout = [["maximize" "minimize"] ["menu" "close"]];
   Gtk.IconSizes        = GtkIconSizes;
 
   Net.ThemeName        = "HighContrast";

@@ -1,4 +1,4 @@
---- « .ghci » -*- eval: (progn (dante-mode -1) (flycheck-mode -1)) -*-
+--- « .ghci » -*- eval: (progn (dante-mode 0) (flycheck-mode 0)) -*-
 
 --------------------------------------------------
 

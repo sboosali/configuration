@@ -41,6 +41,10 @@ xprop       = ''${pkgs.xorg.xprop}/bin/xprop'';
 
 redshift   = ''${pkgs.redshift}/bin/redshift'';
 
+##################################################
+
+#TODO configure between [1] the package's program and [2] the vendored submodule's program with environment-variable like SBOO_HOME_MANAGER_CABAL
+
 cabal      = ''${pkgs.cabal-install}/bin/cabal'';
 
 ##################################################
@@ -392,6 +396,8 @@ in
  "hc-7-thru-8-build" = "hc8 && time hba ; hc7 && time hba ; hc80 && time hba ; hc82 && time hba ; hc84 && time hba ; hc86 && time hba";
 
  "hc-7-thru-8-test" = "hc8 && time hta ; hc7 && time hta ; hc80 && time hta ; hc82 && time hta ; hc84 && time hta ; hc86 && time hta";
+
+ "hc-7-thru-8-make" = "hc8 && time make ; hc7 && time make ; hc80 && time make ; hc82 && time make ; hc84 && time make ; hc86 && time make";
 
  #-----------------------------------------------#
 
