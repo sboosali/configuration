@@ -55,7 +55,9 @@ unfreePrograms = with self; [
 
  idea  # "IntelliJ IDEA"
 
-#google-chrome
+ #TODOdwarf-fortress
+
+ google-chrome
 
 ];
 

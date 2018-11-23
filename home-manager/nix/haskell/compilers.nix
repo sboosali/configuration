@@ -12,7 +12,7 @@ in
 ##################################################
 let
 
-defaultGHC = self.haskell.compiler.ghc843;
+defaultGHC = GHC86;
 
 ##################################################
 
@@ -20,15 +20,54 @@ defaultGHCJS = self.haskell.compiler.ghcjs;
 
 ##################################################
 
+GHC86 =
+
+  if   self.haskell.compiler ? ghc862
+  then self.haskell.compiler.ghc862
+
+  else
+  if   self.haskell.compiler ? ghc861
+  then self.haskell.compiler.ghc861
+
+  else null;
+
+##################################################
+
+GHC84 =
+
+  if   self.haskell.compiler ? ghc844
+  then self.haskell.compiler.ghc844
+
+  else
+  if   self.haskell.compiler ? ghc843
+  then self.haskell.compiler.ghc843
+
+  else null;
+
+##################################################
+
+GHC710 =
+
+  if   self.haskell.compiler ? ghc7103
+  then self.haskell.compiler.ghc7103
+
+  else
+  if   self.haskell.compiler ? ghc7103Binary
+  then self.haskell.compiler.ghc7103Binary
+
+  else null;
+
+##################################################
+
 GHCs =
 
   [
     defaultGHC
-    self.haskell.compiler.ghc7103Binary
+    GHC710
     self.haskell.compiler.ghc822 
-    self.haskell.compiler.ghc844 
-    self.haskell.compiler.ghc861
-
+    GHC84
+    GHC86
+    
     defaultGHCJS
   ];
 

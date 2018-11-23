@@ -383,10 +383,22 @@ in
 
  #-----------------------------------------------#
 
- hc80 = "${cabal} new-configure -w ghc-8.0.2 --ghc";  # {c}onfigure ghc-{8}.{0}
- hc82 = "${cabal} new-configure -w ghc-8.2.2 --ghc";  # {c}onfigure ghc-{8}.{2}
- hc84 = "${cabal} new-configure -w ghc-8.4.4 --ghc";  # {c}onfigure ghc-{8}.{4}
- hc86 = "${cabal} new-configure -w ghc-8.6.1 --ghc";  # {c}onfigure ghc-{8}.{6}
+ hc802 = "${cabal} new-configure -w ghc-8.0.2 --ghc";  # {c}onfigure ghc-{8}.{0}
+ hc822 = "${cabal} new-configure -w ghc-8.2.2 --ghc";  # {c}onfigure ghc-{8}.{2}
+ hc843 = "${cabal} new-configure -w ghc-8.4.3 --ghc";  # {c}onfigure ghc-{8}.{4}
+ hc844 = "${cabal} new-configure -w ghc-8.4.4 --ghc";  
+ hc861 = "${cabal} new-configure -w ghc-8.6.1 --ghc";  # {c}onfigure ghc-{8}.{6}
+ hc862 = "${cabal} new-configure -w ghc-8.6.2 --ghc";  
+
+ #TODOalias hc86="cabal new-configure -w ghc-8.6.2 --ghc"  # {c}onfigure ghc-{8}.{6}
+ #hc88 = "${cabal} new-configure -w ghc-8.8. --ghc";  # {c}onfigure ghc-{8}.{}
+
+ #-----------------------------------------------#
+
+ hc80 = "hc802";  # {c}onfigure ghc-{8}.{0}
+ hc82 = "hc822";  # {c}onfigure ghc-{8}.{2}
+ hc84 = "hc844";  # {c}onfigure ghc-{8}.{4}
+ hc86 = "hc862";  # {c}onfigure ghc-{8}.{6}
 
  #TODOalias hc86="cabal new-configure -w ghc-8.6.2 --ghc"  # {c}onfigure ghc-{8}.{6}
  #hc88 = "${cabal} new-configure -w ghc-8.8. --ghc";  # {c}onfigure ghc-{8}.{}
