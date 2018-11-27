@@ -96,8 +96,8 @@ self = {
   programs.home-manager.enable = true;
   
   #programs.home-manager.path   = toString ../../submodules/home-manager;
-  programs.home-manager.path   = https://github.com/rycee/home-manager/archive/release-18.09.tar.gz;
-  
+
+  programs.home-manager.path = (import ./versions/home-manager.nix).remote;
   # ^
   
   #TODO:
@@ -129,7 +129,7 @@ self = {
   # Programs:
   
   home.packages = [
-   
+
     (import ./home/programs.nix  { inherit pkgs sboo; })
     (import ./home/libraries.nix { inherit pkgs; })
     haskell.compilers
@@ -137,6 +137,10 @@ self = {
   
   ];
   
+  ################################################
+
+  #TODO posthook = '' ${cabal} new-update '';
+
   ################################################
   # Fonts:
   

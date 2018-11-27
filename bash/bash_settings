@@ -16,6 +16,7 @@
 ########################################
 # NIX/NIXPKGS SETTINGS
 
+export NIX_PATH="nixpkgs=$HOME/nixpkgs:$NIX_PATH"
 #TODO# export NIX_PATH="nixpkgs=$HOME/nixpkgs:$NIX_PATH"
 
 # ^ my fork of `nixpkgs`
