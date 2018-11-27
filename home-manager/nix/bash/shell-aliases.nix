@@ -18,11 +18,12 @@ nix-shell   = "nix-shell"; #TODO# ''${pkgs.nix}/bin/nix-shell''
  #TODO3 or... keep "dynamic" (not lexical) to use the same nix that must be installed for home-manager to evaluate this very file
 
 tar         = "tar"; #TODO# ''${pkgs.tar}/bin/tar'';
-
-grep         = "grep"; #TODO# ''${pkgs.??}/bin/grep'';
+sed         = "sed"; #TODO# ''${pkgs.coreutils?}/bin/sed'';
+grep        = "grep"; #TODO# ''${pkgs.??}/bin/grep'';
 
 git         = ''${pkgs.git}/bin/git'';
 
+xev         = "xev"; #TODO# ''${pkgs.xev}/bin/xev'';
 xclip       = ''${pkgs.xclip}/bin/xclip'';
 xdotool     = ''${pkgs.xdotool}/bin/xdotool'';
 wmctrl      = ''${pkgs.wmctrl}/bin/wmctrl'';
@@ -265,6 +266,16 @@ in
  #-----------------------------------------------#
 
  #################################################
+
+ xv=''${xev} | ${grep} -A2 --line-buffered '^KeyRelease' | ${sed} -n '/keycode /s/^.*keycode \([0-9]*\).* (.*, \(.*\)).*$/\1 \2/p''; #TODO
+ #  xev | grep -A2 --line-buffered '^KeyRelease' | sed -n '/keycode /s/^.*keycode \([0-9]*\).* (.*, \(.*\)).*$/\1 \2/p'
+
+ # e.g.
+ #     $ xev
+ #     107 Print
+ #     78 Scroll_Lock
+ #     127 Pause
+
  #-----------------------------------------------#
  copy = ''${xclip} -selection clipboard'';
  xc   = ''${xclip} -selection clipboard'';

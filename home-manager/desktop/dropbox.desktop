@@ -1,0 +1,23 @@
+##################################################
+[Desktop Entry]
+Type=Application
+
+Name=Dropbox
+Exec=/home/sboo/.dropbox-dist/dropboxd 
+
+GenericName=File Synchronizer
+Comment=Sync your files across computers and to the web
+Categories=Network;FileTransfer;
+Terminal=false
+Icon=dropbox
+StartupNotify=false
+
+##################################################
+
+# NOTE the dropbox installation had this line:
+#
+#     Exec=dropbox start -i
+#
+# which didn't work.
+
+##################################################

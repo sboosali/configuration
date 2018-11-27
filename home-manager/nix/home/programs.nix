@@ -53,6 +53,8 @@ freePrograms = builtins.concatLists [
 
 unfreePrograms = with self; [
 
+ dropbox
+
  idea  # "IntelliJ IDEA"
 
  #TODOdwarf-fortress
