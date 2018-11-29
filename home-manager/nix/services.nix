@@ -13,41 +13,18 @@
 
   ################################################
 
-  gpg-agent = {
-
-     enable = true;
+  gpg-agent = import ./services/gpg-agent.nix { inherit pkgs sboo; }
+          // { enable = true; };
   
-     defaultCacheTtl = 1800;
-     enableSshSupport = true;
-  };
-
-  # ^ Enable GnuPG private-key agent.
+  # ^ Enable GnuPG, a private-key agent.
 
   ################################################
 
-  redshift = {
-      enable = true;
+  redshift = import ./services/redshift.nix { inherit pkgs sboo; }
+          // { enable = true; };
   
-      provider  = "manual";
-      inherit (sboo.locations.boston) longitude latitude;
-  
-  #    provider  = "manual";
-  #    longitude = "42";
-  #    latitude  = "71";
-  
-      temperature.night  = 1000;
-      temperature.day    = 20000;
-  
-      # ^ kelvins.
-      # min 1000 (red), max 25000 (blue).
-  
-      brightness.night  = "0.9";
-      brightness.day    = "1.0";
-  
-      # ^ fraction.
-      # min 0.1 (dim, 10%), max 1.0 (bright, 100%).
-  };
-  
+  # ^ Enable RedShift, a screen-color daemon.
+
   ################################################
   
   #services.network-manager-applet.enable = true;

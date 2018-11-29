@@ -51,7 +51,7 @@ utilities =
 
 ##################################################
 
-sboo = import ./home/sboo.nix { inherit (utilities) env; };
+sboo = import ./sboo { inherit (utilities) env; };
 
 ##################################################
 
@@ -104,15 +104,6 @@ self = rec {
   home.file = import ./home/files.nix { inherit pkgs; };
 
   ################################################
-
-  home.keyboard.options = [ "ctrl:nocaps" ];
-
-  # ^ « grp:caps_switch »:
-  # Caps Lock (while pressed), Alt+Caps Lock does the original capslock action.
-
-  #TODO# home.keyboard.model = "pc104"
-
-  ################################################
   # Programs:
 
   home.packages = [
@@ -123,6 +114,15 @@ self = rec {
     haskell.packages
 
   ];
+
+  ################################################
+
+  home.keyboard.options = [ "ctrl:nocaps" ];
+
+  # ^ « grp:caps_switch »:
+  # Caps Lock (while pressed), Alt+Caps Lock does the original capslock action.
+
+  #TODO# home.keyboard.model = "pc104"
 
   ################################################
 
@@ -140,6 +140,15 @@ self = rec {
   # Fonts:
 
   fonts.fontconfig.enableProfileFonts = true;
+
+  ################################################
+  # GTK Appearence/Behavior:
+
+  gtk =
+    (import ./gtk { inherit pkgs sboo env;
+                  })
+     // { enable = false;
+        };
 
   ################################################
   # XDG:

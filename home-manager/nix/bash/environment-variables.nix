@@ -16,8 +16,11 @@ in
 ##################################################
 {
 
-PAGER = less;
+ PAGER = less;
 
+ #TODO GNUPGHOME = xdgDir "gnupg";
+
+ # ^ « $GNUPGHOME » defaults to « $HOME » (i.e. « ~/.gnupg »).
 
 }
 ##################################################

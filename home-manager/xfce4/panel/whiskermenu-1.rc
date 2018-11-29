@@ -1,0 +1,123 @@
+##################################################
+# Properties #####################################
+##################################################
+
+favorites=exo-web-browser.desktop,exo-mail-reader.desktop,exo-file-manager.desktop,libreoffice-writer.desktop,libreoffice-calc.desktop,pidgin.desktop,org.gnome.Software.desktop,exo-terminal-emulator.desktop,xfhelp4.desktop
+
+recent=chromium-browser.desktop,google-chrome.desktop,exo-terminal-emulator.desktop,exo-web-browser.desktop,xfce-display-settings.desktop,xfce4-accessibility-settings.desktop,firefox.desktop,signal-desktop.desktop
+
+##################################################
+
+button-title=Applications Menu
+
+button-icon=xubuntu-logo-menu
+
+button-single-row=false
+
+show-button-title=false
+
+show-button-icon=true
+
+launcher-show-name=true
+
+launcher-show-description=false
+
+item-icon-size=1
+
+hover-switch-category=false
+
+category-icon-size=0
+
+load-hierarchy=true
+
+recent-items-max=10
+
+favorites-in-recent=true
+
+display-recent-default=false
+
+position-search-alternate=true
+
+position-commands-alternate=false
+
+position-categories-alternate=false
+
+menu-width=3072
+
+menu-height=1788
+
+menu-opacity=100
+
+command-settings=xfce4-settings-manager
+
+show-command-settings=true
+
+command-lockscreen=xflock4
+
+show-command-lockscreen=true
+
+command-switchuser=dm-tool switch-to-greeter
+
+show-command-switchuser=false
+
+command-logout=xfce4-session-logout
+
+show-command-logout=true
+
+command-menueditor=menulibre
+
+show-command-menueditor=true
+
+command-profile=mugshot
+
+show-command-profile=true
+
+##################################################
+
+search-actions=4
+
+#NOTE To add a Search Action:
+#
+# (1) add an « [action<N>] » INI-section (below);
+# (2) increment « search-actions » (above).
+#
+
+##################################################
+# Actions ########################################
+##################################################
+[action0]
+
+pattern=#
+regex=false
+
+name=Man Pages
+command=exo-open --launch TerminalEmulator man %s
+
+##################################################
+[action1]
+
+pattern=!w
+regex=false
+
+name=Wikipedia
+command=exo-open --launch WebBrowser https://en.wikipedia.org/wiki/%u
+
+##################################################
+[action2]
+
+pattern=!
+regex=false
+
+name=Run in Terminal
+command=exo-open --launch TerminalEmulator %s
+
+##################################################
+[action3]
+
+pattern=^(file|http|https):\\/\\/(.*)$
+regex=true
+
+name=Open URI
+command=exo-open \\0
+
+##################################################
