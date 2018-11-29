@@ -84,7 +84,7 @@ dataFile = path:
 
 ##################################################
 
-self = {
+self = rec {
 
   ################################################
 
@@ -96,7 +96,7 @@ self = {
   home.sessionVariables =
     (import ./home/environment-variables.nix
             { inherit pkgs sboo;
-              inherit (self) xdg;
+              inherit xdg;
             });
 
   ################################################
@@ -130,11 +130,11 @@ self = {
 
   ################################################
 
-  programs = import ./home/programs.nix { inherit pkgs sboo self; };
+  programs = import ./programs.nix { inherit pkgs sboo xdg env utilities; };
 
   ################################################
 
-  services = import ./home/services.nix { inherit pkgs sboo self; };
+  services = import ./services.nix { inherit pkgs sboo; };
 
   ################################################
   # Fonts:
@@ -151,19 +151,6 @@ self = {
         };
 
   ##############################################
-
-  } // {
-
-  programs.home-manager.enable = true;
-
-  #programs.home-manager.path   = toString ../../submodules/home-manager;
-
-  programs.home-manager.path = (import ./versions/home-manager.nix).remote;
-  # ^
-
-  #TODO:
-  # - https://github.com/rycee/home-manager/archive/release-18.09.tar.gz;
-  # - ../../submodules/home-manager/
 
 };
 

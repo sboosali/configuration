@@ -1,8 +1,8 @@
 ##################################################
 { pkgs
+
 , xdg
 , sboo
-
 , bashUtilities
 }:
 
@@ -38,7 +38,7 @@ bashUtilities.concatBashScripts
 
       ############################################
 
-      (import ./profile/x11-rc.nix { inherit pkgs xdg; })
+      (import ./profile/x11-rc.sh.nix { inherit pkgs xdg; })
 
       (import ./profile/ssh-agent.sh.nix { inherit pkgs sboo; } )
 

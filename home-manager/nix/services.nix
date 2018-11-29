@@ -1,8 +1,7 @@
 ##################################################
 { pkgs
-, sboo
 
-, self
+, sboo
 }:
 
 ##################################################
@@ -14,7 +13,13 @@
 
   ################################################
 
-  gpg-agent.enable = true;
+  gpg-agent = {
+
+     enable = true;
+  
+     defaultCacheTtl = 1800;
+     enableSshSupport = true;
+  };
 
   # ^ Enable GnuPG private-key agent.
 
@@ -48,15 +53,6 @@
   #services.network-manager-applet.enable = true;
   
   # ^ for wifi password input.
-  
-  ################################################
-  
-  #TODO# services.gpg-agent = {
-  #    enable = true;
-  #
-  #    defaultCacheTtl = 1800;
-  #    enableSshSupport = true;
-  #};
   
   ################################################
   

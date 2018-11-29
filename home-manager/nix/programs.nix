@@ -1,19 +1,51 @@
 ##################################################
 { pkgs
-, sboo
 
-, self
+, xdg
+, env
+, sboo
+, utilities
 }:
 
 ##################################################
 
-#with pkgs; 
+with utilities;
 
 ##################################################
 {
+
   ################################################
 
-  programs.emacs =
+  home-manager.enable = true;
+
+  #home-manager.path   = toString ../../submodules/home-manager;
+
+  home-manager.path = (import ./versions/home-manager.nix).remote;
+  # ^
+
+  #TODO:
+  # - https://github.com/rycee/home-manager/archive/release-18.09.tar.gz;
+  # - ../../submodules/home-manager/
+
+  #TODO:
+  #
+  # offline-rebuilding via `nix-channel:
+  #
+  # ```sh
+  # $ nix-channel --add https://github.com/rycee/home-manager/archive/master.tar.gz home-manager
+  #
+  #
+  # $ nix-channel --update
+  #
+  #
+  # $ ls -la .nix-defexpr/channels/home-manager
+  # home-manager.path = "$HOME/.nix-defexpr/channels/home-manager";
+  # ```
+  #
+
+  ################################################
+
+  emacs =
 
     (import ./emacs
             { inherit pkgs utilities;
@@ -24,7 +56,7 @@
 
   ################################################
 
-  programs.git =
+  git =
 
     (import ./git
             { inherit pkgs sboo;
@@ -35,11 +67,10 @@
 
   ################################################
 
-  programs.ssh =
+  ssh =
 
-    (import ./home/ssh.nix
-            { inherit pkgs sboo;
-              inherit (self) xdg;
+    (import ./ssh
+            { inherit pkgs sboo xdg;
             })
 
      // { enable = true;
@@ -47,11 +78,10 @@
 
   ################################################
 
-  programs.bash =
+  bash =
 
     (import ./bash
-            { inherit pkgs sboo env;
-              inherit (self) xdg;
+            { inherit pkgs sboo env xdg;
             })
 
      // { enable = true;
@@ -59,7 +89,7 @@
 
   ##############################################
 
-  programs.firefox = {
+  firefox = {
       enable = true;
 
       #enable = true;
@@ -67,9 +97,9 @@
    
   ################################################
 
-  # programs.chromium.enable = true;
+  # chromium.enable = true;
 
-  # programs.chromium.extensions = [
+  # chromium.extensions = [
 
   #   "gcbommkclmclpchllfjekcdonpmejbdp" 
   #   # ^ https everywhere
@@ -83,7 +113,7 @@
 
   ##############################################
 
-  programs.termite.enable = true;
+  termite.enable = true;
 
   # ^ TERMite is a terminal-emulator, and is:
   # 
@@ -96,13 +126,13 @@
 
   # large-font & black-on-white:
 
-  programs.termite.font = "Monospace 24";
+  termite.font = "Monospace 24";
 
   # the Font Description,
   # i.e. Font Family (which should be a monospace font) and Font Size.
 
-  programs.termite.foregroundColor = sboo.colors.black;
-  programs.termite.backgroundColor = sboo.colors.white;
+  termite.foregroundColor = sboo.colors.black;
+  termite.backgroundColor = sboo.colors.white;
 
   # the BackgroundColor
   # should look soft under `xrandr-invert-colors`.
@@ -110,39 +140,39 @@
 
   #"rgba(192, 64, 192, 0.95)";
 
-  programs.termite.clickableUrl = true; 
+  termite.clickableUrl = true; 
 
   # Whether Auto-detected URLs can be clicked on,
   # to open them in your browser (if a browser is configured or detected.)
 
-  programs.termite.dynamicTitle = true; 
+  termite.dynamicTitle = true; 
 
   # Whether the shell can update the terminal's title.
 
-  programs.termite.fullscreen = true;
+  termite.fullscreen = true;
 
   # Enables entering fullscreen mode by pressing F11.
 
-  programs.termite.scrollOnKeystroke = true;
+  termite.scrollOnKeystroke = true;
 
   # Scroll to the bottom automatically when a key is pressed.
 
-  programs.termite.scrollbar = "left";
+  termite.scrollbar = "left";
 
   # Position and presence of the scrollbar.
   #
   # Type: null or one of "off", "left", "right"
 
-  programs.termite.urgentOnBell = true;
+  termite.urgentOnBell = true;
 
   # Sets the window as urgent on the terminal bell.
 
-  programs.termite.allowBold = true;
+  termite.allowBold = true;
 
   # Whether the terminal-emulator outputs bold characters,
   # when the stdout outputs the bold escape-sequence.
 
-  programs.termite.browser = 
+  termite.browser = 
   ''${pkgs.xdg_utils}/xdg-open'';
 
   # Set the default browser for opening links. 
@@ -154,21 +184,21 @@
   #       programs.termite.browser = ''${pkgs.xdg_utils}/xdg-open'';
   #
 
-  programs.termite.audibleBell = false;
+  termite.audibleBell = false;
 
   ################################################
 
-  programs.htop.enable = true;
+  htop.enable = true;
 
   ################################################
 
-  programs.feh = {
+  feh = {
    enable = true;
   };
    
   ################################################
 
-  programs.texlive = {
+  texlive = {
    enable = true;
 
    extraPackages = tpkgs: 
@@ -184,11 +214,11 @@
 
   ################################################
 
-  programs.command-not-found.enable = true;
+  command-not-found.enable = true;
 
   ################################################
 
-  programs.man.enable = false;
+  man.enable = false;
 
   # ^
   # Using your system man package should be able to view man pages installed through Nixpkgs since ~/.nix-profile/etc/profile.d/nix.sh contains
@@ -201,7 +231,7 @@
 
   ################################################
 
-  programs.lesspipe.enable = true
+  lesspipe.enable = true;
 
   # ^ « lesspipe » is a preprocessor for « pipe ».
 
