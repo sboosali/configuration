@@ -41,6 +41,7 @@ with pkgs;
  nox
  openssh
  pandoc
+ pass
  pocketsphinx
  postgresql
  qbittorrent
