@@ -32,48 +32,22 @@ bashUtilities.concatBashScripts
 
       (builtins.readFile ../../bash/profile.sh)
 
-       ###########################################
-
       (builtins.readFile ../../../bash/aliases)
       (builtins.readFile ../../../bash/bash_definitions)
       (builtins.readFile ../../../bash/bash_aliases)
 
-       ###########################################
+      ############################################
 
-      (import ./x11-rc.nix { inherit pkgs xdg; })
+      (import ./profile/x11-rc.nix { inherit pkgs xdg; })
 
-       ###########################################
+      (import ./profile/ssh-agent.sh.nix { inherit pkgs sboo; } )
 
-       ''
-       export PATH="${sboo-scripts-directory}":"${cabal-scripts-directory}":"$PATH"
-       ''
+      ''
+      export PATH="${sboo-scripts-directory}":"${cabal-scripts-directory}":"$PATH"
+      ''
 
-       ###########################################
+      (import ./profile/terminfo.sh.nix { inherit pkgs; } )
 
-       ''
-       #-----------------------------------------------#
-       # ssh-agent ------------------------------------#
-       #-----------------------------------------------#
-
-       if [ -x "$(command -v ${pkgs.openssh}/bin/ssh-agent)" ]
-       then
-
-       if   ! pgrep -x "ssh-agent" > /dev/null
-       then eval "$(${pkgs.openssh}/bin/ssh-agent -s)"
-       fi
-
-           # ^ Start the « ssh-agent » in the background.
-
-           if [ -f "~/.ssh/${sboo.keys.github}" ]
-           then
-               "${pkgs.openssh}/bin/ssh-add" ~/.ssh/${sboo.keys.github}
-           fi
-
-           # ^ Register my GitHub (@sboosali) key, via « ssh-agent ».
-       fi
-       ''
-
-       ###########################################
 ]
 
 # ^ TODO 

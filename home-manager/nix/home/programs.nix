@@ -1,116 +1,214 @@
 ##################################################
 { pkgs
-
 , sboo
 
-, haskellPackages   ? (pkgs.haskellPackages)
-, haskellCompilers  ? (pkgs.haskell.compiler)
-
+, self
 }:
 
 ##################################################
-let
 
-self  = pkgs;
-super = pkgs;
-
-in
-##################################################
-let
-
-sbooPrograms = super.buildEnv
- {
-   name                  = "sboo-programs";
-
-   paths                 = programs;
-   pathsToLink           = [ "/" "/bin" ];
-   extraOutputsToInstall = [ "out" "bin" "man" "info" ];
-
-   ignoreCollisions      = true;
- };
+#with pkgs; 
 
 ##################################################
+{
+  ################################################
 
-programs =
-     freePrograms
-  ++ unfreePrograms
-     ;
+  programs.emacs =
 
-##################################################
+    (import ./emacs
+            { inherit pkgs utilities;
+            })
 
-freePrograms = builtins.concatLists [
+     // { enable = true;
+        };
 
-  systemPrograms
-  haskellPrograms
-  xorgPrograms
-  x11Programs
+  ################################################
 
-];
+  programs.git =
 
-# systemPrograms ++ haskellPrograms ++ haskellCompilerPrograms ++ xorgPrograms;
+    (import ./git
+            { inherit pkgs sboo;
+            })
 
-##################################################
+     // { enable = true;
+        };
 
-unfreePrograms = with self; [
+  ################################################
 
- dropbox
+  programs.ssh =
 
- idea  # "IntelliJ IDEA"
+    (import ./home/ssh.nix
+            { inherit pkgs sboo;
+              inherit (self) xdg;
+            })
 
- #TODOdwarf-fortress
+     // { enable = true;
+        };
 
- google-chrome
+  ################################################
 
-];
+  programs.bash =
 
-##################################################
+    (import ./bash
+            { inherit pkgs sboo env;
+              inherit (self) xdg;
+            })
 
-systemPrograms = import ../programs/system-programs.nix { inherit pkgs; };
+     // { enable = true;
+        };
 
-# ^ NOTE we must omit the `programs._` programs:
-#
-# * emacs26
-# * git
-# * firefox
-# * ...
-#
-# from the `home.packages = _` programs.
-#
+  ##############################################
 
-##################################################
+  programs.firefox = {
+      enable = true;
 
-x11Programs = with pkgs.xlibs; [
+      #enable = true;
+  };
+   
+  ################################################
 
- xbacklight
+  # programs.chromium.enable = true;
 
-];
+  # programs.chromium.extensions = [
 
-########################################
+  #   "gcbommkclmclpchllfjekcdonpmejbdp" 
+  #   # ^ https everywhere
 
-xorgPrograms = with self.xorg; [
+  #   "cjpalhdlnbpafiamejdnhcphjbkeiagm"
+  #   # ^ ublock origin
 
- xinput
- xmessage
- xmodmap
- xprop
+  #   #""
+  #   # ^
+  # ];
 
-];
+  ##############################################
 
-##################################################
+  programs.termite.enable = true;
 
-haskellPrograms = with haskellPackages; [
+  # ^ TERMite is a terminal-emulator, and is:
+  # 
+  # * is minimal 
+  # * is VTE-based 
+  # * has modal UI (i.e. like Vim)
+  # * 
+  # 
+  # See « https://wiki.archlinux.org/index.php/termite ».
 
- alex
- happy
- hscolour
+  # large-font & black-on-white:
 
- ghcid
- hpack
- git-annex
+  programs.termite.font = "Monospace 24";
 
-];
+  # the Font Description,
+  # i.e. Font Family (which should be a monospace font) and Font Size.
 
-in
-##################################################
-sbooPrograms
+  programs.termite.foregroundColor = sboo.colors.black;
+  programs.termite.backgroundColor = sboo.colors.white;
+
+  # the BackgroundColor
+  # should look soft under `xrandr-invert-colors`.
+  # (like purple-gray?)
+
+  #"rgba(192, 64, 192, 0.95)";
+
+  programs.termite.clickableUrl = true; 
+
+  # Whether Auto-detected URLs can be clicked on,
+  # to open them in your browser (if a browser is configured or detected.)
+
+  programs.termite.dynamicTitle = true; 
+
+  # Whether the shell can update the terminal's title.
+
+  programs.termite.fullscreen = true;
+
+  # Enables entering fullscreen mode by pressing F11.
+
+  programs.termite.scrollOnKeystroke = true;
+
+  # Scroll to the bottom automatically when a key is pressed.
+
+  programs.termite.scrollbar = "left";
+
+  # Position and presence of the scrollbar.
+  #
+  # Type: null or one of "off", "left", "right"
+
+  programs.termite.urgentOnBell = true;
+
+  # Sets the window as urgent on the terminal bell.
+
+  programs.termite.allowBold = true;
+
+  # Whether the terminal-emulator outputs bold characters,
+  # when the stdout outputs the bold escape-sequence.
+
+  programs.termite.browser = 
+  ''${pkgs.xdg_utils}/xdg-open'';
+
+  # Set the default browser for opening links. 
+  # 
+  # If it's not set, $BROWSER is read.
+  # If that too isn't set, url hints will be disabled.
+  #
+  # e.g.:
+  #       programs.termite.browser = ''${pkgs.xdg_utils}/xdg-open'';
+  #
+
+  programs.termite.audibleBell = false;
+
+  ################################################
+
+  programs.htop.enable = true;
+
+  ################################################
+
+  programs.feh = {
+   enable = true;
+  };
+   
+  ################################################
+
+  programs.texlive = {
+   enable = true;
+
+   extraPackages = tpkgs: 
+    { inherit (tpkgs)
+      resumecls
+      resumemac
+      collection-fontsrecommended 
+      algorithms
+      ;
+   };
+
+  };
+
+  ################################################
+
+  programs.command-not-found.enable = true;
+
+  ################################################
+
+  programs.man.enable = false;
+
+  # ^
+  # Using your system man package should be able to view man pages installed through Nixpkgs since ~/.nix-profile/etc/profile.d/nix.sh contains
+  #
+  #     if [ -n "${MANPATH}" ]; then
+  #         export MANPATH="$NIX_LINK/share/man:$MANPATH"
+  #     fi
+  #
+  # About PAGER variable I guess the Ubuntu man package will use a default value when it is unset? The Nixpkgs man package doesn't seem to have such a default and instead relies on the TODO.
+
+  ################################################
+
+  programs.lesspipe.enable = true
+
+  # ^ « lesspipe » is a preprocessor for « pipe ».
+
+  ################################################
+
+
+
+  ################################################
+}
 ##################################################

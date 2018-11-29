@@ -1,5 +1,6 @@
 ##################################################
 { pkgs
+
 , xdg
 , sboo
 , env
@@ -40,14 +41,14 @@ in
 # * « ~/.bash_login » exists.
 #
 
- bashrcExtra = import ./bash-interactive-rc.nix { inherit env bashUtilities; };
+ bashrcExtra = import ./bash-interactive-rc.nix { inherit env bashUtilities;
+                                                };
 
 # ^ « .bashrc » extras.
 # 
 # i.e. Extra commands that should be run when initializing an interactive shell.
 
- shellOptions =
-  [ "histappend" "checkwinsize" "extglob" "globstar" "checkjobs" ];
+ shellOptions = [ "histappend" "checkwinsize" "extglob" "globstar" "checkjobs" ];
 
 # ^ Shell options to set.
 

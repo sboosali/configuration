@@ -8,6 +8,16 @@
 # for `sh`-general environment-variables, see « ../home/environment-variables.nix ».
 
 ##################################################
+let
+
+less = ''${pkgs.less}/bin/less'';
+
+in
+##################################################
 {
+
+PAGER = less;
+
+
 }
 ##################################################
