@@ -29,91 +29,94 @@ in
                                              inherit bashUtilities;
                                            };
 
-# ^ « .profile » extras.
-# 
-# i.e. Extra commands that should be run when initializing a login shell.
+ # ^ « .profile » extras.
+ # 
+ # i.e. Extra commands that should be run when initializing a login shell.
 
-# ^ « ~/.profile » is executed by the command interpreter for Login Shells.
-#
-# NOTE `bash` ignores « ~/.profile » if either:
-#
-# * « ~/.bash_profile » exists, or
-# * « ~/.bash_login » exists.
-#
+ # ^ « ~/.profile » is executed by the command interpreter for Login Shells.
+ #
+ # NOTE `bash` ignores « ~/.profile » if either:
+ #
+ # * « ~/.bash_profile » exists, or
+ # * « ~/.bash_login » exists.
+ #
 
  bashrcExtra = import ./bash-interactive-rc.nix { inherit env bashUtilities;
                                                 };
 
-# ^ « .bashrc » extras.
-# 
-# i.e. Extra commands that should be run when initializing an interactive shell.
+ # ^ « .bashrc » extras.
+ # 
+ # i.e. Extra commands that should be run when initializing an interactive shell.
 
  shellOptions = [ "histappend" "checkwinsize" "extglob" "globstar" "checkjobs" ];
 
-# ^ Shell options to set.
+ # ^ Shell options to set.
 
  shellAliases =
   (import ./shell-aliases.nix
           { inherit pkgs sboo env;
           });
 
-# ^ Attribute Set mapping aliases (the top-level Attribute Names in this option) either:
-# 
-# * to command strings, or
-# * directly to build outputs.
+ # ^ Attribute Set mapping aliases (the top-level Attribute Names in this option) either:
+ # 
+ # * to command strings, or
+ # * directly to build outputs.
 
  sessionVariables = {};
 
-# ^ Environment variables that will be set for the Bash session.
+ # ^ "Environment variables that will be set for the Bash session."
+
+ # ^ NOTE « home.sessionVariables » has « sh »-general environment variables,
+ # « programs.bash.sessionVariables » has the « bash »-specific environment variables.
 
  historyControl = [ "ignoredups" "ignorespace" ];
 
-# ^ 
-# `"ignoredups"`: ignore (consecutive) duplicate commands.
-# `"ignorespace"`: ignore commands that begin with white space.
+ # ^ 
+ # `"ignoredups"`: ignore (consecutive) duplicate commands.
+ # `"ignorespace"`: ignore commands that begin with whitespace.
 
-# historyFile = ''"$HOME"/.bash_history'';
-## ^ Location of the bash history file.
+ # historyFile = ''"$HOME"/.bash_history'';
+ ## ^ Location of the bash history file.
 
  historyIgnore = [ "ls" "cd" "exit" ];
 
-# ^ List of commands that should not be saved to the history list.
+ # ^ List of commands that should not be saved to the history list.
 
  historySize = 100000;
 
-# ^ Number of history lines to keep in memory.
+ # ^ Number of history lines to keep in memory.
 
  historyFileSize = 1000000;
 
-# ^ Number of history lines to keep on file.
+ # ^ Number of history lines to keep on file.
 
  enableAutojump = true;
 
-# ^ Enable the `autojump` navigation tool.
-# 
-# See <https://github.com/wting/autojump>
+ # ^ Enable the `autojump` navigation tool.
+ # 
+ # See <https://github.com/wting/autojump>
 
 /*
 ```sh
-# `j` aliases `autojump`
+ # `j` aliases `autojump`
 
 $ j foo
 
-# ^ `cd` to any (previously navigated to) directory whose path contains `foo`
+ # ^ `cd` to any (previously navigated to) directory whose path contains `foo`
 
 $ jc foo 
 
-# ^ `cd` to any child-directory whose path contains `foo`
+ # ^ `cd` to any child-directory whose path contains `foo`
 
 $ jo foo
 
-# ^ `open` (don't `cd` into) any (previously navigated to) directory whose path contains `foo`
+ # ^ `open` (don't `cd` into) any (previously navigated to) directory whose path contains `foo`
 
 $ jco 
 
-# ^ `jc` + `jo`
+ # ^ `jc` + `jo`
 ```
 */
 
 }
-##################################################
+#################################################
