@@ -20,15 +20,15 @@ startsWithSlash = s:
 
 hasBuiltinType = x:
 
-  builtins.any [
-    builtins.isAttrs     x
-    builtins.isBool      x
-    builtins.isFloat     x
-    builtins.isFunction  x
-    builtins.isInt       x
-    builtins.isList      x
-    builtins.isNull      x
-    builtins.isString    x
+  builtins.any (f: f x) [
+    (builtins.isAttrs)
+    (builtins.isBool)
+    (builtins.isFloat)
+    (builtins.isFunction)
+    (builtins.isInt)
+    (builtins.isList)
+    (builtins.isNull)
+    (builtins.isString)
   ];
 
 isPath = if builtins ? isPath then builtins.isPath else

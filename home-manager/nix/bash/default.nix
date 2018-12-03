@@ -62,7 +62,11 @@ in
  # * to command strings, or
  # * directly to build outputs.
 
- sessionVariables = {};
+ sessionVariables =
+    (import ./environment-variables.nix
+            { inherit pkgs sboo;
+              inherit xdg;
+            });
 
  # ^ "Environment variables that will be set for the Bash session."
 
