@@ -108,8 +108,8 @@ function find-relevant () {
 }
 
 function find-by-extension() {
- FILE_EXTENSION="${1:?'[ERROR] missing argument: FILE_EXTENSION'}"
- find . -type f -name "*.${FILE_EXTENSION}" -printf "| %p\n"
+ FILE_EXTENSION="${1:?'[ERROR] missing argument: FILE_EXTENSION (e.g. « $0 txt »)'}"
+ find -L . -type f -name "*.${FILE_EXTENSION}" -printf "| %p\n"
 }
 
 function ls-permissions() {
