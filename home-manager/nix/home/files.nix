@@ -38,5 +38,8 @@
 
  #################################################
 
+# TODO for VirtualBox, create the shared folder:
+ "guests/Windows10Dragon15/README.md".source = ../../../virtual-machines/Windows10Dragon15/files/README.md;
+
 }
 ##################################################
