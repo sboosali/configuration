@@ -238,6 +238,7 @@ in
  #-----------------------------------------------#
 
  gll  = "${git} pull";                                      # MNEMONIC: pu«l»«l»
+ glrm = "${git} pull --rebase";                             # MNEMONIC: pu«l»l «R»ebase «M»aster
  glru = "${git} pull --rebase upstream master";             # MNEMONIC: pu«l»l «R»ebase «U»pstream
 
  #-----------------------------------------------#
@@ -481,5 +482,12 @@ in
  git-status-subdirs = ''find . -mindepth 1 -maxdepth 1 -type d -exec sh -c '(echo {} && cd {} && git status -s && echo)' \;'';
 
  #################################################
+
+ sboo-cabal-update = ''time (${cabal} new-update && ${cabal} new-build all)'';
+
+ #################################################
+
+ #################################################
+
 }
 ##################################################

@@ -8,6 +8,42 @@ let
 self  = pkgs;
 super = pkgs;
 
+##################################################
+
+tryAttrs = object: fields:
+
+  let
+
+  go = field:
+    tryAttr field object;
+
+  in
+
+  getFirst (builtins.map go fields);
+
+tryAttr = field: object:
+
+  if   builtins.hasAttr field object
+  then builtins.getAttr field object
+  else null;
+
+getFirst = xs:
+
+  let
+
+  go = y: x:
+    if   y == null && x != null
+    then x
+    else y;
+
+    # ^ NOTE
+    # « x != null » means: the current item is non-null.
+    # « y == null » means: no previous item has been non-null.
+
+  in
+
+  builtins.foldl' go null xs;
+
 in
 ##################################################
 let
@@ -22,40 +58,29 @@ defaultGHCJS = self.haskell.compiler.ghcjs;
 
 GHC86 =
 
-  if   self.haskell.compiler ? ghc862
-  then self.haskell.compiler.ghc862
-
-  else
-  if   self.haskell.compiler ? ghc861
-  then self.haskell.compiler.ghc861
-
-  else null;
+  tryAttrs self.haskell.compiler [
+    "ghc863"
+    "ghc862"
+    "ghc861"
+  ];
 
 ##################################################
 
 GHC84 =
 
-  if   self.haskell.compiler ? ghc844
-  then self.haskell.compiler.ghc844
-
-  else
-  if   self.haskell.compiler ? ghc843
-  then self.haskell.compiler.ghc843
-
-  else null;
+  tryAttrs self.haskell.compiler [
+    "ghc844"
+    "ghc843"
+  ];
 
 ##################################################
 
 GHC710 =
 
-  if   self.haskell.compiler ? ghc7103
-  then self.haskell.compiler.ghc7103
-
-  else
-  if   self.haskell.compiler ? ghc7103Binary
-  then self.haskell.compiler.ghc7103Binary
-
-  else null;
+  tryAttrs self.haskell.compiler [
+    "ghc7103"
+    "ghc7103Binary"
+  ];
 
 ##################################################
 
@@ -143,6 +168,10 @@ environment
 ##################################################
 
 /*
+
+
+foldl' :: (b -> a -> b) -> b -> [a] -> b
+
 
 GHCs =
   [

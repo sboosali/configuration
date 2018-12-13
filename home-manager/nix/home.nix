@@ -101,7 +101,9 @@ self = rec {
 
   ################################################
 
-  home.file = import ./home/files.nix { inherit pkgs; };
+  home.file = (import ./home/files.nix { inherit pkgs; })
+          # // (import ./home/auto.nix  { inherit pkgs; })
+            ;
 
   ################################################
   # Programs:

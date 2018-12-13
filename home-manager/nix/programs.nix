@@ -92,9 +92,9 @@ with utilities;
   firefox = {
       enable = true;
 
-      #enable = true;
+      enableAdobeFlash = true;
   };
-   
+
   ################################################
 
   # chromium.enable = true;

@@ -195,6 +195,15 @@ build-summary                  : ${path ~/.cabal/logs/build.log}
 --------------------------------------------------
 
 haddock
+  hoogle            : True
+  executables       : True
+  tests             : True
+  benchmarks        : True
+  foreign-libraries : True
+  internal          : False
+  hyperlink-source  : True
+  quickjump         : True
+
   -- keep-temp-files   : False
   -- hoogle            : False
   -- html              : False
@@ -248,6 +257,7 @@ install-dirs global
 --------------------------------------------------
 
 program-locations
+
   -- alex-location:
   -- ar-location:
   -- c2hs-location:

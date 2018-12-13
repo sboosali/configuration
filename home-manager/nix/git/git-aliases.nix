@@ -166,8 +166,12 @@ in
 
   # ^ for updating a fork (rebase master onto upstream).
 
+  # ^ run « git fetch upstream » first.
+
   ######################################
 
+  get-current-commit = "rev-parse --verify HEAD";
+  
 
   ######################################
 }
