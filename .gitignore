@@ -38,3 +38,9 @@ TAGS
 
 # OS X
 .DS_Store
+
+# tex
+*.aux
+*.out
+resume/resume.pdf
+
