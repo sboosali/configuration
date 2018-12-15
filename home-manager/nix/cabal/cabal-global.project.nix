@@ -6,7 +6,7 @@ let
 config = {
 
   verbose = 2;
-  jobs    = 7;
+  jobs    = 4;
 
   nix           = false;
   deterministic = true;
@@ -23,6 +23,8 @@ config = {
   username         = "sboo";
   password-command = "sboo-get-hackage-password";
                     # ^ defined in « ~/.profile ».
+
+  #TODO ''${pass} "www.hackage.com/user/sboo"''
 
   remote-build-reporting = "detailed";
 

@@ -23,8 +23,10 @@
 
   ################################################
 
-  # extraConfig = ''
-  # '';
+  extraConfig = ''
+allow-emacs-pinentry
+
+'';
 
   # ^ Extra configuration lines to append to the gpg-agent configuration file.
 

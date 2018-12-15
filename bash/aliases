@@ -204,10 +204,6 @@ alias va="direnv allow"  # [a]llow
 
 ##################################################
 
-alias sboo-emacs="~/.emacs.d/result/bin/emacs &disown"
-
-##alias sboo-emacs="(cd ~/.emacs.d/ && make build && )"
-
 alias sboo-ssh-add="ssh-add ~/.ssh/$(hostname)_git@github.com_id_rsa"
 alias sboo-restart-gnome="gnome-shell --replace &disown"
 alias sboo-restart-xbindkeys="killall xbindkeys || true ; xbindkeys -fg ~/.xbindkeysrc.scm &disown "

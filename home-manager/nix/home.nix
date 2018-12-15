@@ -156,7 +156,7 @@ self = rec {
   # XDG:
 
   xdg =
-    (import ./xdg { inherit env;
+    (import ./xdg { inherit sboo env;
                   })
      // { enable = true;
         };

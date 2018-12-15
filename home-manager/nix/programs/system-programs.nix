@@ -19,10 +19,11 @@ with pkgs;
  flac
  fltk
  fswatch
-#ghc                                              # see ../haskell/compilers.nix
+#ghc                            # see ../haskell/compilers.nix
  gimp
  glib
  gparted
+ gnupg22                        # for « gpg » version ≥2.1.17
  graphviz                       # GraphViz renders « .dot » files.
  htop
  imagemagick

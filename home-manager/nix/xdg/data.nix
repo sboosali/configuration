@@ -1,5 +1,5 @@
 ##################################################
-{ 
+{ sboo
 }:
 ##################################################
 {
@@ -10,7 +10,7 @@
 
  #################################################
 
- "applications/emacs.desktop".source = ../../../desktop-entry-files/emacs.desktop;
+ "applications/emacs.desktop".source = sboo.paths.emacs-desktop;
 
  #################################################
 }

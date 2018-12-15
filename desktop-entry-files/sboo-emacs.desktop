@@ -43,8 +43,8 @@ Exec=/home/sboo/.emacs.d/result/bin/emacs --no-init-file --find-file=/home/sboo/
 # ^ from `nix-install emacs-sboo.nix`
 
 # #TODO
-# TryExec=sboo-emacs
-# Exec=sboo-emacs --no-init-file --load /home/sboo/.emacs.d/init.el --no-desktop
+# TryExec=
+# Exec= --no-init-file --load /home/sboo/.emacs.d/init.el --no-desktop
 # Path=/home/sboo/.emacs.d
 
 # Name=emacs

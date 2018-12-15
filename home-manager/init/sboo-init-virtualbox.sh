@@ -19,13 +19,17 @@ if   ! grep "${VirtualboxRepository}" "${RepositoryRegistry}"
 then echo -e "${VirtualboxRepository}\n" | sudo tee -a "${RepositoryRegistry}"
 fi
 
-wget -q "https://www.virtualbox.org/download/oracle_vbox.asc" -O- | sudo apt-key add -
+wget -q "https://www.virtualbox.org/download/oracle_vbox_2016.asc" -O - | sudo apt-key add -
 
 sudo apt update
 
 ##################################################
 
 sudo apt install --yes "virtualbox-${VirtualboxVersion}"
+
+# ^ « Unpacking... ./virtualbox-5.2_5.2.22-126460~Ubuntu~xenial_amd64.deb »
+
+
 
 sudo apt install --yes "virtualbox-ext-pack"
 # ^ manually accept EULA. 
@@ -43,9 +47,25 @@ virtualbox &disown
 # >     7B0F AB3A 13B9 0743 5925  D9C9 5442 2A4B 98AB 5139
 # >     Oracle Corporation (VirtualBox archive signing key) <info@virtualbox.org>
 
+##################################################
+
 # > As part of a pipe tee can take the input, elevate permissions and write to the file.
 # > 
 # >     $ echo "foo" | sudo tee -a file
 
+##################################################
+
 # > Usage: grep [OPTION]... PATTERN [FILE]...
 
+##################################################
+
+# « https://askubuntu.com/questions/678830/what-causes-this-error-by-apt-get-update »
+
+# 
+#  1   add the repository to our sources
+#  2   download the GPG key
+#  3   add this key for authentication
+#  4   update our apt cache
+#  5   install the desired software package
+
+##################################################

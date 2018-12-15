@@ -1,5 +1,6 @@
 ##################################################
-{ env
+{ sboo
+, env
 }:
 
 ##################################################
@@ -13,9 +14,9 @@
 
 ##################################################
 
- configFile = import ./config.nix { };
+ configFile = import ./config.nix { inherit sboo; };
 
- dataFile   = import ./data.nix { };
+ dataFile   = import ./data.nix { inherit sboo; };
 
 }
 ##################################################

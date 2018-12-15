@@ -56,6 +56,8 @@ NIXPKGS     = "${env.HOME}/nixpkgs";
 #NixProfile = "${env.HOME}/.nix-profile";
 #NixProfile = "${env.HOME}/.nix-profile";
 
+##################################################
+
 in
 ##################################################
 {
@@ -486,6 +488,10 @@ in
  sboo-cabal-update = ''time (${cabal} new-update && ${cabal} new-build all)'';
 
  #################################################
+
+  sboo-emacs = ''${xdg-open} ${sboo.paths.emacs-desktop}'';
+
+  # ^ NOTE « &disown » is implicit in « xdg-open _.desktop ».
 
  #################################################
 

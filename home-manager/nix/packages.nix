@@ -55,11 +55,13 @@ unfreePrograms = with self; [
 
  dropbox
 
- idea  # "IntelliJ IDEA"
-
- #TODOdwarf-fortress
-
  google-chrome
+
+ #TODO dwarf-fortress
+
+ idea                           # "IntelliJ IDEA".
+
+ #TODO enpass                         # Password Manager (cross-platform). See « https://www.enpass.io/ ».
 
 ];
 

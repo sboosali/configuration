@@ -20,7 +20,7 @@ sbooLibraries = super.buildEnv
    pathsToLink           = [ "/" "/src" "/lib" "/include" ];
    extraOutputsToInstall = [ "out" "dev" "doc" "devdoc" "man" "info" ];
 
-   #ignoreCollisions      = true;
+   ignoreCollisions      = true;
  };
 
 ##################################################
