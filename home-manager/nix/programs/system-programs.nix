@@ -34,6 +34,7 @@ with pkgs;
  multimarkdown
  nano
  ncdu
+ nix
  nix-bash-completions
  nix-info
  nix-prefetch-github

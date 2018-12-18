@@ -16,9 +16,9 @@ contact = {
   name.last  = "Boosalis";
 
   address  = "San Francisco";
-  mobile   = "+1 (617) 922-0791";
-  email    = "samboosalis@gmail.com";
-  homepage = http://sboosali.github.io;
+  mobile   = "+1 (617) 922-0791"; # TODO call: link?
+  email    = "samboosalis@gmail.com"; # TODO mailto: link?
+  homepage = https://sboosali.github.io; # TODO "sboosali.github.io"
 
 };
 
@@ -33,7 +33,10 @@ education = [
     from     = 2009;
     to       = 2013;
     items    = [
-      "Implemented a compiler for an ML langauge with recursive bindings and Hindley-Milner type inference. Parsed, typechecked, name-checked, optimized, and assembled (into MIPS)."
+      [
+        "Implemented a compiler for an ML langauge with recursive bindings and Hindley-Milner type inference."
+        "Parsed, typechecked, name-checked, optimized, and assembled (into MIPS)."
+      ]
     ];
   }
 

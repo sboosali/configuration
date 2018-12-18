@@ -58,7 +58,7 @@ rec {
 
   name = "sam_boosalis";
 
-  src = ../tex;                    # TODO
+  src = ../../src;                    # TODO
 
   buildInputs = [
     (texlive.combine latexPackages)
@@ -71,6 +71,7 @@ rec {
 
   buildPhase = ''
     # mv $resume "${name}.tex" 
+    mv "$src/resume.tex" "${name}.tex" 
     xelatex -file-line-error -interaction=nonstopmode "${name}.tex"
   '';
 

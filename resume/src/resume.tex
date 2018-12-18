@@ -1,0 +1,168 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Every LaTeX document has a document class. For this document, I will use a custom resume class.
+
+\documentclass[11pt]{resume}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Next, I’ll provide some semantic information. Each of these commands is defined in the résumé class. 
+
+\name{Sam}{Boosalis}
+\address{San Francisco}
+\mobile{+1 (617) 922-0791}
+\email{samboosalis@gmail.com}
+\homepage{http://sboosali.github.io}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  %% This begins the document. The command makecvheader is from resume.cls and will setup the basic template.
+
+\begin{document}
+
+\makecvheader[C]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\cvsection{Education}
+
+  \begin{cventries}
+
+  %% Each =cvsection= is composed of multiple =cventries=.
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+      \begin{cventries}
+        \cventry
+        { Brown University }
+        { Providence, RI }
+        { Computer Science B.A. }
+        { 2009 — 2013 }
+        { \item { Implemented a compiler for an ML langauge with recursive bindings and Hindley-Milner type inference. Parsed, typechecked, name-checked, optimized, and assembled (into MIPS). } }
+      \end{cventries}
+
+  %% Visually:
+  %% 
+  %% | left         | right        |
+  %% |--------------+--------------|
+  %% | argument 1   | /argument 2/ |
+  %% | /argument 3/ | /argument 4/ |
+
+  %% Semantically:
+  %% 
+  %% | left                  | right                   |
+  %% |-----------------------+-------------------------|
+  %% | Company or University | /Location/              |
+  %% | /Position or degree/  | /Start date - end date/ |
+
+  \end{cventries}
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  \cvsection{Work Experience}
+
+  \begin{cventries}
+
+      \begin{cventries}
+        \cventry
+        { Turn Inc. }
+        { Redwood City, CA }
+        { Research Software Engineer }
+        { Feb 2014 — Jan 2015 }
+        { \item { Implemented Multi-Touch Attribution:  } }
+      \end{cventries}
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  %% \cventry
+  %%   {Amazon.com, Inc.}
+  %%   {Seattle, WA, USA}
+  %%   {SDE Intern}
+  %%   {Summer 2017}
+  %%   {
+  %%     \begin{cvitems}
+  %%     \item { Worked on Mobile Identity team which manages the login screens for
+  %%             Amazon apps }
+  %%     \item { Project made it easier for teams to register new devices through
+  %%             Identity Services }
+  %%     \item { Used Agile development principles in design and development of
+  %%             project }
+  %%     \end{cvitems}
+  %%   }
+  %% 
+  %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %% 
+  %% \cventry
+  %%   {Lexmark Enterprise Software}
+  %%   {Lenexa, KS, USA}
+  %%   {Software Engineer Intern}
+  %%   {Summer 2015, Summer 2016}
+  %%   {
+  %%     \begin{cvitems}
+  %%     \item { Worked on the Client Architecture team which builds the JavaScript
+  %%         web framework which other teams use to build enterprise solutions }
+  %%     \item { Participated in high level design decision conversations }
+  %%     \item { Project moved the web framework away from in-house solutions to
+  %%         better maintained open source projects while preserving legacy
+  %%         compatibility }
+  %%     \item { Asked to return after impressive first year }
+  %%     \end{cvitems}
+  %%   }
+  %% 
+  %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %% 
+  %% \cventry
+  %%   {Together+Clinic}
+  %%   {Lincoln, NE, USA}
+  %%   {Design Studio Intern}
+  %%   {Spring 2015}
+  %%   {
+  %%     \begin{cvitems}
+  %%     \item { Startup building web app to let doctors track patients recovering
+  %%         from surgery without frequent checkup visits }
+  %%     \item { The web interface is used by both patients to record progress and
+  %%         doctors to track progress }
+  %%     \item { Team used Scrum development principles for quick response and user
+  %%         focused design }
+  %%     \end{cvitems}
+  %%   }
+  %% 
+  %% \end{cventries}
+  %% 
+  %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %% 
+  %% \cvsection{Honors \& Awards}
+  %% 
+  %% \begin{cvhonors}
+  %% 
+  %%   \cvhonor
+  %%   {3rd Place}
+  %%   {JayHacks Hackathon}
+  %%   {Lawrence, KS, USA}
+  %%   {2017}
+  %% 
+  %%   \cvhonor
+  %%   {Grand Prize}
+  %%   {Google Code-in}
+  %%   {Mountain View, CA, USA}
+  %%   {2013}
+  %% 
+  %% \end{cvhonors}
+
+ %% The =makecvfooter= command gives a nice footer that will be put at the bottom
+ %% of each page. This can give us the document title and page numbering. In
+ %% addition, the LastPage command will tell us how many pages there are in case
+ %% we misplace a page while printing.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\makecvfooter
+    {SBOOSALI}
+    {\thepage}
+    {\pageref{LastPage}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

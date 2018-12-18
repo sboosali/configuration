@@ -4,32 +4,23 @@
 
 ##################################################
 let
-##################################################
 
-tex = import ./tex.nix {};
-cv  = import ./cv.nix  { inherit tex; };
-
-##################################################
-
-data = import ./samboosalis.nix {};
+inherit (import ./resume { })
+        resume
+        data
+        ;
 
 ##################################################
 
-resume = import ./resume.tex.nix { inherit tex cv; } data;
+package = import ./resume/package.nix { inherit (pkgs) stdenv texlive; } { inherit resume; };
 
-##################################################
-
-package = import ./package.nix { inherit (pkgs) stdenv texlive; } { inherit resume; };
-
-##################################################
 in
 ##################################################
-
-#TODO package
 {
 
- inherit resume;
+  resume.json = builtins.toJSON data;
+  resume.tex  = resume;
+  resume.pdf  = package;
 
 }
-
 ##################################################

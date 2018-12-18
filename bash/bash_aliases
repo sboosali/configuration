@@ -69,4 +69,5 @@ alias path=absolute-path
 # alias white="redshift -x" # 
 # alias un-red="redshift -x" #
 
+alias sboo-prioritize-home-manager='nix-env --set-flag priority 1 home-manager-path'
 
