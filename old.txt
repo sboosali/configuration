@@ -42,6 +42,83 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+# indentBy = { indentation ? 4 }: s:
+
+#   let
+#   i =
+#     if   builtins.isInt indentation
+#     then (replicateSpaces indentation)
+#     else 
+#     if   builtins.isString indentation
+#     then indentation
+#     else s                              # (silently ignore type error)
+#   in
+
+#   i ++ s;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  list.entry = xs:
+    assert (5 == builtins.length xs);
+
+    let
+    a = builtins.elemAt xs 0;
+    b = builtins.elemAt xs 1;
+    c = builtins.elemAt xs 2;
+    d = builtins.elemAt xs 3;
+    e = builtins.elemAt xs 4;
+
+    e' = cv.list.items e;
+
+    ys = [ a b c d e' ];
+    in
+
+    tex.command { name = "entry"; arguments = ; };
+
+
+
+
+
+
+
+
+
+
+
+
+
 ##################################################
 { types ? (import <nixpkgs> {}).lib.types
 }:

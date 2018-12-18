@@ -1,0 +1,6 @@
+#!/bin/bash
+set -eu
+
+INFIX="${1:?\<\<\< $0 INFIX \>\>\>}"
+
+find -L . -type f -name "\*${INFIX}\*" 2> /dev/null

@@ -11,11 +11,11 @@ with pkgs;
  bash-completion
  cabal-install
  cabal2nix
+ emacs26Packages.cask
  colordiff
  dex
  dhall
  expect
- feh
  flac
  fltk
  fswatch
