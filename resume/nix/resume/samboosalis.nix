@@ -3,6 +3,7 @@
 
 ##################################################
 let
+##################################################
 
 class = "resume";
 
@@ -18,7 +19,9 @@ contact = {
   address  = "San Francisco";
   mobile   = "+1 (617) 922-0791"; # TODO call: link?
   email    = "samboosalis@gmail.com"; # TODO mailto: link?
-  homepage = https://sboosali.github.io; # TODO "sboosali.github.io"
+  homepage = "sboosali.github.io";
+
+  # TODO homepage = https://sboosali.github.io;
 
 };
 
@@ -80,7 +83,6 @@ career = [
 ];
 
 ##################################################
-
 in
 ##################################################
 {

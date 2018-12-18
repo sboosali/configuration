@@ -5,11 +5,15 @@
 ##################################################
 let
 
-pkgs = (import nixpkgs {}).pkgs;
+inherit (import <nixpkgs> {})
+        pkgs;
 
-resume = import ./nix/package.nix
-  { inherit (pkgs) stdenv texlive; };
+##################################################
+
+inherit (import ./nix { inherit pkgs; })
+        resume;
 
 in
 ##################################################
-resume
+
+resume.pdf

@@ -44,7 +44,7 @@ mkSchool =
   let
   arguments = [ school location degree dates items' ];
 
-  items'    = builtins.map mkItem items;
+  items'    = mkItems items;
   dates     = mkDate { inherit from to; };
   in
 
@@ -86,7 +86,7 @@ mkJob =
   let
   arguments = [ employer location position dates items' ];
 
-  items'    = builtins.map mkItem items;
+  items'    = mkItems items;
   dates     = mkDate { inherit from to; };
   in
 
@@ -115,6 +115,24 @@ mkDate = { from, to ? null }:
 
 ##################################################
 
+mkItems = items:
+
+  assert (
+    (builtins.isList items)
+  );
+
+  let
+  body = builtins.concatMap mkItem items;
+  in
+
+  tex.environment { name = "cvitems";
+                    body = body;
+
+                    multiline = true; string = false; 
+                  };
+
+##################################################
+
 mkItem = sentences:
 
   assert (
@@ -124,11 +142,15 @@ mkItem = sentences:
   let
   paragraph =
     if   builtins.isList sentences
-    then builtins.concatStringsSep " \par " sentences
+    then builtins.concatStringsSep '' \par '' sentences
     else sentences;
   in
 
-  tex.command { name = "item"; arguments = [ paragraph ]; };
+  tex.command { name = "item";
+                arguments = [ paragraph ];
+
+                multiline = false;
+              };
 
 ##################################################
 in

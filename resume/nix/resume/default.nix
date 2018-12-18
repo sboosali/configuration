@@ -13,15 +13,27 @@ inherit (import ../tex {})
 
 data = import ./samboosalis.nix {};
 
+basename = "sam_boosalis";
+
 ##################################################
 
-resume = import ./resume.tex.nix { inherit tex cv; } data;
+resume-tex = import ./resume.tex.nix { inherit tex cv; }
+  data;
+
+##################################################
+
+resume-cls = import ./resume.cls.nix { }
+  { fonts = ../../src/fonts;
+  };
 
 in
 ##################################################
 {
 
-  inherit resume data;
+  resume.tex = resume-tex;
+  resume.cls = resume-cls;
+
+  inherit data basename;
 
 }
-##################################################
+################################################## $resumePath

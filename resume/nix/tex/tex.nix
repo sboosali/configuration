@@ -30,8 +30,8 @@ tex = rec {
    *
    */
 
-  environment =    { name, body, indentation ? 0
-                   , multiline ? false, string ? false
+  environment =    { name, body
+                   , indentation ? 0, multiline ? false, string ? false
                    }:
 
     assert ( builtins.isString name
@@ -144,9 +144,14 @@ tex = rec {
 
   ################################################
 
+  /* In LaTeX, an argument to a command is wrapped in curly-braces.
+   *
+   * NOTE the first space is 
+   *
+   */
   argument = x:
 
-    ''{ ${builtins.toString x} }'';
+    ''{${builtins.toString x}}'';
 
   ################################################
 

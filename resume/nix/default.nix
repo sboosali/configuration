@@ -8,11 +8,15 @@ let
 inherit (import ./resume { })
         resume
         data
+        basename
         ;
 
 ##################################################
 
-package = import ./resume/package.nix { inherit (pkgs) stdenv texlive; } { inherit resume; };
+package = import ./resume/package.nix { inherit (pkgs) stdenv texlive; }
+  { inherit resume;
+    inherit basename;
+  };
 
 in
 ##################################################

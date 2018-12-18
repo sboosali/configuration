@@ -45,7 +45,7 @@
 \defaultfontfeatures{Ligatures=TeX}
 
 \newfontfamily\headerfontspaced{FiraSans}[
-  Path            =   ../fonts/,
+  Path            =   ../fonts,
   UprightFont     =   *-Regular,
   BoldFont        =   *-Bold,
   ItalicFont      =   *-Italic,
@@ -54,7 +54,7 @@
 ]
 
 \newfontfamily\headerfont{FiraSans}[
-  Path            =   ../fonts/,
+  Path            =   ../fonts,
   UprightFont     =   *-Regular,
   BoldFont        =   *-Bold,
   ItalicFont      =   *-Italic,
@@ -62,7 +62,7 @@
 ]
 
 \newfontfamily\footerfont{FiraSans}[
-  Path            =   ../fonts/,
+  Path            =   ../fonts,
   UprightFont     =   *-Regular,
   BoldFont        =   *-Bold,
   ItalicFont      =   *-Italic,
@@ -70,7 +70,7 @@
 ]
 
 \newfontfamily\bodyfont{Charter}[
-  Path            =   ../fonts/,
+  Path            =   ../fonts,
   UprightFont     =   * Regular,
   BoldFont        =   * Bold,
   ItalicFont      =   * Italic,
