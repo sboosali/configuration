@@ -7,7 +7,7 @@ let
 
 pkgs = (import nixpkgs {}).pkgs;
 
-resume = import ./resume.nix
+resume = import ./nix/package.nix
   { inherit (pkgs) stdenv texlive; };
 
 in
