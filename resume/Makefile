@@ -12,11 +12,15 @@ SHELL=bash
 
 # Programs...
 
-TEX ?="xelatex -file-line-error -interaction=nonstopmode"
+TEX ?=xelatex -file-line-error -interaction=nonstopmode
+
+CP ?=cp "--no-preserve=mode,ownership"
 
 NIX ?="nix"
 
-NIX_EVAL ?="nix-instantiate --eval"
+NIX_EVAL ?=nix-instantiate --eval
+
+NIX_BUILD ?=nix-build --show-trace
 
 NIX_REPL ?=$(NIX) repl
 
@@ -24,7 +28,11 @@ NIX_REPL ?=$(NIX) repl
 
 # Files...
 
-RESUME ?=./tex/resume.tex
+#TODO ResumeTex ?=./tex/resume.tex
+
+OutputDirectory ?=.make/
+
+NixDirectory ?=./nix
 
 ##################################################
 # Targets
@@ -38,23 +46,52 @@ default: build open
 
 build:
 
-
 .PHONY: build
 
 #------------------------------------------------#
 
+all: json cls tex pdf
+
+.PHONY: all
+
+##################################################
+
+resume:
+	@$(NIX_BUILD) $(NixDirectory) -A 'resume'
+
+.PHONY: resume
+
+#------------------------------------------------#
+
 pdf:
-	nix-shell --run '$(TEX) resume.tex'
-	find -L ./result -type f -name '*.pdf'
+	@mkdir -p "$(OutputDirectory)"
+	@$(CP) `$(NIX_BUILD) $(NixDirectory) -A 'resume.pdf'` "$(OutputDirectory)/resume.pdf"
 
 .PHONY: pdf
 
 #------------------------------------------------#
 
 tex:
-	die TODO
+	@mkdir -p "$(OutputDirectory)"
+	@$(CP) `$(NIX_BUILD) $(NixDirectory) -A 'resume.tex'` "$(OutputDirectory)/resume.tex"
 
 .PHONY: tex
+
+#------------------------------------------------#
+
+cls:
+	@mkdir -p "$(OutputDirectory)"
+	@$(CP) `$(NIX_BUILD) $(NixDirectory) -A 'resume.cls'` "$(OutputDirectory)/resume.cls"
+
+.PHONY: cls
+
+#------------------------------------------------#
+
+json:
+	@mkdir -p "$(OutputDirectory)"
+	@$(CP) `$(NIX_BUILD) $(NixDirectory) -A 'resume.json'` "$(OutputDirectory)/resume.json"
+
+.PHONY: json
 
 #------------------------------------------------#
 
@@ -82,7 +119,8 @@ install: build
 
 clean:
 	rm -f *.{aux,log,out}	                 # TeX temp files.
-	rm result/		                 # « ./result » is a symlink.
+	rm -f result/		                 # « ./result » is a symlink.
+	rm -f $(OutputDirectory)                 # « ./.make » is our working directory.
 
 .PHONY: clean
 

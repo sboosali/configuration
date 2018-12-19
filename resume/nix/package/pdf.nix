@@ -81,6 +81,51 @@ xelatex = ''${texlive-combined}/bin/xelatex'';
 options-string = builtins.toString options;
 
 ##################################################
+
+src = builtins.filterSource isSrc ../../src;
+
+##################################################
+
+isSrc = path: type:
+
+   ( isDirectory type
+  ||  ( isRegularFile type
+     && ( hasExtension "tex" path
+       || hasExtension "cls" path
+       || hasExtension "otf" path
+        )
+      )
+   );
+
+##################################################
+
+isDirectory = type:
+  type == "directory";
+
+##################################################
+
+isRegularFile = type:
+  type == "regular"; 
+
+##################################################
+
+hasExtension = extension: filepath:
+
+  let
+  basename = builtins.baseNameOf filepath;
+
+  extensionLength = builtins.stringLength extension;
+  basenameLength  = builtins.stringLength basename;
+
+  index  = basenameLength - extensionLength - 1;
+  index' = if index < 0 then 0 else index;
+
+  suffix = builtins.substring index' basenameLength basename;
+  in
+
+  suffix == ''.${extension}'';
+
+##################################################
 in
 ##################################################
 stdenv.mkDerivation {
@@ -89,7 +134,7 @@ stdenv.mkDerivation {
 
   name = ''${basename}-resume'';
 
-  src = ../../src;                    # TODO
+  inherit src;
 
   ################################################
 

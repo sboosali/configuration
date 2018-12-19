@@ -1,3 +1,5 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \ProvidesClass{resume}[2017/08/01 Resume Class]
 \NeedsTeXFormat{LaTeX2e}
 
@@ -8,6 +10,8 @@
 }
 \ProcessOptions\relax
 \LoadClass{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \RequirePackage{upquote}
 \RequirePackage{setspace}
@@ -28,6 +32,8 @@
 \RequirePackage{parskip}
 \RequirePackage[hidelinks,unicode]{hyperref}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \geometry{left=4.0cm, top=2.0cm, right=4.0cm, bottom=2.0cm, footskip=.5cm}
 
 \hypersetup{
@@ -44,8 +50,10 @@
 
 \defaultfontfeatures{Ligatures=TeX}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \newfontfamily\headerfontspaced{FiraSans}[
-  Path            =   ../fonts/,
+  Path            =   /nix/store/qgvvdjy99ncss2zm1xy769zkjd30l9k7-fonts/,
   UprightFont     =   *-Regular,
   BoldFont        =   *-Bold,
   ItalicFont      =   *-Italic,
@@ -54,7 +62,7 @@
 ]
 
 \newfontfamily\headerfont{FiraSans}[
-  Path            =   ../fonts/,
+  Path            =   /nix/store/qgvvdjy99ncss2zm1xy769zkjd30l9k7-fonts/,
   UprightFont     =   *-Regular,
   BoldFont        =   *-Bold,
   ItalicFont      =   *-Italic,
@@ -62,7 +70,7 @@
 ]
 
 \newfontfamily\footerfont{FiraSans}[
-  Path            =   ../fonts/,
+  Path            =   /nix/store/qgvvdjy99ncss2zm1xy769zkjd30l9k7-fonts/,
   UprightFont     =   *-Regular,
   BoldFont        =   *-Bold,
   ItalicFont      =   *-Italic,
@@ -70,12 +78,14 @@
 ]
 
 \newfontfamily\bodyfont{Charter}[
-  Path            =   ../fonts/,
+  Path            =   /nix/store/qgvvdjy99ncss2zm1xy769zkjd30l9k7-fonts/,
   UprightFont     =   * Regular,
   BoldFont        =   * Bold,
   ItalicFont      =   * Italic,
   BoldItalicFont  =   * Bold Italic
 ]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \newcommand*{\headerfirstnamestyle}[1]{
   {\fontsize{24pt}{1em}\headerfontspaced\MakeUppercase{#1} }
@@ -185,6 +195,8 @@
 \newcommand{\acvSectionTopSkip}{3mm}
 \newcommand{\acvSectionContentTopSkip}{2.5mm}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \newcolumntype{L}[1]{
   >{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}
 }
@@ -239,7 +251,8 @@
       {}
       {
         \ifbool{isstart}{\setbool{isstart}{false}}{\acvHeaderSocialSep}
-        \href{http://\@homepage}{\acvHeaderIconSep\@homepage}
+        \href{https://\@homepage}{\acvHeaderIconSep\@homepage}
+        %^ TDOO does external href work? 
       }
       \ifthenelse{\isundefined{\@email}}
       {}
@@ -271,6 +284,8 @@
   \subsectionstyle{#1}
   \phantomsection{}
 }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \newenvironment{cvparagraph}{
   \vspace{\acvSectionContentTopSkip}
@@ -371,3 +386,5 @@
   \end{itemize}
   \vspace{-4.0mm}
 }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

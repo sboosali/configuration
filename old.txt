@@ -55,6 +55,61 @@
 
 
 
+
+
+
+
+
+
+
+
+	@$(NIX_BUILD) $(NixDirectory) -A 'resume.tex' | grep "/nix/store/" > resume.tex
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#------------------------------------------------#
+
+pdf:
+	nix-shell --run '$(TEX) resume.tex'
+	find -L ./result -type f -name '*.pdf'
+
+.PHONY: pdf
+
+#------------------------------------------------#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # indentBy = { indentation ? 4 }: s:
 
 #   let

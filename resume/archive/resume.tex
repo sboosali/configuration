@@ -1,39 +1,21 @@
-##################################################
-{ tex ? import ./tex.nix {}
-, cv  ? import ./cv.nix  { inherit tex; }
-}:
-
-##################################################
-{ class
-, fontsize
-
-, contact
-, education
-, career
-, honors ? []
-}:
-
-##################################################
-let
-
-##################################################
-
-in
-##################################################
-''
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Every LaTeX document has a document class. 
 %% For this document, I will use a custom resume class.
 
-${tex.documentclass { inherit fontsize class; }}
+\documentclass [11pt] {resume}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Next, I’ll provide some semantic information. 
 %% Each of these commands is defined in the résumé class. 
 
-${cv.mkContact contact}
+\name{Sam}{Boosalis}
+\address{San Francisco}
+\mobile{+1 (617) 922-0791}
+\email{samboosalis@gmail.com}
+\homepage{sboosali.github.io}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -48,13 +30,27 @@ ${cv.mkContact contact}
 
 \cvsection{Education}
 
-${cv.mkEducation { indentation = 2; } education}
+  \begin{cventries}
+    \cventry
+    {Brown University}
+    {Providence, RI}
+    {Computer Science B.A.}
+    {2009 — 2013}
+    {\begin{cvitems}   \item {Implemented a compiler for an ML langauge with recursive bindings and Hindley-Milner type inference.\par Parsed, typechecked, name-checked, optimized, and assembled (into MIPS).} \end{cvitems}}
+  \end{cventries}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \cvsection{Work Experience}
 
-${cv.mkCareer { indentation = 2; } career}
+  \begin{cventries}
+    \cventry
+    {Turn Inc.}
+    {Redwood City, CA}
+    {Research Software Engineer}
+    {Feb 2014 — Jan 2015}
+    {\begin{cvitems}   \item {Implemented Multi-Touch Attribution: } \end{cvitems}}
+  \end{cventries}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -77,7 +73,7 @@ ${cv.mkCareer { indentation = 2; } career}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-${if honors != [] then ''\cvsection{Honors \& Awards}'' else ""}
+
 
   %% TODO honors
   %% 
@@ -112,4 +108,3 @@ ${if honors != [] then ''\cvsection{Honors \& Awards}'' else ""}
 \end{document}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-''

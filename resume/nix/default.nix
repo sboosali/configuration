@@ -13,18 +13,18 @@ inherit (import ./resume { })
 
 ##################################################
 
-package = import ./resume/package.nix { inherit (pkgs) stdenv texlive; }
-  { inherit resume;
-    inherit basename;
+package = import ./package { inherit pkgs; }
+  { inherit resume data basename;
   };
 
 in
 ##################################################
 {
 
-  resume.json = builtins.toJSON data;
-  resume.tex  = resume;
-  resume.pdf  = package;
+  resume.pdf  = package.pdf;
+  resume.tex  = package.tex;
+  resume.cls  = package.cls;
+  resume.json = package.json;
 
 }
 ##################################################

@@ -15,7 +15,7 @@ let
 
 paths = {
 
-  fonts = ''${fonts}/'';
+  fonts = ''${fonts}'';
   # ^ NOTE font paths in the « .cls » require trailing-slash.
 
 };
@@ -79,7 +79,7 @@ in
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \newfontfamily\headerfontspaced{FiraSans}[
-  Path            =   ${fonts},
+  Path            =   ${fonts}/,
   UprightFont     =   *-Regular,
   BoldFont        =   *-Bold,
   ItalicFont      =   *-Italic,
@@ -88,7 +88,7 @@ in
 ]
 
 \newfontfamily\headerfont{FiraSans}[
-  Path            =   ${fonts},
+  Path            =   ${fonts}/,
   UprightFont     =   *-Regular,
   BoldFont        =   *-Bold,
   ItalicFont      =   *-Italic,
@@ -96,7 +96,7 @@ in
 ]
 
 \newfontfamily\footerfont{FiraSans}[
-  Path            =   ${fonts},
+  Path            =   ${fonts}/,
   UprightFont     =   *-Regular,
   BoldFont        =   *-Bold,
   ItalicFont      =   *-Italic,
@@ -104,7 +104,7 @@ in
 ]
 
 \newfontfamily\bodyfont{Charter}[
-  Path            =   ${fonts},
+  Path            =   ${fonts}/,
   UprightFont     =   * Regular,
   BoldFont        =   * Bold,
   ItalicFont      =   * Italic,

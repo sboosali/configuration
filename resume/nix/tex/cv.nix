@@ -7,11 +7,23 @@ let
 
 cv = {
 
-  inherit mkEducation mkSchool mkCareer mkJob;
+  inherit mkContact mkEducation mkSchool mkCareer mkJob;
 
   inherit mkDate;
 
 };
+
+##################################################
+
+mkContact = { name, address, mobile, email, homepage }:
+
+  ''
+  \name{${name.first}}{${name.last}}
+  \address{${address}}
+  \mobile{${mobile}}
+  \email{${email}}
+  \homepage{${homepage}}
+  '';
 
 ##################################################
 

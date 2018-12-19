@@ -41,6 +41,10 @@ TAGS
 
 # tex
 *.aux
+*.dvi
 *.out
-resume/resume.pdf
+#TODO resume/resume.pdf
+
+# make
+.make/
 
