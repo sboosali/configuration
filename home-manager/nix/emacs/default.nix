@@ -10,7 +10,7 @@
 
 # package       = pkgs.emacs25;
 
-  overrides = import ./overrides.nix {};
+ #TODO overrides = import ./overrides.nix {};
 
 }
 ##################################################

@@ -27,7 +27,8 @@
 
 % \https :: String -> String 
 %
-% Make a clickable link from a URL, hiding the protocol from the rendered.
+% Make a clickable (secure) link for a URL,
+% hiding the protocol from the rendered document.
 
 \newcommand*{\https}[1]{%
   \href{https://#1} {\underline{#1}}%
@@ -37,6 +38,8 @@
 
 % \mailto :: String -> String 
 %
+% Creates a link for an email address.
+%
 
 \newcommand*{\mailto}[1]{%
   \href{mailto:#1} {\underline{#1}}%
@@ -44,14 +47,16 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% \tel :: String -> String -> String -> String
+% \tel :: String -> String -> String -> String -> String
 %
-% \tel{country-code}{area-code}{digits}
+% Creates a link for a (American) phone number.
 %
-% \tel{w}{xxx}{yyy-zzzz}
+% \tel{country-code}{area-code}{yyy}{zzzz}
+%
+% \tel{w}{xxx}{yyy}{zzzz}
 
-\newcommand*{\tel}[3]{%
-  \href{tel:+#1#2#3} {\underline{+#1 (#2) #3}}%
+\newcommand*{\tel}[4]{%
+  \href{tel:+#1#2#3#4} {\underline{+#1 (#2) #3-#4}}%
 }%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
