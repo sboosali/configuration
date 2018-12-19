@@ -49,10 +49,14 @@ open: build
 
 #------------------------------------------------#
 
-install: build
+install: #TODO# build
 	@mkdir -p $(Directory)/
-	@cp -v ./result/*.pdf $(Directory)/
-	@ls -l $(Directory)/
+	@mv ./*.pdf $(Directory)/
+
+# install: build
+# 	@mkdir -p $(Directory)/
+# 	@cp -v ./result/*.pdf $(Directory)/
+# 	@ls -l $(Directory)/
 
 .PHONY: install
 
@@ -67,7 +71,7 @@ fetch:
 
 clean:
 	@rm -f *.{aux,log,out}
-	@rm result || rm -f ./result/
+	@rm -f result || rm -f ./result/
 
 .PHONY: clean
 

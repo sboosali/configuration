@@ -25,18 +25,20 @@ texPackages = {
   inherit (texlive)
           collection-fontsrecommended
           hyperref
+          # geometry
           # fontspec
           # lastpage
           xetex
           chktex                      # http://www.nongnu.org/chktex/
-          scheme-minimal;
+          scheme-basic;
 
 };
 
-# ^ « hyperref » provides clickable hyperlinks in PDFs.
-
 # ^ Any « scheme-* » derivation provides the language toolchain,
 # e.g. « tex ».
+
+# ^ « hyperref » provides clickable hyperlinks in PDFs.
+# It requires (at least) « scheme-basic ».
 
 # ^ « collection-fontsrecommended » provides TexLive's "fallback fonts",
 # e.g. « lmroman10-regular ».

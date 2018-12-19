@@ -193,8 +193,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % import external dependencies (see « resume.nix »)
 
+%\RequirePackage{array}
+%\RequirePackage{enumitem}
+%
+\RequirePackage{geometry}
 %\RequirePackage[quiet]{fontspec}
-%\RequirePackage[hidelinks,unicode]{hyperref}
+\RequirePackage[hidelinks,unicode]{hyperref}
 
 %% > hyperref – Extensive support for hypertext in LATEX
 %% >
@@ -207,6 +211,14 @@
 %% > * for PDF control within pdfTEX and dvipdfm;
 %% > * for TEX4ht; and
 %% > * for VTEX’s pdf and HTML backends.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%TODO% \geometry{left=4.0cm, top=2.0cm, right=4.0cm, bottom=2.0cm, footskip=.5cm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

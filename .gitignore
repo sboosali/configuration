@@ -43,7 +43,8 @@ TAGS
 *.aux
 *.dvi
 *.out
-#TODO resume/resume.pdf
+resume/1/*.pdf
+resume/2/*.pdf
 
 # make
 .make/
