@@ -199,52 +199,9 @@
 %\RequirePackage{geometry}
 %\RequirePackage[quiet]{fontspec}
 
-\RequirePackage[hidelinks,unicode]{hyperref}
-
-%% > hyperref – Extensive support for hypertext in LATEX
-%% >
-%% > The hyperref package is used to handle cross-referencing commands in LATEX to produce hypertext links in the document.
-%% > The package provides backends:
-%% >
-%% > * for the \special set defined for oHyperTEX DVI processors;
-%% > * for embedded pdfmark commands for processing by Acrobat Distiller (dvips and Y&Y’s dvipsone);
-%% > * for Y&Y’s dviwindo;
-%% > * for PDF control within pdfTEX and dvipdfm;
-%% > * for TEX4ht; and
-%% > * for VTEX’s pdf and HTML backends.
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %TODO% \geometry{left=4.0cm, top=2.0cm, right=4.0cm, bottom=2.0cm, footskip=.5cm}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% \https :: String -> String 
-% Make a clickable link from a URL, hiding the protocol from the rendered.
-
-\newcommand*{\https}[1]{%
-  \href{https://#1} {#1}%
-}%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% \mailto :: String -> String 
-
-\newcommand*{\mailto}[1]{%
-  \href{mailto:#1} {#1}%
-}%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% \mailto :: String -> String -> String -> String
-%
-% \mailto{country-code}{area-code}{digits}
-%
-% \mailto{w}{xxx}{yyy-zzzz}
-
-\newcommand*{\tel}[3]{%
-  \href{tel:+#1#2#3} {+#1 (#2) #3}%
-}%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

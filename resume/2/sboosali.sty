@@ -1,0 +1,57 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\ProvidesPackage{sboosali}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Imports %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage[hidelinks,unicode]{hyperref}
+
+%% > hyperref – Extensive support for hypertext in LATEX
+%% >
+%% > The hyperref package is used to handle cross-referencing commands in LATEX
+%% > to produce hypertext links in the document.
+%% > The package provides backends for:
+%% >
+%% > * the \special set defined for oHyperTEX DVI processors;
+%% > * embedded pdfmark commands for processing by Acrobat Distiller (dvips and Y&Y’s dvipsone);
+%% > * Y&Y’s dviwindo;
+%% > * PDF control within pdfTEX and dvipdfm;
+%% > * TEX4ht; and
+%% > * VTEX’s pdf and HTML backends.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Exports %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \https :: String -> String 
+%
+% Make a clickable link from a URL, hiding the protocol from the rendered.
+
+\newcommand*{\https}[1]{%
+  \href{https://#1} {\underline{#1}}%
+}%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \mailto :: String -> String 
+%
+
+\newcommand*{\mailto}[1]{%
+  \href{mailto:#1} {\underline{#1}}%
+}%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \tel :: String -> String -> String -> String
+%
+% \tel{country-code}{area-code}{digits}
+%
+% \tel{w}{xxx}{yyy-zzzz}
+
+\newcommand*{\tel}[3]{%
+  \href{tel:+#1#2#3} {\underline{+#1 (#2) #3}}%
+}%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
