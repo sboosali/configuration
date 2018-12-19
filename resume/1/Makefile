@@ -14,7 +14,11 @@ SHELL=bash
 
 TEX ?=xelatex -file-line-error -interaction=nonstopmode
 
+OPEN ?=xdg-open
+
 CP ?=cp "--no-preserve=mode,ownership"
+
+RM ?=rm
 
 NIX ?="nix"
 
@@ -30,7 +34,11 @@ NIX_REPL ?=$(NIX) repl
 
 #TODO ResumeTex ?=./tex/resume.tex
 
-OutputDirectory ?=.make/
+OutputDirectory ?=./.make
+
+ResultDirectory ?=./result
+
+ArchiveDirectory ?=./archive
 
 NixDirectory ?=./nix
 
@@ -96,38 +104,38 @@ json:
 #------------------------------------------------#
 
 repl:
-	$(NIX_REPL) ./nix/resume/
+	@$(NIX_REPL) "$(NixDirectory)/repl.nix"
 
 #------------------------------------------------#
 
 open: build
-	xdg-open result/resume.pdf
+	$(OPEN) $(ResultDirectory)/resume.pdf
 
 .PHONY: open
 
 #------------------------------------------------#
 
-install: build
-	mkdir -p archive/
-	cp "--no-preserve=mode,ownership" "result/resume.pdf" "archive/resume.pdf"
+install:
+	mkdir -p $(ArchiveDirectory)
+	$(CP) -v $(OutputDirectory)/* $(ArchiveDirectory)
+	ls -l $(ArchiveDirectory)
 
-	ls -l ./archive
-
-.PHONY: open
+.PHONY: install
 
 #------------------------------------------------#
 
 clean:
-	rm -f *.{aux,log,out}	                 # TeX temp files.
-	rm -f result/		                 # « ./result » is a symlink.
-	rm -f $(OutputDirectory)                 # « ./.make » is our working directory.
+	@$(RM) -f *.{aux,log,out}
+	@$(RM) $(ResultDirectory) || rm -f $(ResultDirectory)/
+	@$(RM) -fr $(OutputDirectory)
+
+# ^ NOTE:
+# 1. TeX generates several temporary-files.
+# 2. « ./result » is a symlink.
+# 3. « ./.make » is our working directory.
+
+# ^ NOTE « ./result » may be either a file or a directory.
 
 .PHONY: clean
-
-##################################################
-
-resume.tex: #TODO « ./nix/**/*.nix »
-#TODO	nix eval ./nix -A 'resume' > ./tex/resume.tex
-	$(NIX_EVAL) --strict --expr '(import nix/resume {}).resume'
 
 ##################################################

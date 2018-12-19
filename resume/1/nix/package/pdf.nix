@@ -167,17 +167,26 @@ stdenv.mkDerivation {
 
   unpackPhase = ''
     # unpack « .cls » files...
-    cp ${if useNixFiles then ''"$clsPath"'' else ''"$src/tex/resume.cls"''} "resume.cls"
+    cp ${if useNixFiles then ''"$clsPath"'' else ''"$src/tex/resume.cls"''} "./resume.cls"
 
     # unpack « .tex » files...
-    cp ${if useNixFiles then ''"$texPath"'' else ''"$src/tex/resume.tex"''} "resume.tex"
+    cp ${if useNixFiles then ''"$texPath"'' else ''"$src/tex/resume.tex"''} "./resume.tex"
 
     # unpack « .otf » files...
     cp -r "$src/fonts" ./fonts
   '';
 
   buildPhase = ''
-    $xelatex ${options-string} "resume.tex"
+    # Try running twice...
+    $xelatex $options "resume.tex" || $xelatex ${options-string} "resume.tex" || true
+
+    # ^ Why? Because LaTeX may need multiple passes, 
+    # e.g. to resolve « \pageref{LastPage} ».
+
+    # Only fail if no PDF was output...
+    if   [ ! -e "resume.pdf" ]
+    then exit 1                       #TODO "$XelatexExitCode"
+    fi
   '';
 
   # ^ These options make it easier to debug xelatex when something goes wrong and makes sure we don’t get xelatex doesn’t require any user input. It will produce a file called resume.pdf that we can use as a résumé.

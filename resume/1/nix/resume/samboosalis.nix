@@ -56,19 +56,25 @@ career = [
     from     = "Feb 2014";
     to       = "Jan 2015";
     items    = [
-      "Implemented Multi-Touch Attribution: "
+      "Architected Multi-Touch Attribution"
+      "MapReduce "
+      "Deployed it to several hundred servers with forwards- and backwards- compatibility."
     ];
   }
 
-  # {
-  #   employer = "";
-  #   location = "";
-  #   position = "";
-  #   from     = "";
-  #   to       = "";
-  #   items    = [
-  #   ];
-  # }
+  {
+    employer = "Yelp";
+    location = "San Francisco, CA";
+    position = "Software Engineering Intern";
+    from     = "Jun 2013";
+    to       = "Aug 2013";
+    items    = [
+      "Designed Yelp's Rate-Tracking Service."
+      "Implemented the server and ."
+      "Deployed the MySQL database and Memcached cache."
+      "Tested it via."
+    ];
+  }
 
   # {
   #   employer = "";

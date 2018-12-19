@@ -77,7 +77,7 @@ ${cv.mkCareer { indentation = 2; } career}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-${if honors != [] then ''\cvsection{Honors \& Awards}'' else ""}
+  %% ${if honors != [] then ''\cvsection{Honors \& Awards}'' else ""}
 
   %% TODO honors
   %% 
@@ -102,7 +102,7 @@ ${if honors != [] then ''\cvsection{Honors \& Awards}'' else ""}
 \makecvfooter
     {SBOOSALI}
     {\thepage}
-    {\pageref{LastPage}}
+    {1}         %% {\pageref{LastPage}}
 
  %% The =makecvfooter= command gives a nice footer that will be put at the bottom
  %% of each page. This can give us the document title and page numbering. In

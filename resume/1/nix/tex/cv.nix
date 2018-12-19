@@ -154,14 +154,14 @@ mkItem = sentences:
   let
   paragraph =
     if   builtins.isList sentences
-    then builtins.concatStringsSep '' \par '' sentences
+    then builtins.concatStringsSep "\n" sentences  # NOTE \par doesn't work with \item
     else sentences;
   in
 
   tex.command { name = "item";
                 arguments = [ paragraph ];
 
-                multiline = false;
+                multiline = true;
               };
 
 ##################################################
