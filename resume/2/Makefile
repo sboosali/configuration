@@ -8,7 +8,7 @@ SHELL=bash
 ##################################################
 # Programs...
 
-TEX ?=xelatex -file-line-error -interaction=nonstopmode
+# TEX ?=xelatex -file-line-error -interaction=nonstopmode
 
 OPEN ?=xdg-open
 
@@ -37,6 +37,7 @@ build:
 
 check:
 	$(NIX_SHELL) ./shell.nix --run 'chktex *.tex'
+#TODO	$(NIX_SHELL) ./shell.nix --run 'chktex *.cls'
 
 .PHONY: check
 
@@ -49,7 +50,7 @@ open: build
 
 #------------------------------------------------#
 
-install: #TODO# build
+install: build
 	@mkdir -p $(Directory)/
 	@mv ./*.pdf $(Directory)/
 
