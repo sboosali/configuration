@@ -1,17 +1,29 @@
 ##################################################
 { lib
 }:
+
 ##################################################
 
 rec {
  #################################################
- 
+
  env = {
  
    HOME     = builtins.getEnv "HOME";
    HOSTNAME = builtins.getEnv "HOSTNAME";
 
+   PKG_CONFIG_PATH = builtins.getEnv "PKG_CONFIG_PATH";
+   TERMINFO_DIRS   = builtins.getEnv "TERMINFO_DIRS";
+
  };
+
+ #################################################
+
+ enable = attrset:
+   attrset // { enable = true; };
+ 
+ disable = attrset:
+   attrset // { enable = false; };
 
  #################################################
  

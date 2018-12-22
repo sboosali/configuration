@@ -1,17 +1,50 @@
 ##################################################
+{ 
+# , initFile      ? null
+# , initDirectory ? null
+}:
+
+#TODO:
+# { Exec
+# , Path
+# }:
+
+#TODO:
+# { program
+# , executable
+# , directory
+# }:
+
+##################################################
+let
+
+fromPath = builtins.toString;
+
+##################################################
+
+emacs   = fromPath ~/.nix-profile/bin/emacs;
+
+emacs-d = fromPath ~/.emacs.d;
+
+#[TODO rm] emacs = ''${config.emacs}/bin/emacs'';
+
+in
+##################################################
+''
+##################################################
 [Desktop Entry]
+Version=1.0
+Type=Application
+Encoding=UTF-8
 
 Name=emacs
 #TODO Name=【E】 emacs
 
-Version=1.0
-Type=Application
-
 #############################
 
-Exec=/home/sboo/.nix-profile/bin/emacs --maximized --name=SBoo %F
+Exec=${emacs} --maximized --name=SBoo %F
 TryExec=emacs
-Path=/home/sboo/.emacs.d
+Path=${emacs-d}
 
 # ^ %F interpolates a list of filenames.
 
@@ -40,9 +73,9 @@ Actions=debug;
 
 Name=【D】 Debug Emacs « --debug-init ».
 
-Exec=/home/sboo/.nix-profile/bin/emacs --debug-init --find-file=~/.emacs.d/init.el --no-splash --name=SBoo/Debug %F
+Exec=${emacs} --debug-init --find-file=~/.emacs.d/init.el --no-splash --name=SBoo/Debug %F
 TryExec=emacs
-Path=/home/sboo/.emacs.d
+Path=${emacs-d}
 
 ##################################################
 # Notes ##########################################
@@ -67,18 +100,7 @@ Path=/home/sboo/.emacs.d
 
 # See https://standards.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html#exec-variables .
 
-##################################################
-
-# `Icon=emacs.png`
-#
-# ^ `desktop-file-validate` demands no extension,
-# unless it's an absolute-filepath.
+#TODO  --load ~/.emacs.d/init.el
 
 ##################################################
-
-#TODO Name=emacs-sboo
-#TODO Exec=/home/sboo/.nix-profile/bin/emacs-sboo
-
-#TODO  --load /home/sboo/.emacs.d/init.el 
-
-##################################################
+''

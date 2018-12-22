@@ -1,9 +1,9 @@
 ##################################################
 { pkgs
 
-, xdg
-, env
 , sboo
+, applications
+, xdg
 }:
 
 ##################################################
@@ -41,7 +41,7 @@ in
  # * « ~/.bash_login » exists.
  #
 
- bashrcExtra = import ./bash-interactive-rc.nix { inherit env bashUtilities;
+ bashrcExtra = import ./bash-interactive-rc.nix { inherit bashUtilities;
                                                 };
 
  # ^ « .bashrc » extras.
@@ -54,7 +54,7 @@ in
 
  shellAliases =
   (import ./shell-aliases.nix
-          { inherit pkgs sboo env;
+          { inherit pkgs sboo applications;
           });
 
  # ^ Attribute Set mapping aliases (the top-level Attribute Names in this option) either:

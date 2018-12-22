@@ -6,7 +6,7 @@
 ##################################################
 let
 
-NIX_PROFILE = "~/.nix-profile";
+NIX_PROFILE = builtins.toString ~/.nix-profile;
 
 env = {
 

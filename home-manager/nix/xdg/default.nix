@@ -1,8 +1,18 @@
 ##################################################
 { sboo
-, env
+, applications
 }:
 
+##################################################
+let
+
+env = {
+
+  HOME = builtins.getEnv "HOME";
+
+};
+
+in
 ##################################################
 {
 
@@ -14,9 +24,9 @@
 
 ##################################################
 
- configFile = import ./config.nix { inherit sboo; };
+ configFile = import ./config.nix { inherit sboo applications; };
 
- dataFile   = import ./data.nix { inherit sboo; };
+ dataFile   = import ./data.nix { inherit sboo applications; };
 
 }
 ##################################################

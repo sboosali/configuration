@@ -1,9 +1,10 @@
 ##################################################
 { pkgs
 
-, xdg
-, env
 , sboo
+, xdg
+, applications
+
 , utilities
 }:
 
@@ -81,7 +82,7 @@ with utilities;
   bash =
 
     (import ./bash
-            { inherit pkgs sboo env xdg;
+            { inherit pkgs sboo xdg applications;
             })
 
      // { enable = true;

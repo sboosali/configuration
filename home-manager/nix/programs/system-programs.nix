@@ -44,6 +44,7 @@ with pkgs;
  openssh
  pandoc
  pass
+ pinta                          # Pinta is a simple image-editor.
  pocketsphinx
  postgresql
  qbittorrent

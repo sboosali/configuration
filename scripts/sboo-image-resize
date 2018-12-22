@@ -1,0 +1,47 @@
+#!/bin/bash
+set -eu
+
+########################################
+
+HELP="\nUSAGE   « $0 FILE (NUMBER | NUMBERxNUMBER) [FILE] »\n\nEXAMPLE « $0 image.png 128 »\nEXAMPLE « $0 foo.png 16x32 bar.png »\n"
+
+INPUTFILE=${1:-""}
+
+NUMBER=${2:-""}
+# ^ e.g. « 64 » or « 64x64 ».
+
+OUTPUTFILE=${3:-""}
+
+if [ $# -lt 2 ]
+then
+    echo -e ${HELP}
+    exit 2
+fi
+
+########################################
+
+command -v convert >/dev/null
+
+# ^ the « ImageMagick » package provides the « convert » program.
+
+########################################
+
+if   [ "${NUMBER}" -ge 0 ] 2>/dev/null
+     # ^ Whether it's a positive integer.
+then Dimensions="${NUMBER}x${NUMBER}"
+else Dimensions="${NUMBER}"
+fi
+
+Input="${INPUTFILE}"
+
+if   [ ! -z "${OUTPUTFILE}" ]
+     # ^ Whether it's not an empty string.
+then Output="${OUTPUTFILE}"
+else Output="${Dimensions}_${Input}"
+fi
+
+########################################
+
+convert "${Input}" -resize "${Dimensions}" "${Output}"
+
+########################################

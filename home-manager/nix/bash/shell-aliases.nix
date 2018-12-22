@@ -2,10 +2,19 @@
 { pkgs
 
 , sboo
-, env
+, applications
 
-# , xdg 
 }:
+##################################################
+let
+
+env = {
+
+  HOME = builtins.getEnv "HOME";
+
+};
+
+in
 ##################################################
 let
 
@@ -489,7 +498,7 @@ in
 
  #################################################
 
-  sboo-emacs = ''${xdg-open} ${sboo.paths.emacs-desktop}'';
+  sboo-emacs = ''${xdg-open} ${applications.emacs.desktop}'';
 
   # ^ NOTE « &disown » is implicit in « xdg-open _.desktop ».
 

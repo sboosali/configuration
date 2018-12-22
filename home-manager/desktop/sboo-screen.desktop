@@ -1,25 +1,26 @@
 ##################################################
 [Desktop Entry]
+
+Name=Invert Screen Colors
+
+Version=1.0
 Type=Application
+Encoding=UTF-8
 
-Name=Dropbox
-Exec=/home/sboo/.dropbox-dist/dropboxd 
+#############################
 
-GenericName=File Synchronizer
-Comment=Sync your files across computers and to the web
-Categories=Network;FileTransfer;
+Exec=xrandr-invert-colors
+TryExec=xrandr-invert-colors
+
+#############################
+
+#Icon=/home/sboo/configuration/home-manager/icons/128x128/xrandr-invert-colors.png
+
+StartupNotify=true
 Terminal=false
-Icon=dropbox
-StartupNotify=false
 
 ##################################################
 # Notes ##########################################
 ##################################################
-
-# the dropbox installation had this line:
-#
-#     Exec=dropbox start -i
-#
-# which didn't work.
 
 ##################################################

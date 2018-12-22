@@ -83,6 +83,20 @@
 
 
 
+optionalAttrs = bool: attrs:
+
+  if   bool
+  then attrs
+  else {};
+
+
+
+
+
+
+
+
+
 
 
 

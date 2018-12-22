@@ -51,7 +51,17 @@ utilities =
 
 ##################################################
 
-sboo = import ./sboo { inherit (utilities) env; };
+sboo = import ./sboo { };
+
+##################################################
+
+applications = import ./applications {
+ #TODO emacs = emacs;
+};
+
+##################################################
+
+emacs = import ./emacs { inherit pkgs; };
 
 ##################################################
 
@@ -119,24 +129,24 @@ self = rec {
 
   ################################################
 
-  home.keyboard.options = [ "ctrl:nocaps" ];
-
-  # ^ « grp:caps_switch »:
-  # Caps Lock (while pressed), Alt+Caps Lock does the original capslock action.
-
-  #TODO# home.keyboard.model = "pc104"
-
-  ################################################
-
   #TODO posthook = '' ${cabal} new-update '';
 
   ################################################
 
-  programs = import ./programs.nix { inherit pkgs sboo xdg env utilities; };
+  programs = import ./programs.nix {
+    inherit pkgs sboo xdg applications utilities;
+  };
 
   ################################################
 
-  services = import ./services.nix { inherit pkgs sboo; };
+  services = import ./services.nix {
+    inherit pkgs sboo;
+  };
+
+  ################################################
+  # Keyboard:
+
+  home.keyboard = import ./home/keyboard.nix {};
 
   ################################################
   # Fonts:
@@ -147,16 +157,23 @@ self = rec {
   # GTK Appearence/Behavior:
 
   gtk =
-    (import ./gtk { inherit pkgs sboo env;
+    (import ./gtk { inherit pkgs sboo;
                   })
      // { enable = false;
         };
+
+  ##############################################
+  # « X Resources »
+
+  xresources.properties =
+    (import ./home/xresources.nix {
+    });
 
   ################################################
   # XDG:
 
   xdg =
-    (import ./xdg { inherit sboo env;
+    (import ./xdg { inherit sboo applications;
                   })
      // { enable = true;
         };

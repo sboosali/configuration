@@ -25,11 +25,9 @@ sudo apt update
 
 ##################################################
 
-sudo apt install --yes "virtualbox-${VirtualboxVersion}"
+sudo apt install --yes "virtualbox-${VirtualboxVersion}" # NOTE if this doesn't work, just install the unqualified/default virtualbox package in the debian repositories (currently, for LTS-16.04 in 2018, it's v5.1).
 
 # ^ « Unpacking... ./virtualbox-5.2_5.2.22-126460~Ubuntu~xenial_amd64.deb »
-
-
 
 sudo apt install --yes "virtualbox-ext-pack"
 # ^ manually accept EULA. 

@@ -1,5 +1,6 @@
 ########################################
 { sboo
+, applications
 }:
 
 ########################################
@@ -22,14 +23,26 @@
 
   ######################################
 
- "autostart/emacs.desktop".source  = sboo.paths.emacs-desktop;
  "autostart/dropbox.desktop".source  = ../../desktop/dropbox.desktop;
+ "autostart/firefox.desktop".source  = ../../desktop/firefox.desktop;
+#TODO "autostart/terminal.desktop".source  = ../../desktop/terminal.desktop;
+#"autostart/.desktop".source  = ../../desktop/.desktop;
 
   # ^ All desktop-entry-files under « ~/.config/autostart/ » are launched upon first login.
 
   ######################################
 
+##################################################
+} // (if applications.emacs.autostart then {
+
+  "autostart/emacs.desktop".text = applications.emacs.desktop;
+
+##################################################
+} else {}) // {
+
+
+
 }
-######################################
+##################################################
 
 #"xfce4/xfconf/xfce-perchannel-xml/xsettings.xml" = ../../../xfce4/xsettings.xml;

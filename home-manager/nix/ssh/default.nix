@@ -1,21 +1,32 @@
 ##################################################
 { pkgs
-, xdg
+
 , sboo
+, xdg
 }:
 
 ##################################################
 let
 
-inherit (pkgs.stdenv) lib;
+inherit (pkgs.stdenv)
+        lib;
+
+##################################################
+
+env = {
+
+  HOME = builtins.getEnv "HOME";
+
+};
 
 ##################################################
 
 sshFile = path:
-  ''${builtins.getEnv "HOME"}/.ssh/${path}'';
+
+  ''${env.HOME}/.ssh/${path}'';
 
 # sshFile = path:
-#   "${xdg.configHome}/ssh/${path}";
+#TODO   "${xdg.configHome}/ssh/${path}";
 
 in
 ##################################################
