@@ -1,8 +1,14 @@
 # Configuration
+
 My personal configuration (dotfiles, etc)
 
 Uses `nix`.
 
+
+## Files
+
+* `./archives/...` — backup home-manager generations (snapshots) 
+* TODO
 
 ## Usage
 
