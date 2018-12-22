@@ -7,7 +7,9 @@ Uses `nix`.
 
 ## Files
 
-* `./archives/...` — backup home-manager generations (snapshots) 
+* `./home-manager/nix/**/*.nix` — my `home-manager`
+* `./archives/...` — backup `home-manager` generations (snapshots)
+* `./dictation/...` — Notes about Dictation & Instructions for configuring microphones and for installing `Dragon NaturallySpeaking` 15 within a `Windows 10` virtual-machine via `VirtualBox`
 * TODO
 
 ## Usage
