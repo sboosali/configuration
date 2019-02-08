@@ -135,6 +135,25 @@ alias fe=find-by-extension
 ############################################################
 ## DEFINITIONS: GREP
 
+############################################################
+############################################################
+## DEFINITIONS: XTERM
+
+function xterm-set-title() {
+
+  Title="${1:-$(basename $(pwd))}"
+
+  echo -e -n "\033]2;${Title}\007"
+
+  # NOTES:
+  # « echo » an XTERM EscapeSequence to set the WindowTitle.
+  # « ]2; » is the sequence being escaped.
+  # « ESC » and « BEL » are the escaping characters.
+
+  # USAGE:
+  # ''if type xterm-set-title; then xterm-set-title ""; fi'';
+
+}
 
 ############################################################
 ############################################################

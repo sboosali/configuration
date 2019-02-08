@@ -28,6 +28,12 @@ default: build open
 
 #------------------------------------------------#
 
+#TODO
+# SamBoosalis.pdf: SamBoosalis.tex resume.cls sboosali.sty *.nix
+# 	time $(NIX_SHELL) ./shell.nix --run './build.sh'
+
+##################################################
+
 build:
 	time $(NIX_SHELL) ./shell.nix --run './build.sh'
 
@@ -43,8 +49,8 @@ check:
 
 #------------------------------------------------#
 
-open: build
-	$(OPEN) *.pdf
+open: build  #SamBoosalis.pdf
+	$(OPEN) SamBoosalis.pdf 2>/dev/null
 
 .PHONY: open
 
