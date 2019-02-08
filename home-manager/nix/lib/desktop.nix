@@ -1,5 +1,6 @@
 ##################################################
 { lib ? (import <nixpkgs> {}).pkgs.lib
+, mkDesktopEntry
 }:
 
 ##################################################
@@ -11,25 +12,35 @@ let
 
 mkApplication = { name, desktop, autostart ? false }:
 
-  assert (builtins.elem (builtins.typesOf desktop) ["string" "path"]);
+  assert (builtins.elem (builtins.typesOf desktop) ["string" "path" "attr"]);
 
   let
-  typeof-desktop = builtins.typesOf desktop;
+  desktop-type = builtins.typesOf desktop;
 
-  desktop-attrset = if autostart && ("string" == typeof-desktop)
+  desktop-attrset =
+
+      if   autostart && ("string" == desktop-type)
       then { text = desktop; }
+
       else
 
-      if   autostart && ("path" == typeof-desktop)
+      if   autostart && ("path" == desktop-type)
       then { source = desktop; }
+
       else
 
+      if   autostart && ("attr" == desktop-type) && (submodule.check desktop)
+      then { text = mkDesktopEntry desktop; }
+
+      else {};
   in
 
   {
     data."applications/emacs.desktop".text = desktop;
+
   } // (lib.optionalAttrs autostart {
     config."autostart/${name}.desktop" = desktop-attrset; }
+
   });
 
 in
