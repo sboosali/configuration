@@ -42,11 +42,11 @@ Name=emacs
 
 #############################
 
-Exec=${emacs} --maximized --name=SBoo %F
+Exec=${emacs} --maximized --name=SBoo
 TryExec=emacs
 Path=${emacs-d}
 
-# ^ %F interpolates a list of filenames.
+# ^ %F interpolates a list of filenames (TODO from what? a selection under the file explorer.).
 
 #############################
 

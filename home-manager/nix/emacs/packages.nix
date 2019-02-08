@@ -123,7 +123,7 @@ with epkgs; [
  ghc
  dante
 
- ##intero          # needs `stack` system-package
+ intero          # needs `stack` system-package
 
  ####################
 

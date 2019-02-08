@@ -27,7 +27,7 @@ rec {
   xresources = import ./xresources { inherit lib; };
 
   #TODO# desktop = import ./desktop.nix {};
-
+ 
   mkDesktopEntry = import ./desktop/default.nix {}; 
 
 }

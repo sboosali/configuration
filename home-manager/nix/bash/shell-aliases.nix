@@ -88,17 +88,17 @@ in
 
  #-----------------------------------------------#
 
- "de" = "cd ~/.emacs.d";
- "dc" = "cd ~/configuration";
- "dh" = "cd ~/haskell";
- "dn" = "cd ~/notes";
+ "dc" = ''cd ~/configuration && if type xterm-set-title; then xterm-set-title "config";  fi'';
+ "de" = ''cd ~/.emacs.d      && if type xterm-set-title; then xterm-set-title "emacs";   fi'';
+ "dh" = ''cd ~/haskell       && if type xterm-set-title; then xterm-set-title "haskell"; fi'';
+ "dn" = ''cd ~/notes         && if type xterm-set-title; then xterm-set-title "notes";   fi'';
 
- "dw" = "cd ~/Downloads";
- "dm" = "cd ~/Documents";
- "dr" = "cd ~/Dropbox";
+ "dr" = ''cd ~/Dropbox       && if type xterm-set-title; then xterm-set-title "Dropbox";   fi'';
+ "dw" = ''cd ~/Downloads'';
+ "dm" = ''cd ~/Documents'';
 
- "dt" = "cd ~/temporary";
- "dk" = "cd ~/backup";
+ "dt" = ''cd ~/temporary'';
+ "dk" = ''cd ~/backup'';
 
  "dx"  = ''cd ${NIXPKGS}'';
  "dxp" = ''cd ${NIX_PROFILE}'';
