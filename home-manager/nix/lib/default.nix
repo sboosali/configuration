@@ -4,15 +4,31 @@
 
 ##################################################
 let
+##################################################
 
+/* Parse a keysequence
+ *
+ */
 
+ kbd = s:
+
+   [ { key       = ;
+       modifiers = [];
+     }
+   ];
+
+##################################################
 in
 ##################################################
 rec {
 
-  xresources = import ./xresources.nix { inherit lib; };
+  inherit kbd;
 
-  desktop = import ./desktop.nix {};
+  xresources = import ./xresources { inherit lib; };
+
+  #TODO# desktop = import ./desktop.nix {};
+
+  mkDesktopEntry = import ./desktop/default.nix {}; 
 
 }
 ##################################################

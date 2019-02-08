@@ -1,16 +1,18 @@
 ##################################################
-{ lib ? (import <nixpkgs> {}).pkgs.lib
+{ lib
 }:
 
 ##################################################
 let
 
 
+
 in
 ##################################################
 rec {
 
-  xresources = import ./xresources.nix { inherit lib; };
+ inherit (import ./xterm.nix { inherit lib; })
+         xterm;
 
 }
 ##################################################
