@@ -19,6 +19,7 @@ in
 let
 
 mkdir       = ''${pkgs.coreutils}/bin/mkdir'';
+chmod       = ''${pkgs.coreutils}/bin/chmod'';
 
 find        = ''${pkgs.findutils}/bin/find'';
 xargs       = ''${pkgs.findutils}/bin/xargs'';
@@ -93,8 +94,9 @@ in
  "dh" = ''cd ~/haskell       && if type xterm-set-title; then xterm-set-title "haskell"; fi'';
  "dn" = ''cd ~/notes         && if type xterm-set-title; then xterm-set-title "notes";   fi'';
 
- "dr" = ''cd ~/Dropbox       && if type xterm-set-title; then xterm-set-title "Dropbox";   fi'';
- "dw" = ''cd ~/Downloads'';
+ "dr" = ''cd ~/Dropbox       && if type xterm-set-title; then xterm-set-title "Dropbox"; fi'';
+#"dw" = ''cd ~/Downloads'';
+ "dw" = ''cd ~/www           && if type xterm-set-title; then xterm-set-title "www";     fi'';
  "dm" = ''cd ~/Documents'';
 
  "dt" = ''cd ~/temporary'';
@@ -109,6 +111,10 @@ in
  "dxl" = ''cd ${NIX_PROFILE}/lib'';
  "dxi" = ''cd ${NIX_PROFILE}/include'';
 #"dx" = ''cd ${NIX_PROFILE}/'';
+
+ #-----------------------------------------------#
+
+ cd-external-hard-drive = ''cd "/media/sboo/TOSHIBA EXT/" && df .'';
 
  #################################################
 
@@ -149,6 +155,12 @@ in
  md="${mkdir} -p";
 
  # ^ « mkdir »
+
+ #################################################
+
+ c7="${chmod} 700";
+
+ # ^ « chmod »
 
  #################################################
 
@@ -478,7 +490,17 @@ in
 
  #################################################
 
- yt = ''${pkgs.youtube-dl}/bin/youtube-dl -f 22'';
+ yt = ''${pkgs.youtube-dl}/bin/youtube-dl --ignore-errors --write-info-json --write-thumbnail'';
+
+ # « youtube-dl » options:
+ #
+ # * « --ignore-errors » — Continue on download errors, for example to skip unavailable videos in a playlist.
+ # * « --write-info-json » — Write video metadata to a .info.json file.
+ # * « --write-thumbnail » — Write thumbnail image to disk. 
+ # * «  » — 
+ # * «  » — 
+
+#yt = ''${pkgs.youtube-dl}/bin/youtube-dl -f 22'';
 
  #TODO melpa2nix = ''${pkgs.emacs2nix}/bin/melpa2nix'';
 
@@ -498,9 +520,15 @@ in
 
  #################################################
 
-  sboo-emacs = ''${xdg-open} ${applications.emacs.desktop}'';
+ sboo-emacs = ''${xdg-open} ${applications.emacs.desktop}'';
 
-  # ^ NOTE « &disown » is implicit in « xdg-open _.desktop ».
+ # ^ NOTE « &disown » is implicit in « xdg-open _.desktop ».
+
+ #################################################
+
+ sboo-date = ''date +%Y-%m-%d'';
+
+ # ^ NOTE the date-format is year-first.
 
  #################################################
 

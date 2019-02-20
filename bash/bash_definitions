@@ -540,6 +540,8 @@ function nix-prefetch-all-cabal-hashes() {
 #  echo 'c = (import /etc/nixos/configuration.nix) { inherit (p) pkgs config lib; }'
 function sboo-nix-repl () {
 
+ xterm-set-title "nix repl"
+
  read -r -d '' NIX_REPL_EXAMPLES <<EOF
 
 ''
@@ -2018,6 +2020,64 @@ function sboo-thaw-emacs () {
    kill -USR2 $(pgrep emacs)
 
 }
+############################################################
+
+function sboo-new-executable () {
+
+ FILE="${1:?« sboo-new-executable FILE »}"
+
+ touch "$FILE"
+
+ chmod 700 "$FILE"
+
+ cat <<- 'EOF' > "$FILE"
+#!/bin/bash
+
+# -*- mode: sh; -*-
+
+set -e
+set -u
+
+##################################################
+
+HELP="««« $(basename $0) INPUT »»»"
+
+##################################################
+
+INPUT="${1:?$HELP}"
+
+##################################################
+
+OUTPUT="${INPUT}"
+
+##################################################
+
+echo ========================================
+echo
+
+echo "${INPUT}"
+echo "${OUTPUT}"
+
+echo
+echo ========================================
+
+##################################################
+EOF
+
+ emacsclient "$FILE" &disown
+
+# NOTES #
+#
+# If you don't want to interpret variables in the text, then use single quotes:
+# 
+#     $ cat << 'EOF' > /tmp/yourfilehere
+#     The variable $FOO will not be interpreted.
+#     EOF
+
+}
+############################################################
+
+
 
 ############################################################
 ############################################################
