@@ -1,0 +1,38 @@
+==================================================
+
+export TERMINFO_DIRS="$HOME/.nix-profile/share/terminfo":/lib/terminfo
+
+----------------------------------------------
+
+mkPATH = xs:
+
+  let 
+  stringFromPathOrString = x:
+    if   builtins.isString x
+    then x
+    else
+    if   isPath x
+    then builtins.toString x
+    else abort "pathFromList";
+  in
+
+  builtins.concatStringsSep ":"
+    (builtins.map stringFromPathOrString
+      xs);
+
+# ^ Renders as absolute filepath.
+#
+# Why `toString`?
+# Because interpolating a path is different than interpolating a string.
+#
+# in particular, "« ${../../../scripts}" »:
+# doesn't equal « /home/sboo/configuration/scripts »,
+# it equals « "/nix/store/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-scripts" ».
+
+----------------------------------------------
+
+
+----------------------------------------------
+
+
+==================================================

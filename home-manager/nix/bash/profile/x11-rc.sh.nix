@@ -7,13 +7,15 @@
 
 ##################################################
 let
+#-----------------------------------------------#
 
 xbindkeys = ''${pkgs.xbindkeys}/bin/xbindkeys'';
 
-##################################################
+#-----------------------------------------------#
 
 xbindkeysrc = ''${xdg.configHome}/xbindkeys/.xbindkeysrc'';
 
+#-----------------------------------------------#
 in
 ##################################################
 
@@ -28,6 +30,7 @@ if  [ "_$XDG_SESSION_TYPE" = "_x11" ]
     # i.e. versus Wayland or versus no window manager.
 
 then
+
     #-----------------------------------------------#
     # xbindkeys ------------------------------------#
     #-----------------------------------------------#
@@ -42,14 +45,14 @@ then
 
              # ^ Whether xbindkeys is already running.
 
-        then "${xbindkeys}" --poll-rc -f ${xbindkeysrc}
+        then "${xbindkeys}" --poll-rc --file ${xbindkeysrc}
         fi
 
     # ^ Start the « xbindkeys » daemon in the background.
 
     # ^ « --poll-rc » means: reload the config whenever it changes.
 
-    # ^ « -f _ » means: load the given config ("rc") file.
+    # ^ « --file _ » means: load the given config ("rc") file.
     # By default, the config is at « ~/.xbindkeysrc »,
     # which we've overriden to be under (one of) « $XDG_CONFIG_DIRS ».
 

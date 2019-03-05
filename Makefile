@@ -104,7 +104,20 @@ apt-install:
 
 	sudo apt install -y "exfat-utils"
 
-	sudo apt install -y ""
+	sudo apt install -y "freeglut3-dev"
+
+	sudo apt install -y "portaudio19-dev"
+
+	sudo apt install -y "lightdm"
+	sudo apt install -y "xubuntu-desktop"
+
+	sudo apt install -y "paper-icon-theme"
+
+	sudo apt install -y "locales"
+	sudo apt install -y "language-pack-en"
+
+	sudo locale-gen en_US.UTF-8
+	sudo dpkg-reconfigure locales
 
 #	sudo apt install -y ""
 

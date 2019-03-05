@@ -1,5 +1,6 @@
 ##################################################
 { pkgs
+, lib
 
 , sboo
 , xdg
@@ -25,11 +26,11 @@ bashUtilities.concatBashScripts
 
       ############################################
 
-      (import ./profile/x11-rc.sh.nix { inherit pkgs xdg; })
+      (import ./profile/x11-rc.sh.nix { inherit pkgs; inherit xdg; })
 
-      (import ./profile/ssh-agent.sh.nix { inherit pkgs sboo; } )
+      (import ./profile/ssh-agent.sh.nix { inherit pkgs; inherit sboo; } )
 
-      (import ./profile/terminfo.sh.nix { inherit pkgs; } )
+      (import ./profile/terminfo.sh.nix { inherit pkgs lib; inherit bashUtilities; } )
 
 ]
 

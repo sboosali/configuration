@@ -1,7 +1,5 @@
 ##################################################
 { lib
-
-, shellUtilities
 }:
 
 ##################################################
@@ -49,42 +47,41 @@ isPath = if builtins ? isPath then builtins.isPath else
 #------------------------------------------------#
 in
 ##################################################
-shellUtilities // rec {
+rec {
+  #----------------------------------------------#
 
   #----------------------------------------------#
 
-  concatBashScripts =
+  /* Make a Colon-Separated string, from a list of « path »s and/or « string »s.
+   *
+   * Examples:
+   *
+   *     >>> makePath [ ~/.cabal/bin "~/.local/bin" ]
+   *     "~/.cabal/bin:~/.local/bin"
+   *
+   * Notes:
+   *
+   * Renders the input as absolute filepath. 
+   *
+   * Calls « builtins.toString », because interpolating a path is different than interpolating a string.
+   *
+   * For example, « "${../../../scripts}" »:
+   * - doesn't equal « /home/sboo/configuration/scripts »;
+   * - does equals « "/nix/store/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-scripts" »;
+   *
+   */
 
-    builtins.concatStringsSep "\n########################################\n";
+  makePath = paths:
 
-  #----------------------------------------------#
-
-  renderBashFunctions = attrs:
+    assert (builtins.all isStringOrPath paths);
 
     let
-    go = key: value:
-        renderBashFunction { name = key; definition = value; };
+
+    strings = builtins.map builtins.toString paths;
+
     in
 
-    (concatBashScripts
-      (builtins.attrValues
-        (builtins.mapAttrs
-          go
-          attrs)));
-
-  #----------------------------------------------#
-
-  renderBashFunction = { name, definition }: ''
-#--------------------------------------#
-
-function ${name} () {
-
-${definition}
-
-}
-
-#--------------------------------------#
-'';
+    lib.strings.makeSearchPath "" strings;
 
   #----------------------------------------------#
 }

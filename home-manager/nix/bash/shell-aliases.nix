@@ -31,6 +31,8 @@ nix-shell   = "nix-shell"; #TODO# ''${pkgs.nix}/bin/nix-shell''
  #TODO3 or... keep "dynamic" (not lexical) to use the same nix that must be installed for home-manager to evaluate this very file
 nix-store = "nix-store";
 
+home-manager = "home-manager"; #TODO#
+
 tar         = "tar"; #TODO# ''${pkgs.tar}/bin/tar'';
 sed         = "sed"; #TODO# ''${pkgs.coreutils?}/bin/sed'';
 grep        = "grep"; #TODO# ''${pkgs.??}/bin/grep'';
@@ -96,7 +98,10 @@ in
 
  "dc" = ''cd ~/configuration && if type xterm-set-title; then xterm-set-title "config";  fi'';
  "de" = ''cd ~/.emacs.d      && if type xterm-set-title; then xterm-set-title "emacs";   fi'';
+
  "dh" = ''cd ~/haskell       && if type xterm-set-title; then xterm-set-title "haskell"; fi'';
+ "dl" = ''cd ~/elisp         && if type xterm-set-title; then xterm-set-title "elisp";   fi'';
+
  "dn" = ''cd ~/notes         && if type xterm-set-title; then xterm-set-title "notes";   fi'';
 
  "dr" = ''cd ~/Dropbox       && if type xterm-set-title; then xterm-set-title "Dropbox"; fi'';
@@ -461,7 +466,22 @@ in
 
  #################################################
 
+ hm = ''${home-manager}'';
+
  #-----------------------------------------------#
+
+ nm  = ''time ${home-manager} -f ${sboo.files."home.nix"}'';
+ nmb = ''time ${home-manager} -f ${sboo.files."home.nix"} build'';
+ nmw = ''time ${home-manager} -f ${sboo.files."home.nix"} switch'';
+
+ nmg = ''${home-manager} generations'';
+ nmp = ''${home-manager} packages'';
+
+ #-----------------------------------------------#
+
+ help-home-manager = ''${home-manager} --help'';
+
+ #################################################
 
  #-----------------------------------------------#
 
@@ -480,6 +500,19 @@ in
  #################################################
 
  #-----------------------------------------------#
+
+
+# « ssh » commands:
+#
+# * « ssh-add »
+# * « ssh-key  »
+# * « ssh-ident »
+#
+
+# ssh-add github
+# passwd same as github.com
+#
+# ssh-key with passphrase, with ssh-ident:
 
  #################################################
 

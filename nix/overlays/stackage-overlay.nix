@@ -1,1 +1,0 @@
-/home/sboo/nixpkgs-stackage/default.nix

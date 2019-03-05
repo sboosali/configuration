@@ -1,22 +1,39 @@
 ##################################################
 { pkgs
+, lib
+
+, bashUtilities
 }:
 
 ##################################################
 let
-
-NIX_PROFILE = "$HOME/.nix-profile";
+#-----------------------------------------------#
 
 #TODO terminfo = ''${pkgs.terminfo}/...'';
 
+#-----------------------------------------------#
+
+NIX_PROFILE = "$HOME/.nix-profile";
+
+#-----------------------------------------------#
+
+TERMINFO_DIRS = bashUtilities.makePath
+
+  [
+    ~/.nix-profile/share/terminfo
+    /lib/terminfo
+  ];
+
+#-----------------------------------------------#
 in
 ##################################################
+
 ''
 #-----------------------------------------------#
 # terminfo -------------------------------------#
 #-----------------------------------------------#
 
-export TERMINFO_DIRS="${NIX_PROFILE}/share/terminfo":/lib/terminfo
+export TERMINFO_DIRS=${TERMINFO_DIRS}
 
 #-----------------------------------------------#
 ''
@@ -28,3 +45,4 @@ export TERMINFO_DIRS="${NIX_PROFILE}/share/terminfo":/lib/terminfo
 # ^ TODO :"$TERMINFO" as sessionVariables that interpolates `{pkgs.termite}/share/terminfo`
 # ^ TODO « "./home-path/share/terminfo/x/xterm-termite" »
 
+##################################################

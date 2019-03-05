@@ -1,3 +1,8 @@
+##################################################
+{}:
+
+##################################################
+
 [
 
  ~/configuration/bin            # my personal/downloaded programs
@@ -19,11 +24,23 @@
 
 ]
 
-# ^ NOTE Nix evaluates path-literals at parse-time,
-# but they're not checked for existence (and thus won't fail if a path-literal doesn't exists).
-#
-# Also, relative paths are always relative to the current file,
-# so most paths above should be written as absolute.
-#
+##################################################
+# Notes ##########################################
+##################################################
+/*
+
+^ NOTE:
+
+  1. Nix evaluates path-literals at parse-time,
+     but they're not checked for existence (and thus won't fail if a path-literal doesn't exists).
+
+     Also, relative paths are always relative to the current file,
+     so most paths above should be written as absolute.
+
+  2. 
+
+*/
 
 #TODO PATH has these below before the above: /home/sboo/.nix-profile/bin:/home/sboo/.local/bin:/home/sboo/.nix-profile/bin:...
+
+##################################################

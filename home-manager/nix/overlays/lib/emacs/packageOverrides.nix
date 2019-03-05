@@ -1,29 +1,35 @@
 ##################################################
 pkgs:
 
-##################################################
+#------------------------------------------------#
 self: super:
 
 ##################################################
 let
+#------------------------------------------------#
 
-inherit (pkgs)   fetchurl fetchgit fetchFromGitHub stdenv;
+inherit (pkgs) fetchurl fetchgit fetchFromGitHub;
+
+#------------------------------------------------#
+
+inherit (pkgs)   stdenv;
 inherit (stdenv) lib mkDerivation;
 
+#------------------------------------------------#
 in
 ##################################################
 let
-##################################################
+#------------------------------------------------#
 
 withPatches = pkg: patches:
 
   lib.overrideDerivation pkg (attrs: { inherit patches; });
 
-##################################################
+#------------------------------------------------#
 
 compileEmacsFiles = pkgs.callPackage ./emacs/builder.nix;
 
-##################################################
+#------------------------------------------------#
 
 addBuildInputs = pkg: inputs:
 
@@ -31,7 +37,7 @@ addBuildInputs = pkg: inputs:
     buildInputs = attrs.buildInputs ++ inputs;
   });
 
-##################################################
+#------------------------------------------------#
 
 compileLocalFile = { directory ? ../../src/emacs }: name:
 
@@ -41,7 +47,7 @@ compileLocalFile = { directory ? ../../src/emacs }: name:
     src = directory + ("/" + name); # TODO
   };
 
-##################################################
+#------------------------------------------------#
 
 fetchFromEmacsWiki = pkgs.callPackage ({ fetchurl, name, sha256 }:
 
@@ -51,7 +57,7 @@ fetchFromEmacsWiki = pkgs.callPackage ({ fetchurl, name, sha256 }:
     url = "https://www.emacswiki.org/emacs/download/" + name;
   });
 
-##################################################
+#------------------------------------------------#
 
 compileEmacsWikiFile =
 
@@ -65,7 +71,7 @@ compileEmacsWikiFile =
     src = fetchFromEmacsWiki { inherit name sha256; };
   };
 
-##################################################
+#------------------------------------------------#
 in
 ##################################################
 {

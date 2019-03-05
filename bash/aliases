@@ -41,12 +41,6 @@ alias nm=home-manager
 
 #------------------------------------------------#
 
-SBOO_HOME_DOT_NIX="$HOME/configuration/home-manager/nix/home.nix"
-
-alias nm="home-manager -f ${SBOO_HOME_DOT_NIX}"
-alias nmb="home-manager -f ${SBOO_HOME_DOT_NIX} build"
-alias nmw="time home-manager -f ${SBOO_HOME_DOT_NIX} switch"
-
 # alias nmb='NIX_PATH=nixpkgs=/home/sboo/.nix-defexpr/channels/nixpkgs home-manager -f "$HOME/configuration/home-manager/nix/home.nix" build'
 # alias nmw='NIX_PATH=nixpkgs=/home/sboo/.nix-defexpr/channels/nixpkgs home-manager -f "$HOME/configuration/home-manager/nix/home.nix" switch'
 
@@ -58,17 +52,6 @@ alias nmw="time home-manager -f ${SBOO_HOME_DOT_NIX} switch"
 
 #alias nmb="home-manager build"
 #alias nmw="home-manager switch"
-
-#------------------------------------------------#
-
-alias nmg="home-manager generations"
-alias nmp="home-manager packages"
-
-#alias nh_="home-manager _"
-
-#------------------------------------------------#
-
-alias help-home-manager="home-manager --help"
 
 ##################################################
 

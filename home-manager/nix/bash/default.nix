@@ -11,13 +11,26 @@
 let
 #------------------------------------------------#
 
-bashUtilities = import ./lib.nix {};
+shellUtilities = import ../shell/lib.nix
+
+  { inherit lib;
+  };
 
 #------------------------------------------------#
 
-bashFunctions = import ./bash-functions.nix { inherit pkgs lib;
-                                                inherit sboo;
-                                              };
+bashUtilities = import ./lib.nix
+
+  { inherit lib;
+    inherit shellUtilities;
+  };
+
+#------------------------------------------------#
+
+bashFunctions = import ./bash-functions.nix
+
+  { inherit pkgs lib;
+    inherit sboo;
+  };
 
 #------------------------------------------------#
 
@@ -29,7 +42,8 @@ in
 ##################################################
 {
 
- profileExtra = import ./bash-login-rc.nix { inherit pkgs xdg sboo;
+ profileExtra = import ./bash-login-rc.nix { inherit pkgs lib;
+                                             inherit xdg sboo;
                                              inherit bashUtilities;
                                            };
 
@@ -69,8 +83,9 @@ in
 
  sessionVariables =
     (import ./environment-variables.nix
-            { inherit pkgs sboo;
-              inherit xdg;
+            { inherit pkgs;
+              inherit sboo xdg;
+              inherit bashUtilities;
             });
 
  # ^ "Environment variables that will be set for the Bash session."
