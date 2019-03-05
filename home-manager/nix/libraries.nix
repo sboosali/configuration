@@ -91,6 +91,7 @@ fltkLibraries = with pkgs; [
 #m
 #pthread
  zlib
+ bzip2     # « bz2 »
 
  freeglut
  libGLU_combined

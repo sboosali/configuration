@@ -2,6 +2,9 @@
 ignore/
 TODO
 
+# make
+./configure
+
 # nix
 result/
 result

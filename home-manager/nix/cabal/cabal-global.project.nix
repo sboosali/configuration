@@ -87,10 +87,14 @@ relocatable:   ${bool config.relocatable}
 
 --------------------------------------------------
 
+-- TODO distinguish null from default/false
+-- TODO or, move this under « package * » stanza
+--
+-- tests:          ${bool config.tests}
+-- benchmarks:     ${bool config.benchmarks}
+-- coverage:       ${bool config.coverage}
+
 documentation:  ${bool config.documentation}
-tests:          ${bool config.tests}
-benchmarks:     ${bool config.benchmarks}
-coverage:       ${bool config.coverage}
 
 --------------------------------------------------
 

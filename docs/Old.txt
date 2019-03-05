@@ -1,0 +1,20 @@
+
+
+
+
+
+
+# HM_FILE ?=$HOME/configuration/home-manager/nix/home.nix
+
+
+
+
+
+
+
+
+
+
+
+
+

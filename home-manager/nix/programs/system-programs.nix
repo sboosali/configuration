@@ -16,6 +16,7 @@ with pkgs;
  dex
  dhall
  expect
+ ffmpeg
  flac
  fltk
  fswatch
@@ -30,6 +31,7 @@ with pkgs;
  inotify-tools
  jq
  libreoffice
+ mplayer # exes: « mplayer », « mencoder »
  #mdless
  multimarkdown
  nano
@@ -72,6 +74,7 @@ with pkgs;
  xtitle
  xvkbd
  youtube-dl
+ libxml2
 
  #nixfmt
  #terminfo

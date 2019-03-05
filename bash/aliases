@@ -133,7 +133,6 @@ alias npu="nix-prefetch-url"
 
 alias nix-make-shell='cabal2nix *.cabal --sha256=0 --shell > shell.nix'
 alias nix-make-default='cabal2nix *.cabal > default.nix'
-alias nr=sboo-nix-repl
 
 # alias hn="stack setup" # "n"ew
 # alias hb="stack build"

@@ -1,5 +1,5 @@
 ##################################################
-{ # lib ? (import <nixpkgs> {}).pkgs.lib
+{ lib ? (import <nixpkgs> {}).pkgs.lib
 }:
 
 ##################################################
@@ -10,11 +10,13 @@ in
 ##################################################
 rec {
 
-  applications  = import ./applications.nix  { inherit application; };
+  applications   = import ./applications.nix   { inherit lib application; };
 
-  application   = import ./application.nix   { inherit desktop-entry; };
+  application    = import ./application.nix    { inherit lib desktop-entry; };
 
-  desktop-entry = import ./desktop-entry.nix {};
+  desktop-entry  = import ./desktop-entry.nix  { inherit lib desktop-action; };
+
+  desktop-action = import ./desktop-action.nix { inherit lib; };
 
 }
 ##################################################
