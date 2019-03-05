@@ -1,5 +1,6 @@
 ##################################################
 { bashUtilities
+, bashFunctions
 }:
 
 ##################################################
@@ -19,8 +20,10 @@ bashUtilities.concatBashScripts
       (builtins.readFile ../../../bash/bash_aliases)
       (builtins.readFile ../../../bash/bash_settings)
 
-]   
+      (bashUtilities.renderBashFunctions bashFunctions)
+    ]   
 
+#TODO#
 #  bashrcExtra = lib.mkBefore ''
 # '';
 

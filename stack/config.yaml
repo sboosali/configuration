@@ -9,7 +9,7 @@
 ########################################
 
 nix:
-  enable: true
+  enable: false
   pure:   false
 
 system-ghc: true

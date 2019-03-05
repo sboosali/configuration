@@ -3,5 +3,5 @@ set -eu
 
 QUERY="${1:?\<\<\< $0 QUERY \>\>\>}"
 
-find . -type f -exec grep --color=auto -i -n -C 0 "$QUERY" \{} /dev/null \;
+find -L .  -type f  -exec grep --color=auto -n -C 1 "$QUERY" '{}' /dev/null ';'
 

@@ -33,7 +33,15 @@ SRC="./"
 # Variables ######################################
 ##################################################
 
-DST="/media/$USER/TOSHIBA EXT/$(readlink -f ${SRC})/"
+DST=/media/$USER/toshiba-ext_2000GB_white/$(readlink -f ${SRC})/
+#DST=/media/$USER/toshiba-ext_1000GB_black/$(readlink -f ${SRC})/
+
+#------------------------------------------------#
+
+# DST=/media/$USER/toshiba-ext_2000GB_white/$(readlink -f ${SRC})/
+# DST=/media/$USER/toshiba-ext_1000GB_black/$(readlink -f ${SRC})/
+# DST=/media/$USER/toshiba-ext_*/$(readlink -f ${SRC})/
+# DST="/media/$USER/TOSHIBA EXT/$(readlink -f ${SRC})/"
 
 ##################################################
 # Actions ########################################
@@ -58,7 +66,7 @@ find "${DST}"
 echo 
 echo ----------------------------------------
 
-rsync -rav --exclude='*.part' --exclude='*~' "${SRC}" "${DST}"
+rsync -rav --exclude='*.part' --exclude='*~' "${SRC}" ${DST}
 
 echo ----------------------------------------
 echo 

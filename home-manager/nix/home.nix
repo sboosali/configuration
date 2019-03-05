@@ -134,7 +134,7 @@ self = rec {
   ################################################
 
   programs = import ./programs.nix {
-    inherit pkgs sboo xdg applications utilities;
+    inherit pkgs lib sboo xdg applications utilities;
   };
 
   ################################################

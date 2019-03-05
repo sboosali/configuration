@@ -45,20 +45,57 @@ in
 ##################################################
 ''
 --------------------------------------------------
+-- Repositories ----------------------------------
+--------------------------------------------------
 
-verbose: ${int config.verbose}
-         -- « 1 » by default.
+repository stackage-lts-13.9
 
-jobs: ${int config.jobs}
-      -- « $ncpus » by default.
+  url: https://www.stackage.org/lts-13.9
+
+  -- ^ Stackage, GHC-8.6.3 (circa 2019-02-24)
+  -- 
+  -- See: https://www.stackage.org/lts-13.9/cabal.config?global=true
+  -- 
+
+--------------------------------------------------
+
+repository hackage.mobilehaskell
+
+  url: https://hackage.mobilehaskell.org/
+
+  secure:    True
+  key-threshold: 3
+  root-keys: 8184c1f23ce05ab836e5ebac3c3a56eecb486df503cc28110e699e24792582da
+             81ff2b6c5707d9af651fdceded5702b9a6950117a1c39461f4e2c8fc07d2e36a
+             8468c561cd02cc7dfe27c56de0da1a5c1a2b1b264fff21f4784f02b8c5a63edd
+
+  -- ^ Mobile (Andriod and iOS)
 
 --------------------------------------------------
 
 repository hackage.haskell.org
-  url: http://hackage.haskell.org/
-  -- secure: True
-  -- root-keys:
+
+  url: https://hackage.haskell.org/
+
+  -- secure:       True
   -- key-threshold: 3
+  -- root-keys: 07c59cb65787dedfaef5bd5f987ceb5f7e5ebf88b904bbd4c5cbdeb2ff71b740
+  --            2e8555dde16ebd8df076f1a8ef13b8f14c66bad8eafefd7d9e37d0ed711821fb
+  --            8f79fd2389ab2967354407ec852cbe73f2e8635793ac446d09461ffb99527f6e
+
+  -- ^ central Hackage server (the default repository).
+
+--------------------------------------------------
+-- Settings --------------------------------------
+--------------------------------------------------
+
+verbose: ${int config.verbose}
+-- {{{ 1 }}}, by default.
+
+jobs: ${int config.jobs}
+-- {{{ $ncpus }}}, by default.
+
+--------------------------------------------------
 
 username:         ${config.username}
 password-command: ${config.password-command}
@@ -88,13 +125,12 @@ relocatable:   ${bool config.relocatable}
 --------------------------------------------------
 
 -- TODO distinguish null from default/false
--- TODO or, move this under « package * » stanza
---
--- tests:          ${bool config.tests}
--- benchmarks:     ${bool config.benchmarks}
--- coverage:       ${bool config.coverage}
+-- TODO or, move this under the {{{ package * }}} stanza
 
 documentation:  ${bool config.documentation}
+tests:          ${bool config.tests}
+benchmarks:     ${bool config.benchmarks}
+coverage:       ${bool config.coverage}
 
 --------------------------------------------------
 
@@ -201,6 +237,7 @@ build-summary                  : ${path ~/.cabal/logs/build.log}
 --------------------------------------------------
 
 haddock
+
   hoogle            : True
   executables       : True
   tests             : True
@@ -229,6 +266,9 @@ haddock
 --------------------------------------------------
 
 install-dirs user
+
+  --TODO--
+
   -- prefix        : ${path ~/.cabal}
   -- bindir        : $prefix/bin
   -- libdir        : $prefix/lib
@@ -246,6 +286,7 @@ install-dirs user
 --------------------------------------------------
 
 install-dirs global
+
   -- prefix        : /usr/local
   -- bindir        : $prefix/bin
   -- libdir        : $prefix/lib
@@ -294,6 +335,7 @@ program-locations
 --------------------------------------------------
 
 program-default-options
+
   -- alex-options:
   -- ar-options:
   -- c2hs-options:

@@ -75,6 +75,23 @@ GHC84 =
 
 ##################################################
 
+GHC82 =
+
+  tryAttrs self.haskell.compiler [
+    "ghc822"
+    "ghc821"
+  ];
+
+##################################################
+
+GHC80 =
+
+  tryAttrs self.haskell.compiler [
+    "ghc802"
+  ];
+
+##################################################
+
 GHC710 =
 
   tryAttrs self.haskell.compiler [
@@ -88,12 +105,14 @@ GHCs =
 
   [
     defaultGHC
-    GHC710
-    self.haskell.compiler.ghc822 
+
+    # GHC710
+    # GHC80
+    # GHC82
     GHC84
     GHC86
-    
-    defaultGHCJS
+
+    # defaultGHCJS
   ];
 
   # ^

@@ -8,8 +8,9 @@ with pkgs;
 ##################################################
 [
 
+ arcanist
  bash-completion
- cabal-install
+ cabal-install                # Comment-out to use development-version « cabal-install-2.5.0.0 » in « ~/.cabal/bin ».
  cabal2nix
  emacs26Packages.cask
  colordiff
@@ -31,6 +32,8 @@ with pkgs;
  inotify-tools
  jq
  libreoffice
+ markdown-pp
+ #markdown-merge
  mplayer # exes: « mplayer », « mencoder »
  #mdless
  multimarkdown
@@ -51,10 +54,13 @@ with pkgs;
  postgresql
  qbittorrent
  redshift
+ replace  # command
+ ripgrep
  shellcheck
  signal-desktop
  sox
  stack
+ styx                           # https://styx-static.github.io/styx-site/
  tmux
  tree
  unzip

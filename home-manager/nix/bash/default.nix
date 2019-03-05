@@ -1,5 +1,6 @@
 ##################################################
 { pkgs
+, lib
 
 , sboo
 , applications
@@ -8,19 +9,22 @@
 
 ##################################################
 let
+#------------------------------------------------#
 
-bashUtilities = rec {
+bashUtilities = import ./lib.nix {};
 
- concatBashScripts =
-   builtins.concatStringsSep "########################################\n\n";
+#------------------------------------------------#
 
-};
+bashFunctions = import ./bash-functions.nix { inherit pkgs lib;
+                                                inherit sboo;
+                                              };
 
-##################################################
+#------------------------------------------------#
 
 # configFile = path:
 #   "${xdg.configHome}/${path}";
 
+#------------------------------------------------#
 in
 ##################################################
 {
@@ -42,6 +46,7 @@ in
  #
 
  bashrcExtra = import ./bash-interactive-rc.nix { inherit bashUtilities;
+                                                  inherit bashFunctions;
                                                 };
 
  # ^ « .bashrc » extras.

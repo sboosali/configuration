@@ -7,6 +7,7 @@
 }:
 ##################################################
 let
+#------------------------------------------------#
 
 env = {
 
@@ -14,9 +15,11 @@ env = {
 
 };
 
+#------------------------------------------------#
 in
 ##################################################
 let
+#------------------------------------------------#
 
 mkdir       = ''${pkgs.coreutils}/bin/mkdir'';
 chmod       = ''${pkgs.coreutils}/bin/chmod'';
@@ -26,6 +29,7 @@ xargs       = ''${pkgs.findutils}/bin/xargs'';
 
 nix-shell   = "nix-shell"; #TODO# ''${pkgs.nix}/bin/nix-shell''
  #TODO3 or... keep "dynamic" (not lexical) to use the same nix that must be installed for home-manager to evaluate this very file
+nix-store = "nix-store";
 
 tar         = "tar"; #TODO# ''${pkgs.tar}/bin/tar'';
 sed         = "sed"; #TODO# ''${pkgs.coreutils?}/bin/sed'';
@@ -52,13 +56,13 @@ xprop       = ''${pkgs.xorg.xprop}/bin/xprop'';
 
 redshift   = ''${pkgs.redshift}/bin/redshift'';
 
-##################################################
+#------------------------------------------------#
 
 #TODO configure between [1] the package's program and [2] the vendored submodule's program with environment-variable like SBOO_HOME_MANAGER_CABAL
 
 cabal      = ''${pkgs.cabal-install}/bin/cabal'';
 
-##################################################
+#------------------------------------------------#
 
 NIX_PROFILE = "~/.nix-profile";
 NIXPKGS     = "${env.HOME}/nixpkgs";
@@ -66,8 +70,9 @@ NIXPKGS     = "${env.HOME}/nixpkgs";
 #NixProfile = "${env.HOME}/.nix-profile";
 #NixProfile = "${env.HOME}/.nix-profile";
 
-##################################################
+#------------------------------------------------#
 
+#------------------------------------------------#
 in
 ##################################################
 {
@@ -97,7 +102,7 @@ in
  "dr" = ''cd ~/Dropbox       && if type xterm-set-title; then xterm-set-title "Dropbox"; fi'';
 #"dw" = ''cd ~/Downloads'';
  "dw" = ''cd ~/www           && if type xterm-set-title; then xterm-set-title "www";     fi'';
- "dm" = ''cd ~/Documents'';
+ "dm" = ''cd ~/media         && if type xterm-set-title; then xterm-set-title "media";   fi'';
 
  "dt" = ''cd ~/temporary'';
  "dk" = ''cd ~/backup'';
@@ -110,11 +115,13 @@ in
  "dxs" = ''cd ${NIX_PROFILE}/share'';
  "dxl" = ''cd ${NIX_PROFILE}/lib'';
  "dxi" = ''cd ${NIX_PROFILE}/include'';
+
 #"dx" = ''cd ${NIX_PROFILE}/'';
+#"dm" = ''cd ~/Documents'';
 
  #-----------------------------------------------#
 
- cd-external-hard-drive = ''cd "/media/sboo/TOSHIBA EXT/" && df .'';
+ cd-external-hard-drive = ''cd /media/sboo/toshiba-ext_*/ && df .'';
 
  #################################################
 
@@ -155,6 +162,8 @@ in
  md="${mkdir} -p";
 
  # ^ « mkdir »
+
+ #-----------------------------------------------#
 
  #################################################
 
@@ -454,7 +463,17 @@ in
 
  #-----------------------------------------------#
 
+ #-----------------------------------------------#
+
+ nr=''sboo-nix-repl'';
+
+ #-----------------------------------------------#
+
+ nix-reverse-dependencies = ''${nix-store} --query --referrers'';
+
  #################################################
+
+ sboo-apt-install = ''sudo apt -y install'';
 
  #-----------------------------------------------#
 
@@ -529,8 +548,6 @@ in
  sboo-date = ''date +%Y-%m-%d'';
 
  # ^ NOTE the date-format is year-first.
-
- #################################################
 
 }
 ##################################################

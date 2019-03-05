@@ -1,5 +1,6 @@
 ##################################################
 { pkgs
+, lib
 
 , sboo
 , xdg
@@ -49,7 +50,8 @@ with utilities;
   emacs =
 
     (import ./emacs
-            { inherit pkgs utilities;
+            { inherit pkgs;
+              inherit utilities;
             })
 
      // { enable = true;
@@ -82,7 +84,7 @@ with utilities;
   bash =
 
     (import ./bash
-            { inherit pkgs sboo xdg applications;
+            { inherit pkgs lib sboo xdg applications;
             })
 
      // { enable = true;
