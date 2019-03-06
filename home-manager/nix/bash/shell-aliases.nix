@@ -66,6 +66,12 @@ cabal      = ''${pkgs.cabal-install}/bin/cabal'';
 
 #------------------------------------------------#
 
+XDG_DATA_HOME   = builtins.getEnv "XDG_DATA_HOME";
+XDG_CONFIG_HOME = builtins.getEnv "XDG_CONFIG_HOME";
+XDG_CACHE_HOME  = builtins.getEnv "XDG_CACHE_HOME";
+
+#------------------------------------------------#
+
 NIX_PROFILE = "~/.nix-profile";
 NIXPKGS     = "${env.HOME}/nixpkgs";
 
@@ -123,6 +129,12 @@ in
 
 #"dx" = ''cd ${NIX_PROFILE}/'';
 #"dm" = ''cd ~/Documents'';
+
+ #-----------------------------------------------#
+
+ cd-xdg-data   = ''cd ${XDG_DATA_HOME}'';
+ cd-xdg-config = ''cd ${XDG_CONFIG_HOME}'';
+ cd-xdg-cache  = ''cd ${XDG_CACHE_HOME}'';
 
  #-----------------------------------------------#
 
