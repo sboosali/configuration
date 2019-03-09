@@ -1,9 +1,9 @@
 ##################################################
-self: super:
-
-#------------------------------------------------#
 { overrides
 }:
+
+#------------------------------------------------#
+self: super:
 
 ##################################################
 # Imports ########################################
@@ -55,13 +55,13 @@ mkEmacsPackages = { emacs, overrides ? identityOverlay }:
  */
 
 mkEmacsOverlay = { emacs, overrides }:
-                 esuper: eself:
+                 eself: esuper:
 
   let
 
-  myBaseEmacsPackages = esuper.melpaPackages // {
+  myBaseEmacsPackages = eself.melpaPackages // {
       inherit emacs;
-      inherit (esuper) melpaBuild trivialBuild;
+      inherit (eself) melpaBuild trivialBuild;
     };
 
   in
@@ -70,9 +70,6 @@ mkEmacsOverlay = { emacs, overrides }:
 
 # ^ NOTE: nested overlay.
 #
-# the `self` and `super` of `mkEmacsOverlay` shadow their namesakes
-# of this file (`./overlays/emacs/utilities.nix`),
-# (which is itself an overlay).
 
 # ^ « pkgs.lib.extends » has type « :: (a -> a -> a) -> (a -> a) -> (a -> a) ».
 
@@ -81,24 +78,29 @@ in
 ##################################################
 # Exports ########################################
 ##################################################
-rec {
+{
 #------------------------------------------------#
 
  #-----------------------------#
  # Aliases 
 
- emacs           = self.emacs26;
+ emacsPackages   = self.emacs26Packages;
  emacsPackagesNg = self.emacs26PackagesNg;
+ emacs           = self.emacs26;
 
  #-----------------------------#
  # Emacs-26.1
 
+ emacs26Packages   = self.emacs26PackagesNg;
  emacs26PackagesNg = mkEmacsPackages {
    emacs = self.emacs26;
    inherit overrides;
  };
 
- emacs26 =
+ #-----------------------------#
+ # Emacs (Jwiegley)
+
+ emacs26Jwiegley =
 
  let
 

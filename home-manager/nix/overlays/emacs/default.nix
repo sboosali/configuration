@@ -17,20 +17,19 @@ utilities = import ./utilities.nix
 
 #------------------------------------------------#
 
-emacsPackageOverrides = import ./packages.nix
-  { inherit pkgs;
-    inherit utilities;
+emacsPackageOverrides = import ./overrides.nix
+  { inherit utilities;
   };
 
 #------------------------------------------------#
 
-emacsApplicationOverrides = import ./emacs.nix self super;
-
-#------------------------------------------------#
-
-emacsApplications = emacsApplicationOverrides
+emacsApplicationOverrides = import ./emacs.nix
   { overrides = emacsPackageOverrides;
   };
+
+#------------------------------------------------#
+
+emacsApplications = emacsApplicationOverrides self super;
 
 #------------------------------------------------#
 in

@@ -21,6 +21,8 @@ haskell-overridez =
 
 #------------------------------------------------#
 
+cask = emacsPackages.cask;
+
 #------------------------------------------------#
 in
 ##################################################
@@ -30,7 +32,7 @@ in
  bash-completion
  cabal-install                # Comment-out to use development-version « cabal-install-2.5.0.0 » in « ~/.cabal/bin ».
  cabal2nix
- emacs26Packages.cask
+#cask
  colordiff
  dex
  dhall

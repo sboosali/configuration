@@ -207,30 +207,6 @@ optionalEmacsPackages = {
 
  #-----------------------------#
 
-   github-pullrequest = super.addBuildInputs super.github-pullrequest
-     [ pkgs.git
-     ];
-
- #-----------------------------#
-
-   magithub = super.addBuildInputs super.magithub
-     [ pkgs.git
-       self.dash self.graphql self.treepy
-     ];
-
- #-----------------------------#
-
-   magit-annex = super.addBuildInputs super.magit-annex
-     [ pkgs.git
-       pkgs.haskellPackages.magit-annex
-     ];
-
- #-----------------------------#
-
-    helm-google = withPatches super.helm-google [ ./patches/helm-google.patch ];
-
- #-----------------------------#
-
  #-----------------------------#
 
 };
@@ -239,11 +215,37 @@ optionalEmacsPackages = {
 in
 ##################################################
 rec {
+ #-----------------------------#
 
  #TODO p = f (super.p);
 
  # q = (super.q or {}) // self.p;
 
+ #-----------------------------#
+
+ github-pullrequest = super.addBuildInputs super.github-pullrequest
+     [ pkgs.git
+     ];
+
+ #-----------------------------#
+
+ magithub = super.addBuildInputs super.magithub
+     [ pkgs.git
+       self.dash self.graphql self.treepy
+     ];
+
+ #-----------------------------#
+
+ magit-annex = super.addBuildInputs super.magit-annex
+     [ pkgs.git
+       pkgs.haskellPackages.magit-annex
+     ];
+
+ #-----------------------------#
+
+ helm-google = withPatches super.helm-google [ ./patches/helm-google.patch ];
+
+ #-----------------------------#
 }
 ##################################################
 /* Notes *****************************************

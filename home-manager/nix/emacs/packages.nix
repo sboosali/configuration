@@ -57,13 +57,7 @@ coreEmacsPackages = with epkgs; [
 
   #----------------------------------------------#
 
-  ( addBuildInputs [ pkgs.git ]
-    melpaPackages.magit
-  )
-
-  ( addBuildInputs [ pkgs.git pkgs.haskellPackages.git-annex ]
-    melpaPackages.magit-annex
-  )
+  magit
 
   #----------------------------------------------#
 
@@ -77,18 +71,13 @@ coreEmacsPackages = with epkgs; [
 #------------------------------------------------#
 
 moreEmacsPackages = (with epkgs; [
- #----------------------------------------------#
-
- org
-
- 
-
- #----------------------------------------------#
- ])
 
  #----------------------------------------------#
 
- ++ (with epkgs.elpaPackages; [
+ # hexrgb
+ # awesome-tab
+
+ #----------------------------------------------#
 
  pinentry
 
@@ -112,12 +101,6 @@ moreEmacsPackages = (with epkgs; [
   #
   # under the same directory which server.el uses.
 
- ])
-
- #----------------------------------------------#
-
- ++ (with epkgs.melpaPackages; [ #TODO
-
  #----------------------------------------------#
  # Completion
 
@@ -140,7 +123,7 @@ moreEmacsPackages = (with epkgs; [
  #----------------------------------------------#
  # Window/Buffer Management
 
-#TODO awesome-tab                    # Tabs
+#awesome-tab                    # Tabs
  shackle
  window-purpose
 
@@ -188,6 +171,8 @@ moreEmacsPackages = (with epkgs; [
  deft                           # « Notational Velocity » port
  # ^ Quick note taking and management
 
+ edit-indirect
+
  #----------------------------------------------#
  # FileSystem
 
@@ -228,6 +213,19 @@ moreEmacsPackages = (with epkgs; [
  anaconda-mode
 
  #----------------------------------------------#
+ # Development
+
+ #magit          # <C-x g>
+ magit-annex
+ magithub
+#github-pullrequest             # FIXME
+
+ direnv         # needs `direnv` system-package
+ neotree
+
+ multi-term
+
+ #----------------------------------------------#
 
  anzu   
  # ^ shows total search hits in mode line.
@@ -237,17 +235,6 @@ moreEmacsPackages = (with epkgs; [
  #  # ^ editing csv files
 
  #any-ini-mode # EmacsWiki only
-
- #----------------------------------------------#
-
- #magit          # <C-x g>
-
- direnv         # needs `direnv` system-package
- neotree
-
- multi-term
-
- edit-indirect
 
  #----------------------------------------------#
 
@@ -319,8 +306,8 @@ builtins.concatLists
 
   [
     coreEmacsPackages
-  # themeEmacsPackages
     moreEmacsPackages
+  # themeEmacsPackages
   ]
 
 ##################################################

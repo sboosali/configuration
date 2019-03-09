@@ -17,7 +17,7 @@ in
 
  inherit (emacsApplications)
          emacs
-  #TODO  emacsPackages
+         emacsPackages
          emacsPackagesNg
          ;
 

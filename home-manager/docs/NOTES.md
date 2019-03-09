@@ -170,5 +170,11 @@ $ nix repl
 
 
 
+## `overrideScope`
+
+> trace: WARNING: `overrideScope` (from `lib.makeScope`) is deprecated. Do `overrideScope' (self: super: { … })` instead of `overrideScope (super: self: { … })`. All other overrides have the parameters in that order, including other definitions of `overrideScope`. This was the only definition violating the pattern.
+
+
 ## 
+
 

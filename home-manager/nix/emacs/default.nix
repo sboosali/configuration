@@ -31,7 +31,7 @@ in
 
   };
 
-# package       = pkgs.emacs26;
+  package = pkgs.emacs;
 
  #TODO overrides = import ./overrides.nix {};
 
