@@ -1,51 +1,60 @@
-########################################
+##################################################
 { stdenv
-
 , emacs
+
 , name
 , src
 
 , buildInputs ? []
 , patches     ? []
-
+, preBuild    ? ""
 }:
-########################################
+##################################################
 let
+#------------------------------------------------#
 
 site-lisp-of-paths = paths:
   stdenv.lib.concatStringsSep " "
     (builtins.map site-lisp-of-path
       paths);
 
+#------------------------------------------------#
+
 site-lisp-of-path = path: 
   path + "/share/emacs/site-lisp"
 
+#------------------------------------------------#
 in
-########################################
+##################################################
 let
+#------------------------------------------------#
 
-environment = {
+buildEnvironment = {
 
-  ######################################
   SiteLispDirectories = site-lisp-of-paths buildInputs;
 
   # ^ a custom derivation-attribute: all attributes of {{ stdenv.mkDerivation }}
   # become environment-variables exported to the `builder`.
 
-  ######################################
-
 };
 
+#------------------------------------------------#
 in
-########################################
-stdenv.mkDerivation (environment // {
+##################################################
 
-  inherit name src patches;
+stdenv.mkDerivation (buildEnvironment // {
 
-  buildInputs = [ emacs ] ++ buildInputs;
+ #-----------------------------#
 
-  ######################################
-  unpackCmd = ''
+ inherit name src patches;
+
+ #-----------------------------#
+
+ buildInputs = [ emacs ] ++ buildInputs;
+
+ #-----------------------------#
+
+ unpackCmd = ''
     test -f "${src}" && mkdir el/ && cp -p ${src} el/${name}
   '';
 
@@ -58,8 +67,10 @@ stdenv.mkDerivation (environment // {
   # {{ $ man cp }} says: {{ -p }} is the same as
   # {{ --preserve=mode,ownership,timestamps }}.
 
-  ######################################
-  buildPhase = ''
+ #-----------------------------#
+
+ buildPhase = ''
+    ${preBuild}
     EmacsLoadPath=$(find $SiteLispDirectories -type d -exec echo '-L' {} \;)
 
     ${emacs}/bin/emacs -Q -nw -L . $EmacsLoadPath --batch -f batch-byte-compile *.el
@@ -76,27 +87,29 @@ stdenv.mkDerivation (environment // {
 
   # ^ {{ emacs -L . }} adds the current directory to the emacs `load-path`.
 
-  ######################################
-  installPhase = ''
+ #-----------------------------#
+
+ installPhase = ''
     mkdir -p $out/share/emacs/site-lisp
     install *.el* $out/share/emacs/site-lisp
   '';
 
   # ^ {{ *.el* }} means: all `.el` and `.elc` files.
 
-  ######################################
-  meta = {
+ #-----------------------------#
+
+ meta = {
     homepage    = http://www.emacswiki.org;
     platforms   = stdenv.lib.platforms.all;
-    description = "Emacs projects from the Internet or from your filesystem (just compiled .el files).";
+    description = "Emacs projects from the Internet or from your filesystem (just compiled « .el » files).";
   };
 
-  ######################################
+ #-----------------------------#
 })
 
-########################################
-# Notes ################################
-########################################
+##################################################
+# Notes ##########################################
+##################################################
 # 
 # See:
 # * <https://github.com/jwiegley/nix-config/blob/master/overlays/emacs/builder.nix emacs/builder.nix (jwiegley/nix-config)>
@@ -114,4 +127,4 @@ stdenv.mkDerivation (environment // {
 # 
 # 
 # 
-########################################
+##################################################

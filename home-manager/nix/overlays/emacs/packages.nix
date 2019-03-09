@@ -1,15 +1,20 @@
 ##################################################
+# "parameters":
 
-pkgs:        # "parameters"
+{ pkgs
+, utilities
+}:
 
 #------------------------------------------------#
+# overlay:
 
-self: super: # overlay
+self: super:
 
 ##################################################
 # Imports ########################################
 ##################################################
 let
+#------------------------------------------------#
 
 inherit (pkgs)
         fetchurl fetchgit fetchFromGitHub stdenv;
@@ -20,55 +25,16 @@ inherit (stdenv)
         lib;
 
 #------------------------------------------------#
-
-utilities
-  = (import ./utilities.nix) pkgs;
-
 in
-##################################################
-# Utilities ######################################
-##################################################
-let
-
-# these utilities, unlike « ./utilities.nix »,
-# don't import « pkgs ».
-# thus, being simpler, they're kept separate.
-
-addBuildInputs = extraBuildInputs: package:
-
-  package.overrideAttrs (old:
-    { buildInputs = old.buildInputs ++ extraBuildInputs;
-    }));
-
-# ^
-#
-# e.g.
-#
-# (addBuildInputs [ pkgs.git ] melpaPackages.magit) 
-# 
-# equals:
-#
-# (melpaPackages.magit.overrideAttrs(old: {
-#         buildInputs = old.buildInputs ++ [ pkgs.git ];
-#       }))
-#
-
-#------------------------------------------------#
-
-withPatches = pkg: patches:
-
-  lib.overrideDerivation pkg 
-    (attrs: { inherit patches; });
-
-in
-##################################################
-# Packages #######################################
 ##################################################
 
 with utilities;
 
-#------------------------------------------------#
+##################################################
+# Packages #######################################
+##################################################
 let
+#------------------------------------------------#
 
 # Packages Overridden and/or Introduced.
 
@@ -258,6 +224,12 @@ optionalEmacsPackages = {
      [ pkgs.git
        pkgs.haskellPackages.magit-annex
      ];
+
+ #-----------------------------#
+
+    helm-google = withPatches super.helm-google [ ./patches/helm-google.patch ];
+
+ #-----------------------------#
 
  #-----------------------------#
 

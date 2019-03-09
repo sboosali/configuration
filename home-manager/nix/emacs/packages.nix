@@ -67,22 +67,29 @@ coreEmacsPackages = with epkgs; [
 
   #----------------------------------------------#
 
-  org
+  wgrep                         # "Writeable GREP"
 
-  #----------------------------------------------#
-
-  wgrep
   # ^ https://github.com/mhayashi1120/Emacs-wgrep
 
   #----------------------------------------------#
 
-];
-
 #------------------------------------------------#
 
-moreEmacsPackages = (with epkgs.elpaPackages; [
+moreEmacsPackages = (with epkgs; [
+ #----------------------------------------------#
 
-  pinentry
+ org
+
+ 
+
+ #----------------------------------------------#
+ ])
+
+ #----------------------------------------------#
+
+ ++ (with epkgs.elpaPackages; [
+
+ pinentry
 
   # ^ 
   # This package allows GnuPG passphrase to be prompted through the
@@ -167,8 +174,6 @@ moreEmacsPackages = (with epkgs.elpaPackages; [
 
  #----------------------------------------------#
  # Editing
-
- wgrep                          # "Writeable GREP"
 
  expand-region
  # ^ Expand selection to strings, definitions, words, lines, paragraphs, etc.

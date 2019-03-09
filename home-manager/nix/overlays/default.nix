@@ -21,11 +21,17 @@ let
  *
  */
 
-importOverlays = { path ? ./. }:
+importOverlays =
+
+  { path      ? ./.
+  , whitelist ? null
+  , blacklist ? null
+  }:
 
   let
 
   isStringOrPath = x:
+
     let
     t = builtins.typeOf x;
     in
@@ -37,6 +43,11 @@ importOverlays = { path ? ./. }:
 
   let
 
+  isOverlay = n:
+
+       (doesWhitelistAccept n && doesBlacklistNotReject n)
+    && (isNixFile n || isNixDirectory n);
+
   importRelative     = n: import (toOverlayFile n);
   listDirectoryFiles = d: (builtins.attrNames (builtins.readDir d));
 
@@ -45,7 +56,16 @@ importOverlays = { path ? ./. }:
 
   isNixFile      = n: (builtins.match ".*\\.nix" n != null);
   isNixDirectory = n: (builtins.pathExists (toOverlaySubdirectory n));
-  isOverlay      = n: (isNixFile n || isNixDirectory n);
+
+  doesWhitelistAccept =
+    if   whitelist == null
+    then (x: true)
+    else (x: builtins.elem x whitelist);
+
+  doesBlacklistNotReject =
+    if   blacklist == null
+    then (x: true)
+    else (x: ! (builtins.elem x blacklist));
 
   overlays =
 

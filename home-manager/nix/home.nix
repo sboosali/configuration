@@ -99,7 +99,10 @@ self = rec {
   #----------------------------------------------#
 
   nixpkgs.config   = import ./config;
-  nixpkgs.overlays = []; #TODO# import ./overlays;
+  nixpkgs.overlays = import ./overlays;
+
+  # nixpkgs.config   = {};
+  # nixpkgs.overlays = [];
 
   #----------------------------------------------#
 
