@@ -4,7 +4,7 @@
 # Parameters #####################################
 ##################################################
 
-{ pkgs
+{ pkgs ? (import ./nixpkgs {}).pkgs
 
 # , haskellPackages   ? (pkgs.haskellPackages)
 # , haskellCompilers  ? (pkgs.haskell.compiler)
@@ -99,7 +99,7 @@ self = rec {
   #----------------------------------------------#
 
   nixpkgs.config   = import ./config;
-  nixpkgs.overlays = import ./overlays;
+  nixpkgs.overlays = import ./overlays { whitelist = [ "emacs" ]; };
 
   # nixpkgs.config   = {};
   # nixpkgs.overlays = [];
