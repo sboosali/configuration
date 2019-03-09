@@ -61,9 +61,21 @@ mkEmacsOverlay = emacs:
 
 ########################################
 
+/*
+ *
+ */
+
 mkEmacsPackages = emacs:
 
   (self.emacsPackagesNgGen emacs).overrideScope (mkEmacsOverlay emacs);
 
 }
 ########################################
+/*************************************************
+
+>>> pkgs.emacsPackagesNgGen pkgs.emacs26
+
+
+
+*************************************************/
+

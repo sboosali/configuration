@@ -14,9 +14,17 @@ Timestamp ?=$(shell date +%d-%m-%Y+%H:%M)
 
 #------------------------------------------------#
 
-HM ?=home-manager
-
 HM_FILE    ?=${HOME}/configuration/home-manager/nix/home.nix
+
+#------------------------------------------------#
+
+EmacsDirectory ?=${HOME}/.emacs.d
+
+EmacsSubDirectory ?=$(EmacsDirectory)/sboo
+
+#------------------------------------------------#
+
+HM ?=home-manager
 
 #HM_FILE    ?=${HOME}/configuration/home-manager/nix/home.nix
 #HM_FILE    ?=./configuration/home-manager/nix/home.nix
@@ -34,6 +42,8 @@ NIX_OPTIONS ?=--show-trace
 #------------------------------------------------#
 
 Emacs ?=emacs
+
+EmacsBuild ?=emacs -batch  --funcall=batch-byte-compile  --directory=$(EmacsSubDirectory)
 
 EmacsOptions ?=--name=SBoo/$(Timestamp) --no-desktop --maximized --no-splash
 
@@ -89,7 +99,7 @@ home-manager:
 
 switch: build
 
-	NIX_PATH=nixpkgs=$(HM_NIXPKGS) $(HM) -f $(HM_FILE) switch
+	$(HM) -f $(HM_FILE) switch
 
 .PHONY: switch
 
@@ -101,13 +111,41 @@ switch: build
 ##################################################
 #------------------------------------------------#
 
-emacs: build
-
-	@exec $(Emacs) $(EmacsOptions) &disown
-
-.PHONY: emacs
+# emacs:
+# .PHONY: emacs
 
 #------------------------------------------------#
+
+emacs-run: build  #TODO# emacs-build
+
+	exec $(Emacs) $(EmacsOptions) &disown
+
+.PHONY: emacs-run
+
+#------------------------------------------------#
+
+emacs-debug: build  #TODO# emacs-build
+
+	$(Emacs) $(EmacsOptions) --debug-init
+
+.PHONY: emacs-debug
+
+#------------------------------------------------#
+
+emacs-build: #TODO
+
+	$(EmacsBuild) $(EmacsSubDirectory)/*.el
+
+.PHONY: emacs-build
+
+#------------------------------------------------#
+
+emacs-clean:
+
+	find "$(EmacsSubDirectory)" -type f -name '*.elc' -print
+	find "$(EmacsSubDirectory)" -type f -name '*.elc' -delete
+
+.PHONY: emacs-clean
 
 #------------------------------------------------#
 

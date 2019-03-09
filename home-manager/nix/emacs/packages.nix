@@ -57,7 +57,13 @@ coreEmacsPackages = with epkgs; [
 
   #----------------------------------------------#
 
-  (addBuildInputs [ pkgs.git ] melpaPackages.magit)
+  ( addBuildInputs [ pkgs.git ]
+    melpaPackages.magit
+  )
+
+  ( addBuildInputs [ pkgs.git pkgs.haskellPackages.git-annex ]
+    melpaPackages.magit-annex
+  )
 
   #----------------------------------------------#
 
@@ -100,9 +106,17 @@ moreEmacsPackages = (with epkgs.elpaPackages; [
 
  ])
 
- #----------------------------------------------##
+ #----------------------------------------------#
 
  ++ (with epkgs.melpaPackages; [ #TODO
+
+ #----------------------------------------------#
+ # Completion
+
+ helm-dash
+ helm-make
+ helm-swoop
+ helm-hayoo
 
  #company-yasnippet
  #company-abbrev
@@ -116,58 +130,83 @@ moreEmacsPackages = (with epkgs.elpaPackages; [
  company-anaconda
 
  #----------------------------------------------#
+ # Window/Buffer Management
 
- ghc
- dante
-
- intero          # needs `stack` system-package
-
- #----------------------------------------------#
-
- anaconda-mode
-
- #----------------------------------------------#
-
- tabbar
+#TODO awesome-tab                    # Tabs
  shackle
  window-purpose
 
  #----------------------------------------------#
+ # Appearence
 
  color-theme
  smooth-scrolling
  centered-cursor-mode
 
  #----------------------------------------------#
+ # Haskell
 
- paredit
+ dante
+
+#intero                         # needs `stack` system-package
+#ghc                            # « ghc-mod »
+
+ lsp-mode                       # for « haskell-ide-engine »
+ lsp-ui                         # for « haskell-ide-engine »
+ lsp-haskell                    # for « haskell-ide-engine »
 
  #----------------------------------------------#
+ # Bookmarks
 
- #magit          # <C-x g>
+ bm                             # visual bookmarks
 
- direnv         # needs `direnv` system-package
- neotree
- wgrep
+ #----------------------------------------------#
+ # Desktops
 
- multi-term
+#desktopPlus
+
+ #----------------------------------------------#
+ # Editing
+
+ wgrep                          # "Writeable GREP"
+
+ expand-region
+ # ^ Expand selection to strings, definitions, words, lines, paragraphs, etc.
+
+ page-break-lines
+ # ^ Convert the ^L (form feed) chars to horizontal lines
+
+ wrap-region
+ # ^ Wrap selection with punctuations, tags (org-mode, markdown-mode, ..)
+
+ deft                           # « Notational Velocity » port
+ # ^ Quick note taking and management
+
+ #----------------------------------------------#
+ # FileSystem
+
+ dired-collapse # from the « dired-hacks » megarepo
+ dired-filter   # from the « dired-hacks » megarepo
+#dired-list     # from the « dired-hacks » megarepo
+ dired-open     # from the « dired-hacks » megarepo
+ dired-rainbow  # from the « dired-hacks » megarepo
+ dired-ranger   # from the « dired-hacks » megarepo
+ dired-sidebar  # from the « dired-hacks » megarepo
+ dired-subtree  # from the « dired-hacks » megarepo
+
+ #----------------------------------------------#
+ # Formats
 
  markdown-mode 
- edit-indirect
-
- #----------------------------------------------#
-
  json-mode
  yaml-mode
 
  restclient
 
  #----------------------------------------------#
+ # Lisp
 
- helm-dash
- helm-make
- helm-swoop
- helm-hayoo
+#paredit
 
  #----------------------------------------------#
 
@@ -178,31 +217,31 @@ moreEmacsPackages = (with epkgs.elpaPackages; [
  ##evil
 
  #----------------------------------------------#
+ # Python
+
+ anaconda-mode
+
+ #----------------------------------------------#
 
  anzu   
  # ^ shows total search hits in mode line.
  # c.f. `query-replace`.
 
- bm 
- # ^ visual bookmarks
-
  # csv-nav
  #  # ^ editing csv files
 
- deft
- # ^ quick note taking and management
-
- expand-region
-
- page-break-lines
- # ^ Convert the ^L (form feed) chars to horizontal lines
-
- wrap-region
- # ^ wrap selection with punctuations, tags (org-mode, markdown-mode, ..)
-
- yaml-mode
-
  #any-ini-mode # EmacsWiki only
+
+ #----------------------------------------------#
+
+ #magit          # <C-x g>
+
+ direnv         # needs `direnv` system-package
+ neotree
+
+ multi-term
+
+ edit-indirect
 
  #----------------------------------------------#
 
@@ -211,32 +250,13 @@ moreEmacsPackages = (with epkgs.elpaPackages; [
  #emacs-web-server
  
  #----------------------------------------------#
- # for haskell-ide-engine:
-
- lsp-mode
- lsp-ui 
- lsp-haskell
-
- #----------------------------------------------#
 
  ranger
-
- #----------------------------------------------#
- # from the "dired-hacks" megarepo:
-
- dired-filter
- dired-open
- dired-rainbow
- dired-subtree
- dired-ranger
- #dired-list
- dired-collapse
 
  #----------------------------------------------#
 
  move-text
  treemacs
- tabbar-ruler
 
  #----------------------------------------------#
 

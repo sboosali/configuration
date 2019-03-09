@@ -1,31 +1,33 @@
-########################################
+##################################################
 
 pkgs:        # "parameters"
 
+#------------------------------------------------#
+
 self: super: # overlay
 
-########################################
-# Imports ##############################
-########################################
+##################################################
+# Imports ########################################
+##################################################
 let
 
 inherit (pkgs)
         fetchurl fetchgit fetchFromGitHub stdenv;
 
-########################################
+#------------------------------------------------#
 
 inherit (stdenv)
         lib;
 
-########################################
+#------------------------------------------------#
 
 utilities
   = (import ./utilities.nix) pkgs;
 
 in
-########################################
-# Utilities ############################
-########################################
+##################################################
+# Utilities ######################################
+##################################################
 let
 
 # these utilities, unlike « ./utilities.nix »,
@@ -51,7 +53,7 @@ addBuildInputs = extraBuildInputs: package:
 #       }))
 #
 
-########################################
+#------------------------------------------------#
 
 withPatches = pkg: patches:
 
@@ -59,13 +61,13 @@ withPatches = pkg: patches:
     (attrs: { inherit patches; });
 
 in
-########################################
-# Packages #############################
-########################################
+##################################################
+# Packages #######################################
+##################################################
 
 with utilities;
 
-########################################
+#------------------------------------------------#
 let
 
 # Packages Overridden and/or Introduced.
@@ -80,11 +82,11 @@ sboosaliEmacsPackages =
 #     optionalEmacsPackages
 #   ];
 
-########################################
+##################################################
 
 requiredEmacsPackages = {
 
-   #####################################
+ #-----------------------------#
 
    # use-package = self.melpaBuild {
    #    pname = "use-package";
@@ -102,15 +104,15 @@ requiredEmacsPackages = {
    #    };
    #  };
 
-   #####################################
+ #-----------------------------#
 
 };
 
-########################################
+##################################################
 
 localEmacsPackages = {
 
-   #####################################
+ #-----------------------------#
 
    dante = self.melpaBuild {
 
@@ -138,15 +140,34 @@ localEmacsPackages = {
       meta.license  = lib.licenses.gpl3Plus;
     };
 
-   #####################################
+ #-----------------------------#
+
+  # awesome-tab = self.melpaBuild {
+
+  #     pname   = "awesome-tab";
+  #     version = "2.6";
+
+  #     src = ../../../../submodules/awesome-tab;
+
+  #     recipe = ''
+  #     (awesome-tab :repo    "manateelazycat/awesome-tab"
+  #                  :fetcher github)
+  #     '';
+
+  #     meta.homepage = "https://github.com/manateelazycat/awesome-tab#README";
+  #     meta.license  = lib.licenses.gpl3Plus;
+
+  # };
+
+  # #TODO# awesome-tab = let self = (pkgs.emacsPackagesNgGen pkgs.emacs26); in self.melpaBuild { pname = "awesome-tab"; version = "2.6"; src = ~/configuration/submodules/awesome-tab; recipe = ''(awesome-tab :repo "manateelazycat/awesome-tab" :fetcher github)''; meta.homepage = "https://github.com/manateelazycat/awesome-tab#README"; meta.license = lib.licenses.gpl3Plus; }
 
 };
 
-########################################
+##################################################
 
 melpaEmacsPackages = {
 
-   #####################################
+ #-----------------------------#
 
    dante = self.melpaBuild {
       pname = "dante";
@@ -164,15 +185,35 @@ melpaEmacsPackages = {
       };
     };
 
-   #####################################
+ #-----------------------------#
+
+  awesome-tab = self.melpaBuild rec {
+
+    pname   = "awesome-tab";
+    version = "2.6";
+
+    src = fetchFromGitHub {
+      owner  = "manateelazycat";
+      repo   = pname;
+      rev    = "7f59860947d2f275011385fee81a88b00726c7bf";
+      sha256 = "";
+    };
+
+    recipe = ''(awesome-tab :repo "manateelazycat/awesome-tab" :fetcher github)'';
+    meta.homepage = "https://github.com/manateelazycat/awesome-tab#README";
+    meta.license  = lib.licenses.gpl3Plus;
+
+  };
+
+  #TODO# awesome-tab = let self = (pkgs.emacsPackagesNgGen pkgs.emacs26); in self.melpaBuild { pname = "awesome-tab"; version = "2.6"; src = ~/configuration/submodules/awesome-tab; recipe = ''(awesome-tab :repo "manateelazycat/awesome-tab" :fetcher github)''; meta.homepage = "https://github.com/manateelazycat/awesome-tab#README"; meta.license = lib.licenses.gpl3Plus; }
 
 };
 
-########################################
+##################################################
 
 optionalEmacsPackages = {
 
-   #####################################
+ #-----------------------------#
 
    hexrgb = self.compileEmacsWikiFile {
       name = "hexrgb.el";
@@ -180,7 +221,7 @@ optionalEmacsPackages = {
       # date = 2018-08-02T21:54:21-0400;
     };
 
-   #####################################
+ #-----------------------------#
 
    highlight-cl = self.compileEmacsWikiFile {
       name = "highlight-cl.el";
@@ -188,7 +229,7 @@ optionalEmacsPackages = {
       # date = 2018-02-21T17:21:43-0800;
     };
 
-   #####################################
+ #-----------------------------#
 
     col-highlight = self.compileEmacsWikiFile {
       name = "col-highlight.el";
@@ -198,33 +239,33 @@ optionalEmacsPackages = {
       buildInputs = [ self.vline ];
     };
 
-   #####################################
+ #-----------------------------#
 
    github-pullrequest = super.addBuildInputs super.github-pullrequest
      [ pkgs.git
      ];
 
-   #####################################
+ #-----------------------------#
 
    magithub = super.addBuildInputs super.magithub
      [ pkgs.git
        self.dash self.graphql self.treepy
      ];
 
-   #####################################
+ #-----------------------------#
 
    magit-annex = super.addBuildInputs super.magit-annex
      [ pkgs.git
        pkgs.haskellPackages.magit-annex
      ];
 
-   #####################################
+ #-----------------------------#
 
 };
 
-########################################
+#------------------------------------------------#
 in
-########################################
+##################################################
 
 sboosaliEmacsPackages
 
@@ -245,4 +286,3 @@ e.g. « self » is « emacs26PackagesNg ».
   ]
 
 *************************************************/
-##################################################

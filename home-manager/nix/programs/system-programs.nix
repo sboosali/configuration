@@ -6,6 +6,24 @@
 with pkgs; 
 
 ##################################################
+let
+#------------------------------------------------#
+
+haskell-overridez =
+  let
+  version = "0.10.3.1";
+  notes   = "https://github.com/adetokunbo/haskell-overridez#readme";
+  in
+  builtins.fetchTarball {
+    url    = "https://github.com/adetokunbo/haskell-overridez/archive/v${version}.tar.gz";
+    sha256 = "1w2pv96bdf16nc1vvh03acx37qq4h4hrz2y979a705i70z8h59lk"; # via « nix-prefetch-url »
+  };
+
+#------------------------------------------------#
+
+#------------------------------------------------#
+in
+##################################################
 [
 
  arcanist
@@ -27,6 +45,7 @@ with pkgs;
  gparted
  gnupg22                        # for « gpg » version ≥2.1.17
  graphviz                       # GraphViz renders « .dot » files.
+ haskell-overridez
  htop
  imagemagick
  inotify-tools

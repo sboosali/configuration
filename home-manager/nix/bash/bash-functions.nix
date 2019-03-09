@@ -123,27 +123,28 @@ in
       c = nixpkgs.config
       l = nixpkgs.lib
 
+      :a nixpkgs
+      :a nixpkgs.lib
+
       haskell = pkgs.haskell
       h       = pkgs.haskell.lib
       ghcs    = pkgs.haskell.compilers
       hs      = pkgs.haskellPackages
       hs86    = pkgs.haskell.packages.ghc863
 
-      el   = pkgs.emacs26Packages
-      el26 = pkgs.emacs26Packages
+      es    = pkgs.emacsPackagesNgGen pkgs.emacs26
+      es26  = es
+      melpa = es.melpaPackages
 
       py   = pkgs.python27Packages
-      py27 = pkgs.python27Packages
+      py27 = py
 
-      :a nixpkgs
-      :a nixpkgs.lib
-
-      melpa      = pkgs.emacs26Packages.emacsMelpa
-
-      xfceu = pkgs.xfceUnstable
+      self  = pkgs
+      super = pkgs
 
     '';
 
+      # es25 = pkgs.emacsPackagesNgGen pkgs.emacs26
       # melpaBuild = pkgs.emacs26Packages.emacsMelpa.melpaBuild
       # melpa      = pkgs.emacs26Packages.emacsMelpa
 

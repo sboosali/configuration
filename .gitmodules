@@ -7,3 +7,6 @@
 [submodule "cabal"]
 	path = submodules/cabal
 	url = https://github.com/haskell/cabal
+[submodule "awesome-tab"]
+	path = submodules/awesome-tab
+	url = https://github.com/manateelazycat/awesome-tab
