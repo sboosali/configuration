@@ -5,6 +5,8 @@
 , sboo
 , applications
 , xdg
+
+, xdgUtilities
 }:
 
 ##################################################
@@ -52,6 +54,14 @@ in
 ##################################################
 {
 
+ #-----------------------------#
+
+ shellOptions = [ "histappend" "checkwinsize" "extglob" "globstar" "checkjobs" ];
+
+ # ^ Shell options to set.
+
+ #-----------------------------#
+
  profileExtra = import ./bash-login-rc.nix { inherit pkgs lib;
                                              inherit xdg sboo;
                                              inherit bashUtilities;
@@ -69,6 +79,8 @@ in
  # * « ~/.bash_login » exists.
  #
 
+ #-----------------------------#
+
  bashrcExtra = import ./bash-interactive-rc.nix { inherit bashUtilities;
                                                   inherit bashFunctions;
                                                   inherit bashCompletions;
@@ -78,9 +90,14 @@ in
  # 
  # i.e. Extra commands that should be run when initializing an interactive shell.
 
- shellOptions = [ "histappend" "checkwinsize" "extglob" "globstar" "checkjobs" ];
+ #-----------------------------#
 
- # ^ Shell options to set.
+#initExtra
+
+ # ^ « . » extras.
+ # 
+
+ #-----------------------------#
 
  shellAliases =
   (import ./shell-aliases.nix
@@ -91,6 +108,8 @@ in
  # 
  # * to command strings, or
  # * directly to build outputs.
+
+ #-----------------------------#
 
  sessionVariables =
     (import ./environment-variables.nix
@@ -103,6 +122,8 @@ in
 
  # ^ NOTE « home.sessionVariables » has « sh »-general environment variables,
  # « programs.bash.sessionVariables » has the « bash »-specific environment variables.
+
+ #-----------------------------#
 
  historyControl = [ "ignoredups" "ignorespace" ];
 
@@ -124,6 +145,12 @@ in
  historyFileSize = 1000000;
 
  # ^ Number of history lines to keep on file.
+
+ historyFile = xdgUtilities.asXdgCachePath "bash/.bash_history";
+
+ # ^ defaults to « ~/.bash_history »
+
+ #-----------------------------#
 
  enableAutojump = true;
 
@@ -152,6 +179,8 @@ $ jco
  # ^ `jc` + `jo`
 ```
 */
+
+ #-----------------------------#
 
 }
 #################################################

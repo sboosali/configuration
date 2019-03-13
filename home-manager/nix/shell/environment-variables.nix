@@ -13,7 +13,10 @@ paths = import ./paths.nix { };
 
 #-----------------------------------------------#
 
-#inherit shellUtilities; 
+browser = "google-chrome";
+
+# browser = "firefox";
+# browser = "google-chrome";
 
 #-----------------------------------------------#
 
@@ -66,6 +69,8 @@ in
  LD_PRELOAD = ""; #HACK# 
 
  #-----------------------------------------------#
+
+ BROWSER = browser;
 
  #FONTCONFIG_PATH    = "${xdg.configHome}/fontconfig:/etc/fonts";
  #FONTCONFIG_FILE    = "${xdg.configHome}/fontconfig/fonts.conf";

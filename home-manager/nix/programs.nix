@@ -7,6 +7,7 @@
 , applications
 
 , utilities
+, xdgUtilities
 }:
 
 ##################################################
@@ -84,7 +85,10 @@ with utilities;
   bash =
 
     (import ./bash
-            { inherit pkgs lib sboo xdg applications;
+            {
+              inherit pkgs lib;
+              inherit sboo xdg applications;
+              inherit xdgUtilities;
             })
 
      // { enable = true;

@@ -69,18 +69,44 @@ in
 with utilities;
 
 ##################################################
-let 
+let
 #-----------------------------------------------#
 
-configFile = path:
+asXdgConfigPath = path:
 
-  "${self.xdg.configHome}/${path}";
+  let
+  path' = builtins.toString path;
+  in
+
+  ''${self.xdg.configHome}/${path'}'';
 
 #------------------------------------------------#
 
-dataFile = path:
+asXdgDataPath = path:
 
-  "${self.xdg.dataHome}/${path}";
+  let
+  path' = builtins.toString path;
+  in
+
+  ''${self.xdg.dataHome}/${path'}'';
+
+#-----------------------------------------------#
+
+asXdgCachePath = path:
+
+  let
+  path' = builtins.toString path;
+  in
+
+  ''${self.xdg.cacheHome}/${path'}'';
+
+#-----------------------------------------------#
+
+xdgUtilities = {
+
+ inherit asXdgConfigPath asXdgDataPath asXdgCachePath;
+
+};
 
 #-----------------------------------------------#
 
@@ -132,8 +158,11 @@ self = rec {
 
   #----------------------------------------------#
 
-  programs = import ./programs.nix {
-    inherit pkgs lib sboo xdg applications utilities;
+  programs = import ./programs.nix
+  {
+    inherit pkgs lib;
+    inherit sboo xdg applications;
+    inherit utilities xdgUtilities;
   };
 
   #----------------------------------------------#
