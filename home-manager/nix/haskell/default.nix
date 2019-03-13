@@ -35,10 +35,11 @@ packageEnvironment = super.buildEnv
 
 in
 ##################################################
+{
 
-{ compilers = compilerPrograms;
+  compilers = compilerPrograms;
 
   packages  = packageEnvironment;
-}
 
+}
 ##################################################

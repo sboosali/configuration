@@ -38,13 +38,11 @@ coreEmacsPackages = with epkgs; [
   helm
   async
   popup
+  lcr
 
   #----------------------------------------------#
 
   haskell-mode
-
-  #----------------------------------------------#
-
   nix-mode
 
   #----------------------------------------------#
@@ -54,6 +52,10 @@ coreEmacsPackages = with epkgs; [
   #----------------------------------------------#
 
   yasnippet
+
+  #----------------------------------------------#
+
+  flycheck
 
   #----------------------------------------------#
 
@@ -74,8 +76,9 @@ moreEmacsPackages = (with epkgs; [
 
  #----------------------------------------------#
 
- # hexrgb
- # awesome-tab
+ edit-env
+ hexrgb
+#awesome-tab
 
  #----------------------------------------------#
 
@@ -137,7 +140,7 @@ moreEmacsPackages = (with epkgs; [
  #----------------------------------------------#
  # Haskell
 
- dante
+#dante
 
 #intero                         # needs `stack` system-package
 #ghc                            # « ghc-mod »
@@ -285,6 +288,8 @@ webpaste
 imgbb
 
  #TODO# elisp-ffi
+
+ vlf                            # abbreviates "View Large Files"
 
  #----------------------------------------------#
 

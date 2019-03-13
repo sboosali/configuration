@@ -1,9 +1,9 @@
 ##################################################
-{ pkgs }:
+{ self }:
 
 ##################################################
 
-with pkgs; 
+with self; 
 
 ##################################################
 let
@@ -20,10 +20,6 @@ haskell-overridez =
   };
 
 #------------------------------------------------#
-
-cask = emacsPackages.cask;
-
-#------------------------------------------------#
 in
 ##################################################
 [
@@ -32,7 +28,6 @@ in
  bash-completion
  cabal-install                # Comment-out to use development-version « cabal-install-2.5.0.0 » in « ~/.cabal/bin ».
  cabal2nix
-#cask
  colordiff
  dex
  dhall
@@ -81,7 +76,6 @@ in
  signal-desktop
  sox
  stack
- styx                           # https://styx-static.github.io/styx-site/
  tmux
  tree
  unzip
@@ -103,25 +97,40 @@ in
  youtube-dl
  libxml2
 
- #nixfmt
- #terminfo
- #VirtualBox-GuestAdditions
- #cask
- #dconf-editor
- #emacs
- #emacs2nix
- #fsnotify
- #melpa2nix
- #mesa
- #nix
- #nix-derivation-pretty
- #nix-prefetch-git            # subsumed within « nix-prefetch-scripts ».
- #xbacklight
- #xinput
- #xkeyboard-config
- #xmodmap
- #xprop
- #xsel-unstable
+ nodejs                         # JS Interpreter
+ html-tidy                      # HTML Linter
+ csslint                        # CSS Linter
+ shellcheck                     # Bash Linter
+
+#nixfmt
+#terminfo
+#VirtualBox-GuestAdditions
+#dconf-editor
+#emacs
+#emacs2nix
+#fsnotify
+#melpa2nix
+#mesa
+#nix
+#nix-derivation-pretty
+#nix-prefetch-git            # subsumed within « nix-prefetch-scripts ».
+#xbacklight
+#xinput
+#xkeyboard-config
+#xmodmap
+#xprop
+#xsel-unstable
+#styx                           # https://styx-static.github.io/styx-site/
 
 ]
 ##################################################
+
+# ^ NOTE we must omit the `programs._` programs:
+#
+# * emacs26
+# * git
+# * firefox
+# * ...
+#
+# from the `home.packages = _` programs.
+#

@@ -14,8 +14,7 @@ sbooUtilities = utilities;
 
 emacsUtilities = import ./utilities.nix {
 
-  self  = pkgs;
-  super = pkgs;
+  inherit pkgs;
 
 };
 
@@ -24,6 +23,8 @@ in
 ##################################################
 {
 
+  package = pkgs.emacs26;
+
   extraPackages = import ./packages.nix {
 
     inherit pkgs;
@@ -31,9 +32,12 @@ in
 
   };
 
-  package = pkgs.emacs;
+  overrides = import ./overrides.nix {
 
- #TODO overrides = import ./overrides.nix {};
+    inherit pkgs;
+    inherit sbooUtilities emacsUtilities;
+
+  };
 
 }
 ##################################################

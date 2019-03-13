@@ -34,7 +34,7 @@ inherit (pkgs.stdenv) lib;
 utilities =
   import ./home/utilities.nix
          {
-           inherit lib;
+           inherit pkgs lib;
          };
 
 #-----------------------------------------------#
@@ -99,7 +99,7 @@ self = rec {
   #----------------------------------------------#
 
   nixpkgs.config   = import ./config;
-  nixpkgs.overlays = import ./overlays { whitelist = [ "emacs" ]; };
+  nixpkgs.overlays = []; #import ./overlays { whitelist = [ "emacs" ]; };
 
   # nixpkgs.config   = {};
   # nixpkgs.overlays = [];

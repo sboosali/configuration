@@ -72,13 +72,23 @@ XDG_CACHE_HOME  = builtins.getEnv "XDG_CACHE_HOME";
 
 #------------------------------------------------#
 
-NIX_PROFILE = "~/.nix-profile";
+NIX_PROFILE = builtins.toString ~/.nix-profile;
 NIXPKGS     = "${env.HOME}/nixpkgs";
 
 #NixProfile = "${env.HOME}/.nix-profile";
 #NixProfile = "${env.HOME}/.nix-profile";
 
 #------------------------------------------------#
+
+nixpkgs = builtins.mapAttrs (k: v: builtins.toString v) {
+
+  sboo-clone    = ~/nixpkgs;
+  unstable      = ~/.nix-defexpr/channels/nixpkgs-unstable;
+  "nixos-18.09" = ~/.nix-defexpr/channels/nixos-18.09;
+
+#''${NIX_PROFILE}/channels/nixpkgs-unstable'';
+
+};
 
 #------------------------------------------------#
 in
@@ -491,6 +501,21 @@ in
 
  #-----------------------------------------------#
 
+ sboo-home-manager-build  = ''${home-manager} -f ${sboo.files."home.nix"} build'';
+ sboo-home-manager-switch = ''N${home-manager} -f ${sboo.files."home.nix"} switch'';
+
+ #-----------------------------------------------#
+
+ sboo-home-manager-build--cloned  = ''NIX_PATH=nixpkgs=${nixpkgs.sboo-clone} ${home-manager} -f ${sboo.files."home.nix"} build'';
+ sboo-home-manager-switch--cloned = ''NIX_PATH=nixpkgs=${nixpkgs.sboo-clone} ${home-manager} -f ${sboo.files."home.nix"} switch'';
+
+ #-----------------------------------------------#
+
+ sboo-home-manager-build--nixpkgs-unstable  = ''NIX_PATH=nixpkgs=${nixpkgs.unstable} ${home-manager} -f ${sboo.files."home.nix"} build'';
+ sboo-home-manager-switch--nixpkgs-unstable = ''NIX_PATH=nixpkgs=${nixpkgs.unstable} ${home-manager} -f ${sboo.files."home.nix"} switch'';
+
+ #-----------------------------------------------#
+
  help-home-manager = ''${home-manager} --help'';
 
  #################################################
@@ -527,6 +552,8 @@ in
 # ssh-key with passphrase, with ssh-ident:
 
  #################################################
+
+ sboo-source-cabal-bash-completion = ''source ${../../../bash/completion/cabal}'';
 
  #################################################
 
@@ -580,7 +607,9 @@ in
 
  #################################################
 
- sboo-cabal-update = ''time (${cabal} new-update && ${cabal} new-build all)'';
+ sboo-cabal-update = ''time (${cabal} new-update "hackage.haskell.org" && ${cabal} "new-update stackage-lts-13.12" && ${cabal} new-build all)'';
+
+#sboo-cabal-update = ''time (${cabal} new-update && ${cabal} new-build all)'';
 
  #################################################
 

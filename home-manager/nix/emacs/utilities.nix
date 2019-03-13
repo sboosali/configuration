@@ -1,14 +1,98 @@
 ##################################################
-{ self, super }:
+{ pkgs
+}:
 
-# self: super:
-# { self, super }:
-
+##################################################
+# Imports ########################################
 ##################################################
 let
 #------------------------------------------------#
 
-fromRepository = { repo ? null }:
+inherit (pkgs)
+        fetchurl fetchgit fetchFromGitHub stdenv;
+
+#------------------------------------------------#
+
+inherit (stdenv)
+        lib mkDerivation;
+
+#------------------------------------------------#
+in
+##################################################
+# Exports ########################################
+##################################################
+rec {
+#------------------------------------------------#
+
+compileEmacsFiles = pkgs.callPackage ./builder.nix;
+
+#------------------------------------------------#
+
+compileLocalFile = name: 
+
+  compileEmacsFiles {
+    inherit name;
+
+    src = ./elisp + ("/" + name);
+  };
+
+#------------------------------------------------#
+
+compileEmacsWikiFile =
+
+  { name
+  , sha256
+  , buildInputs ? []
+  , patches     ? []
+  }:
+
+  compileEmacsFiles {
+    inherit name buildInputs patches;
+
+    src = fetchFromEmacsWiki { inherit name sha256; };
+  };
+
+#------------------------------------------------#
+
+fetchFromEmacsWiki = pkgs.callPackage
+
+  ({ fetchurl
+   , name
+   , sha256
+   }:
+
+  fetchurl {
+    inherit sha256;
+
+    url = "https://www.emacswiki.org/emacs/download/" + name;
+  });
+
+#------------------------------------------------#
+
+withPatches = package: patches:
+
+  lib.overrideDerivation package (attrs: { inherit patches; });
+
+#------------------------------------------------#
+
+/* Add programs as dependencies.
+ *
+ * e.g.
+ *
+ *     (addBuildInputs melpaPackages.magit [ pkgs.git ])
+ */
+
+addBuildInputs = package: extraBuildInputs:
+
+   package.overrideAttrs (old:
+ 
+     {
+       buildInputs = old.buildInputs ++ extraBuildInputs;
+     });
+
+#------------------------------------------------#
+
+fromEmacsRepository = epkgs: { repo ? null }:
 
     assert (null == repo || builtins.isString repo);
 
@@ -16,10 +100,10 @@ fromRepository = { repo ? null }:
 
     epkgs =
 
-      if repo == "elpa"        then self.elpaPackages        else
-      if repo == "melpa"       then self.melpaPackages       else
-      if repo == "melpaStable" then self.melpaStablePackages else
-      if repo == null          then self                     else
+      if repo == "elpa"        then epkgs.elpaPackages        else
+      if repo == "melpa"       then epkgs.melpaPackages       else
+      if repo == "melpaStable" then epkgs.melpaStablePackages else
+      if repo == null          then epkgs                     else
 
       abort ''« fromRepository x » — « x » is « ${repo} », but must be one of: « null "elpa" "melpa" "melpaStable" »'';
 
@@ -29,7 +113,7 @@ fromRepository = { repo ? null }:
 
 #------------------------------------------------#
 
-configure =
+configureEmacsPackage = epkgs:
 
     { name
     , tools ? null, elisp ? null, package ? null, repo ? null
@@ -39,7 +123,7 @@ configure =
 
     let
 
-    repo' = fromRepository { inherit repo; };
+    repo' = fromEmacsRepository epkgs { inherit repo; };
 
     package' =
 
@@ -61,14 +145,9 @@ configure =
 
     in
 
-    super.addBuildInputs tools' package';
+    addBuildInputs tools' package';
 
 #------------------------------------------------#
-in
-##################################################
-{
-
-  inherit fromRepository configure;
 
 }
 ##################################################

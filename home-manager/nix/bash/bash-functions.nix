@@ -139,6 +139,8 @@ in
       py   = pkgs.python27Packages
       py27 = py
 
+      js = pkgs.nodePackages
+
       self  = pkgs
       super = pkgs
 
@@ -147,6 +149,8 @@ in
       # es25 = pkgs.emacsPackagesNgGen pkgs.emacs26
       # melpaBuild = pkgs.emacs26Packages.emacsMelpa.melpaBuild
       # melpa      = pkgs.emacs26Packages.emacsMelpa
+
+      # js10 = pkgs.nodePackages_10_x
 
       # xfce  = pkgs.xfce
       # xfceu = pkgs.xfceUnstable
