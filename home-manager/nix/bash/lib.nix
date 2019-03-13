@@ -87,5 +87,24 @@ ${definition}
 '';
 
   #----------------------------------------------#
+
+  renderBashSources = paths:
+
+    let
+    go = path:
+        renderBashSource { file = builtins.toString path; };
+    in
+
+    (builtins.concatStringsSep "\n"
+      (builtins.map go
+        paths));
+
+  #----------------------------------------------#
+
+  renderBashSource = { file }: ''
+source ${file}
+'';
+
+  #----------------------------------------------#
 }
 ##################################################

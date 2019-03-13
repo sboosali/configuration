@@ -1,6 +1,7 @@
 ##################################################
 { bashUtilities
 , bashFunctions
+, bashCompletions
 }:
 
 ##################################################
@@ -21,6 +22,7 @@ bashUtilities.concatBashScripts
       (builtins.readFile ../../../bash/bash_settings)
 
       (bashUtilities.renderBashFunctions bashFunctions)
+      (bashUtilities.renderBashSources   bashCompletions)
     ]   
 
 #TODO#

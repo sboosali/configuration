@@ -34,6 +34,16 @@ bashFunctions = import ./bash-functions.nix
 
 #------------------------------------------------#
 
+bashCompletions = [
+
+  ../../../bash/completion/cabal
+
+];
+
+# ^ custom completion scripts.
+
+#------------------------------------------------#
+
 # configFile = path:
 #   "${xdg.configHome}/${path}";
 
@@ -61,6 +71,7 @@ in
 
  bashrcExtra = import ./bash-interactive-rc.nix { inherit bashUtilities;
                                                   inherit bashFunctions;
+                                                  inherit bashCompletions;
                                                 };
 
  # ^ « .bashrc » extras.

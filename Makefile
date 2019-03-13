@@ -176,9 +176,11 @@ emacs-clean:
 
 apt-install:
 
+        #----------------------#
+
 	sudo apt update
 
-#------------------------------#
+        #----------------------#
 
 	sudo apt install -y "virtualbox-5.1"
 	sudo apt install -y "virtualbox-guest-additions-iso"
@@ -197,7 +199,7 @@ apt-install:
 
 #	sudo apt install -y ""
 
-#------------------------------#
+        #----------------------#
 
 	sudo apt install -y "locales"
 	sudo apt install -y "language-pack-en"
@@ -205,13 +207,28 @@ apt-install:
 	sudo locale-gen en_US.UTF-8
 	sudo dpkg-reconfigure locales
 
-#------------------------------#
+        #----------------------#
 
 	sudo ln -s $(HOME)/.nix-profile/bin/emacs /usr/bin/emacs
 
-#------------------------------#
+        #----------------------#
 
 .PHONY: apt-install
+
+#------------------------------------------------#
+
+manual-install:
+
+        #----------------------#
+
+	wget "https://ftp.gnu.org/gnu/bash/bash-3.2.tar.gz"
+	tar -xv  -f bash-3.2.tar.gz  bash-3.2
+	cd ./bash-3.2
+	(./configure  &&  make bash)
+
+        #----------------------#
+
+.PHONY: manual-install
 
 #------------------------------------------------#
 
