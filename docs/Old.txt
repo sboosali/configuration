@@ -1,10 +1,49 @@
-
-
-
-
-
-
 # HM_FILE ?=$HOME/configuration/home-manager/nix/home.nix
+
+
+
+
+
+
+
+
+
+
+#--------------------------------------#
+
+# https://stackoverflow.com/a/26759734/1337806
+sboo-set-branch() {
+
+    if [ -x "$(command -v __git_ps1)" ]
+       # ^ if present and executable
+    then
+        BRANCH="$(__git_ps1 \(%s\))"
+        # echo $BRANCH
+    fi
+
+}
+
+# ^ unless empty or unset
+# shellcheck disable=SC2154 
+# if [ -z "$__git_ps1" ]; then
+
+#--------------------------------------#
+
+sboo-prompt-command-git() {
+ sboo-set-branch
+}
+
+SBOO_PROMPT_COMMAND_GIT="{ [ -x sboo-prompt-command-git ] && sboo-prompt-command-git; }"
+
+export PROMPT_COMMAND="$SBOO_PROMPT_COMMAND_GIT; $PROMPT_COMMAND"
+
+# function sboo-get-branch {
+#  # unless empty or unset
+#  if [ -z "$__git_ps1" ]; then
+#    "$(__git_ps1 \(%s\))"
+#  fi
+# }
+
 
 
 
