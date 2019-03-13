@@ -99,6 +99,7 @@ home-manager:
 
 	$(HM) -f $(HM_FILE) build
 
+
 #	                               $(HM) -f $(HM_FILE) build
 #	NIX_PATH=nixpkgs=$(HM_NIXPKGS) $(HM) -f $(HM_FILE) build
 
@@ -177,6 +178,8 @@ apt-install:
 
 	sudo apt update
 
+#------------------------------#
+
 	sudo apt install -y "virtualbox-5.1"
 	sudo apt install -y "virtualbox-guest-additions-iso"
 	sudo apt install -y "virtualbox-ext-pack"
@@ -192,13 +195,21 @@ apt-install:
 
 	sudo apt install -y "paper-icon-theme"
 
+#	sudo apt install -y ""
+
+#------------------------------#
+
 	sudo apt install -y "locales"
 	sudo apt install -y "language-pack-en"
 
 	sudo locale-gen en_US.UTF-8
 	sudo dpkg-reconfigure locales
 
-#	sudo apt install -y ""
+#------------------------------#
+
+	sudo ln -s $(HOME)/.nix-profile/bin/emacs /usr/bin/emacs
+
+#------------------------------#
 
 .PHONY: apt-install
 
