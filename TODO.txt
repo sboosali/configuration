@@ -16,6 +16,46 @@
 
 
 
+
+
+
+
+
+
+
+GTAGS
+
+Added to the above, to be able to use ctags as backend, you need to copy the default gtags.conf into ~/.globalrc:
+
+cp gtags.conf ~/.globalrc
+
+This can confuse new gtags users since GNU Global claims that it supports ctags but without the config file, it does nothing.
+And also in addition, add below to your shell init.
+
+setenv GTAGSCONF ~/.globalrc
+setenv GTAGSLABEL ctags
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 PROBLEM 1:
 
     (process:17674): Gtk-WARNING **: 00:37:38.583: Locale not supported by C library.

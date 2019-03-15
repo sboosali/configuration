@@ -52,7 +52,7 @@ bashCompletions = [
 #------------------------------------------------#
 in
 ##################################################
-{
+rec {
 
  #-----------------------------#
 
@@ -81,7 +81,8 @@ in
 
  #-----------------------------#
 
- bashrcExtra = import ./bash-interactive-rc.nix { inherit bashUtilities;
+ bashrcExtra = initExtra;
+ initExtra   = import ./bash-interactive-rc.nix { inherit bashUtilities;
                                                   inherit bashFunctions;
                                                   inherit bashCompletions;
                                                 };

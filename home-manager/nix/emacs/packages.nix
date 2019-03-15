@@ -111,6 +111,7 @@ moreEmacsPackages = (with epkgs; [
  helm-make
  helm-swoop
  helm-hayoo
+ helm-gtags
 
  #company-yasnippet
  #company-abbrev
@@ -184,7 +185,7 @@ moreEmacsPackages = (with epkgs; [
 #dired-list     # from the « dired-hacks » megarepo
  dired-open     # from the « dired-hacks » megarepo
  dired-rainbow  # from the « dired-hacks » megarepo
- dired-ranger   # from the « dired-hacks » megarepo
+#dired-ranger   # from the « dired-hacks » megarepo
  dired-sidebar  # from the « dired-hacks » megarepo
  dired-subtree  # from the « dired-hacks » megarepo
 
@@ -223,6 +224,8 @@ moreEmacsPackages = (with epkgs; [
  magithub
 #github-pullrequest             # FIXME
 
+ ggtags
+
  direnv         # needs `direnv` system-package
  neotree
 
@@ -247,7 +250,7 @@ moreEmacsPackages = (with epkgs; [
  
  #----------------------------------------------#
 
- ranger
+#ranger
 
  #----------------------------------------------#
 
