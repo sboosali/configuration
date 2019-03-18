@@ -9,6 +9,21 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #--------------------------------------#
 
 # https://stackoverflow.com/a/26759734/1337806
@@ -43,6 +58,180 @@ export PROMPT_COMMAND="$SBOO_PROMPT_COMMAND_GIT; $PROMPT_COMMAND"
 #    "$(__git_ps1 \(%s\))"
 #  fi
 # }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+_home-manager_subcommands () {
+
+    local Subcommands
+    Subcommands=("help" "edit" "build" "switch" "generations" "remove-generations" "expire-generations" "packages" "news")
+
+    for WORD in ${Subcommands[@]}
+    do
+
+        echo "$WORD"
+
+    done
+}
+
+##################################################
+
+#   -f FILE                     # compgen -A file; compgen -A directory 
+#   -A ATTRIBUTE                # compgen -W programs.*
+#   -I PATH                     # compgen -A directory 
+#   -v
+#   -n
+#   -h
+
+_home-manager_completions () {
+
+    local Subcommands
+    Subcommands=( $(_home-manager_subcommands) )
+
+    # ^ « home-manager »'s subcommands.
+
+    local CurrentWord
+    CurrentWord=${COMP_WORDS[$COMP_CWORD]}
+
+    # ^ the word currently being completed
+
+    for WORD in ${Subcommands[@]}
+    do
+
+        COMPREPLY+=($WORD)
+
+    done
+
+    local CurrentWord
+    CurrentWord=${COMP_WORDS[$COMP_CWORD]}
+
+    COMPREPLY=( $( compgen -W "$( eval "${CommandLine[@]}" 2>/dev/null ) $( _cabal_targets "${CommandLine[@]}" ) $( _cabal_subcommands "${COMP_WORDS[@]}" )" -- "$CurrentWord" ) )
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    #--------------------------#
+
+    for WORD in "${Subcommands[@]}"
+    do
+
+        COMPREPLY+=( "$WORD" )
+
+    done
+
+    COMPREPLY=( $( compgen -W "${Subcommands[*]} ${Options[*]}" -- "$CurrentWord" ) )
+
+
+    COMPREPLY=()
+
+    COMPREPLY+=( $( compgen -W "${Options[*]}" -- "$CurrentWord" ) )
+    COMPREPLY+=( $( compgen -W "${Subcommands[*]}" -- "$Curren
+
+
+
+
+
+
+
+
+
+
+
+
+_home-manager_completions () {
+
+    #--------------------------#
+
+    local Subcommands
+    Subcommands=( "help" "edit" "build" "switch" "generations" "remove-generations" "expire-generations" "packages" "news" )
+
+    # ^ « home-manager »'s subcommands.
+
+    #--------------------------#
+
+    local Options
+    Options=( "-f" "-A" "-I" "-h" "-n" "-v" )
+
+    # ^ « home-manager »'s options.
+
+    #--------------------------#
+
+    local CurrentWord
+    CurrentWord=${COMP_WORDS[$COMP_CWORD]}
+
+    # ^ the word currently being completed
+
+    #--------------------------#
+
+    COMPREPLY=()
+
+    COMPREPLY+=( $( compgen -W "${Subcommands[@]}" -- "$CurrentWord" ) )
+    COMPREPLY+=( $( compgen -W "${Options[@]}" -- "$CurrentWord" ) )
+
+    #--------------------------#
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

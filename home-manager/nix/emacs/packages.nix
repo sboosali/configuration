@@ -29,7 +29,7 @@ coreEmacsPackages = with epkgs; [
 
   #----------------------------------------------#
 
-  use-package
+# use-package
   bind-key
   diminish
 
@@ -111,7 +111,6 @@ moreEmacsPackages = (with epkgs; [
  helm-make
  helm-swoop
  helm-hayoo
- helm-gtags
 
  #company-yasnippet
  #company-abbrev
@@ -223,8 +222,6 @@ moreEmacsPackages = (with epkgs; [
  magit-annex
  magithub
 #github-pullrequest             # FIXME
-
- ggtags
 
  direnv         # needs `direnv` system-package
  neotree

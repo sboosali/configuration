@@ -102,7 +102,7 @@ in
  csslint                        # CSS Linter
  shellcheck                     # Bash Linter
 
- global                         # GNU Global (a.k.a. « gtags »)
+#global                         # GNU Global (a.k.a. « gtags »)
 
 #nixfmt
 #terminfo

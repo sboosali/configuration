@@ -17,14 +17,16 @@ with utilities;
 ##################################################
 {
 
-  ################################################
+  #----------------------------#
 
   home-manager.enable = true;
 
-  #home-manager.path   = toString ../../submodules/home-manager;
+  home-manager.path = (import ./versions/home-manager.nix).local;
 
-  home-manager.path = (import ./versions/home-manager.nix).remote;
   # ^
+
+  # home-manager.path = (import ./versions/home-manager.nix).remote;
+  # home-manager.path = (import ./versions/home-manager.nix).local;
 
   #TODO:
   # - https://github.com/rycee/home-manager/archive/release-18.09.tar.gz;
@@ -46,7 +48,7 @@ with utilities;
   # ```
   #
 
-  ################################################
+  #----------------------------#
 
   emacs =
 
@@ -58,7 +60,7 @@ with utilities;
      // { enable = true;
         };
 
-  ################################################
+  #----------------------------#
 
   git =
 
@@ -69,7 +71,7 @@ with utilities;
      // { enable = true;
         };
 
-  ################################################
+  #----------------------------#
 
   ssh =
 
@@ -80,7 +82,7 @@ with utilities;
      // { enable = true;
         };
 
-  ################################################
+  #----------------------------#
 
   bash =
 
@@ -102,7 +104,7 @@ with utilities;
       enableAdobeFlash = true;
   };
 
-  ################################################
+  #----------------------------#
 
   # chromium.enable = true;
 
@@ -193,17 +195,17 @@ with utilities;
 
   termite.audibleBell = false;
 
-  ################################################
+  #----------------------------#
 
   htop.enable = true;
 
-  ################################################
+  #----------------------------#
 
   feh = {
    enable = true;
   };
    
-  ################################################
+  #----------------------------#
 
   texlive = {
    enable = true;
@@ -219,11 +221,11 @@ with utilities;
 
   };
 
-  ################################################
+  #----------------------------#
 
   command-not-found.enable = true;
 
-  ################################################
+  #----------------------------#
 
   man.enable = false;
 
@@ -236,16 +238,16 @@ with utilities;
   #
   # About PAGER variable I guess the Ubuntu man package will use a default value when it is unset? The Nixpkgs man package doesn't seem to have such a default and instead relies on the TODO.
 
-  ################################################
+  #----------------------------#
 
   lesspipe.enable = true;
 
   # ^ « lesspipe » is a preprocessor for « pipe ».
 
-  ################################################
+  #----------------------------#
 
 
 
-  ################################################
+  #----------------------------#
 }
 ##################################################

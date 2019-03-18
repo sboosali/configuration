@@ -553,7 +553,7 @@ in
 
  #################################################
 
- sboo-source-cabal-bash-completion = ''source ${../../../bash/completion/cabal}'';
+ sboo-source-cabal-bash-completion = ''source ${builtins.toString ~/src/sboo/cabal/cabal-install/bash-completion/cabal}'';
 
  #################################################
 

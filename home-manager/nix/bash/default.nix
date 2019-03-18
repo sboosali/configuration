@@ -38,7 +38,8 @@ bashFunctions = import ./bash-functions.nix
 
 bashCompletions = [
 
-  ../../../bash/completion/cabal
+  ../../../bash/completion/cabal.bash
+  ../../../bash/completion/home-manager.bash
 
 ];
 

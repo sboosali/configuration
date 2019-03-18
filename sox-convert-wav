@@ -1,0 +1,54 @@
+#!/bin/bash
+set -e
+set -u
+
+##################################################
+
+HELP="««« $(basename $0) INPUT »»»"
+
+##################################################
+
+INPUT="${1:?$HELP}"
+
+# ^ e.g. « audio.wav »
+
+OUTPUT="${INPUT}.pcm"
+
+# ^ e.g. « audio.pcm.wav » TODO
+
+##################################################
+
+echo ========================================
+echo
+
+echo "« sox »:"
+echo
+command -v sox
+
+echo
+echo ----------------------------------------
+echo
+
+echo '« $SOX_OPTS »:'
+echo
+echo "${SOX_OPTS:-∅}"
+
+echo
+echo ----------------------------------------
+echo
+
+echo "FILES:"
+echo
+echo "${INPUT}"
+echo "${OUTPUT}"
+
+echo
+echo ========================================
+echo
+
+#sox  --type wav  --encoding signed-integer  -- "${INPUT}"  -- "${OUTPUT}"
+
+echo
+echo ========================================
+
+##################################################
