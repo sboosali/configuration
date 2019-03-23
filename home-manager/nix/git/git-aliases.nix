@@ -15,55 +15,55 @@ uniq = "${pkgs.coreutils}/bin/uniq";
 in
 ##################################################
 {
-  ######################################
+  #----------------------------#
   amend      = "commit --amend -C HEAD";
   authors    = "!\"${git} log --pretty=format:%aN"
              + " | ${sort}"
              + " | ${uniq} -c"
              + " | ${sort} -rn\"";
 
-  ######################################
+  #----------------------------#
   a            = "add";
   au           = "add -u";
   ap           = "add -p";
 
-  ######################################
+  #----------------------------#
   b          = "branch --color -v";
 
-  ######################################
+  #----------------------------#
 
 
-  ######################################
+  #----------------------------#
   p      = "push";
   pf     = "push -f";
 
-  ######################################
+  #----------------------------#
 
 
-  ######################################
+  #----------------------------#
   ca         = "commit --amend";
   cm         = "commit -m";
 
-  ######################################
+  #----------------------------#
   changes    = "diff --name-status -r";
 
-  ######################################
+  #----------------------------#
   co         = "checkout";
   com        = "checkout master";
   cou        = "checkout upstream";
 
-  ######################################
+  #----------------------------#
 
   clone      = "clone --recursive";
 
   cp         = "cherry-pick";
 
-  ######################################
+  #----------------------------#
   dc         = "diff --cached";
   dh         = "diff HEAD";
   ds         = "diff --staged";
 
-  ######################################
+  #----------------------------#
 
   f          = "fetch";
   ft         = "fetch --tags";
@@ -74,35 +74,35 @@ in
   fu          = "fetch        upstream";
   ftu         = "fetch --tags upstream";
 
-  ######################################
+  #----------------------------#
   from       = "!${git} bisect start && ${git} bisect bad HEAD && ${git} bisect good";
 
-  ######################################
+  #----------------------------#
   ls-ignored = "ls-files --exclude-standard --ignored --others";
 
-  ######################################
+  #----------------------------#
   nb         = "!${git} checkout --track $(${git} config branch.$(${git} rev-parse --abbrev-ref HEAD).remote)/$(${git} rev-parse --abbrev-ref HEAD) -b";
 
-  ######################################
+  #----------------------------#
 ##pr         = ""
 ##pr         = "!${git} push $(${git} config branch.$(${git} rev-parse --abbrev-ref HEAD).remote) HEAD:$(${git} rev-parse --abbrev-ref HEAD) && ${pkgs.git-pull-request}/bin/git-pull-request --target-branch $(${git} config branch.$(${git} rev-parse --abbrev-ref HEAD).merge) --target-remote $(${git} config branch.$(${git} rev-parse --abbrev-ref HEAD).remote) --no-rebase --no-comment-on-update";
 
-  ######################################
+  #----------------------------#
   rc         = "rebase --continue";
   ri         = "rebase --interactive";
   rs         = "rebase --skip";
 
-  ######################################
+  #----------------------------#
   ru         = "remote update --prune";
 
-  ######################################
+  #----------------------------#
   rh         = "reset --hard";
 
-  ######################################
+  #----------------------------#
   s          = "status";
   sp         = "status --porcelain";
 
-  ######################################
+  #----------------------------#
   snap       = "!${git} stash"
              + " && ${git} stash apply";
   snaplog    = "!${git} log refs/snapshots/refs/heads/"
@@ -111,26 +111,26 @@ in
              + " && ${git} pull"
              + " && ${git} stash pop";
 
-  ######################################
+  #----------------------------#
   su         = "submodule update --init --recursive";
 
-  ######################################
+  #----------------------------#
   undo       = "reset --soft HEAD^";
   w          = "status -sb";
   wdiff      = "diff --color-words";
 
-  ######################################
+  #----------------------------#
   l          = "log --graph --pretty=format:'%Cred%h%Creset"
              + " —%Cblue%d%Creset %s %Cgreen(%cr)%Creset'"
              + " --abbrev-commit --date=relative --show-notes=*";
 
-  ######################################
+  #----------------------------#
   unedit       = "checkout --";
   unstage      = "reset HEAD --";
   uncommit     = "reset --soft HEAD~1";
   recommit     = "commit -c ORIG_HEAD";
 
-  ######################################
+  #----------------------------#
 
   upstream-set    = "remote add upstream";
 
@@ -168,10 +168,11 @@ in
 
   # ^ run « git fetch upstream » first.
 
-  ######################################
+  #----------------------------#
 
   get-current-commit = "rev-parse --verify HEAD";
-  
 
-  ######################################
+  #----------------------------#
+
 }
+##################################################

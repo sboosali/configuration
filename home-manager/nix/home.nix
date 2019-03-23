@@ -122,7 +122,7 @@ shell =
 
 self = rec {
 
-  #----------------------------------------------#
+  #----------------------------#
 
   nixpkgs.config   = import ./config;
   nixpkgs.overlays = []; #import ./overlays { whitelist = [ "emacs" ]; };
@@ -130,17 +130,17 @@ self = rec {
   # nixpkgs.config   = {};
   # nixpkgs.overlays = [];
 
-  #----------------------------------------------#
+  #----------------------------#
 
   home.sessionVariables = shell.environmentVariables;
 
-  #----------------------------------------------#
+  #----------------------------#
 
   home.file = (import ./home/files.nix { inherit pkgs; })
           # // (import ./home/auto.nix  { inherit pkgs; })
             ;
 
-  #----------------------------------------------#
+  #----------------------------#
   # Programs:
 
   home.packages = [
@@ -152,11 +152,11 @@ self = rec {
 
   ];
 
-  #----------------------------------------------#
+  #----------------------------#
 
   #TODO posthook = '' ${cabal} new-update '';
 
-  #----------------------------------------------#
+  #----------------------------#
 
   programs = import ./programs.nix
   {
@@ -165,23 +165,23 @@ self = rec {
     inherit utilities xdgUtilities;
   };
 
-  #----------------------------------------------#
+  #----------------------------#
 
   services = import ./services.nix {
     inherit pkgs sboo;
   };
 
-  #----------------------------------------------#
+  #----------------------------#
   # Keyboard:
 
   home.keyboard = import ./home/keyboard.nix {};
 
-  #----------------------------------------------#
+  #----------------------------#
   # Fonts:
 
   fonts.fontconfig.enableProfileFonts = true;
 
-  #----------------------------------------------#
+  #----------------------------#
   # GTK Appearence/Behavior:
 
   gtk =
@@ -190,14 +190,18 @@ self = rec {
      // { enable = false;
         };
 
-  ##############################################
+  #----------------------------#
   # « X Resources »
 
-  xresources.properties =
-    (import ./home/xresources.nix {
-    });
+  xresources.properties = (import ./home/xresources.nix {
+  });
 
-  #----------------------------------------------#
+  xresources.extraConfig = builtins.readFile (if sboo.dark
+    then ../../submodules/solarized-xresources/Xresources.dark
+    else ../../submodules/solarized-xresources/Xresources.light
+  );
+
+  #----------------------------#
   # XDG:
 
   xdg =
@@ -206,7 +210,7 @@ self = rec {
      // { enable = true;
         };
 
-  #----------------------------------------------#
+  #----------------------------#
 
 };
 

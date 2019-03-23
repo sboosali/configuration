@@ -48,28 +48,28 @@ in
 -- Repositories ----------------------------------
 --------------------------------------------------
 
-repository stackage-lts-13.9
+repository stackage-lts-13.13
 
-  url: https://www.stackage.org/lts-13.9
+  url: https://www.stackage.org/lts-13.13
 
-  -- ^ Stackage, GHC-8.6.3 (circa 2019-02-24)
+  -- ^ Stackage, GHC-8.6.4 (circa 2019-03)
   -- 
   -- See: https://www.stackage.org/lts-13.9/cabal.config?global=true
   -- 
 
 --------------------------------------------------
 
-repository hackage.mobilehaskell
-
-  url: https://hackage.mobilehaskell.org/
-
-  secure:    True
-  key-threshold: 3
-  root-keys: 8184c1f23ce05ab836e5ebac3c3a56eecb486df503cc28110e699e24792582da
-             81ff2b6c5707d9af651fdceded5702b9a6950117a1c39461f4e2c8fc07d2e36a
-             8468c561cd02cc7dfe27c56de0da1a5c1a2b1b264fff21f4784f02b8c5a63edd
-
-  -- ^ Mobile (Andriod and iOS)
+--repository hackage.mobilehaskell
+--
+--  url: http://hackage.mobilehaskell.org/
+--
+--  secure:    True
+--  key-threshold: 3
+--  root-keys: 8184c1f23ce05ab836e5ebac3c3a56eecb486df503cc28110e699e24792582da
+--             81ff2b6c5707d9af651fdceded5702b9a6950117a1c39461f4e2c8fc07d2e36a
+--             8468c561cd02cc7dfe27c56de0da1a5c1a2b1b264fff21f4784f02b8c5a63edd
+--
+--  -- ^ Mobile (Andriod and iOS)
 
 --------------------------------------------------
 

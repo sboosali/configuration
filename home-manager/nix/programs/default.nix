@@ -38,6 +38,7 @@ systemPrograms = import ./system-programs.nix
 haskellPrograms = import ./haskell-programs.nix
 
   { self = pkgs.haskellPackages;
+    lib  = pkgs.haskell.lib;
   };
 
 #------------------------------------------------#

@@ -140,8 +140,8 @@ with utilities;
   # the Font Description,
   # i.e. Font Family (which should be a monospace font) and Font Size.
 
-  termite.foregroundColor = sboo.colors.black;
-  termite.backgroundColor = sboo.colors.white;
+  termite.foregroundColor = sboo.lib.colors.black;
+  termite.backgroundColor = sboo.lib.colors.white;
 
   # the BackgroundColor
   # should look soft under `xrandr-invert-colors`.

@@ -26,8 +26,9 @@ in
 
  arcanist
  bash-completion
- cabal-install                # Comment-out to use development-version « cabal-install-2.5.0.0 » in « ~/.cabal/bin ».
+ cabal-install                  # Comment-out to use development-version « cabal-install-2.5.0.0 » in « ~/.cabal/bin ».
  cabal2nix
+ bat                            # a cat(1) clone with "wings" (i.e. syntax highlighting and Git integration.) « https://github.com/sharkdp/bat »
  colordiff
  dex
  dhall

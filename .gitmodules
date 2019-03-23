@@ -10,3 +10,9 @@
 [submodule "awesome-tab"]
 	path = submodules/awesome-tab
 	url = https://github.com/manateelazycat/awesome-tab
+[submodule "xfce4-terminal-colors-solarized"]
+	path = submodules/xfce4-terminal-colors-solarized
+	url = https://github.com/sgerrand/xfce4-terminal-colors-solarized.git
+[submodule "solarized-xresources"]
+	path = submodules/solarized-xresources
+	url = https://github.com/solarized/xresources.git

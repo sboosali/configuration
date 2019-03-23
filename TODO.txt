@@ -21,6 +21,42 @@
 
 
 
+#complete -W "help edit build switch generations remove-generations expire-generations packages news" home-manager
+
+
+
+
+
+
+
+
+
+
+
+
+
+as <https://iridakos.com/tutorials/2018/03/01/bash-programmable-completion-tutorial.html> says, reasons for completion include:
+
+* to save them from typing text when it can be auto-completed
+* to help them know what are the available continuations to their commands
+* to prevent errors and improve their experience by hiding or showing options based on what they have already typed
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 GTAGS

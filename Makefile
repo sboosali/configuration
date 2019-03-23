@@ -145,7 +145,7 @@ emacs-run: build  #TODO# emacs-build
 
 emacs-debug: build  #TODO# emacs-build
 
-	$(Emacs) $(EmacsOptions) --debug-init
+	SBOO_EMACS_DESKTOP=0 $(Emacs) $(EmacsOptions) --debug-init
 
 .PHONY: emacs-debug
 

@@ -1,13 +1,8 @@
 ##################################################
-{ 
-}:
+{ }:
 
 ##################################################
 let
-#-----------------------------------------------#
-
-applications = import ../applications {};
-
 #-----------------------------------------------#
 
 env = {
@@ -17,24 +12,49 @@ env = {
 };
 
 #-----------------------------------------------#
+
+applications = import ../applications {
+};
+
+#-----------------------------------------------#
 in
 ##################################################
 rec {
 
- #----------------------------------------------#
+ #-----------------------------#
 
  paths = {
  };
+
+ #-----------------------------#
  
- #----------------------------------------------#
+ dark = false;
+
+ # ^ Whether the system/global Color Scheme is dark (« true ») or light (« false »). 
+
+ #-----------------------------#
+
+ firstname = "Sam";
+
+ lastname  = "Boosalis";
+
+ name = builtins.concatStringsSep " "
  
- colors.white = "rgb(255, 255, 255)";
- colors.black = "rgb(0,   0,   0)";
+   [ firstname lastname ];
+
+ email = builtins.concatStringsSep ""
  
- #colors.darkorchid = "rgb(153,50,204)";
- #colors.lightgray  = "rgb()";
+   [ firstname lastname "@" "gmail.com" ];
+
+ #-----------------------------#
  
- #----------------------------------------------#
+ keys.github = "${env.HOSTNAME}_git@github.com_id_rsa";
+
+ #-----------------------------#
+
+ files."home.nix" = builtins.toString ../home.nix;
+
+ #-----------------------------#
  
  locations = {
  
@@ -46,31 +66,10 @@ rec {
  
  };
  
- #----------------------------------------------#
+ #-----------------------------#
 
- name = builtins.concatStringsSep " "
- 
-   [ firstname lastname ];
+ lib = import ./lib.nix;
 
- email = builtins.concatStringsSep ""
- 
-   [ firstname lastname "@" "gmail.com" ];
-
- firstname = "Sam";
-
- lastname  = "Boosalis";
-
- # ^ TODO obfuscate more.
-
- #----------------------------------------------#
- 
- keys.github = "${env.HOSTNAME}_git@github.com_id_rsa";
-
- #----------------------------------------------
-
- files."home.nix" = builtins.toString ../home.nix;
-
- #----------------------------------------------#
-
+ #-----------------------------#
 }
 ##################################################

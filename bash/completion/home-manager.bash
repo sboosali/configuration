@@ -10,7 +10,39 @@
 #
 
 ##################################################
-# Examples
+# Contributing:
+
+# Compatibility — Bash 3.
+#
+# OSX won't update Bash 3 (last updated circa 2009) to Bash 4,
+# and we'd like this completion script to work on both Linux and Mac.
+#
+# For example, OSX Yosemite (released circa 2014) ships with Bash 3:
+#
+#  $ echo $BASH_VERSION
+#  3.2
+#
+# While Ubuntu LTS 14.04 (a.k.a. Trusty, also released circa 2016)
+# ships with the latest version, Bash 4 (updated circa 2016):
+#
+#  $ echo $BASH_VERSION
+#  4.3
+#
+
+# Testing
+#
+# (1) Invoke « shellcheck »
+#
+#     * source: « https://github.com/koalaman/shellcheck »
+#     * run:    « shellcheck ./share/bash-completion/completions/home-manager »
+#
+# (2) Interpret via Bash 3
+#
+#     * run:    « bash --noprofile --norc ./share/bash-completion/completions/home-manager »
+#
+
+##################################################
+# Examples:
 
 # $ home-manager <TAB>
 #
@@ -51,6 +83,7 @@
 # 203
 
 ##################################################
+# Notes:
 
 # « home-manager » Subcommands:
 #
@@ -122,6 +155,7 @@ command -v grep         >/dev/null
 command -v sed          >/dev/null
 
 ##################################################
+# Code:
 
 _home-manager_list_generation_identifiers ()
 
@@ -144,6 +178,8 @@ _home-manager_list_generation_identifiers ()
 #    * matches « 199 », for example, in the line « 2019-03-13 15:26 : id 199 -> /nix/store/mv619y9pzgsx3kndq0q7fjfvbqqdy5k8-home-manager-generation »
 #
 # 
+
+#------------------------------------------------#
 
 _home-manager_list_nix_attributes ()
 
@@ -430,7 +466,7 @@ _home-manager_list_nix_attributes ()
 
 }
 
-##################################################
+#------------------------------------------------#
 
 # shellcheck disable=SC2207
 _home-manager_completions ()
@@ -508,8 +544,6 @@ _home-manager_completions ()
 
     #--------------------------#
 }
-
-#sed -n -e 's/ : id \([[:alnum:]]+\) -> .*/\1/p'
 
 ##################################################
 

@@ -56,7 +56,9 @@ xdg-open     = ''${pkgs.xdg_utils}/bin/xdg-open'';
 
 xprop       = ''${pkgs.xorg.xprop}/bin/xprop'';
 
-redshift   = ''${pkgs.redshift}/bin/redshift'';
+redshift    = ''${pkgs.redshift}/bin/redshift'';
+
+bat         = ''${pkgs.bat}/bin/bat'';
 
 #------------------------------------------------#
 
@@ -117,6 +119,7 @@ in
 
  "dh" = ''cd ~/haskell       && if type xterm-set-title; then xterm-set-title "haskell"; fi'';
  "dl" = ''cd ~/elisp         && if type xterm-set-title; then xterm-set-title "elisp";   fi'';
+ "ds" = ''cd ~/src           && if type xterm-set-title; then xterm-set-title "src";     fi'';
 
  "dn" = ''cd ~/notes         && if type xterm-set-title; then xterm-set-title "notes";   fi'';
 
@@ -153,8 +156,6 @@ in
  #################################################
 
  c = "cat";
-
- #-----------------------------------------------#
 
  #################################################
 
@@ -276,7 +277,6 @@ in
 
  gl  = "${git} status";                                     # MNEMONIC: "«l»ist"
                                                             # NOTE "gs" would shadow GhostScript. 
-
  #-----------------------------------------------#
 
  "ga."  = "${git} add .";
@@ -321,9 +321,7 @@ in
 
  #################################################
 
- # = "${}";
- 
- #-----------------------------------------------#
+ b = ''${bat}'';
 
  #################################################
 
@@ -404,7 +402,7 @@ in
 
  #################################################
 
- h = "${cabal} new-build all";   # build {a}ll
+ h = "( rm -fr ~/.cabal/packages/hackage.mobilehaskell/ ) ; ${cabal} new-build all";   # build {a}ll
 
  #-----------------------------------------------#
 

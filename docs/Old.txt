@@ -17,6 +17,50 @@
 
 
 
+    #--------------------------#
+
+    local PACKAGE
+
+    if  printf '%s\n' "${ArgumentList[@]}" | grep -P '^library$'
+        # ^ i.e. if "library" is in ArgumentList
+    then
+        for FILE in "${CabalFiles[@]}"
+        do
+
+            PACKAGE=$(_cabal_get_package_from_file "$(grep -l -i "^library[[:space:]]*" "$FILE" 2>/dev/null)")
+
+            if [ -n "$PACKAGE" ]
+            then
+                echo "$PACKAGE"
+                echo "lib:$PACKAGE"
+            fi
+
+        done | sort | uniq
+
+        # ^ non-internal libraries are named as the basename of the « .cabal » file they're in.
+        #   but not all « .cabal » files have a « library » stanza.
+
+    fi
+
+    #--------------------------#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -201,6 +245,964 @@ _home-manager_completions () {
 
     #--------------------------#
 }
+
+
+
+
+
+
+
+
+
+
+
+    local CompletionWords
+
+    CompletionWords=( "${COMP_WORDS[@]}" )
+
+
+
+
+
+
+
+
+
+
+
+
+
+    local CompletionWords
+    local Word
+    CompletionWords=()
+
+    for Index in "${!COMP_WORDS[@]}"
+    do
+        Word=${COMP_WORDS[Index]}
+
+        
+
+        CompletionWords[Index]=Word
+
+        # ^ merge colon-separated tokens.
+        #
+        #   e.g. « ( "cabal" "new-test" "spiros" ":" "test" ":" "unit" ) » becomes
+        #        « ( "cabal" "new-test" "spiros:test:unit" ) »
+        #
+    done
+
+
+
+
+
+
+
+
+_cabal_merge_colon_separated_words()
+
+{
+    local WordsArray
+    WordsArray=$1
+
+    local OldWord
+    local NewWord
+    NewWord=""
+
+    local CompletionWords
+    CompletionWords=()
+
+    for OldWord in "${$WordsArray[@]}"
+    do
+        if [ "$OldWord" == ":" ]
+        then
+
+            NewWord="$NewWord:"
+            continue
+
+        else
+
+            NewWord="$OldWord"
+
+        fi
+
+        CompletionWords+=( "$NewWord" )
+
+    done
+
+    for CompletionWord in "${CompletionWords[@]}"
+    do
+
+        echo "$CompletionWord"
+    
+    done
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+_cabal_merge_colon_separated_words()
+
+{
+
+    local OldWord
+    local NewWord
+    NewWord=""
+
+    local CompletionWords
+    CompletionWords=()
+
+    for OldWord in "${WordsArray[@]}"
+    do
+        if [ "$OldWord" == ":" ]
+        then
+
+            NewWord="${NewWord}:"
+            continue
+
+        else
+
+            NewWord="$OldWord"
+
+        fi
+
+        CompletionWords+=( "$NewWord" )
+
+    done
+
+    for CompletionWord in "${CompletionWords[@]}"
+    do
+
+        echo "$CompletionWord"
+    
+    done
+
+}
+
+
+
+
+
+
+
+
+    for OldWord in "${WordsArray[@]}"
+    do
+        if [ "$OldWord" == ":" ]
+        then
+
+            NewWord="${NewWord}:"
+            continue
+
+        else
+
+            NewWord="${NewWord}${OldWord}"
+            OldWord=""
+
+        fi
+
+        CompletionWords+=( "$NewWord" )
+        NewWord=""
+    done
+
+    for CompletionWord in "${CompletionWords[@]}"
+    do
+
+        echo "$CompletionWord"
+    
+    done
+
+
+
+
+
+
+
+
+
+
+_cabal_merge_colon_separated_words()
+
+{
+
+    local Word
+    Word=""
+
+    local ThisWord
+    local NextWord
+
+    local ThisIndex
+    local NextIndex
+
+    ThisIndex="0"
+
+    local CompletionWords
+    CompletionWords=()
+
+    while [ "$ThisIndex" -lt "${#WordsArray[@]}" ]
+    do
+
+        NextIndex=$((ThisIndex + 1))
+
+        ThisWord=${WordsArray[ThisIndex]}
+        NextWord=${WordsArray[NextIndex]}
+
+        if [ "$ThisWord" != ":" ] && [ "$NextWord" == ":" ]
+        then #-----------------#
+
+            Word=""
+
+            while [ "$ThisWord" != ":" ] && [ "$NextWord" == ":" ]
+            do
+
+                Word="${Word}${ThisWord}:"
+
+                ThisIndex=$((ThisIndex + 2))
+                ThisWord=${WordsArray[ThisIndex]}
+                NextWord=${WordsArray[NextIndex]}
+            done
+
+            Word="${Word}${ThisWord}"
+
+            CompletionWords+=( "$Word" )
+
+            ThisIndex=$((ThisIndex + 1))
+        else #-----------------#
+
+            CompletionWords+=( "$ThisWord" )
+
+            ThisIndex=$((ThisIndex + 1))
+        fi #-----------------#
+    done
+
+    for CompletionWord in "${CompletionWords[@]}"
+    do
+
+        echo "$CompletionWord"
+    
+    done
+
+}
+
+# NOTES
+#
+# (1) « $(( ... )) »:
+#
+#     * is the syntax for a Bash arithmetic expression.
+#
+# (2) « ${#...[@]} »:
+#
+#     * gets the length of a Bash array.
+#
+# 
+
+
+
+
+
+
+
+
+
+~/src$ echo "${WordsArray[@]// : /:}"
+cabal new-test spiros : test : unit
+
+~/src$ echo "${WordsArray// : /:}"
+cabal
+
+~/src$ WordsString="${WordsArray[@]}"
+
+~/src$ echo ${WordsString} 
+cabal new-test spiros : test : unit
+
+~/src$ echo "${WordsString// : /:}"
+cabal new-test spiros:test:unit
+
+
+
+
+
+
+
+
+##################################################
+
+#_cabal_merge_colon_separated_words COMP_WORDS
+
+_cabal_merge_colon_separated_words()
+
+{
+    local CompletionString
+    local CompletionArray
+    CompletionArray=()
+
+    #--------------------------#
+
+    CompletionString="${WordsArray[*]}"
+    CompletionString="${CompletionString// : /:}"
+
+    { IFS=" " read -r -a CompletionArray <<< "$CompletionString"; }
+
+    #--------------------------#
+
+    for Completion in "${CompletionArray[@]}"
+    do
+
+        echo "$Completion"
+    
+    done
+}
+
+# NOTES
+#
+# (1) « ${var//xxx/yyy} »:
+#
+#     * Replaces all substrings « xxx » with string « yyy » in variable « $var ».
+#
+# 
+# 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    echo $COMP_CWORD   >> ~/.cache/cabal/COMP_WORDS.txt
+    echo $CurrentIndex >> ~/.cache/cabal/COMP_WORDS.txt
+
+
+
+
+
+
+# shellcheck disable=SC2207
+_cabal()
+
+{
+    # no completion past cabal arguments.
+    _cabal_has_doubledash && return
+
+    #--------------------------#
+
+    local CompletionsString
+    local CompletionsArray
+
+    {
+
+        CompletionsString="${COMP_WORDS[*]}"
+        CompletionsString="${CompletionsString// : /:}"
+
+        { IFS=" " read -r -a CompletionsArray <<< "$CompletionsString"; }
+
+        # ^ merge colon-separated tokens.
+        #
+        #   e.g. « ( "cabal" "new-test" "spiros" ":" "test" ":" "unit" ) » becomes
+        #        « ( "cabal" "new-test" "spiros:test:unit" ) »
+        #
+    }
+
+    #--------------------------#
+
+    local COMP_WORDS_LENGTH
+    local CompletionsLength
+    local LengthDifference
+
+    COMP_WORDS_LENGTH="${#COMP_WORDS[@]}"
+    CompletionsLength="${#CompletionsArray[@]}"
+
+    LengthDifference=$(( COMP_WORDS_LENGTH - CompletionsLength ))
+
+    #--------------------------#
+
+    # get the word currently being completed:
+    local CurrentWord
+    local CurrentIndex
+
+    CurrentIndex=$(( COMP_CWORD - LengthDifference ))
+
+
+    CurrentWord=${CompletionsArray[$CurrentIndex]}
+    #CurrentWord=${COMP_WORDS[$COMP_CWORD]}
+
+    #DEBUGGING# (mkdir -p  ~/.cache/cabal; for COMP_WORD in "${COMP_WORDS[@]}"; do printf '%s\n' "$COMP_WORD"; done >> ~/.cache/cabal/COMP_WORDS.txt)
+
+    #--------------------------#
+
+    # create a « cabal ... --list-options » command line to « eval »:
+    local CommandLine
+
+    # copy all words the user has entered:
+    CommandLine=( "${CompletionsArray[@]}" )
+
+    # replace the current word with « --list-options »:
+    CommandLine[${COMP_CWORD}]="--list-options"
+
+    #--------------------------#
+
+    # register completions via the « COMPREPLY » array:
+
+    COMPREPLY=( $( compgen -W "$( eval "${CommandLine[@]}" 2>/dev/null ) $( _cabal_targets "${CompletionsArray[@]}" ) $( _cabal_subcommands "${CompletionsArray[@]}" )" -- "$CurrentWord" ) )
+
+    #TODO#
+    # COMPREPLY=()
+    # while IFS='' read -r line; do array+=("$line"); done < <( compgen -W "$( eval "${CommandLine[@]}" 2>/dev/null ) $( _cabal_targets "${CommandLine[@]}" ) $( _cabal_subcommands "${COMP_WORDS[@]}" )" -- "$CurrentWord" )
+
+    #--------------------------#
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#------------------------------------------------#
+
+_home-manager_list_nix_attributes ()
+
+{
+
+    echo "accounts.email.accounts"
+    echo "accounts.email.accounts.private"
+    echo "dconf.settings"
+    echo "file"
+    echo "general"
+    echo "gtk"
+    echo "gtk.font"
+    echo "gtk.font.name"
+    echo "gtk.font.package"
+    echo "gtk.theme"
+    echo "gtk.theme.name"
+    echo "gtk.theme.package"
+    echo "home.file"
+    echo "home.keyboard"
+    echo "home.keyboard.layout"
+    echo "home.keyboard.model"
+    echo "home.keyboard.options"
+    echo "home.keyboard.variant"
+    echo "home.language"
+    echo "home.language.address"
+    echo "home.language.base"
+    echo "home.language.monetary"
+    echo "home.language.paper"
+    echo "home.language.time"
+    echo "home.packages"
+    echo "home.username"
+    echo "lib"
+    echo "manual.html"
+    echo "manual.manpages"
+    echo "news.display"
+    echo "nixpkgs.config"
+    echo "nixpkgs.overlays"
+    echo "programs.afew"
+    echo "programs.alot"
+    echo "programs.alot.bindings"
+    echo "programs.alot.bindings.bufferlist"
+    echo "programs.alot.bindings.envelope"
+    echo "programs.alot.bindings.global"
+    echo "programs.alot.bindings.search"
+    echo "programs.alot.bindings.taglist"
+    echo "programs.alot.bindings.thread"
+    echo "programs.alot.hooks"
+    echo "programs.astroid"
+    echo "programs.autorandr"
+    echo "programs.autorandr.hooks"
+    echo "programs.autorandr.hooks.postswitch"
+    echo "programs.autorandr.hooks.predetect"
+    echo "programs.autorandr.hooks.preswitch"
+    echo "programs.autorandr.profiles"
+    echo "programs.bash"
+    echo "programs.beets"
+    echo "programs.beets.settings"
+    echo "programs.browserpass"
+    echo "programs.browserpass.browsers"
+    echo "programs.chromium"
+    echo "programs.chromium.extensions"
+    echo "programs.chromium.package"
+    echo "programs.direnv"
+    echo "programs.direnv.config"
+    echo "programs.direnv.stdlib"
+    echo "programs.eclipse"
+    echo "programs.eclipse.plugins"
+    echo "programs.emacs"
+    echo "programs.emacs.overrides"
+    echo "programs.emacs.package"
+    echo "programs.feh"
+    echo "programs.feh.keybindings"
+    echo "programs.firefox"
+    echo "programs.firefox.package"
+    echo "programs.fish"
+    echo "programs.fish.package"
+    echo "programs.fzf"
+    echo "programs.git"
+    echo "programs.git.aliases"
+    echo "programs.git.ignores"
+    echo "programs.git.includes"
+    echo "programs.git.lfs"
+    echo "programs.git.package"
+    echo "programs.git.signing"
+    echo "programs.git.signing.key"
+    echo "programs.go"
+    echo "programs.go.package"
+    echo "programs.go.packages"
+    echo "programs.htop"
+    echo "programs.htop.delay"
+    echo "programs.htop.fields"
+    echo "programs.htop.meters"
+    echo "programs.htop.meters.left"
+    echo "programs.htop.meters.right"
+    echo "programs.info"
+    echo "programs.irssi"
+    echo "programs.irssi.aliases"
+    echo "programs.irssi.networks"
+    echo "programs.jq"
+    echo "programs.jq.colors"
+    echo "programs.keychain"
+    echo "programs.keychain.agents"
+    echo "programs.keychain.keys"
+    echo "programs.keychain.package"
+    echo "programs.lesspipe"
+    echo "programs.man"
+    echo "programs.matplotlib"
+    echo "programs.matplotlib.config"
+    echo "programs.mbsync"
+    echo "programs.mbsync.groups"
+    echo "programs.mbsync.package"
+    echo "programs.mercurial"
+    echo "programs.mercurial.aliases"
+    echo "programs.mercurial.ignores"
+    echo "programs.mercurial.package"
+    echo "programs.msmtp"
+    echo "programs.neovim"
+    echo "programs.neovim.configure"
+    echo "programs.neovim.package"
+    echo "programs.newsboat"
+    echo "programs.newsboat.browser"
+    echo "programs.newsboat.queries"
+    echo "programs.newsboat.urls"
+    echo "programs.noti"
+    echo "programs.noti.settings"
+    echo "programs.notmuch"
+    echo "programs.notmuch.new"
+    echo "programs.notmuch.new.ignore"
+    echo "programs.notmuch.new.tags"
+    echo "programs.offlineimap"
+    echo "programs.opam"
+    echo "programs.opam.package"
+    echo "programs.pidgin"
+    echo "programs.pidgin.package"
+    echo "programs.pidgin.plugins"
+    echo "programs.rofi"
+    echo "programs.rofi.colors"
+    echo "programs.rofi.colors.rows"
+    echo "programs.rofi.colors.rows.active"
+    echo "programs.rofi.colors.rows.active.background"
+    echo "programs.rofi.colors.rows.active.foreground"
+    echo "programs.rofi.colors.rows.active.highlight"
+    echo "programs.rofi.colors.rows.active.highlight.background"
+    echo "programs.rofi.colors.rows.active.highlight.foreground"
+    echo "programs.rofi.colors.rows.normal"
+    echo "programs.rofi.colors.rows.normal.background"
+    echo "programs.rofi.colors.rows.normal.foreground"
+    echo "programs.rofi.colors.rows.normal.highlight"
+    echo "programs.rofi.colors.rows.normal.highlight.background"
+    echo "programs.rofi.colors.rows.normal.highlight.foreground"
+    echo "programs.rofi.colors.rows.urgent"
+    echo "programs.rofi.colors.rows.urgent.background"
+    echo "programs.rofi.colors.rows.urgent.foreground"
+    echo "programs.rofi.colors.rows.urgent.highlight"
+    echo "programs.rofi.colors.rows.urgent.highlight.background"
+    echo "programs.rofi.colors.rows.urgent.highlight.foreground"
+    echo "programs.rofi.colors.window"
+    echo "programs.rofi.colors.window.background"
+    echo "programs.rofi.colors.window.border"
+    echo "programs.rofi.colors.window.separator"
+    echo "programs.rofi.cycle"
+    echo "programs.rofi.font"
+    echo "programs.rofi.fullscreen"
+    echo "programs.rofi.lines"
+    echo "programs.rofi.location"
+    echo "programs.rofi.padding"
+    echo "programs.rofi.scrollbar"
+    echo "programs.rofi.separator"
+    echo "programs.rofi.terminal"
+    echo "programs.rofi.theme"
+    echo "programs.rofi.width"
+    echo "programs.rofi.xoffset"
+    echo "programs.rofi.yoffset"
+    echo "programs.ssh"
+    echo "programs.ssh.compression"
+    echo "programs.taskwarrior"
+    echo "programs.taskwarrior.config"
+    echo "programs.termite"
+    echo "programs.termite.browser"
+    echo "programs.termite.font"
+    echo "programs.termite.fullscreen"
+    echo "programs.termite.geometry"
+    echo "programs.termite.scrollbar"
+    echo "programs.texlive"
+    echo "programs.texlive.package"
+    echo "programs.tmux"
+    echo "programs.tmux.package"
+    echo "programs.tmux.plugins"
+    echo "programs.tmux.shortcut"
+    echo "programs.tmux.terminal"
+    echo "programs.tmux.tmuxinator"
+    echo "programs.tmux.tmuxp"
+    echo "programs.urxvt"
+    echo "programs.urxvt.fonts"
+    echo "programs.urxvt.keybindings"
+    echo "programs.urxvt.package"
+    echo "programs.urxvt.scroll.bar"
+    echo "programs.urxvt.scroll.bar"
+    echo "programs.urxvt.scroll.bar.align"
+    echo "programs.urxvt.scroll.bar.floating"
+    echo "programs.urxvt.scroll.bar.position"
+    echo "programs.urxvt.scroll.bar.style"
+    echo "programs.urxvt.scroll.lines"
+    echo "programs.urxvt.shading"
+    echo "programs.urxvt.transparent"
+    echo "programs.vim"
+    echo "programs.vim.package"
+    echo "programs.vim.plugins"
+    echo "programs.vim.settings"
+    echo "programs.vscode"
+    echo "programs.vscode.extensions"
+    echo "programs.zathura"
+    echo "programs.zathura.options"
+    echo "programs.zsh"
+    echo "programs.zsh.history"
+    echo "programs.zsh.history.extended"
+    echo "programs.zsh.history.path"
+    echo "programs.zsh.history.save"
+    echo "programs.zsh.history.share"
+    echo "programs.zsh.history.size"
+    echo "programs.zsh.plugins"
+    echo "qt"
+    echo "services.compton"
+    echo "services.compton.backend"
+    echo "services.compton.blur"
+    echo "services.compton.fade"
+    echo "services.compton.package"
+    echo "services.compton.shadow"
+    echo "services.dunst"
+    echo "services.dunst.settings"
+    echo "services.emacs"
+    echo "services.flameshot"
+    echo "services.kbfs"
+    echo "services.kdeconnect"
+    echo "services.kdeconnect.indicator"
+    echo "services.keepassx"
+    echo "services.keybase"
+    echo "services.mbsync"
+    echo "services.mbsync.frequency"
+    echo "services.mbsync.package"
+    echo "services.mbsync.verbose"
+    echo "services.mpd"
+    echo "services.mpd.network.port"
+    echo "services.parcellite"
+    echo "services.pasystray"
+    echo "services.polybar"
+    echo "services.polybar.config"
+    echo "services.polybar.package"
+    echo "services.polybar.script"
+    echo "services.redshift"
+    echo "services.redshift.brightness.day"
+    echo "services.redshift.brightness.night"
+    echo "services.redshift.latitude"
+    echo "services.redshift.longitude"
+    echo "services.redshift.package"
+    echo "services.redshift.provider"
+    echo "services.redshift.temperature.day"
+    echo "services.redshift.temperature.night"
+    echo "services.redshift.tray"
+    echo "services.stalonetray"
+    echo "services.stalonetray.config"
+    echo "services.stalonetray.package"
+    echo "services.syncthing"
+    echo "services.syncthing.tray"
+    echo "services.taffybar"
+    echo "services.taffybar.package"
+    echo "services.udiskie"
+    echo "services.udiskie.automount"
+    echo "services.udiskie.notify"
+    echo "services.udiskie.tray"
+    echo "services.unclutter"
+    echo "services.unclutter.package"
+    echo "services.unclutter.threshold"
+    echo "services.unclutter.timeout"
+    echo "services.xscreensaver"
+    echo "systemd.user.paths"
+    echo "systemd.user.services"
+    echo "systemd.user.sockets"
+    echo "systemd.user.targets"
+    echo "systemd.user.timers"
+    echo "xdg"
+    echo "xresources.properties"
+    echo "xsession"
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+These values don't really reflect the intended functionality of the -A option. The option is there to allow a home.nix of the form
+
+{
+  setup-a = import ./home-a.nix;
+  setup-b = import ./home-b.nix;
+}
+
+where home-a.nix and home-b.nix are two separate Home Manager configurations.
+
+You can then choose which one to activate using
+
+$ home-manager -A setup-a switch
+and
+
+$ home-manager -A setup-b switch
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

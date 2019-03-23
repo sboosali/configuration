@@ -191,24 +191,17 @@ moreEmacsPackages = (with epkgs; [
  #----------------------------------------------#
  # Formats
 
- markdown-mode 
- json-mode
- yaml-mode
-
- restclient
+ markdown-mode                  # « .md »
+ json-mode                      # « .json »
+ yaml-mode                      # « .yaml »
+ restclient                     # « POST ... »
 
  #----------------------------------------------#
  # Lisp
 
 #paredit
 
- #----------------------------------------------#
-
- modalka
- # ^ https://github.com/mrkkrp/modalka/blob/master/README.md
-
- ##god-mode
- ##evil
+ modalka # « https://github.com/mrkkrp/modalka/blob/master/README.md »
 
  #----------------------------------------------#
  # Python
@@ -225,74 +218,36 @@ moreEmacsPackages = (with epkgs; [
 
  direnv         # needs `direnv` system-package
  neotree
-
  multi-term
 
  #----------------------------------------------#
-
- anzu   
- # ^ shows total search hits in mode line.
- # c.f. `query-replace`.
-
- # csv-nav
- #  # ^ editing csv files
-
- #any-ini-mode # EmacsWiki only
-
- #----------------------------------------------#
-
- epc
- elnode
- #emacs-web-server
- 
- #----------------------------------------------#
-
-#ranger
-
- #----------------------------------------------#
-
- move-text
- treemacs
-
- #----------------------------------------------#
-
- request
- # ^ https://tkf.github.io/emacs-request/manual.html
-
- #----------------------------------------------#
-
- palimpsest
-
- #----------------------------------------------#
-
- which-key
- # ^ https://github.com/justbur/emacs-which-key/blob/master/README.org
-
- #----------------------------------------------#
-
- ov
-
- #----------------------------------------------#
-
- volatile-highlights
-
- #----------------------------------------------#
-
- #TODO# objed
+ # Miscellaneous
 
  #TODO# graphviz-dot
-
-hungry-delete
-
-webpaste
-imgbb
-
- #TODO# elisp-ffi
-
+ #any-ini-mode # EmacsWiki only
+ #csv-nav # editing CSV files
+ #emacs-web-server
+ anzu # shows total search hits in mode line (c.f. `query-replace`).
+ elfeed
+ elnode
+ epc
+ hungry-delete
+ imgbb
+ move-text
+ ov
+ request # « https://tkf.github.io/emacs-request/manual.html »
  vlf                            # abbreviates "View Large Files"
+ volatile-highlights
+ webpaste
+ which-key # « https://github.com/justbur/emacs-which-key/blob/master/README.org »
+#TODO# elisp-ffi
+#TODO# objed
+#palimpsest
+#ranger
+ rainbow-mode                   # Visualize Hex strings, CSS color syntax, X11 color names, etc. « http://elpa.gnu.org/packages/rainbow-mode.html »
 
- #----------------------------------------------#
-
+ #-----------------------------#
+ 
 ]);
 
 #------------------------------------------------#
