@@ -2037,8 +2037,6 @@ function sboo-new-executable () {
  cat <<- 'EOF' > "$FILE"
 #!/bin/bash
 
-# -*- mode: sh; -*-
-
 set -e
 set -u
 
