@@ -134,7 +134,7 @@ GHCs =
     GHC84
     GHC86
 
-  # defaultGHCJS
+    defaultGHCJS
   ];
 
   # ^

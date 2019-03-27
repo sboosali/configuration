@@ -244,7 +244,14 @@ moreEmacsPackages = (with epkgs; [
 #TODO# objed
 #palimpsest
 #ranger
+ eimp
+
+ #-----------------------------#
+ # EmacsWiki:
+
  rainbow-mode                   # Visualize Hex strings, CSS color syntax, X11 color names, etc. « http://elpa.gnu.org/packages/rainbow-mode.html »
+ grab-and-drag
+ better-registers
 
  #-----------------------------#
  

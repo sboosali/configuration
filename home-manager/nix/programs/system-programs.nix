@@ -19,6 +19,8 @@ haskell-overridez =
     sha256 = "1w2pv96bdf16nc1vvh03acx37qq4h4hrz2y979a705i70z8h59lk"; # via « nix-prefetch-url »
   };
 
+# /nix/store/qjq8scb0y89nsq2shk3a8pf3sr70hpp0-ghcjs-8.6.0.1
+
 #------------------------------------------------#
 in
 ##################################################

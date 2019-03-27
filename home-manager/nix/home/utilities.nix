@@ -63,6 +63,34 @@ rec {
 
  #-----------------------------------------------#
 
+ tryString = x:
+
+   let
+   inherit (builtins.tryEval x) success value;
+   in
+
+   if success then value else "";
+
+ #-----------------------------------------------#
+
+ tryList = x:
+
+   let
+   inherit (builtins.tryEval x) success value;
+   in
+
+   if success then value else [];
+
+ #-----------------------------------------------#
+
+ tryAttrs = x:
+
+   let
+   inherit (builtins.tryEval x) success value;
+   in
+
+   if success then value else {};
+
  #-----------------------------------------------#
 
 }

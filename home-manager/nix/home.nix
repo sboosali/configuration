@@ -193,13 +193,32 @@ self = rec {
   #----------------------------#
   # « X Resources »
 
-  xresources.properties = (import ./home/xresources.nix {
-  });
+  xresources.properties = import ./home/xresources.nix { };
 
-  xresources.extraConfig = builtins.readFile (if sboo.dark
-    then ../../submodules/solarized-xresources/Xresources.dark
-    else ../../submodules/solarized-xresources/Xresources.light
-  );
+  xresources.extraConfig =
+
+   let
+   themePath =
+        if   sboo.dark
+        then /usr/share/xfce4/terminal/colorschemes/solarized-light.theme
+        else /usr/share/xfce4/terminal/colorschemes/solarized-dark.theme;
+
+   themeString =
+        if   builtins.pathExists themePath
+        then builtins.readFile themePath
+        else "";
+
+   in themeString;
+
+  # xresources.extraConfig = builtins.readFile (if sboo.dark
+  #   then /usr/share/xfce4/terminal/colorschemes/solarized-light.theme
+  #   else /usr/share/xfce4/terminal/colorschemes/solarized-dark.theme;
+  # );
+
+  # xresources.extraConfig = builtins.readFile (if sboo.dark
+  #   then ../../submodules/solarized-xresources/Xresources.dark
+  #   else ../../submodules/solarized-xresources/Xresources.light
+  # );
 
   #----------------------------#
   # XDG:
