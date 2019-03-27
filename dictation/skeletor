@@ -1,0 +1,85 @@
+#!/bin/bash
+set -e
+set -u
+
+##################################################
+
+INPUT=./xxx-package-xxx.cabal
+OUTPUT=./dictation-vocabulary.cabal
+CONFIG=./skeletor.ini
+
+##################################################
+
+function _skeletor_for-dictation-vocabulary
+(
+
+echo ========================================
+echo
+
+echo "${INPUT}"
+echo "${OUTPUT}"
+echo "${CONFIG}"
+
+echo
+echo ========================================
+echo
+
+
+# shellcheck source=./skeletor.ini
+source "${CONFIG}"
+
+echo "xxx-package-xxx        = ${xxx_package_xxx}"
+echo "xxx-program-xxx        = ${xxx_program_xxx}"
+echo "Xxx_Module_xxX         = ${Xxx_Module_xxX}"
+echo "__Synopsis__           = ${__Synopsis__}"
+echo "__Categories__         = ${__Categories__}"
+echo "__GithubUser__         = ${__GithubUser__}"
+echo "__GithubRepository__   = ${__GithubRepository__}"
+echo "xxx-package-subdir-xxx = ${xxx_package_subdir_xxx}"
+echo "__Project__            = ${__Project__}"
+echo "__ProjectDirectory__   = ${__ProjectDirectory__}"
+echo "__Name__               = ${__Name__}"
+
+echo
+echo ========================================
+echo
+
+SUBSTITUTIONS=( )
+SUBSTITUTIONS+=( "s/xxx-package-xxx/${xxx_package_xxx}/g" )
+SUBSTITUTIONS+=( "s/xxx-program-xxx/${xxx_program_xxx}/g" )
+SUBSTITUTIONS+=( "s/Xxx_Module_xxX/${Xxx_Module_xxX}/g" )
+SUBSTITUTIONS+=( "s:__Categories__:${__Categories__}:g" )
+SUBSTITUTIONS+=( "s/__GithubUser__/${__GithubUser__}/g" )
+SUBSTITUTIONS+=( "s/__GithubRepository__/${__GithubRepository__}/g" )
+SUBSTITUTIONS+=( "s:xxx-package-subdir-xxx:${xxx_package_subdir_xxx}:g" )
+SUBSTITUTIONS+=( "s:__Project__:${__Project__}:g" )
+SUBSTITUTIONS+=( "s:__ProjectDirectory__:${__ProjectDirectory__}:g" )
+
+SUBSTITUTIONS+=( "s/__Name__/${__Name__}/g" )
+SUBSTITUTIONS+=( "s:__Synopsis__:${__Synopsis__}:g" )
+
+for SUBSTITUTION in "${SUBSTITUTIONS[@]}"
+do
+  printf "%s\n" "$SUBSTITUTION"
+done
+
+echo
+echo ========================================
+echo
+
+for SUBSTITUTION in "${SUBSTITUTIONS[@]}"; do printf " -e '%s' " "$SUBSTITUTION"; done
+
+echo
+
+#sed $(for SUBSTITUTION in "${SUBSTITUTIONS[@]}"; do printf " -e '%s' " "$SUBSTITUTION"; done) "${INPUT}"
+
+sed  -e 's/xxx-package-xxx/dictation-vocabulary/g'  -e 's/xxx-program-xxx/haskell-vocabulary/g'  -e 's/Xxx_Module_xxX/Language.Haskell.Dictation.Vocabulary/g'  -e 's:__Categories__:Dictation:g'  -e 's/__GithubUser__/sboosali/g'  -e 's/__GithubRepository__/configuration/g'  -e 's:xxx-package-subdir-xxx:dictation/src:g'  -e 's:__Project__:configuration:g'  -e 's:__ProjectDirectory__:~/configuration/dictation/src/:g'  -e 's/__Name__/Sam Boosalis/g'  -e 's:__Synopsis__:Parse Haskell files for dictation vocabulary:g'  "${INPUT}"  >   "${OUTPUT}"
+
+echo
+echo ========================================
+
+)
+
+##################################################
+
+_skeletor_for-dictation-vocabulary

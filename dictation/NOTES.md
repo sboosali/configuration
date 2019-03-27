@@ -1,11 +1,45 @@
 # Dictation
 
+## Contents
 
 ## Files
 
+* `./vocabulary.txt` — list of words/phrases (one-per-line) to import into DragonNaturallySpeaking
+* `./scripts/add-user.sh` — register `$USER` under VirtualBox `group`s.
 
-* <<./scripts/add-user.sh>> — register your `$USER` under VirtualBox `group`s.
+## Vocabulary
 
+### creating `vocabulary.txt`
+
+1. get my code files, including:
+
+    * `*.hs` — Haskell files
+    * `*.el` — Elisp files
+    * `*.nix` — Nix files
+    * `*.sh` — Shell scripts
+    * `*.` — 
+    * `*.` — 
+
+2. strip — strip out comments (i.e. only keep the code). 
+3. tokenize — split into words. remove symbols, or "pronounce" them (e.g. `<*>` becomes `apply`, `<*>\apply` in Natlink's syntax).
+
+via:
+
+    find -L ~/haskell -type f -name '*.hs' -print 2> /dev/null
+
+for parsing haskell:
+
+* `haskell-src-meta`, `haskell-src-exts`
+
+
+
+### importing `vocabulary.txt`
+
+click `Add Document`, select these settings:
+
+* ✓ `new words`
+* ✓ `new capitalization`
+* ❌ `match style`
 
 ## the `TableMike`
 

@@ -1,0 +1,969 @@
+cabal-version:       2.4
+
+                     -- ^ « v2.2 » introduced:
+                     --
+                     --   * « common » stanzas;
+                     --   * the « elif » keyword;
+                     --
+                     -- ^ « v2.4 » introduced:
+                     --
+                     --   * double-star wildcards (e.g. « data/**/*.txt »);
+                     --
+
+build-type:          Simple
+
+--------------------------------------------------
+
+name:                xxx-package-xxx
+version:             0.0.0
+                     -- ^ ❲ A.B.C.D ❳:
+                     --
+                     -- • ❲ A.B ❳ — the MajorVersion
+                     -- • ❲ C ❳   — the MinorVersion
+                     -- • ❲ D ❳   — a PatchVersion
+
+-- x-revision:          1
+
+--------------------------------------------------
+-- Description -----------------------------------
+--------------------------------------------------
+
+synopsis: __Synopsis__
+
+category: __Categories__
+
+--------------------------------------------------
+
+description: __Synopsis__.
+             .
+             __Description__
+             .
+
+--------------------------------------------------
+
+author:              __Name__
+maintainer:          __Name__ <__Email__>
+
+--------------------------------------------------
+-- Portability -----------------------------------
+--------------------------------------------------
+
+stability: provisional
+
+--------------------------------------------------
+
+tested-with: GHC   == 8.6.3
+           , GHC   == 8.4.4
+           , GHC   == 8.2.2
+           , GHC   == 8.0.2
+--         , GHC   == 7.10.3
+--         , GHCJS == 8.4.0.1
+
+--------------------------------------------------
+-- Licensing -------------------------------------
+--------------------------------------------------
+
+license:             Apache-2.0
+license-file:        LICENSE
+copyright:           2019 __Name__
+
+-- license:             GPL-3.0-or-later
+-- license:             Apache-2.0
+
+--------------------------------------------------
+-- (Non-Code) Files ------------------------------
+--------------------------------------------------
+
+extra-source-files: LICENSE
+
+                    README.md
+                    CHANGELOG.md
+
+                   -- CONTRIBUTING.md
+
+  --TODO: how to include project files (parent directory) in package?
+  --
+  --                 ../Makefile
+  --                 ../shell.nix
+  --                 ../nix/**/*.nix
+  --                 ../nix/**/*.json
+  --                 ../.gitignore
+
+  --TODO: ./share/**/
+
+  -- share/man/*.man
+  -- share/info/
+  -- share/bash-completion/
+  -- share/doc/
+  -- share/elisp/*.el
+  -- share//
+
+--------------------------------------------------
+
+data-dir: data
+
+data-files: golden/*.txt
+                -- TODO golden/**/*.txt
+          , golden/*.example
+
+--------------------------------------------------
+
+--TODO add images
+-- extra-doc-files: docs/
+
+--------------------------------------------------
+-- Repository ------------------------------------
+--------------------------------------------------
+
+homepage:    https://github.com/__GithubUser__/__Repository__#readme
+bug-reports: https://github.com/__GithubUser__/__Repository__/issues
+
+--------------------------------------------------
+
+source-repository head
+  type:     git
+  location: git://github.com/__GithubUser__/__Repository__.git
+  subdir:   xxx-package-directory-xxx
+
+--------------------------------------------------
+
+-- source-repository this
+--   type:     git
+--   location: https://github.com/__GithubUser__/__Repository__/tree/v0.1.0
+--   subdir:   xxx-package-directory-xxx
+
+--------------------------------------------------
+-- Flags -----------------------------------------
+--------------------------------------------------
+
+flag develop
+
+  default:     False
+
+  description: Exposed internals and/or dynamic typechecking (for development).
+
+  manual:      True
+
+--------------------------------------------------
+
+flag static
+
+  default:     False
+
+  description: Both « -fexecutable-static » and « -flibrary-static ».
+
+  manual:      True
+
+--------------------------------------------------
+
+flag executable-static
+
+  default:     False
+
+  description: Build a statically-linked executable (NOTE you should also, via « ./nix/static.nix », provision an environment with « musl » and other statically-linkable C Libraries.)
+
+  manual:      True
+
+--------------------------------------------------
+
+flag library-static
+
+  default:     False
+
+  description: Build statically-linked haskell libraries.
+
+  manual:      True
+
+--------------------------------------------------
+
+-- flag ...
+--   default:     False
+--   description: Enable ...
+--   manual:      True
+
+--------------------------------------------------
+-- Common Stanzas --------------------------------
+--------------------------------------------------
+
+common Haskell2020Library
+
+ -----------------------------
+ --TODO cross-platform template...
+
+ -- if   os(linux)
+ -- --   linux-only:
+ -- --   ...
+ -- elif os(windows)
+ -- --   windows-only:
+ -- --   ...
+ -- elif os(darwin)
+ -- --   mac-only:
+ -- --   ...
+
+ -- -- ^ See « System.Info.os ».
+ -- -- ^ NOTE « os(windows) » canonicalizes « os(mingw32) », « os(cygwin32) », etc.
+
+ -----------------------------
+ --TODO cross-platform template...
+
+ -- if   arch(x86_64)
+ -- --   64-bit-only:
+ -- --   ...
+ -- elif arch(i386)
+ -- --   32-bit-only:
+ -- --   ...
+
+ -- -- ^ See « System.Info.arch ».
+
+ -----------------------------
+
+ default-language: Haskell2010
+
+ -----------------------------
+
+ build-depends: base >=4.10 && <5
+--build-depends: base-noprelude >=4.10 && <5
+
+ -----------------------------
+
+ include-dirs:     include
+ includes:         HsSbooMacros.h
+ install-includes: HsSbooMacros.h
+
+ -----------------------------
+
+ ghc-options:
+
+  --------------------
+  -- warning groups
+  --------------------
+
+             -Wall
+
+  --------------------
+  -- disabled warnings
+  --------------------
+
+  --------------------
+  -- enabled warnings
+  --------------------
+
+             -fwarn-name-shadowing
+             -fwarn-tabs
+
+  --------------------
+  -- (miscellaneous warnings)
+  --------------------
+
+  -- raise a warning into an error
+  -- -Werror=missing-fields
+
+ -----------------------------
+
+ if flag(static) || flag(library-static)
+    ghc-options: -staticlib
+
+ -----------------------------
+
+ if impl(ghc >= 7.10)
+    ghc-options:
+
+        --------------------
+        -- disabled warnings
+        --------------------
+
+                -fno-warn-unticked-promoted-constructors
+                -- ^ NOTE « -fno-warn-... » is the old style,
+                --        « -Wno-... » is the new style.
+
+ -----------------------------
+
+ if impl(ghc >= 8.0)
+    ghc-options:
+
+        --------------------
+        -- warning groups
+        --------------------
+
+                -Wcompat
+
+        --------------------
+        -- disabled warnings
+        --------------------
+
+                -Wno-unticked-promoted-constructors
+         --TODO -fno-warn-redundant-constraints
+
+        --------------------
+        -- enabled warnings
+        --------------------
+
+                -Wnoncanonical-monad-instances
+                -Wnoncanonical-monadfail-instances
+
+                -Wincomplete-record-updates
+                -Wincomplete-uni-patterns
+
+                -Wmissing-methods
+                -Widentities
+
+                -- -Wmissing-exported-signatures
+                -- -Whi-shadowing
+
+        --------------------
+
+                -Wtyped-holes
+
+ -----------------------------
+
+ if flag(develop)
+ 
+    cpp-options: -DDEVELOP
+                 -- ^ Define the « DEVELOP » symbol for CPP.
+
+ -----------------------------
+
+ if flag(develop) && impl(ghc >= 8.0)
+ 
+    ghc-options: -fdefer-typed-holes
+                 -- ^ Use `typed-holes`, not `undefined`, during development.
+
+ -----------------------------
+
+ if impl(ghc >= 8.2)
+    ghc-options:
+
+        --------------------
+        -- enabled warnings
+        --------------------
+
+                -Wcpp-undef
+
+                -Wmissing-home-modules
+
+                -Wunbanged-strict-patterns
+
+ -----------------------------
+
+ default-extensions:
+
+   --------------------
+   -- "controversial"
+   --------------------
+                    NoImplicitPrelude
+
+   --------------------
+   -- `deriving`
+   --------------------
+                    AutoDeriveTypeable
+                    DeriveDataTypeable
+                    DeriveGeneric
+                    DeriveFunctor
+                    DeriveFoldable
+                    DeriveTraversable
+                    StandaloneDeriving
+--TODO
+
+   --------------------
+   -- syntax
+   --------------------
+                    PackageImports
+                    LambdaCase
+                    EmptyCase
+                    TypeOperators
+                    PostfixOperators
+                    BangPatterns
+                    KindSignatures
+                    NamedFieldPuns
+                    RecordWildCards
+                    TupleSections
+                    MultiWayIf
+                    DoAndIfThenElse
+                    EmptyDataDecls
+                    InstanceSigs
+
+   --------------------
+   -- typeclasses
+   --------------------
+                    MultiParamTypeClasses
+                    FlexibleContexts
+                    FlexibleInstances
+                    TypeFamilies
+                    FunctionalDependencies
+                    ConstrainedClassMethods
+
+   --------------------
+   -- patterns
+   --------------------
+                    ViewPatterns
+                    PatternSynonyms
+
+   --------------------
+   -- (miscellaneous)
+   --------------------
+                    ScopedTypeVariables
+
+ -----------------------------
+
+ other-extensions:
+
+   --------------------
+   -- macros
+   --------------------
+                  CPP
+   --               TemplateHaskell
+   --               QuasiQuotes
+
+   --------------------
+   -- syntax (of literals)
+   --------------------
+                  OverloadedStrings
+                  OverloadedLists
+
+   --------------------
+   -- (miscellaneous)
+   --------------------
+
+   -- RebindableSyntax
+   -- kinds:
+   -- DataKinds ConstraintKinds
+   -- harmful to inference:
+   -- GADTs RankNTypes
+   -- (miscellaneous)
+
+ -----------------------------
+
+ if impl(ghc >= 7.2)
+
+    default-extensions: DeriveLift
+
+ -----------------------------
+
+ if impl(ghc >= 7.10)
+
+    other-extensions: DeriveAnyClass
+
+ -----------------------------
+
+ if impl(ghc >= 8.0)
+
+    default-extensions: DuplicateRecordFields
+
+    other-extensions:   TemplateHaskellQuotes
+
+ -----------------------------
+
+ if impl(ghc >= 8.4)
+
+    default-extensions: DerivingStrategies
+                      , DeriveAnyClass
+                      , GeneralizedNewtypeDeriving
+
+ -----------------------------
+
+ if impl(ghc >= 8.6)
+
+    default-extensions: StarIsType
+                      , BlockArguments
+
+    -- ^ Enabling « StarIsType » is necessary for forwards-compatibility.
+    --
+    --   Using « :: * -> * » versus « :: Type -> Type » is necessary
+    --   for backwards-compatibility.
+    --
+    --   "Before GHC 8.0: the only way to refer to the kind of lifted types was the * syntax."
+    --
+    --   See « https://github.com/ghc-proposals/ghc-proposals/blob/master/proposals/0030-remove-star-kind.rst ».
+
+ -----------------------------
+
+ other-extensions:
+
+   --------------------
+   -- macros
+   --------------------
+                  TemplateHaskell
+   -- QuasiQuotes
+
+   --------------------
+   -- syntax (of literals)
+   --------------------
+                  OverloadedStrings
+                  OverloadedLists
+
+   --------------------
+   -- (miscellaneous)
+   --------------------
+
+   -- RebindableSyntax
+   -- kinds:
+   -- DataKinds ConstraintKinds
+   -- harmful to inference:
+   -- GADTs RankNTypes
+   -- (miscellaneous)
+
+--------------------------------------------------
+
+common Haskell2020Program
+
+ import: Haskell2020Library
+
+ -----------------------------
+
+ ghc-options:
+
+   --------------------
+   -- Compilation -----
+   --------------------
+
+             -O2
+
+   --------------------
+   -- Runtime ---------
+   --------------------
+
+             -threaded
+             -rtsopts -with-rtsopts=-N             
+
+   --------------------
+   -- Warnings --------
+   --------------------
+
+             -Wno-missing-signatures
+             -fno-warn-type-defaults
+
+ -----------------------------
+
+ if flag(static) || flag(executable-static)
+    ghc-options: -static -optl=-static
+
+ -----------------------------
+
+--------------------------------------------------
+
+common Haskell2020Benchmark
+
+ import: Haskell2020Program
+
+ -----------------------------
+
+ ghc-options:
+
+   --------------------
+   -- Compilation -----
+   --------------------
+
+             -O2
+
+   --------------------
+   -- Runtime ---------
+   --------------------
+
+             -fdicts-cheap
+             -funbox-strict-fields
+
+   --------------------
+
+--------------------------------------------------
+-- Library ---------------------------------------
+--------------------------------------------------
+
+library
+
+------------------------------
+
+ import: Haskell2020Library
+
+------------------------------
+
+ hs-source-dirs: library
+               , internals
+ --            , signatures
+
+ --(TODO: signatures break repl?)
+
+ -----------------------------
+
+ exposed-modules: Xxx_Module_xxX
+
+                  Xxx_Module_xxX.Types
+                  Xxx_Module_xxX.Core
+                  Xxx_Module_xxX.Derived
+
+--other-modules: -- NOTE these intenal modules are exposed for the test-components.
+
+                  Internal.Xxx_Module_xxX
+                  Prelude_xxx_package_xxx
+
+ -----------------------------
+
+ if flag(develop)
+    exposed-modules: Paths_xxx_package_xxx
+ else
+  --other-modules: Paths_xxx_package_xxx
+    exposed-modules: Paths_xxx_package_xxx
+    autogen-modules: Paths_xxx_package_xxx
+
+ -----------------------------
+
+ -- signatures:
+
+ -----------------------------
+
+ build-depends:
+
+  --------------------
+  -- My Libraries ----
+  --------------------
+
+               spiros
+   ---          , enumerate
+
+  --------------------
+  -- Standard-Library
+  --------------------
+
+             , text             
+             , bytestring
+             , transformers
+             , mtl
+             , containers
+
+  --------------------
+  -- "Extended" StdLib
+  --------------------
+
+             , deepseq
+             , hashable
+             , unordered-containers
+
+-- async
+-- bytestring
+-- containers
+-- mtl
+-- stm
+-- text
+-- transformers
+-- unordered-containers
+-- vector
+-- filepath
+-- directory
+-- process
+-- unix
+-- deepseq
+-- optparse-applicative
+
+  --------------------
+  -- Filesystem ------
+  --------------------
+
+             , filepath
+             , directory
+
+  --------------------
+  -- Records ---------
+  --------------------
+
+             , lens
+             , generic-lens
+             , vinyl
+                                        
+  --------------------
+  -- Parsing ---------
+  --------------------
+
+             , parsers
+             , trifecta
+             , charset
+
+  --------------------
+  -- (etc) -----------
+  --------------------
+
+             -- , pkg
+
+ -----------------------------
+
+ -- -- « if !os(posix) »
+ -- if !(os(linux) || os(darwin) || os(aix) || os(hpux) || os(irix) || os(solaris) || os(freebsd) || os(opennbsd) || os(netbsd) || os(ios) || os(android) || os(hurd) || os(halvm))
+ --    buildable: false
+
+ -----------------------------
+
+--------------------------------------------------
+-- Tests -----------------------------------------
+--------------------------------------------------
+
+test-suite doc
+
+ import: Haskell2020Program
+
+ -----------------------------
+
+ if impl(ghcjs)
+    buildable: False
+    -- ^ Because « GHCJSi » doesn't work.
+
+ -----------------------------
+
+ hs-source-dirs: tests/doc
+
+ main-is:        DocTests.hs
+
+--other-modules:       
+
+ -----------------------------
+
+ build-depends: base
+              , xxx-package-xxx
+
+              ----------------
+
+              , doctest
+
+ -----------------------------
+
+ type: exitcode-stdio-1.0
+
+--------------------------------------------------
+
+test-suite unit
+
+  import: Haskell2020Program
+
+  ----------------------------
+
+  main-is:        UnitTests.hs
+
+  hs-source-dirs: tests/unit
+
+  ----------------------------
+
+  other-modules:  Test.Unit.Xxx_Module_xxX
+
+  ----------------------------
+
+  build-depends: xxx-package-xxx
+
+               , tasty
+               , tasty-hunit
+
+            -- , HUnit
+            -- NOTE « tasty-hunit » re-implements a minimal interface of HUnit.
+
+  ----------------------------
+
+--build-tool-depends: hspec-discover:hspec-discover
+
+  ----------------------------
+
+  type: exitcode-stdio-1.0
+
+--------------------------------------------------
+
+test-suite property
+
+  import: Haskell2020Program
+
+  ----------------------------
+
+  hs-source-dirs: tests/property
+
+  main-is:        PropertyTests.hs
+
+  other-modules:  Test.Property.Xxx_Module_xxX
+
+  ----------------------------
+
+  build-depends: xxx-package-xxx
+               , hedgehog
+
+               , tasty
+               , tasty-hedgehog
+
+  ----------------------------
+
+  type: exitcode-stdio-1.0
+
+--------------------------------------------------
+
+test-suite golden
+
+  import: Haskell2020Program
+
+  ----------------------------
+
+  hs-source-dirs: tests/golden
+
+  main-is:        GoldenTests.hs
+
+  other-modules:  Test.Golden.Xxx_Module_xxX
+
+  ----------------------------
+
+  build-depends: xxx-package-xxx
+               , tasty
+               , tasty-golden
+
+               , bytestring
+               , filepath
+
+  ----------------------------
+
+  type: exitcode-stdio-1.0
+
+--------------------------------------------------
+-- Executables -----------------------------------
+--------------------------------------------------
+
+-- See « Program.Xxx_Module_xxX.Main ».
+
+executable xxx-program-xxx
+
+  import: Haskell2020Program
+
+  ----------------------------
+
+  hs-source-dirs: executables/program
+
+  main-is:       Program.Xxx_Module_xxX.Main
+
+  other-modules: Program.Xxx_Module_xxX.Types
+                 Program.Xxx_Module_xxX.Constants
+
+                 -- Program.Xxx_Module_xxX.IO
+                 -- Program.Xxx_Module_xxX.CLI
+                 -- Program.Xxx_Module_xxX.Prelude
+
+                 Program.Xxx_Module_xxX.Core
+                 Program.Xxx_Module_xxX.Options
+                 Program.Xxx_Module_xxX.Paths
+
+                 Program.Xxx_Module_xxX.Prelude
+
+  ----------------------------
+
+  build-depends: xxx-package-xxx
+               , optparse-applicative
+
+--TODO--
+-- 
+-- <https://github.com/haskell/cabal/issues/4677>
+-- 
+-- given an Archive File named `libXYZ.a`, then add this in your `.cabal` file:
+-- 
+--     ghc-options: -pgml gcc "-optl-Wl,--allow-multiple-definition" "-optl-Wl,--whole-archive" "-optl-Wl,-Bstatic" "-optl-Wl,-lXYZ" "-optl-Wl,-Bdynamic" "-optl-Wl,--no-whole-archive"
+-- 
+-- 
+
+--------------------------------------------------
+
+executable example-xxx-package-xxx
+
+  import: Haskell2020Program
+
+  ----------------------------
+
+  hs-source-dirs: executables/example
+
+  main-is:        Main.hs
+
+  other-modules:  Example.Xxx_Module_xxX
+
+  ----------------------------
+
+  build-depends: xxx-package-xxx
+               , base
+
+--------------------------------------------------
+-- Benchmarks ------------------------------------
+--------------------------------------------------
+
+benchmark time
+
+  ----------------------------
+
+  import: Haskell2020Benchmark
+
+  ----------------------------
+
+  hs-source-dirs: benchmarks/time
+
+  main-is:        Main.hs
+  other-modules:  Bench.Xxx_Module_xxX
+
+  ----------------------------
+
+  build-depends: xxx-package-xxx
+               , base
+            -- , deepseq
+
+               , criterion
+
+  ----------------------------
+
+  type: exitcode-stdio-1.0
+
+--------------------------------------------------
+
+benchmark space
+
+  ----------------------------
+
+  import: Haskell2020Benchmark
+
+  ----------------------------
+
+  hs-source-dirs: benchmarks/space
+
+  main-is:        Main.hs
+  other-modules:  Bench.Xxx_Module_xxX
+
+  ----------------------------
+
+  build-depends: xxx-package-xxx
+               , base
+
+               , weigh
+
+  ----------------------------
+
+  type: exitcode-stdio-1.0
+
+--------------------------------------------------
+-- Objects (« .so », « .dylib », « .dl; ») -------
+--------------------------------------------------
+
+--
+-- foreign-library xxx-package-xxx
+--   -----------------------------
+--   type:                native-shared
+--   lib-version-info:    0:0:0
+--   if os(Windows)
+--     options: standalone
+--     -- mod-def-file: xxx-package-xxx.def
+--   -----------------------------
+--   hs-source-dirs:
+--     lib
+--   other-modules:
+--   ------------------------------  
+--   include-dirs:
+--     cbits
+--   includes:
+--     emacs-module.h
+--   install-includes:
+--     emacs-module.h
+--   c-sources:
+--     cbits/emacs_wrapper.c
+--   -----------------------------
+--   ghc-prof-options:
+--     -fprof-auto
+--   -----------------------------
+--   build-tools:
+--     hsc2hs
+--   build-depends:
+--                 xxx-package-xxx
+--               , bytestring
+--               , safe-exceptions-checked
+--   -----------------------------
+--------------------------------------------------
