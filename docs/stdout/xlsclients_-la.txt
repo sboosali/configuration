@@ -1,0 +1,252 @@
+Window 0x800001:
+  Machine:  SpirOS
+  Name:  bamfdaemon
+  Icon Name:  bamfdaemon
+  Command:  bamfdaemon
+  Instance/Class:  bamfdaemon/Bamfdaemon
+
+Window 0x2000001:
+  Machine:  SpirOS
+  Name:  wrapper-2.0
+  Icon Name:  wrapper-2.0
+  Command:  wrapper-2.0
+  Instance/Class:  wrapper-2.0/Wrapper-2.0
+
+Window 0x2400001:
+  Machine:  SpirOS
+  Name:  nm-applet
+  Icon Name:  nm-applet
+  Command:  nm-applet
+  Instance/Class:  nm-applet/Nm-applet
+
+Window 0x2200001:
+  Machine:  SpirOS
+  Name:  update-notifier
+  Icon Name:  update-notifier
+  Command:  update-notifier
+  Instance/Class:  update-notifier/Update-notifier
+
+Window 0x2600001:
+  Machine:  SpirOS
+  Name:  polkit-gnome-authentication-agent-1
+  Icon Name:  polkit-gnome-authentication-agent-1
+  Command:  polkit-gnome-authentication-agent-1
+  Instance/Class:  polkit-gnome-authentication-agent-1/Polkit-gnome-authentication-agent-1
+
+Window 0x2800001:
+  Machine:  SpirOS
+  Name:  indicator-keyboard-service
+  Icon Name:  indicator-keyboard-service
+  Command:  indicator-keyboard-service
+  Instance/Class:  indicator-keyboard-service/Indicator-keyboard-service
+
+Window 0x3600001:
+  Machine:  SpirOS
+  Name:  blueman-applet
+  Icon Name:  blueman-applet
+  Command:  blueman-applet
+  Instance/Class:  blueman-applet/
+
+Window 0x3a00001:
+  Machine:  SpirOS
+  Name:  gnome-screensaver
+  Icon Name:  gnome-screensaver
+  Command:  gnome-screensaver
+  Instance/Class:  gnome-screensaver/Gnome-screensaver
+
+Window 0x4000001:
+  Machine:  SpirOS
+  Name:  notify-osd
+  Icon Name:  notify-osd
+  Command:  notify-osd
+  Instance/Class:  notify-osd/Notify-osd
+
+Window 0x3200001:
+  Machine:  SpirOS
+  Name:  dropbox
+  Icon Name:  dropbox
+  Command:  dropbox
+  Instance/Class:  dropbox/Dropbox
+
+Window 0x5400001:
+  Machine:  SpirOS
+  Name:  Firefox
+  Icon Name:  firefox
+  Command:  firefox
+  Instance/Class:  firefox/Firefox
+
+Window 0x5600001:
+  Machine:  SpirOS
+  Name:  /nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox
+  Icon Name:  /nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox
+  Command:  /nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox
+  Instance/Class:  /nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox//nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox
+
+Window 0x5800001:
+  Machine:  SpirOS
+  Name:  /nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox
+  Icon Name:  /nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox
+  Command:  /nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox
+  Instance/Class:  /nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox//nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox
+
+Window 0x5a00001:
+  Machine:  SpirOS
+  Name:  /nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox
+  Icon Name:  /nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox
+  Command:  /nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox
+  Instance/Class:  /nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox//nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox
+
+Window 0x5c00001:
+  Machine:  SpirOS
+  Name:  /nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox
+  Icon Name:  /nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox
+  Command:  /nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox
+  Instance/Class:  /nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox//nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox
+
+Window 0x5e00001:
+  Machine:  SpirOS
+  Name:  /nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox
+  Icon Name:  /nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox
+  Command:  /nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox
+  Instance/Class:  /nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox//nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox
+
+Window 0x6200001:
+  Machine:  SpirOS
+  Name:  dropbox
+  Icon Name:  dropbox
+  Command:  dropbox
+  Instance/Class:  dropbox/Dropbox
+
+Window 0x4800001:
+  Machine:  SpirOS
+  Name:  SBoo_23-03-2019_18_53
+  Icon Name:  SBoo_23-03-2019_18_53
+  Command:  SBoo_23-03-2019_18_53
+  Instance/Class:  SBoo_23-03-2019_18_53/Emacs
+
+Window 0x3c00001:
+  Machine:  SpirOS
+  Name:  google-chrome-stable
+  Icon Name:  google-chrome-stable
+  Command:  google-chrome-stable
+  Instance/Class:  google-chrome-stable/Google-chrome-stable
+
+Window 0x6600001:
+  Machine:  SpirOS
+  Name:  /nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox
+  Icon Name:  /nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox
+  Command:  /nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox
+  Instance/Class:  /nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox//nix/store/pn2dj7alj8zdx8ninzw0bqkd46yw5sg7-firefox-unwrapped-65.0.2/lib/firefox/firefox
+
+Window 0x600001:
+  Machine:  SpirOS
+  Name:  xfce4-session
+  Icon Name:  xfce4-session
+  Command:  xfce4-session
+  Instance/Class:  xfce4-session/Xfce4-session
+
+Window 0xc00001:
+  Machine:  SpirOS
+  Name:  xfwm4
+  Icon Name:  xfwm4
+  Command:  xfwm4
+  Instance/Class:  xfwm4/Xfwm4
+
+Window 0xe00001:
+  Machine:  SpirOS
+  Name:  xfce4-panel
+  Icon Name:  xfce4-panel
+  Command:  xfce4-panel
+  Instance/Class:  xfce4-panel/Xfce4-panel
+
+Window 0x1000001:
+  Machine:  SpirOS
+  Name:  xfsettingsd
+  Icon Name:  xfsettingsd
+  Command:  xfsettingsd
+  Instance/Class:  xfsettingsd/Xfsettingsd
+
+Window 0x1200001:
+  Machine:  SpirOS
+  Name:  wrapper-1.0
+  Icon Name:  wrapper-1.0
+  Command:  wrapper-1.0
+  Instance/Class:  wrapper-1.0/Wrapper-1.0
+
+Window 0x1800001:
+  Machine:  SpirOS
+  Name:  xfce4-power-manager
+  Icon Name:  xfce4-power-manager
+  Command:  xfce4-power-manager
+  Instance/Class:  xfce4-power-manager/Xfce4-power-manager
+
+Window 0x1a00001:
+  Machine:  SpirOS
+  Name:  wrapper-1.0
+  Icon Name:  wrapper-1.0
+  Command:  wrapper-1.0
+  Instance/Class:  wrapper-1.0/Wrapper-1.0
+
+Window 0x1c00001:
+  Machine:  SpirOS
+  Name:  wrapper-1.0
+  Icon Name:  wrapper-1.0
+  Command:  wrapper-1.0
+  Instance/Class:  wrapper-1.0/Wrapper-1.0
+
+Window 0x1e00001:
+  Machine:  SpirOS
+  Name:  wrapper-1.0
+  Icon Name:  wrapper-1.0
+  Command:  wrapper-1.0
+  Instance/Class:  wrapper-1.0/Wrapper-1.0
+
+Window 0x3400001:
+  Machine:  SpirOS
+  Name:  xfce4-volumed
+  Icon Name:  xfce4-volumed
+  Command:  xfce4-volumed
+  Instance/Class:  xfce4-volumed/Xfce4-volumed
+
+Window 0x3000001:
+  Machine:  SpirOS
+  Name:  xfce4-power-manager
+  Icon Name:  xfce4-power-manager
+  Command:  xfce4-power-manager
+  Instance/Class:  xfce4-power-manager/Xfce4-power-manager
+
+Window 0x5200001:
+  Machine:  SpirOS
+  Name:  VirtualBox
+  Icon Name:  VirtualBox
+  Command:  VirtualBox
+  Instance/Class:  VirtualBox/VirtualBox
+
+Window 0x1400001:
+  Machine:  SpirOS
+  Name:  xfdesktop
+  Icon Name:  xfdesktop
+  Command:  xfdesktop
+  Instance/Class:  xfdesktop/Xfdesktop
+
+Window 0x4c00001:
+  Machine:  SpirOS
+  Name:  Xfce Terminal
+  Icon Name:  Xfce Terminal
+  Command:  xfce4-terminal
+  Instance/Class:  xfce4-terminal/Xfce4-terminal
+
+Window 0x4a00001:
+  Machine:  SpirOS
+  Name:  xfce4-settings-manager
+  Icon Name:  xfce4-settings-manager
+  Command:  xfce4-settings-manager
+  Instance/Class:  xfce4-settings-manager/Xfce4-settings-manager
+
+Window 0x6400001:
+  Machine:  SpirOS
+  Name:  xfce4-settings-editor
+  Icon Name:  xfce4-settings-editor
+  Command:  xfce4-settings-editor
+  Instance/Class:  xfce4-settings-editor/Xfce4-settings-editor
+

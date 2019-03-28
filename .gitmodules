@@ -16,3 +16,6 @@
 [submodule "solarized-xresources"]
 	path = submodules/solarized-xresources
 	url = https://github.com/solarized/xresources.git
+[submodule "haskell-mode"]
+	path = submodules/haskell-mode
+	url = https://github.com/haskell/haskell-mode

@@ -1,0 +1,161 @@
+# press <F8>, get <C-v>:
+
+$ xev
+
+#
+
+Outer window is 0x6a00001, inner window is 0x6a00002
+
+PropertyNotify event, serial 8, synthetic NO, window 0x6a00001,
+    atom 0x27 (WM_NAME), time 655251707, state PropertyNewValue
+
+PropertyNotify event, serial 9, synthetic NO, window 0x6a00001,
+    atom 0x22 (WM_COMMAND), time 655251707, state PropertyNewValue
+
+PropertyNotify event, serial 10, synthetic NO, window 0x6a00001,
+    atom 0x28 (WM_NORMAL_HINTS), time 655251707, state PropertyNewValue
+
+CreateNotify event, serial 11, synthetic NO, window 0x6a00001,
+    parent 0x6a00001, window 0x6a00002, (10,10), width 50, height 50
+border_width 4, override NO
+
+PropertyNotify event, serial 14, synthetic NO, window 0x6a00001,
+    atom 0x151 (WM_PROTOCOLS), time 655251708, state PropertyNewValue
+
+MapNotify event, serial 15, synthetic NO, window 0x6a00001,
+    event 0x6a00001, window 0x6a00002, override NO
+
+PropertyNotify event, serial 20, synthetic NO, window 0x6a00001,
+    atom 0x15f (_NET_WM_STATE), time 655251709, state PropertyNewValue
+
+PropertyNotify event, serial 20, synthetic NO, window 0x6a00001,
+    atom 0x159 (_NET_WM_DESKTOP), time 655251709, state PropertyNewValue
+
+ConfigureNotify event, serial 20, synthetic NO, window 0x6a00001,
+    event 0x6a00001, window 0x6a00001, (0,0), width 178, height 178,
+    border_width 0, above 0x3e00018, override NO
+
+ReparentNotify event, serial 20, synthetic NO, window 0x6a00001,
+    event 0x6a00001, window 0x6a00001, parent 0xc37944,
+    (12,58), override NO
+
+ConfigureNotify event, serial 20, synthetic NO, window 0x6a00001,
+    event 0x6a00001, window 0x6a00001, (12,58), width 178, height 178,
+    border_width 0, above 0xc37953, override NO
+
+ConfigureNotify event, serial 20, synthetic YES, window 0x6a00001,
+    event 0x6a00001, window 0x6a00001, (1511,834), width 178, height 178,
+    border_width 0, above 0x0, override NO
+
+MapNotify event, serial 20, synthetic NO, window 0x6a00001,
+    event 0x6a00001, window 0x6a00001, override NO
+
+VisibilityNotify event, serial 20, synthetic NO, window 0x6a00001,
+    state VisibilityUnobscured
+
+Expose event, serial 20, synthetic NO, window 0x6a00001,
+    (0,0), width 178, height 10, count 3
+
+Expose event, serial 20, synthetic NO, window 0x6a00001,
+    (0,10), width 10, height 58, count 2
+
+Expose event, serial 20, synthetic NO, window 0x6a00001,
+    (68,10), width 110, height 58, count 1
+
+Expose event, serial 20, synthetic NO, window 0x6a00001,
+    (0,68), width 178, height 110, count 0
+
+PropertyNotify event, serial 20, synthetic NO, window 0x6a00001,
+    atom 0x1bf (WM_STATE), time 655251713, state PropertyNewValue
+
+PropertyNotify event, serial 20, synthetic NO, window 0x6a00001,
+    atom 0x1ad (_NET_WM_ALLOWED_ACTIONS), time 655251713, state PropertyNewValue
+
+PropertyNotify event, serial 20, synthetic NO, window 0x6a00001,
+    atom 0x15f (_NET_WM_STATE), time 655251713, state PropertyNewValue
+
+FocusIn event, serial 20, synthetic NO, window 0x6a00001,
+    mode NotifyNormal, detail NotifyNonlinear
+
+KeymapNotify event, serial 20, synthetic NO, window 0x0,
+    keys:  4294967265 0   0   0   16  0   0   0   0   0   0   0   0   0   0   0   
+           0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+
+PropertyNotify event, serial 20, synthetic NO, window 0x6a00001,
+    atom 0x156 (_NET_FRAME_EXTENTS), time 655251713, state PropertyNewValue
+
+PropertyNotify event, serial 20, synthetic NO, window 0x6a00001,
+    atom 0x15f (_NET_WM_STATE), time 655251713, state PropertyNewValue
+
+PropertyNotify event, serial 20, synthetic NO, window 0x6a00001,
+    atom 0x15f (_NET_WM_STATE), time 655251714, state PropertyNewValue
+
+PropertyNotify event, serial 33, synthetic NO, window 0x6a00001,
+    atom 0x1b0 (_NET_WM_ICON_GEOMETRY), time 655251760, state PropertyNewValue
+
+PropertyNotify event, serial 33, synthetic NO, window 0x6a00001,
+    atom 0x1b0 (_NET_WM_ICON_GEOMETRY), time 655251760, state PropertyNewValue
+
+KeyRelease event, serial 34, synthetic NO, window 0x6a00001,
+    root 0x156, subw 0x0, time 655251767, (168,-32), root:(1679,802),
+    state 0x0, keycode 36 (keysym 0xff0d, Return), same_screen YES,
+"   XLookupString gives 1 bytes: (0d) "
+    XFilterEvent returns: False
+
+FocusOut event, serial 37, synthetic NO, window 0x6a00001,
+    mode NotifyGrab, detail NotifyAncestor
+
+#
+
+KeyPress event, serial 37, synthetic YES, window 0x6a00001,
+    root 0x156, subw 0x0, time 0, (1,1), root:(1,1),
+    state 0x0, keycode 50 (keysym 0xffe1, Shift_L), same_screen YES,
+    XLookupString gives 0 bytes: 
+    XmbLookupString gives 0 bytes: 
+    XFilterEvent returns: False
+
+KeyRelease event, serial 37, synthetic YES, window 0x6a00001,
+    root 0x156, subw 0x0, time 0, (1,1), root:(1,1),
+    state 0x1, keycode 50 (keysym 0xffe1, Shift_L), same_screen YES,
+    XLookupString gives 0 bytes: 
+    XFilterEvent returns: False
+
+KeyPress event, serial 37, synthetic YES, window 0x6a00001,
+    root 0x156, subw 0x0, time 0, (1,1), root:(1,1),
+    state 0x0, keycode 37 (keysym 0xffe3, Control_L), same_screen YES,
+    XLookupString gives 0 bytes: 
+    XmbLookupString gives 0 bytes: 
+    XFilterEvent returns: False
+
+KeyPress event, serial 37, synthetic YES, window 0x6a00001,
+    root 0x156, subw 0x0, time 0, (1,1), root:(1,1),
+    state 0x4, keycode 55 (keysym 0x76, v), same_screen YES,
+    XLookupString gives 1 bytes: (16) ""
+    XmbLookupString gives 1 bytes: (16) ""
+    XFilterEvent returns: False
+
+KeyRelease event, serial 37, synthetic YES, window 0x6a00001,
+    root 0x156, subw 0x0, time 0, (1,1), root:(1,1),
+    state 0x4, keycode 55 (keysym 0x76, v), same_screen YES,
+    XLookupString gives 1 bytes: (16) ""
+    XFilterEvent returns: False
+
+KeyRelease event, serial 37, synthetic YES, window 0x6a00001,
+    root 0x156, subw 0x0, time 0, (1,1), root:(1,1),
+    state 0x4, keycode 37 (keysym 0xffe3, Control_L), same_screen YES,
+    XLookupString gives 0 bytes: 
+    XFilterEvent returns: False
+
+FocusIn event, serial 37, synthetic NO, window 0x6a00001,
+    mode NotifyUngrab, detail NotifyAncestor
+
+#
+
+KeymapNotify event, serial 37, synthetic NO, window 0x0,
+    keys:  4294967216 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+           0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   
+
+ClientMessage event, serial 37, synthetic YES, window 0x6a00001,
+    message_type 0x151 (WM_PROTOCOLS), format 32, message 0x14f (WM_DELETE_WINDOW)
+
+#

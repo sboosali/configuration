@@ -1,0 +1,23 @@
+Firefox
+Emacs_SBoo_23-03-2019_18_53
+VirtualBox
+Xfce Terminal
+bamfdaemon
+blueman-applet
+dropbox
+gnome-screensaver
+google-chrome-stable
+indicator-keyboard-service
+nm-applet
+notify-osd
+polkit-gnome-authentication-agent-1
+update-notifier
+xfce4-panel
+xfce4-power-manager
+xfce4-session
+xfce4-settings-editor
+xfce4-settings-manager
+xfce4-volumed
+xfdesktop
+xfsettingsd
+xfwm4
