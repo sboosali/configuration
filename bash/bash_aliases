@@ -71,3 +71,15 @@ alias path=absolute-path
 
 alias sboo-prioritize-home-manager='nix-env --set-flag priority 1 home-manager-path'
 
+#alias sboo-zip-configs=tar -cz -v  -f "config_$(date +).tar.gz"  -C /  home/sboo/.config etc/xdg/xfce4 etc/xdg/Thunar etc/xdg/menus etc/xdg/xdg-xubuntu
+#
+#alias sboo-zip-themes=tar -cz -v  -f "themes_$(date +).tar.gz"  -C /  home/sboo/.themes home/sboo/.icons usr/share/themes usr/share/icons
+
+#alias sboo-zip-configs=tar -czvf "config_$(date +).tar.gz" -C / ~/.config /etc/xdg/xfce4 /etc/xdg/Thunar/ /etc/xdg/menus /etc/xdg/xdg-xubuntu
+#
+#alias sboo-zip-themes=tar -cz -v -f "themes_$(date +).tar.gz" -C / ~/.themes ~/.icons /usr/share/themes /usr/share/icons
+
+#alias sboo-zip-configs=tar -czvf "config_$(date +).tar.gz" -C home ~/.config -C root /etc/xdg/xfce4 /etc/xdg/Thunar/ /etc/xdg/menus /etc/xdg/xdg-xubuntu
+#
+#alias sboo-zip-themes=tar -cz -v -f "themes_$(date +).tar.gz" -C home ~/.themes ~/.icons -C root /usr/share/themes /usr/share/icons
+

@@ -75,23 +75,6 @@ withPatches = package: patches:
 
 #------------------------------------------------#
 
-/* Add programs as dependencies.
- *
- * e.g.
- *
- *     (addBuildInputs melpaPackages.magit [ pkgs.git ])
- */
-
-addBuildInputs = package: extraBuildInputs:
-
-   package.overrideAttrs (old:
- 
-     {
-       buildInputs = old.buildInputs ++ extraBuildInputs;
-     });
-
-#------------------------------------------------#
-
 fromEmacsRepository = epkgs: { repo ? null }:
 
     assert (null == repo || builtins.isString repo);
@@ -146,6 +129,29 @@ configureEmacsPackage = epkgs:
     in
 
     addBuildInputs tools' package';
+
+#------------------------------------------------#
+
+ fetchFromGitHubJSON = path:
+
+   pkgs.fetchFromGitHub (lib.importJSON path);
+
+#------------------------------------------------#
+
+/* Add programs as dependencies.
+ *
+ * e.g.
+ *
+ *     (addBuildInputs melpaPackages.magit [ pkgs.git ])
+ */
+
+addBuildInputs = package: extraBuildInputs:
+
+   package.overrideAttrs (old:
+ 
+     {
+       buildInputs = old.buildInputs ++ extraBuildInputs;
+     });
 
 #------------------------------------------------#
 

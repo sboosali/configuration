@@ -3,8 +3,7 @@
 ##################################################
 { pkgs
 
-, sbooUtilities
-, emacsUtilities
+, utilities
 }:
 
 #------------------------------------------------#
@@ -15,11 +14,7 @@ epkgs:
 # Output #########################################
 ##################################################
 
-with sbooUtilities;
-
-#------------------------------------------------#
-
-with emacsUtilities;
+with utilities;
 
 ##################################################
 let
@@ -176,6 +171,8 @@ moreEmacsPackages = (with epkgs; [
 
  edit-indirect
 
+ simpleclip
+
  #----------------------------------------------#
  # FileSystem
 
@@ -228,6 +225,7 @@ moreEmacsPackages = (with epkgs; [
  #csv-nav # editing CSV files
  #emacs-web-server
  anzu # shows total search hits in mode line (c.f. `query-replace`).
+ eimp
  elfeed
  elnode
  epc
@@ -236,6 +234,7 @@ moreEmacsPackages = (with epkgs; [
  move-text
  ov
  request # « https://tkf.github.io/emacs-request/manual.html »
+ rg
  vlf                            # abbreviates "View Large Files"
  volatile-highlights
  webpaste
@@ -244,7 +243,6 @@ moreEmacsPackages = (with epkgs; [
 #TODO# objed
 #palimpsest
 #ranger
- eimp
 
  #-----------------------------#
  # EmacsWiki:

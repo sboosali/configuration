@@ -54,7 +54,6 @@ with utilities;
 
     (import ./emacs
             { inherit pkgs;
-              inherit utilities;
             })
 
      // { enable = true;
@@ -227,7 +226,7 @@ with utilities;
 
   #----------------------------#
 
-  man.enable = false;
+  man.enable = false;           # TODO
 
   # ^
   # Using your system man package should be able to view man pages installed through Nixpkgs since ~/.nix-profile/etc/profile.d/nix.sh contains
@@ -246,7 +245,7 @@ with utilities;
 
   #----------------------------#
 
-
+# xbindkeys.enable = true;           # TODO
 
   #----------------------------#
 }

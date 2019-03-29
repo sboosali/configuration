@@ -41,6 +41,7 @@ bashCompletions = [
   ../../../bash/completion/cabal.bash
   ../../../bash/completion/home-manager.bash
   ../../../bash/completion/emacsclient
+  ../../../bash/completion/xbindkeys
 
 ];
 

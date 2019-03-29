@@ -11,7 +11,6 @@ Start xbindkeys:
   # start xbindkeys daemon
   xbindkeys -f ~/.xbindkeysrc
 
-
 ========================================
 
 $ xbindkeys -p -fg .xbindkeysrc.scm 

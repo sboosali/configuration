@@ -170,6 +170,12 @@ in
 
   #----------------------------#
 
+  downstream-set    = "remote add downstream";
+  downstream-get    = "remote -v show downstream";
+  downstream-rebase = "pull --rebase downstream master";
+
+  #----------------------------#
+
   get-current-commit = "rev-parse --verify HEAD";
 
   #----------------------------#

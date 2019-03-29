@@ -191,7 +191,7 @@ _cabal_list_targets()
     # ^ Split « $@ » into Bash array on « | » delimiter.
 
     local CabalFiles
-    CabalFiles=( ./*.cabal ./*/*.cabal ./*/*/*.cabal )
+    CabalFiles=( ./*.cabal ./*/*.cabal ./*/*/*.cabal ./*/*/*/*.cabal ./*/*/*/*.cabal )
 
     # ^ look for « .cabal » files in the current directory, subdirectories, and sub-subdirectories.
 
@@ -209,7 +209,7 @@ _cabal_list_targets()
 
     local PACKAGE
 
-    if printf '%s\n' ${ArgumentList[@]} | grep -P '^library$'
+    if printf '%s\n' "${ArgumentList[@]}" | grep -P '^library$'
        # ^ i.e. if "library" is in ArgumentList
     then
         for FILE in "${CabalFiles[@]}"

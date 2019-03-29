@@ -61,6 +61,11 @@ haskell = import ./haskell { inherit pkgs; };
 # haskellCompilers  = (pkgs.haskell.compiler);
 
 #-----------------------------------------------#
+
+enUS      = "en_US";
+enUS_UTF8 = "en_US.UTF-8";
+
+#-----------------------------------------------#
 in
 ##################################################
 # The Home-Manager Configuration #################
@@ -220,11 +225,19 @@ self = rec {
   #   else ../../submodules/solarized-xresources/Xresources.light
   # );
 
+ #----------------------------#
+
+  # language.base     = enUS;      # « $LANG »
+  # language.address  = enUS_UTF8; # « $LC_ADDRESS »
+  # language.monetary = enUS_UTF8; # « $LC_MONETARY »
+  # language.paper    = enUS_UTF8; # « $LC_PAPER »
+  # language.time     = enUS_UTF8; # « $LC_TIME »
+
   #----------------------------#
   # XDG:
 
   xdg =
-    (import ./xdg { inherit sboo applications;
+    (import ./xdg { inherit sboo applications xdgUtilities;
                   })
      // { enable = true;
         };

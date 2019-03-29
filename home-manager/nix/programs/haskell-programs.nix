@@ -28,7 +28,9 @@ in
  happy                          # Parser-generator
  hscolour                       # 
 
- ghcid                          # GHCI Daemon
+ stack                          # Build Tool
+
+ ghcid                          # GHCi Daemon
  hasktags                       # TAGS-generator
  hpack                          # 
 

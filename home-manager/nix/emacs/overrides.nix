@@ -1,9 +1,7 @@
 ##################################################
 { pkgs
 
-, sbooUtilities
-, emacsUtilities
-
+, utilities
 }:
 
 #------------------------------------------------#
@@ -22,11 +20,7 @@ configuration = import ./configuration.nix {
 in
 ##################################################
 
-with sbooUtilities;
-
-#------------------------------------------------#
-
-with emacsUtilities;
+with utilities;
 
 ##################################################
 {
@@ -35,19 +29,19 @@ with emacsUtilities;
  # Utilities ------------------#
  #-----------------------------#
 
- configurePackage = emacsUtilities.configureEmacsPackage self;
+ configurePackage = utilities.configureEmacsPackage self;
 
-#fromRepository = emacsUtilities.fromEmacsRepository self;
+#fromRepository = utilities.fromEmacsRepository self;
 
  #-----------------------------#
  # Packages -------------------#
  #-----------------------------#
 
- edit-env = emacsUtilities.compileLocalFile "edit-env.el";
+ edit-env = utilities.compileLocalFile "edit-env.el";
 
  #-----------------------------#
 
- hexrgb = emacsUtilities.compileEmacsWikiFile {
+ hexrgb = utilities.compileEmacsWikiFile {
       name   = "hexrgb.el";
       sha256 = "18hb8brf7x92aidjfgczxangri6rkqq4x5d06lh41193f97rslm8";
       # date = 2019-03-09
@@ -73,14 +67,14 @@ with emacsUtilities;
 
  #-----------------------------#
 
- better-registers = emacsUtilities.compileEmacsWikiFile {
+ better-registers = utilities.compileEmacsWikiFile {
       name   = "better-registers.el";
       sha256 = "sha256:05dlhhvd1m9q642gqqj6klif13shbinqi6bi72fldidi1z6wcqlh";
  };
 
  #-----------------------------#
 
- grab-and-drag = emacsUtilities.compileEmacsWikiFile {
+ grab-and-drag = utilities.compileEmacsWikiFile {
       name   = "grab-and-drag.el";
       sha256 = "sha256:0lglm55vdlaqzsc6n7mm9ldcmlfq5rzg3fjkqqcpm02r231xnmcy";
  };

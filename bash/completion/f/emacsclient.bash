@@ -224,7 +224,7 @@ _emacsclient_completions ()
 
     #--------------------------#
 
-    COMPREPLY=()
+    COMPREPLY=( )
 
    # COMPREPLY+=( $( compgen -A file -- "$CurrentWord") )
 

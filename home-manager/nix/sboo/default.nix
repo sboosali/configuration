@@ -47,6 +47,11 @@ rec {
    [ firstname lastname "@" "gmail.com" ];
 
  #-----------------------------#
+
+ language = "en_US";
+ encoding = "en_US.UTF-8";
+
+ #-----------------------------#
  
  keys.github = "${env.HOSTNAME}_git@github.com_id_rsa";
 

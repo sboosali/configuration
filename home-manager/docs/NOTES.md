@@ -1,6 +1,32 @@
 # Notes about Nix, Bash, Linux, etc (for `home-manager`)
 
 
+## `home-manager`
+
+### `config`
+
+sharing `config.nix` between `<home-manager>` and `<nixpkgs>`:
+
+```
+{
+  nixpkgs.config                             = import ./nixpkgs/config.nix;
+  xdg.configFile."nixpkgs/config.nix".source = ./nixpkgs/config.nix;
+}
+```
+
+### `overlays`
+
+sharing `overlays.nix` between `<home-manager>` and `<nixpkgs>`:
+
+```
+{
+  nixpkgs.overlays                                = import ./nixpkgs/overlays/default.nix;
+  xdg.configFile."nixpkgs/overlays.nix".source    = ./nixpkgs/overlays;
+  xdg.configFile."nixpkgs/overlays.nix".recursive = true;
+}
+```
+
+
 ## Nix
 
 ### `lib._`

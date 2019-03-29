@@ -1391,6 +1391,97 @@ SUBSTITUTIONS+=( "--expression=s:__ProjectDirectory__:$(readlink -f ${__ProjectD
 
 
 
+ "xbindkeys/.xbindkeysrc".source   = ../../../xbindkeys/xbindkeysrc;
+ "xbindkeys/.xbindkeysrc".onChange = ''
+    
+     # Whether « ${xbindkeys} » is installed:
+
+if   [ -x "$(command -v ${xbindkeys})" ]
+then
+
+     # Whether « ${xbindkeys} » is running:
+
+if   pgrep -x ${xbindkeys} > /dev/null
+
+then # Reload the config:
+
+     killall --signal USR1 ${xbindkeys}
+
+else # Start the daemon:
+
+     ${xbindkeys} --poll-rc --file ${xbindkeysrc} || true
+
+fi
+fi
+
+# ^ Start the « xbindkeys » daemon in the background.
+
+# ^ « --poll-rc » means: reload the config whenever it changes.
+
+# ^ « -f _ » means: load the given config ("rc") file.
+# By default, the config is at « ~/.xbindkeysrc », 
+# which we've overriden to be under (one of) « $XDG_CONFIG_DIRS ».
+
+  '';
+
+
+
+
+
+
+
+
+  #----------------------------#
+
+ "xbindkeys/xbindkeysrc.scm".source   = ../../../xbindkeys/test-xbindkeysrc.scm;
+ "xbindkeys/xbindkeysrc.scm".onChange = ''
+    
+         # Whether « ${xbindkeys} » is installed:
+    
+    if   [ -x "$(command -v ${xbindkeys})" ]
+    then
+    
+         # Whether « ${xbindkeys} » is running:
+    
+    if   pgrep -x "xbindkeys" > /dev/null
+    
+    then # Reload the config:
+    
+         kill --signal USR1 $(pgrep "xbindkeys")
+    
+    else # Start the daemon:
+    
+         ${xbindkeys} --poll-rc --file-guile ${xbindkeysrc}
+    
+    fi
+    fi
+    
+    # ^ Start the « xbindkeys » daemon in the background.
+    
+    # ^ « --poll-rc » means: reload the config whenever it changes.
+    
+    # ^ « -f _ » means: load the given config ("rc") file.
+    # By default, the config is at « ~/.xbindkeysrc »,
+    # which we've overriden to be under (one of) « $XDG_CONFIG_DIRS ».
+  '';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

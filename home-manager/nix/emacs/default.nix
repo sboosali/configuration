@@ -1,22 +1,15 @@
 ##################################################
-{ pkgs
+{ nixpkgs  ? <nixpkgs>
+, config   ? {}
+, overlays ? []
 
-, utilities
+, pkgs      ? (import nixpkgs         { inherit config overlays; })
+, utilities ? (import ./utilities.nix { inherit pkgs;            })
 }:
 
 ##################################################
 let
 #------------------------------------------------#
-
-sbooUtilities = utilities;
-
-#------------------------------------------------#
-
-emacsUtilities = import ./utilities.nix {
-
-  inherit pkgs;
-
-};
 
 #------------------------------------------------#
 in
@@ -28,14 +21,14 @@ in
   extraPackages = import ./packages.nix {
 
     inherit pkgs;
-    inherit sbooUtilities emacsUtilities;
+    inherit utilities;
 
   };
 
   overrides = import ./overrides.nix {
 
     inherit pkgs;
-    inherit sbooUtilities emacsUtilities;
+    inherit utilities;
 
   };
 
