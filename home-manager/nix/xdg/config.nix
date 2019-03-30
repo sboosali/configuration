@@ -35,37 +35,12 @@ in
 
   #----------------------------#
 
- "xbindkeys/xbindkeysrc.scm".source   = ../../../xbindkeys/test.scm;
- "xbindkeys/xbindkeysrc.scm".onChange = ''
-    
-         # Whether « ${xbindkeys} » is installed:
-    
-    if   [ -x "$(command -v ${xbindkeys})" ]
-    then
-    
-         # Whether « ${xbindkeys} » is running:
-    
-    if   pgrep -x "xbindkeys" > /dev/null
-    
-    then # Reload the config:
-    
-         kill -s1 $(pgrep "xbindkeys")
-    
-    else # Start the daemon:
-    
-         ${xbindkeys} --poll-rc -fg ${xbindkeysrc}
-    
-    fi
-    fi
-    
-    # ^ Start the « xbindkeys » daemon in the background.
-    
-    # ^ « --poll-rc » means: reload the config whenever it changes.
-    
-    # ^ « -fg _ » means: load the given config (a Guile File).
-    # By default, the config is at « ~/.xbindkeysrc »,
-    # which we've overriden to be under « $XDG_CONFIG_HOME ».
-  '';
+ "xbindkeys/xbindkeysrc.scm".source   = ../../../xbindkeys/xbindkeysrc.scm;
+ "xbindkeys/xbindkeysrc.scm".onChange = builtins.readFile ../../../xbindkeys/start;
+
+# TODO: import a derivation
+# XBINDKEYS="${xbindkeys}";
+# XBINDKEYSRC="${xbindkeysrc}";
 
   #----------------------------#
 

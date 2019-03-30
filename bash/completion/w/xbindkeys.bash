@@ -10,41 +10,11 @@
 # Commentary ------------------------------------#
 #------------------------------------------------#
 
-# Examples...
+# Examples
 
 # $ xbindkeys <TAB>
 #
-# -V
-# --version
-# -H
-# --help   
-# -nw
-# -t
-# --tty
-# -c
-# --create-frame   
-# -F
-# --frame-parameters
-# -e
-# --eval   
-# -n
-# --no-wait
-# -q
-# --quiet
-# -u
-# --suppress-output
-# -d
-# --display
-# --parent
-# -s
-# -socket-name
-# -f
-# --server-file
-# -a
-# --alternate-editor
-# -T
-# --tramp
-#
+# ...
 
 #------------------------------------------------#
 
@@ -78,13 +48,13 @@
 
 _xbindkeys_options=( )
 
+_xbindkeys_options+=( "-h" "--help" )
 _xbindkeys_options+=( "-V" "--version" )
 _xbindkeys_options+=( "-d" "--defaults" )
 _xbindkeys_options+=( "-dg""--defaults-guile" )
 _xbindkeys_options+=( "-f" "--file" )
 _xbindkeys_options+=( "-fg""--file-guile" )
 _xbindkeys_options+=( "-p" "--poll-rc" )
-_xbindkeys_options+=( "-h" "--help" )
 _xbindkeys_options+=( "-X" "--display" )
 _xbindkeys_options+=( "-v" "--verbose" )
 _xbindkeys_options+=( "-s" "--show" )

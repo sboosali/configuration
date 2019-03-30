@@ -218,13 +218,9 @@ moreEmacsPackages = (with epkgs; [
  multi-term
 
  #----------------------------------------------#
- # Miscellaneous
+ # Miscellaneou
 
- #TODO# graphviz-dot
- #any-ini-mode # EmacsWiki only
- #csv-nav # editing CSV files
- #emacs-web-server
- anzu # shows total search hits in mode line (c.f. `query-replace`).
+ anzu                # shows total search hits in mode line (c.f. `query-replace`).
  eimp
  elfeed
  elnode
@@ -233,16 +229,22 @@ moreEmacsPackages = (with epkgs; [
  imgbb
  move-text
  ov
- request # « https://tkf.github.io/emacs-request/manual.html »
+ request             # « https://tkf.github.io/emacs-request/manual.html »
  rg
- vlf                            # abbreviates "View Large Files"
- volatile-highlights
+ vlf                 # abbreviates "View Large Files"
+ volatile-highlights # 
  webpaste
- which-key # « https://github.com/justbur/emacs-which-key/blob/master/README.org »
-#TODO# elisp-ffi
-#TODO# objed
-#palimpsest
-#ranger
+ quack
+ which-key           # « https://github.com/justbur/emacs-which-key/blob/master/README.org »
+
+ #TODO# graphviz-dot
+ #any-ini-mode # EmacsWiki only
+ #csv-nav # editing CSV files
+ #emacs-web-server
+ #TODO# elisp-ffi
+ #TODO# objed
+ #palimpsest
+ #ranger
 
  #-----------------------------#
  # EmacsWiki:

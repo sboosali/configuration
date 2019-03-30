@@ -1,47 +1,136 @@
-;; This configuration is guile based.
-;;   http://www.gnu.org/software/guile/guile.html
-;; any functions that work in guile will work here.
-;; see EXTRA FUNCTIONS:
-
-;; Version: 1.8.6
-
-;; If you edit this file, do not forget to uncomment any lines
-;; that you change.
-;; The semicolon(;) symbol may be used anywhere for comments.
-
-;; To specify a key, you can use 'xbindkeys --key' or
-;; 'xbindkeys --multikey' and put one of the two lines in this file.
-
-;; A list of keys is in /usr/include/X11/keysym.h and in
-;; /usr/include/X11/keysymdef.h
-;; The XK_ is not needed.
-
-;; List of modifier:
-;;   Release, Control, Shift, Mod1 (Alt), Mod2 (NumLock),
-;;   Mod3 (CapsLock), Mod4, Mod5 (Scroll).
-
-
-;; The release modifier is not a standard X modifier, but you can
-;; use it if you want to catch release instead of press events
-
-;; By defaults, xbindkeys does not pay attention to modifiers
-;; NumLock, CapsLock and ScrollLock.
-;; Uncomment the lines below if you want to use them.
-;; To dissable them, call the functions with #f
-
 ;;----------------------------------------------;;
-;; Definitions ---------------------------------;;
+;; Imports -------------------------------------;;
 ;;----------------------------------------------;;
 
-(define (transfer)
-  ;; seems to work, both from emacs and into emacs
- (run-command " xdotool key --delay 120 --clearmodifiers 'Control_L+c'  'Alt_L+Tab' 'Control_L+v' 'Return' 'Alt_L+Tab'"))
+(use-modules (srfi srfi-19))
+(use-modules (ice-9 format))
+
+;;----------------------------------------------;;
+;; Programs ------------------------------------;;
+;;----------------------------------------------;;
+
+(define (notify-send title message)
+
+  ;; 
+
+  (run-command
+   (format #f "notify-send '~a' '~a'" title message)))
+
+;; Format Placeholders:
+;;
+;; • Guile « ~a » is like Elisp « %s »
+;; • Guile « ~s » is like Elisp « %S »
+
+;;----------------------------------------------;;
+
+(define (wmctrl application)
+
+  ;; 
+
+  (run-command
+   (format #f "wmctrl -a '~a'" application)))
+
+;; « wmctrl -a » matches a (case-insensitive) Regular Expression against a Window Title.
+
+;;----------------------------------------------;;
+
+(define (xdotool-key keysyms)
+
+  ;; 
+
+  (run-command
+   (format #f
+           "xdotool key --clearmodifiers '~a'"
+           keysyms)))
+
+;;----------------------------------------------;;
+;; Functions -----------------------------------;;
+;;----------------------------------------------;;
+
+;;----------------------------------------------;;
+;; Commands ------------------------------------;;
+;;----------------------------------------------;;
+ 
+(define (send-control-c) (xdotool-key "Control_L+c"))
+(define (send-control-x) (xdotool-key "Control_L+x"))
+(define (send-control-v) (xdotool-key "Control_L+v"))
+
+;; (define (send-control-c) (send-keys "C-c"))
+;; (define (send-control-x) (send-keys "C-x"))
+;; (define (send-control-v) (send-keys "C-v"))
 
 ;;----------------------------------------------;;
 
 (define (open-google-voice-search)
+
   ;; 
- (run-command "xdg-open 'https://www.google.com'"))
+
+  (run-command
+   "google-chrome 'https://www.google.com'")
+
+;;TODO (xdotool-key "Control_L+Shift+period")
+
+  )
+
+;; Mouse-Click the 🎤 (to the right of the google search bar).
+
+;;TODO click mouse on hard-coded coordinates.
+
+;;TODO « chrome://extensions/shortcuts »
+
+;;----------------------------------------------;;
+
+(define (transfer)
+
+  ;; seems to work, both from emacs and into emacs.
+
+  (let ((delay-milliseconds 120)
+        )
+
+    (run-command
+     (format #f
+             "xdotool key --delay  '~a' --clearmodifiers 'Control_L+c'  'Alt_L+Tab' 'Control_L+v' 'Return' 'Alt_L+Tab'"
+             delay-milliseconds))))
+
+;;----------------------------------------------;;
+
+(define (bring-editor)
+
+  (wmctrl "Emacs - "))
+
+;;----------------------------------------------;;
+
+(define (bring-browser)
+
+  (wmctrl "- Google Chrome"))
+
+;;----------------------------------------------;;
+
+(define (bring-terminal)
+
+  (wmctrl "Terminal - "))
+
+;;----------------------------------------------;;
+
+(define (sboo-xbindkeys_show)
+
+  (run-command "xbindkeys_show -fg ${XBINDKEYSRC:-${XDG_CONFIG_HOME:-$HOME/.config}/xbindkeys/xbindkeysrc.scm}"))
+
+;;----------------------------------------------;;
+
+(define (sboo-popup-date)
+
+  (let ((DATE (date->string (current-date) "~A, ~B ~e ~Y ~H:~S"))
+        )
+
+  (notify-send "date" DATE)))
+
+;;----------------------------------------------;;
+;; Keybindings: Aliases ------------------------;;
+;;----------------------------------------------;;
+
+(xbindkey-function '(F5) send-control-c)
+(xbindkey-function '(F6) send-control-x)
 
 ;;----------------------------------------------;;
 ;; Keybindings: Applications -------------------;;
@@ -56,73 +145,42 @@
 
 ;;----------------------------------------------;;
 
-;; Release, Control, Shift, Mod1 (Alt)
+(xbindkey-function '(control alt shift e) bring-editor)
+;; (xbindkey-function '(control alt shift b) bring-browser)
+;; (xbindkey-function '(control alt shift t) bring-terminal)
 
 ;;----------------------------------------------;;
 ;; Keybindings: Miscellaneous ------------------;;
 ;;----------------------------------------------;;
 
-(xbindkey-function '(release "m:0x0" "Pause")
-                   transfer)
-
 ;;----------------------------------------------;;
 
-(xbindkey-function '(release "m:0x0" "Escape")
-                   open-google-voice-search)
+(xbindkey-function '(control alt shift d) sboo-popup-date)
 
 ;;----------------------------------------------;;
-
-(xbindkey '(release "m:0x0" "c:118")
-          "xdotool key --clearmodifiers 'Control_L+0x76'")
-
-;; needs extra presses
-;; (xbindkey '(release "m:0x0" "c:___") ;; other keys don't work
-(xbindkey '(release "m:0x0" "c:107") ;; buggy
- ;; "sleep 0.03 && xdotool key --clearmodifiers 'Control_L+0x63'")
- ;; "xdotool key --clearmodifiers 'Control_L+0x63'") 
- ;; "xte 'keydown Control_L' 'key C' 'keyup Control_L'")
-;; "xvkbd -text '\\Cc'")
- "xdotool keydown control key c xdotool keyup control")
- ;; doesn't work in emacs (where i need it most), but works in terminal, seems to work in chrome and firefox
-
-(xbindkey '(release "m:0x0" "c:78")
-          "xdotool key --clearmodifiers 'Control_L+0x7a'")
-
+;; Testing -------------------------------------;;
 ;;----------------------------------------------;;
 
-;; (xbindkey '(release "m:0x0" "c:0xff63") 
-;;  "xdotool key --clearmodifiers 'Control_L+v'")
-;; (xbindkey '(release "m:0x0" "c:0xff61")
-;;  "sleep 0.03 && xdotool key --clearmodifiers 'Control_L+c'")
-;; (xbindkey '(release "m:0x0" "c:0xff14") 
-;;  "xdotool key --clearmodifiers 'Control_L+z'")
-
-;; xdotool --clearmodifiers key 'control+_'
-
-;; (xbindkey '(release "m:0x0" "c:118") 
-;;  "xdotool key --clearmodifiers 'Control_L+v'")
-;; (xbindkey '(release "m:0x0" "c:107")
-;;  "sleep 0.03 && xdotool key --clearmodifiers 'Control_L+c'")
-;; (xbindkey '(release "m:0x0" "c:78") 
-;;  "xdotool key --clearmodifiers 'Control_L+z'")
-
-;; (xbindkey '("m:0x0" "c:118") "C-v")
-;; (xbindkey '("m:0x0" "c:107") "C-c")
-;; (xbindkey '("m:0x0" "c:78") "C-z")
-
-;; via `xbindkey -k`
-
-    ;; m:0x0 + c:9
-    ;; Escape
-
-    ;; m:0x0 + c:118
-    ;; Insert
-
-    ;; m:0x0 + c:107
-    ;; Print
-
-    ;; m:0x0 + c:78
-    ;; Scroll_Lock
+;; $ guile
+;;
+;; > (use-modules (srfi srfi-19))
+;; > (use-modules (ice-9 format))
+;;
+;; > ;; (define (run-command string) string)
+;; > (define (run-command string) (system string))
+;;
+;; > (define (notify-send title message)
+;;     (run-command
+;;      (format #f "notify-send '~a' '~a'" title message)))
+;; > (define (popup-date)
+;;     (let ((DATE (date->string (current-date) "~A, ~B ~e ~Y ~H:~S"))
+;;           )
+;;       (notify-send "date" DATE)))
+;;
+;; > (format #f "notify-send '~a' '~a'" "title" "message")
+;;   $1 = "notify-send 'date' 'Friday, March 29 2019 15:33'"
+;; > (popup-date)
+;;
 
 ;;----------------------------------------------;;
 ;; Notes ---------------------------------------;;
@@ -173,6 +231,99 @@
 ;;   "(Scheme function)"
 ;;       m:0xd + c:24
 ;;       Control+Shift+Alt + q
+;;
+
+;;----------------------------------------------;;
+;; Notes...
+
+;; $ xbindkeys --version
+;;
+;; Version: 1.8.6
+
+;; This configuration is guile based.
+
+;; The release modifier is not a standard X modifier, but you can
+;; use it if you want to catch release instead of press events
+
+;; By defaults, xbindkeys does not pay attention to modifiers
+;; NumLock, CapsLock and ScrollLock.
+;; Uncomment the lines below if you want to use them.
+;; To dissable them, call the functions with #f
+
+;; $ xbindkeys --key
+;;
+;; To specify a key, you can use 'xbindkeys --key' or
+;; 'xbindkeys --multikey' and put one of the two lines in this file.
+
+;; List of keys:
+;;
+;; /usr/include/X11/keysymdef.h
+;; /usr/include/X11/keysym.h
+;;
+;; The XK_ is not needed.
+
+;; List of modifiers:
+;;
+;; • Release
+;; • Control
+;; • Shift
+;; • Mod1 (Alt)
+;; • Mod2 (NumLock),
+;; • Mod3 (CapsLock)
+;; • Mod4
+;; • Mod5 (Scroll)
+;; 
+
+;;----------------------------------------------;;
+;; Pop-ups...
+
+;; xmessage (output-only):
+;;
+;; $ xmessage -center "Hello, World!"
+;;
+
+;; notify-send (user-input):
+;;
+;; $ notify-send 'title' 'message'
+;;
+
+;; dialog (user-input):
+;;
+;; $ dialog --checklist "Choose OS:" 15 40 5 \
+;; 1 Linux off \
+;; 2 Solaris on \
+;; 3 'HP UX' off \
+;; 4 AIX off
+;;
+
+;;----------------------------------------------;;
+;; Guile:
+
+;; e.g. « string-split »
+;;
+;; M-: (string-split "C-c" #\-)
+;;   ⇒ ("C" "c")
+;;
+;; M-: (map (lambda (keychord) (string-split keychord #\-)) (string-split "M-S-a C-c" #\ ))
+;;   ⇒ (("M" "S" "a") ("C" "c"))
+;;
+;; M-: (map (lambda (keychord) (string-split keychord #\-)) (string-split "C-c" #\ ))
+;;   ⇒ (("C" "c"))
+;;
+;; M-: (map (lambda (keychord) (string-split keychord #\-)) (string-split "c" #\ ))
+;;   ⇒ (("c"))
+;;
+
+;;----------------------------------------------;;
+;; Links:
+
+;; • /usr/include/X11/keysym.h
+;; • /usr/include/X11/keysymdef.h
+;;
+;; • http://www.gnu.org/software/guile/guile.htm
+;; • https://www.gnu.org/software/guile/manual/html_node/Strings.html#Strings
+;;
+;; • https://unix.stackexchange.com/questions/144924/how-to-create-a-message-box-from-the-command-line
 ;;
 
 ;;----------------------------------------------;;

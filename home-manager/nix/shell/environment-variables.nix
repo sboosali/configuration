@@ -152,11 +152,11 @@ in
 
  #----------------------------------------------#
 
- CABAL_CONFIG       = "${xdg.configHome}/cabal/config";
+ CABAL_CONFIG = "${xdg.configHome}/cabal/config";
 
  #-----------------------------------------------#
 
-
+ XBINDKEYS_CONFIG = "${xdg.configHome}/xbindkeys/xbindkeysrc.scm";
 
  #----------------------------------------------#
 }

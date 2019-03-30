@@ -45,6 +45,7 @@ in
  gparted
  gnupg22                        # for « gpg » version ≥2.1.17
  graphviz                       # GraphViz renders « .dot » files.
+ guile                          # « Scheme » implementation (v2.2.4, circa 2019)
  haskell-overridez
  htop
  imagemagick

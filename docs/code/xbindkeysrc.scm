@@ -11,7 +11,7 @@
 
 (define (sboo-xbindkeys_show)
 
-  (run-command "xbindkeys_show -fg ${XBINDKEYSRC:-${XDG_CONFIG_HOME:-$HOME/.config}/xbindkeys/xbindkeysrc.scm}"))
+  (run-command "xbindkeys_show"))
 
 ;;----------------------------------------------;;
 
@@ -55,8 +55,8 @@
 ;; > (use-modules (srfi srfi-19))
 ;; > (use-modules (ice-9 format))
 ;;
-;; > ;; (define (run-command string) string)
-;; > (define (run-command string) (system string))
+;; > (define (run-command string) string)
+;; > (define (run-command string) (string))
 ;;
 ;; > (define (notify-send title message)
 ;;     (run-command

@@ -44,7 +44,7 @@ xclip       = ''${pkgs.xclip}/bin/xclip'';
 xdotool     = ''${pkgs.xdotool}/bin/xdotool'';
 wmctrl      = ''${pkgs.wmctrl}/bin/wmctrl'';
 xbrightness = ''${pkgs.xbrightness}/bin/xbrightness'';
-xbindkeys   = ''${pkgs.xbindkeys}/bin/xbindkeys'';
+
 #xmodmap    = ''${pkgs.xmodmap}/bin/xmodmap'';
 
 xrandr               = ''${xrandr}/bin/xrandr'';
@@ -59,6 +59,11 @@ xprop       = ''${pkgs.xorg.xprop}/bin/xprop'';
 redshift    = ''${pkgs.redshift}/bin/redshift'';
 
 bat         = ''${pkgs.bat}/bin/bat'';
+
+#------------------------------------------------#
+
+xbindkeys      = ''${pkgs.xbindkeys}/bin/xbindkeys'';
+xbindkeys_show = ''${pkgs.xbindkeys}/bin/xbindkeys_show'';
 
 #------------------------------------------------#
 
@@ -91,6 +96,10 @@ nixpkgs = builtins.mapAttrs (k: v: builtins.toString v) {
 #''${NIX_PROFILE}/channels/nixpkgs-unstable'';
 
 };
+
+#------------------------------------------------#
+
+xbindkeysrc = builtins.toString ~/.config/xbindkeys/xbindkeysrc.scm;
 
 #------------------------------------------------#
 in
@@ -552,6 +561,20 @@ in
   #----------------------------------------------#
 
  sboo-source-cabal-bash-completion = ''source ${builtins.toString ~/src/sboo/cabal/cabal-install/bash-completion/cabal}'';
+
+  #----------------------------------------------#
+
+  sboo-xbindkeys-start  = ''${xbindkeys} --poll-rc -fg ${xbindkeysrc}'';
+  sboo-xbindkeys-stop   = ''killall xbindkeys'';
+  sboo-xbindkeys-reload = ''killall -s1 xbindkeys'';
+
+  sboo-xbindkeys-test   = ''${xbindkeys} --show --verbose --nodaemon -fg ${xbindkeysrc}'';
+  sboo-xbindkeys-list   = ''pgrep -x xbindkeys'';
+  sboo-xbindkeys-config = ''${xbindkeys_show} -fg ${xbindkeysrc}'';
+
+  # ^ « pgrep -x »:
+  #
+  #   • means an exact process-name match.
 
   #----------------------------------------------#
 

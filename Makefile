@@ -51,9 +51,7 @@ Emacs ?=emacs
 
 EmacsBuild ?=emacs -batch  --funcall=batch-byte-compile  --directory=$(EmacsSubDirectory)
 
-EmacsOptions ?=--name=SBoo/$(Timestamp) --no-desktop --maximized --no-splash
-
-#EmacsOptions ?= --maximized --no-splash --name=SBoo/$(Timestamp) --debug-init --no-desktop
+EmacsOptions ?=--name=Emacs/SBoo/$(Timestamp) --no-desktop --maximized --no-splash
 
 #------------------------------------------------#
 

@@ -1479,6 +1479,349 @@ fi
 
 
 
+#!/bin/bash
+
+##################################################
+
+XBINDKEYS=${XBINDKEYS:xbindkeys}
+XBINDKEYSRC=${XBINDKEYSRC:"~/.config/xbindkeys/xbindkeysrc.scm"}
+
+##################################################
+
+     # Whether « xbindkeys » is installed:
+
+if   [ -x "$(command -v "${XBINDKEYS}")" ]
+then
+
+     # Whether « xbindkeys » is running:
+
+if   pgrep -x "XBINDKEYS" > /dev/null
+
+then # Reload the config:
+
+     killall -s1 XBINDKEYS
+
+else # Start the daemon:
+
+     ${XBINDKEYS} --poll-rc -fg "${XBINDKEYSRC}"
+
+fi
+fi
+
+##################################################
+
+# ^ Start the « xbindkeys » daemon in the background.
+
+# ^ « --poll-rc » means: reload the config whenever it changes.
+
+# ^ « -fg _ » means: load the given config (a Guile File).
+# By default, the config is at « ~/.xbindkeysrc »,
+# which we've overriden to be under « $XDG_CONFIG_HOME ».
+
+##################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(use-modules (srfi srfi-19))
+(use-modules (ice-9 format))
+
+(define (run-command string) (system string))
+
+(define (notify-send title message)
+    (run-command
+     (format #f "notify-send '~a' '~a'" title message)))
+(define (popup-date)
+    (let ((DATE (date->string (current-date) "~A, ~B ~e ~Y ~H:~S"))
+          )
+      (notify-send "date" DATE)))
+
+(format #f "notify-send '~a' '~a'" "title" "message")
+(popup-date)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Files
+
+* `./bin/xxx-program-xxx`
+* `./share/man/man1/xxx-program-xxx.1.gz`
+* `./share/bash-completion/xxx-program-xxx.bash`
+* `./share/zsh-completion/xxx-program-xxx.zsh`
+* `./share/fish-completion/xxx-program-xxx.fish`
+
+
+
+
+
+
+
+
+
+## Files
+
+* `./bin/xxx-program-xxx`                   — 
+* `./share/man/man1/xxx-program-xxx.1.gz`   — 
+* `./share/completion/xxx-program-xxx.bash` — 
+* `./share/completion/xxx-program-xxx.zsh`  — 
+* `./share/completion/xxx-program-xxx.fish` — 
+
+
+
+
+
+
+
+
+
+
+
+
+## Files
+
+* `./bin/x86_64-linux/xxx-program-xxx`      — *statically-linked* executable (runs on any 64-bit Linux).
+* `./share/man/man1/xxx-program-xxx.1.gz`   — `man` page
+* `./share/completion/xxx-program-xxx.bash` — `bash` completion
+* `./share/completion/xxx-program-xxx.zsh`  — `zsh` completion
+* `./share/completion/xxx-program-xxx.fish` — `fish` completion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+;;----------------------------------------------;;
+;; Functions -----------------------------------;;
+;;----------------------------------------------;;
+
+(define (send-keys keys)
+
+  ;; 
+
+  (let ((keysyms keys) ;TODO concat, space-separated
+        )
+
+    (xdotool-key keysyms)))
+;;----------------------------------------------;;
+
+(define (parse-keys s)
+
+  ;; 
+
+  (let* ((keychords   (string-split s #\ ))
+         (keysequence (map (lambda (keychord)
+                             (string-split keychord #\-))
+                           keychords))
+         )
+
+    keysequence))
+
+;; e.g.
+;;
+;; M-: (parse-keys "C-c")
+;;   ⇒ (("C" "c"))
+;;
+
+;;----------------------------------------------;;
+
+(define (munge-keys s)
+
+  ;; 
+
+  (let* ((keysequence (parse-keys s))
+        )
+
+    keysequence))
+
+;; e.g.
+;;
+;; M-: (munge-keys "C-c")
+;;   ⇒ "Control_L+c"
+;;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+;;----------------------------------------------;;
+
+;; (xbindkey '(release "m:0x0" "c:118")
+;;           "xdotool key --clearmodifiers 'Control_L+0x76'")
+
+;; ;; needs extra presses
+;; ;; (xbindkey '(release "m:0x0" "c:___") ;; other keys don't work
+;; (xbindkey '(release "m:0x0" "c:107") ;; buggy
+;;  ;; "sleep 0.03 && xdotool key --clearmodifiers 'Control_L+0x63'")
+;;  ;; "xdotool key --clearmodifiers 'Control_L+0x63'") 
+;;  ;; "xte 'keydown Control_L' 'key C' 'keyup Control_L'")
+;; ;; "xvkbd -text '\\Cc'")
+;;  "xdotool keydown control key c xdotool keyup control")
+;;  ;; doesn't work in emacs (where i need it most), but works in terminal, seems to work in chrome and firefox
+
+;; (xbindkey '(release "m:0x0" "c:78")
+;;           "xdotool key --clearmodifiers 'Control_L+0x7a'")
+
+;;----------------------------------------------;;
+
+;; (xbindkey '(release "m:0x0" "c:0xff63") 
+;;  "xdotool key --clearmodifiers 'Control_L+v'")
+;; (xbindkey '(release "m:0x0" "c:0xff61")
+;;  "sleep 0.03 && xdotool key --clearmodifiers 'Control_L+c'")
+;; (xbindkey '(release "m:0x0" "c:0xff14") 
+;;  "xdotool key --clearmodifiers 'Control_L+z'")
+
+;; xdotool --clearmodifiers key 'control+_'
+
+;; (xbindkey '(release "m:0x0" "c:118") 
+;;  "xdotool key --clearmodifiers 'Control_L+v'")
+;; (xbindkey '(release "m:0x0" "c:107")
+;;  "sleep 0.03 && xdotool key --clearmodifiers 'Control_L+c'")
+;; (xbindkey '(release "m:0x0" "c:78") 
+;;  "xdotool key --clearmodifiers 'Control_L+z'")
+
+;; (xbindkey '("m:0x0" "c:118") "C-v")
+;; (xbindkey '("m:0x0" "c:107") "C-c")
+;; (xbindkey '("m:0x0" "c:78") "C-z")
+
+;; via `xbindkey -k`
+
+    ;; m:0x0 + c:9
+    ;; Escape
+
+    ;; m:0x0 + c:118
+    ;; Insert
+
+    ;; m:0x0 + c:107
+    ;; Print
+
+    ;; m:0x0 + c:78
+    ;; Scroll_Lock
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

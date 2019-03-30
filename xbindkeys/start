@@ -1,0 +1,60 @@
+#!/bin/bash
+
+# Start, or restart, « xbindkeys ».
+
+##################################################
+
+XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-"$HOME/.config"}
+
+XBINDKEYS=${XBINDKEYS:-xbindkeys}
+XBINDKEYSRC=${XBINDKEYSRC:-"${XDG_CONFIG_HOME}/xbindkeys/xbindkeysrc.scm"}
+
+##################################################
+
+# Whether « xbindkeys » is installed:
+
+if   [ -x "$(command -v "${XBINDKEYS}")" ]
+then
+
+    # Whether « xbindkeys » is running:
+
+    if   pgrep -x "xbindkeys" > /dev/null
+
+    then # Reload the config:
+
+        killall -s1 "${XBINDKEYS}"
+
+    else # Start the daemon:
+
+        ${XBINDKEYS} --poll-rc -fg "${XBINDKEYSRC}"
+
+    fi
+fi
+
+##################################################
+# Notes
+
+# ^ Variables
+#
+# • « ${p:-x} » is Bash syntax:
+#
+#   • return « $p » if « $p » is set.
+#   • return « x » if « $p » is unset.
+#
+# • « p=${p:-x} » means:
+#
+#   • initialize « $p » only if uninitialized.
+#
+
+# ^ Function
+#
+# • Start the « xbindkeys » daemon in the background.
+#
+# • « --poll-rc » means: reload the config whenever it changes.
+#
+# • « -fg _ » means: load the given config (a Guile File).
+# By default, the config is at « ~/.xbindkeysrc »,
+# which we've overriden to be under « $XDG_CONFIG_HOME ».
+#
+
+##################################################

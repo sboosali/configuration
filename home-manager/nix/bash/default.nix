@@ -42,6 +42,7 @@ bashCompletions = [
   ../../../bash/completion/home-manager.bash
   ../../../bash/completion/emacsclient
   ../../../bash/completion/xbindkeys
+  ../../../bash/completion/xbindkeys_show
 
 ];
 
