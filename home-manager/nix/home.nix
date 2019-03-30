@@ -141,7 +141,7 @@ self = rec {
 
   #----------------------------#
 
-  home.file = (import ./home/files.nix { inherit pkgs; })
+  home.file = (import ./home/files.nix { inherit pkgs xdg; })
           # // (import ./home/auto.nix  { inherit pkgs; })
             ;
 

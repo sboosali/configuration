@@ -1,0 +1,18 @@
+! 2015-06-15
+! change number layout, but not the shifted symbols
+
+! swap keys 8 and 1:
+
+keycode  17 = 1 asterisk 1 asterisk
+keycode  10 = 8 exclam 8 exclam
+
+! swap keys 7 and 2:
+
+keycode  11 = 7 at 7 at
+keycode  16 = 2 ampersand 2 ampersand
+
+! keycode  10 = 1 exclam 1 exclam
+! keycode  11 = 2 at 2 at
+! keycode  ...
+! keycode  16 = 7 ampersand 7 ampersand
+! keycode  17 = 8 asterisk 8 asterisk

@@ -123,7 +123,6 @@ in
 #xbacklight
 #xinput
 #xkeyboard-config
-#xmodmap
 #xprop
 #xsel-unstable
 #styx                           # https://styx-static.github.io/styx-site/
