@@ -10,11 +10,11 @@
  #-----------------------------#
 
 #TODO#
-# ".xinitrc".source     = import ./xinitrc.nix { inherit pkgs xdg; };
+# ".xinitrc".source     = import ../x11/xinitrc.nix { inherit pkgs xdg; };
 # ".xinitrc".executable = true;
 
 #TODO#
-# ".Xmodmap".source     = import ./xmodmap.nix { inherit pkgs xdg; };
+# ".Xmodmap".source     = import ../x11/xmodmap.nix { inherit pkgs xdg; };
 
  #-----------------------------#
 
@@ -22,6 +22,10 @@
  ".bash_aliases".source     = ../../../bash/bash_aliases;
  ".bash_definitions".source = ../../../bash/bash_definitions;
  ".bash_settings".source    = ../../../bash/bash_settings;
+
+ #-----------------------------#
+
+ ".inputrc".source          = ../../bash/inputrc.sh;
 
  #-----------------------------#
 

@@ -20,7 +20,17 @@ in
 {
   #----------------------------#
 
- "nix/nix.conf".source = ../../configs/nix.conf;
+ "nix/nix.conf".source = ../../../configs/nix/nix.conf;
+
+  #----------------------------#
+
+ "nixpkgs/home.nix".source   = ../../../configs/nixpkgs/home-noattrs.nix;
+ "nixpkgs/config.nix".source = ../../../configs/nixpkgs/config.nix;
+
+#"nixpkgs/overlays/default.nix".source = ../../../configs/nixpkgs/overlays/default.nix;
+
+#"nixpkgs/home.nix".source   = ../../../configs/nixpkgs/home-noattrs.nix;
+#"nixpkgs/home.nix".source   = ../../../configs/nixpkgs/home-attrs.nix;
 
   #----------------------------#
 

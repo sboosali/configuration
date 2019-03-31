@@ -1891,6 +1891,13 @@ keycode  35 = parenright braceright parenright braceright
 
 
 
+    for i in $(seq 1 $#)
+    do
+        i+=1
+        echo $i
+    done
+
+
 
 
 

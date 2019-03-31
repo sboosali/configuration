@@ -12,6 +12,17 @@
 # , emacsPackages     ? (pkgs.emacs26Packages)
 # , melpaPackages     ? (pkgs.emacs26PackagesNg)
 
+, platformLinux       ? true
+, platformDarwin      ? false
+
+, minimalInstallation ? false
+, maximalInstallation ? true
+
+, onlyEmacsPackages   ? false
+, onlySystemPrograms  ? false
+
+  #TODO# sboo prefix
+
 , ...
 }:
 
