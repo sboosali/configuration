@@ -218,9 +218,10 @@ moreEmacsPackages = (with epkgs; [
  multi-term
 
  #----------------------------------------------#
- # Miscellaneou
+ # Miscellaneous
 
  anzu                # shows total search hits in mode line (c.f. `query-replace`).
+ desktop-environment # « https://github.com/DamienCassou/desktop-environment/ »
  eimp
  elfeed
  elnode

@@ -1,0 +1,10 @@
+#!/nix/store/cinw572b38aln37glr0zb8lxwrgaffl4-bash-4.4-p23/bin/sh
+export PATH="$PATH:/nix/store/rbpyfy6413aqpik9aj6p3a2syd1mda68-binutils-wrapper-2.31.1/bin:/nix/store/d9s1kq1bnwqgxwcvv4zrc36ysnxg8gv7-coreutils-8.30/bin"
+exedir="/nix/store/8vq01xmxlp9wxzilkw85rb621ag7nwmd-ghc-8.6.4/lib/ghc-8.6.4/bin"
+exeprog="ghc-stage2"
+executablename="$exedir/$exeprog"
+datadir="oc/share/doc/ghc"
+bindir="/nix/store/8vq01xmxlp9wxzilkw85rb621ag7nwmd-ghc-8.6.4/bin"
+topdir="/nix/store/8vq01xmxlp9wxzilkw85rb621ag7nwmd-ghc-8.6.4/lib/ghc-8.6.4"
+executablename="$exedir/ghc"
+exec "$executablename" -B"$topdir" ${1+"$@"}

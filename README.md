@@ -12,6 +12,71 @@ Uses `nix`.
 * `./dictation/...` — Notes about Dictation & Instructions for configuring microphones and for installing `Dragon NaturallySpeaking` 15 within a `Windows 10` virtual-machine via `VirtualBox`
 * TODO
 
+## `./bin`
+
+`./bin` holds platform-specific, statically-linked executables. 
+
+only `nix` and `curl` (TODO no `git`?) are necessary for bootstrapping.
+
+to bootstrap, on your platform, register the programs. e.g., on 64-bit Linux:
+
+``` sh
+PATH="$(readlink -f ./bin/x86_64-linux):${PATH}"
+```
+
+### bootstrapping configuring
+
+static `nix`:
+
+``` sh
+$ ldd ./bin/x86_64-linux/nix
+
+  not a dynamic executable
+
+$ du -h ./bin/x86_64-linux/nix
+
+  11M
+
+$ ./bin/x86_64-linux/nix --version
+
+  nix (Nix) 2.2
+```
+
+### bootstrapping haskell
+
+static `cabal`:
+
+``` sh
+$ ldd ./bin/x86_64-linux/ghc
+
+  not a dynamic executable
+
+$ du -h ./bin/x86_64-linux/ghc
+
+  4K
+
+$ ./bin/x86_64-linux/ghc --numeric-version
+
+  8.6.4
+```
+
+static `cabal`:
+
+``` sh
+$ ldd ./bin/x86_64-linux/cabal
+
+  not a dynamic executable
+
+$ du -h ./bin/x86_64-linux/cabal
+
+  18M
+
+$ ./bin/x86_64-linux/cabal --numeric-version
+
+  2.2.0.0
+```
+
+### 
 
 ## Usage
 
