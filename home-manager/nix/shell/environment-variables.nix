@@ -23,6 +23,7 @@ browser = "google-chrome";
 locale = {
 
   en_US.UTF-8 = "en_US.UTF-8";
+  C.UTF-8     = "C.UTF-8";
 
 };
 
@@ -30,7 +31,8 @@ locale = {
 
 language = {
 
-  en_US = "en_US";
+  en_US = "en_US";              # American English.
+  el_GR = "el_GR";              # Greek (Ελληνικά)
 
 };
 
@@ -92,7 +94,9 @@ in
  LANGUAGE = language.en_US;
  LANG     = locale.en_US.UTF-8;
 
-# LC_ALL            = locale.en_US.UTF-8;
+ LC_ALL            = locale.C.UTF-8;
+ # ^ Fixes « commitBuffer: invalid argument (invalid character) » bug.
+
  LC_CTYPE          = locale.en_US.UTF-8;
  LC_NUMERIC        = locale.en_US.UTF-8;
  LC_TIME           = locale.en_US.UTF-8;

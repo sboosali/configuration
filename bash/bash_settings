@@ -1,11 +1,9 @@
 ### -*- mode: shell-script; -*-
 
-########################################
+#------------------------------------------------#
 
 # this file is "impure";
 # it has effects like overwriting environment variables, spawning daemons, calling `shopt`, etc
-
-# TODO rm /usr/games /usr/local/games /snap/bin #LOL Ubuntu
 
 # guard executions on whether the executable's present
 # 
@@ -13,10 +11,16 @@
 #  
 # fi
 
-########################################
-# NIX/NIXPKGS SETTINGS
+#------------------------------------------------#
+# Nix -------------------------------------------#
+#------------------------------------------------#
+
+# Settings for « nix » and « nixpkgs ».
+
+#------------------------------------------------#
 
 export NIX_PATH="nixpkgs=$HOME/nixpkgs:$NIX_PATH"
+
 #TODO# export NIX_PATH="nixpkgs=$HOME/nixpkgs:$NIX_PATH"
 
 # ^ my fork of `nixpkgs`
@@ -25,76 +29,199 @@ export NIX_PATH="nixpkgs=$HOME/nixpkgs:$NIX_PATH"
 
 #export NIX_PATH="nixpkgs=$HOME/nixpkgs:nixpkgs=$HOME/.nix-defexpr/channels/nixpkgs"
 
-########################################
-## IMPORTS
+#------------------------------------------------#
+# Imports ---------------------------------------#
+#------------------------------------------------#
 
 export CONFIGURATION="$HOME/configuration"
+
 # ^ location of my personal configuration ("dotfiles").
 # it's a single subdirectory to simplify version-control, including of this file itself
 # (though this complicates synchronization", i.e. symlinking things (`ln -sf`) all across the filesystem.)
 
-########################################
-## IMPORTS
+#------------------------------------------------#
 
 if [ -f .git-prompt.sh ]; then
   # shellcheck disable=SC1091 
   source .git-prompt.sh
 fi
 
-########################################
-## RE-SETTINGS
+#------------------------------------------------#
+# Initialization --------------------------------#
+#------------------------------------------------#
 
-# clear
+# Initialization (set variables or clear them).
+
+#------------------------------------------------#
+
 PROMPT_COMMAND=""
 
 #PROMPT_COMMAND=""
 #PROMPT_COMMAND="${PROMPT_COMMAND:+${PROMPT_COMMAND} ;} ...TODO..."
 
-########################################
-## LOCALE SETTINGS
+#------------------------------------------------#
+#  Bash Completion ------------------------------#
+#------------------------------------------------#
 
-# LANGUAGE=en_US
-# LANG=en_US.UTF-8
+# « source » bash-completion scripts.
 
-#TODO LC_ALL=en_US
-# ^ see <https://askubuntu.com/questions/114759/warning-setlocale-lc-all-cannot-change-locale>
-# $ sudo update-locale LC_ALL=en_US 3no this may have caused a bug for gnoom-terminal.
+#------------------------------------------------#
 
-########################################
-## BASH COMPLETION SETTINGS
+COMPLETION_FILES=( )
 
-for COMPLETION in ~/.nix-profile/etc/bash_completion.d/*
-do
-    source "$COMPLETION" || true
-done
-
-####################
+#------------------------------------------------#
 
 # don't wildcard the larger directory, whitelist instead.
 #NOTE too many errors from the completion-scripts of hundreds of random executable's.
 
 ##COMPLETION_SCRIPTS=~/.nix-profile/share/bash-completion/completions/*
 
-COMPLETION_DIRECTORY=~/.nix-profile/share/bash-completion/completions
+COMPLETION_DIRECTORIES=( )
+COMPLETION_DIRECTORIES+=( ~/.nix-profile/share/bash-completion/completions )
 
-COMPLETION_FILES=
-# wmctrl,
+#------------------------------------------------#
+
+COMPLETED_PROGRAMS=( )
+
+COMPLETED_PROGRAMS+=( "cabal2nix" )
+COMPLETED_PROGRAMS+=( "convert" )
+COMPLETED_PROGRAMS+=( "curl" )
+COMPLETED_PROGRAMS+=( "dconf" )
+COMPLETED_PROGRAMS+=( "desktop-file-validate" )
+COMPLETED_PROGRAMS+=( "dot" )
+COMPLETED_PROGRAMS+=( "feh" )
+COMPLETED_PROGRAMS+=( "find" )
+COMPLETED_PROGRAMS+=( "gcc" )
+COMPLETED_PROGRAMS+=( "gzip" )
+COMPLETED_PROGRAMS+=( "htop" )
+COMPLETED_PROGRAMS+=( "iconv" )
+COMPLETED_PROGRAMS+=( "info" )
+COMPLETED_PROGRAMS+=( "kill" )
+COMPLETED_PROGRAMS+=( "man" )
+COMPLETED_PROGRAMS+=( "nano" )
+COMPLETED_PROGRAMS+=( "nix" )
+COMPLETED_PROGRAMS+=( "nix-build" )
+COMPLETED_PROGRAMS+=( "nix-channel" )
+COMPLETED_PROGRAMS+=( "nix-collect-garbage" )
+COMPLETED_PROGRAMS+=( "nix-copy-closure" )
+COMPLETED_PROGRAMS+=( "nix-instantiate" )
+COMPLETED_PROGRAMS+=( "nix-shell" )
+COMPLETED_PROGRAMS+=( "pgrep" )
+COMPLETED_PROGRAMS+=( "rg" )
+COMPLETED_PROGRAMS+=( "rsync" )
+COMPLETED_PROGRAMS+=( "scp" )
+COMPLETED_PROGRAMS+=( "sqlite" )
+COMPLETED_PROGRAMS+=( "ssh" )
+COMPLETED_PROGRAMS+=( "ssh-add" )
+COMPLETED_PROGRAMS+=( "ssh-keygen" )
+COMPLETED_PROGRAMS+=( "stack" )
+COMPLETED_PROGRAMS+=( "sudo" )
+COMPLETED_PROGRAMS+=( "tar" )
+COMPLETED_PROGRAMS+=( "tput" )
+COMPLETED_PROGRAMS+=( "wget" )
+COMPLETED_PROGRAMS+=( "xmodmap" )
+COMPLETED_PROGRAMS+=( "xrandr" )
+
+# COMPLETED_PROGRAMS+=( "7z" )
+# COMPLETED_PROGRAMS+=( "autoconf" )
+# COMPLETED_PROGRAMS+=( "c++" )
+# COMPLETED_PROGRAMS+=( "clang" )
+# COMPLETED_PROGRAMS+=( "dd" )
+# COMPLETED_PROGRAMS+=( "dd" )
+# COMPLETED_PROGRAMS+=( "dpkg" )
+# COMPLETED_PROGRAMS+=( "dpkg-deb" )
+# COMPLETED_PROGRAMS+=( "dpkg-query" )
+# COMPLETED_PROGRAMS+=( "dpkg-reconfigure" )
+# COMPLETED_PROGRAMS+=( "dpkg-source" )
+# COMPLETED_PROGRAMS+=( "evince" )
+# COMPLETED_PROGRAMS+=( "git-annex" )
+# COMPLETED_PROGRAMS+=( "gpg" )
+# COMPLETED_PROGRAMS+=( "gpg2" )
+# COMPLETED_PROGRAMS+=( "gzip" )
+# COMPLETED_PROGRAMS+=( "jar" )
+# COMPLETED_PROGRAMS+=( "java" )
+# COMPLETED_PROGRAMS+=( "javac" )
+# COMPLETED_PROGRAMS+=( "mount" )
+# COMPLETED_PROGRAMS+=( "mysql" )
+# COMPLETED_PROGRAMS+=( "nix-env" )
+# COMPLETED_PROGRAMS+=( "pinfo" )
+# COMPLETED_PROGRAMS+=( "ping" )
+# COMPLETED_PROGRAMS+=( "ping6" )
+# COMPLETED_PROGRAMS+=( "sysctl" )
+# COMPLETED_PROGRAMS+=( "timeout" )
+# COMPLETED_PROGRAMS+=( "vi" )
+# COMPLETED_PROGRAMS+=( "xgamma" )
+# COMPLETED_PROGRAMS+=( "xrdb" )
+
+#COMPLETED_PROGRAMS+=( "" )
+
+# COMPLETED_PROGRAMS+=( "find" )
+# COMPLETED_PROGRAMS+=( "pkill" )
+# COMPLETED_PROGRAMS+=( "wmctrl" )
 
 #TODO
 # cabal doesn't exist
 # scp errors
 
-for COMPLETION in "$COMPLETION_DIRECTORY"/{sudo,find,export,declare,ssh-add,ssh-keygen,xmodmap,xrandr,dconf,curl,ping,dd,gzip,rsync,kill,htop,pkill,pgrep,pinfo,iconv,dot,feh,stack}
+##################################################
+
+for CompletionFile in "${COMPLETION_FILES[@]}"
+do
+    # shellcheck source=/dev/null
+    source "${CompletionFile}" || true
+done
+
+#------------------------------------------------#
+
+for CompletionFile in ~/.nix-profile/etc/bash_completion.d/*
+do
+    # shellcheck source=/dev/null
+    source "${CompletionFile}" || true
+done
+
+#------------------------------------------------#
+
+# local CompletionDirectory
+# local CompletionFile
+# local CompletionName
+
+for CompletedProgram in "${COMPLETED_PROGRAMS[@]}"
 do
 
-    if   [[ -e "$COMPLETION" ]]
-    then source "$COMPLETION" || true
-    fi
+    for CompletionDirectory in "${COMPLETION_DIRECTORIES[@]}"
+    do
+
+        CompletionFile="${CompletionDirectory}/${CompletedProgram}"
+
+        if   [[ -e "${CompletionFile}" ]]
+        then
+            # shellcheck source=/dev/null
+            source "${CompletionFile}" || true
+
+            break
+            # ^ « break » from « CompletionDirectory » loop
+            #   which continues to the next iteration of « CompletedProgram » loop.
+            #   thus, only « source » the first completion script (for any given program to-be-completed).
+
+        elif [[ -e "${CompletionFile}.bash" ]]
+             # try the file itself and the file with extensions (e.g. « .bash ») suffixed.
+        then
+            # shellcheck source=/dev/null
+            source "${CompletionFile}.bash" || true
+
+            break
+            # try the file itself and the file with extensions (e.g. « .bash ») suffixed.
+        fi
+
+    done
+
 done
+
+#------------------------------------------------#
 
 ### {sudo,find,ls,export,declare,git,ghc,ghcjs,cabal,clang,gcc,g++,ssh,ssh-add,ssh-keygen,xmodmap,xrandr,xbindkeys,dconf,curl,ping,dd,tar,gzip,7z,rsync,htop,pkill,pgrep,pandoc,iconv,dot,nano,emacs,emacsclient,feh,scp,VBoxManage}
 
-####################
+#------------------------------------------------#
 
 # $ source "$(dirname $(readlink $(which git)))/"../share/git/contrib/completion/git-completion.bash || true
 # ^ custom subdirectory, for `git`.
@@ -174,7 +301,7 @@ export HISTFILE=~/.bash_history_eternal  # any `bash --norc` will truncate the d
 
 sboo-prompt-command-history() {
 
-    history -a; history -c; history -r;
+    history -a; history -r;
 
 }
 
@@ -198,24 +325,42 @@ export PROMPT_COMMAND="$SBOO_PROMPT_COMMAND_HISTORY; $PROMPT_COMMAND"
 
 #--------------------------------------#
 
-#########################################
-## UBUNTU BASHRC DEFAULT SETTINGS
+#------------------------------------------------#
+# Ubuntu Bashrc ---------------------------------#
+#------------------------------------------------#
+
+# default settings from Ubuntu BashRC.
+
+#------------------------------------------------#
 
 # check the window size after each command and, if necessary,
-# update the values of LINES and COLUMNS.
+# update the values of « $LINES » and « $COLUMNS ».
+
 shopt -s checkwinsize
 
-# If set, the pattern "**" used in a pathname expansion context will
+#------------------------------------------------#
+
+# If set, the pattern « ** » used in a pathname expansion context will
 # match all files and zero or more directories and subdirectories.
+
 shopt -s globstar
 
-# make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+#------------------------------------------------#
+
+# make less more friendly for non-text input files, see « lesspipe(1) »
+
+#TODO
+# [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+#------------------------------------------------#
 
 # set variable identifying the chroot you work in (used in the prompt below)
+
 if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
+
+#------------------------------------------------#
 
 # the focus in a terminal window
 # should be on the output of commands, not on the prompt
@@ -229,7 +374,10 @@ fi
 #     ;;
 # esac
 
-# enable color support of ls and also add handy aliases
+#------------------------------------------------#
+
+# enable color support of ls and also add handy aliases:
+
 if [ -x /usr/bin/dircolors ]; then
 
     if   test -r ~/.dircolors
@@ -246,12 +394,18 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
-# colored GCC warnings and errors
+#------------------------------------------------#
+
+# colored GCC warnings and errors:
+
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+
+#------------------------------------------------#
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
+
 if ! shopt -oq posix; then
   if [ -f /usr/share/bash-completion/bash_completion ]; then
     # shellcheck disable=SC1091,SC1094
@@ -262,70 +416,87 @@ if ! shopt -oq posix; then
   fi
 fi
 
+#------------------------------------------------#
+
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-########################################
-## PROMPT SETTINGS
+#------------------------------------------------#
+# Colors ----------------------------------------#
+#------------------------------------------------#
 
-# Color prompt for git
-reset=$(tput sgr0)
-boldgreen=$(tput setaf 2)$(tput bold)
-cyan=$(tput sgr0)$(tput setaf 6)
-boldred=$(tput setaf 1)$(tput bold)
-boldwhite=$(tput setaf 7)$(tput bold)
-boldyellow=$(tput setaf 3)$(tput bold)
+# tput -T"${TERM}" longname
 
-PARENCLR=$'\001\e[0;36m\002'
-BRANCHCLR=$'\001\e[1;33m\002'
+if   tput longname >/dev/null 2>&1
+     # Whether « $TERM » is a known terminal.
+     # TODO check whether it has color capabilities
+then
 
-alias branchname="git branch 2>/dev/null | sed -ne 's/^* \(.*\)/ ${PARENCLR}(${BRANCHCLR}\1${PARENCLR}\)/p'"
+    # Colors for the Git Prompt:
 
-GIT_STATUS='$(branchname)'
+    color_reset="$(tput sgr0)"
+    color_bold="$(tput bold)"
 
-PROMPT_CHAR="\$"
-PS1="\[$boldgreen\]\u\[$cyan\]::\[$boldred\]\h \[$cyan\]{\[$boldwhite\].../\W\[$cyan\]}\[$reset\]$GIT_STATUS\[$reset\]$PROMPT_CHAR "
+    color_fg_black="$(tput setaf 0)"
+    color_fg_red="$(tput setaf 1)"
+    color_fg_green="$(tput setaf 2)"
+    color_fg_yellow="$(tput setaf 3)"
+    color_fg_blue="$(tput setaf 4)"
+    color_fg_magenta="$(tput setaf 5)"
+    color_fg_cyan="$(tput setaf 6)"
+    color_fg_white="$(tput setaf 7)"
 
-#--------------------------------------#
+    # color_fg_green_bold="$(tput setaf 2)$(tput bold)"
+    # color_fg_red_bold="$(tput setaf 1)$(tput bold)"
+    # color_fg_white_bold="$(tput setaf 7)$(tput bold)"
+    # color_fg_yellow_bold="$(tput setaf 3)$(tput bold)"
 
-# https://stackoverflow.com/a/26759734/1337806
-sboo-set-branch() {
+    # reset="$(tput sgr0)"
 
-    if [ -x "$(command -v __git_ps1)" ]
-       # ^ if present and executable
-    then
-        BRANCH="$(__git_ps1 \(%s\))"
-        # echo $BRANCH
-    fi
+else
+    # ^ the guards fix « tput: unknown terminal "emacs-grep" ».
 
-}
+    color_reset=
+    color_bold=
 
-# ^ unless empty or unset
-# shellcheck disable=SC2154 
-# if [ -z "$__git_ps1" ]; then
+    color_fg_black=
+    color_fg_red=
+    color_fg_green=
+    color_fg_yellow=
+    color_fg_blue=
+    color_fg_magenta=
+    color_fg_cyan=
+    color_fg_white=
 
-#--------------------------------------#
+    # color_fg_green_bold=
+    # color_fg_boldred=
+    # color_fg_boldwhite=
+    # color_fg_boldyellow=
 
-sboo-prompt-command-git() {
- sboo-set-branch
-}
+fi
 
-SBOO_PROMPT_COMMAND_GIT="{ [ -x sboo-prompt-command-git ] && sboo-prompt-command-git; }"
+#------------------------------------------------#
 
-export PROMPT_COMMAND="$SBOO_PROMPT_COMMAND_GIT; $PROMPT_COMMAND"
+export color_reset
+export color_bold
 
-# function sboo-get-branch {
-#  # unless empty or unset
-#  if [ -z "$__git_ps1" ]; then
-#    "$(__git_ps1 \(%s\))"
-#  fi
-# }
+export color_fg_black
+export color_fg_red
+export color_fg_green
+export color_fg_yellow
+export color_fg_blue
+export color_fg_magenta
+export color_fg_cyan
+export color_fg_white
 
-########################################
-# Per-DesktopEnvironment
+#------------------------------------------------#
+# Desktop Environment ---------------------------#
+#------------------------------------------------#
 
-#--------------------------------------#
+# Desktop-Environment(-Specific) Settings 
+
+#------------------------------------------------#
 
 sboo-desktop-settings-for-only-xubuntu() {
 
@@ -333,7 +504,7 @@ sboo-desktop-settings-for-only-xubuntu() {
 
 }
 
-#--------------------------------------#
+#------------------------------------------------#
 
 #sboo-desktop-settings-for-only-plasma() { return; }
 
@@ -343,7 +514,7 @@ sboo-desktop-settings-for-only-xubuntu() {
 
 sboo-desktop-settings-for-only-unknown() { return; }
 
-#--------------------------------------#
+#------------------------------------------------#
 
 sboo-desktop-settings() {
 
@@ -374,21 +545,157 @@ sboo-desktop-settings() {
 
 }
 
-#--------------------------------------#
+##################################################
 
 sboo-desktop-settings
 
-########################################
-###NOTES
+#------------------------------------------------#
+# Prompt ----------------------------------------#
+#------------------------------------------------#
+
+# https://stackoverflow.com/a/26759734/1337806
+
+sboo-set-branch() {
+
+    if [ -x "$(command -v __git_ps1)" ]
+       # ^ if present and executable
+    then
+        # shellcheck disable=SC2034
+        BRANCH="$(__git_ps1 \(%s\))"
+        # echo $BRANCH
+    fi
+
+}
+
+# ^ unless empty or unset
+# shellcheck disable=SC2154 
+# if [ -z "$__git_ps1" ]; then
+
+#--------------------------------------#
+
+sboo-prompt-command-git() {
+
+    sboo-set-branch
+
+}
+
+#--------------------------------------#
+
+SBOO_PROMPT_COMMAND_GIT="{ [ -x sboo-prompt-command-git ] && sboo-prompt-command-git; }"
+
+#--------------------------------------#
+
+export PROMPT_COMMAND="$SBOO_PROMPT_COMMAND_GIT; $PROMPT_COMMAND"
+
+#--------------------------------------#
+
+# function sboo-get-branch {
+#  # unless empty or unset
+#  if [ -z "$__git_ps1" ]; then
+#    "$(__git_ps1 \(%s\))"
+#  fi
+# }
+
+##################################################
+# Simple Prompt:
+#------------------------------------------------#
+
+# PS1="\u@\h: \[${color_bold}\]\w\[${color_reset}\] \$ "
+
+#------------------------------------------------#
+
+##################################################
+# Clean Prompt:
+#------------------------------------------------#
+
+SBOO_DEFAULT_USER="sboo"
+
+SBOO_DEFAULT_HOSTNAME="SpirOS"
+
+SBOO_DEFAULT_GIT_BRANCHNAME="master"
+
+#------------------------------------------------#
+
+sboo-ps1-user-host() {
+
+    local U
+    local H
+    local UH
+
+    U="${USER}"
+    H="${HOSTNAME}"
+
+    if [ "${U}" == "${SBOO_DEFAULT_USER}" ]
+    then
+        U=
+    fi
+    
+    if [ "${H}" == "${SBOO_DEFAULT_HOSTNAME}" ]
+    then
+        H=
+    fi
+
+    if  [ -z "${U}" ] && [ -z "${H}" ]
+    then
+        UH=
+    else
+        UH="${U}@${H}"
+    fi
+
+    echo "${UH}"
+
+}
+
+#------------------------------------------------#
+
+#TODO...
+# YELLOW="\\[$(tput setaf 3)\\]"
+# RESET="\\[$(tput sgr0)\\]"
+# PS1="\\n\${BRANCH}${YELLOW}\\w${RESET}\$ "
+
+##################################################
+# Git Prompt:
+#------------------------------------------------#
+
+alias sboo-ps1-git-branch-name="git branch 2>/dev/null | sed -ne 's/^* \(.*\)/ (\1\)/p'"
+
+#------------------------------------------------#
+
+# shellcheck disable=SC2016
+SBOO_GIT_STATUS='$(sboo-ps1-git-branch-name)'
+
+# shellcheck disable=SC2016
+SBOO_USER_HOST_STATUS='$(sboo-ps1-user-host)'
+
+#------------------------------------------------#
+
+PS1="${SBOO_USER_HOST_STATUS}\[${color_fg_green}\]\w\[${color_reset}\]\[${color_fg_blue}\]${SBOO_GIT_STATUS}\[${color_reset}\] \$ "
+
+#------------------------------------------------#
+# Direnv ----------------------------------------#
+#------------------------------------------------#
+
+###TODO eval "$(direnv hook bash)"
+### wrecked my Emacs PATHs.
+
+# ^
+# 
+# > Ensure `direnv` appears *after* other shell extensions that manipulate the prompt, e.g. `git-prompt`.
+#
+# https://direnv.net/
+
+#------------------------------------------------#
+# Notes -----------------------------------------#
+#------------------------------------------------#
 
 # this sets the prompt to show the current directory
 # later settings should preserve this as an infix:
 #     PS1="...${PS1}..."
 
-# GREEN="\\[$(tput setaf 2)\\]"
-YELLOW="\\[$(tput setaf 3)\\]"
-RESET="\\[$(tput sgr0)\\]"
-PS1="\\n\${BRANCH}${YELLOW}\\w${RESET}\$ "
+# # GREEN="\\[$(tput setaf 2)\\]"
+# YELLOW="\\[$(tput setaf 3)\\]"
+# RESET="\\[$(tput sgr0)\\]"
+# PS1="\\n\${BRANCH}${YELLOW}\\w${RESET}\$ "
 
 # ^ ERROR(/Warning): « "tput unknown terminal" ».
 #
@@ -444,22 +751,25 @@ PS1="\\n\${BRANCH}${YELLOW}\\w${RESET}\$ "
 # thus, we need a placeholder, like the return keyword or a semicolon.
 #
 
-#NOTE
+# # shellcheck disable=SC2016
+# GIT_STATUS='$(branchname)'
 #
-# 
-
-#########################################
-# DIRENV ################################
-#########################################
-
-###TODO eval "$(direnv hook bash)"
-### wrecked my Emacs PATHs.
-
-# ^
-# 
-# > Ensure `direnv` appears *after* other shell extensions that manipulate the prompt, e.g. `git-prompt`.
+# PROMPT_CHAR="\$"
+# PS1="\[${color_fg_green}\]\u\[${color_fg_cyan}\]::\[${color_fg_red}\]\h \[${color_fg_cyan}\]{\[${color_fg_white}\].../\W\[${color_fg_cyan}\]}\[${color_reset}\]${GIT_STATUS}\[${color_reset}\] ${PROMPT_CHAR} "
 #
-# https://direnv.net/
+# # e.g. « sboo::SpirOS {.../haskell}$ »
 
-#########################################
-#########################################
+# see <https://askubuntu.com/questions/114759/warning-setlocale-lc-all-cannot-change-locale>
+#   $ sudo update-locale LC_ALL=en_US # no this may have caused a bug for gnome-terminal.
+
+# TODO rm /usr/games /usr/local/games /snap/bin #LOL Ubuntu
+
+# PARENCLR=$'\001\e[0;36m\002'
+# BRANCHCLR=$'\001\e[1;33m\002'
+#
+# # shellcheck disable=SC2139
+# alias branchname="git branch 2>/dev/null | sed -ne 's/^* \(.*\)/ ${PARENCLR}(${BRANCHCLR}\1${PARENCLR}\)/p'"
+
+#------------------------------------------------#
+# EOF -------------------------------------------#
+#------------------------------------------------#
