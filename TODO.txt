@@ -1,25 +1,63 @@
+# TODO
+
+
+
+
+
+##
+
+
+
+
+
+##
+
+
+
+
+
+##
 
 
 
 
 
 
+##
+
+tput: unknown terminal "emacs-grep"
+
+
+
+## eshell-aliases
+
+ "de" = ''cd ~/.emacs.d      && if type xterm-set-title; then xterm-set-title "emacs";   fi'';
+
+ cd-external-hard-drive = ''cd /media/sboo/toshiba-ext_*/ && df .'';
+
+ fx   = ''${find} -L . -type f -executable'';
+
+ p = "${grep} -i -n -C 0";
+
+ gpac = "${git} add . && ${git} commit -m . && ${git} push";# MNEMONIC: «P»ush after «A»dding and «C»ommiting
+
+ gorc = "${git} status --porcelain | cut -d ' ' -f 3 | tr '\\n' ' '";
+
+ xv=''${xev} | ${grep} -A2 --line-buffered '^KeyRelease' | ${sed} -n '/keycode /s/^.*keycode \([0-9]*\).* (.*, \(.*\)).*$/\1 \2/p''; #TODO
+
+ screen-red     = "${redshift} -x && ${redshift} -O 1000";
+
+ sboo-home-manager-switch--cloned = ''NIX_PATH=nixpkgs=${nixpkgs.sboo-clone} ${home-manager} -f ${sboo.files."home.nix"} switch'';
+
+ alert = ''notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e 's/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//')"'';
+
+ sboo-zip-configs = ''tar -cz -v  -f "config_$(date +%Y-%m-%d).tar.gz"  -C /  "home/${env.HOME}/.config" "etc/xdg/xfce4" "etc/xdg/Thunar" "etc/xdg/menus" "etc/xdg/xdg-xubuntu" '';
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+##
 
 #complete -W "help edit build switch generations remove-generations expire-generations packages news" home-manager
 

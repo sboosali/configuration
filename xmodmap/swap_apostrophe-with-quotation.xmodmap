@@ -1,12 +1,10 @@
 ! ============================================== !
 
-! 2015-06-15
-! http://xahlee.info/linux/linux_xmodmap_tutorial.html
+! 2019-04-01
 
 ! ---------------------------------------------- !
 
-! change unshifted layout,
-! but the preserve the shifted symbols.
+! Switch 
 
 ! ---------------------------------------------- !
 ! Keybindings ---------------------------------- !

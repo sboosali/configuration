@@ -34,9 +34,11 @@ in
 
   #----------------------------#
 
- "xfce4/terminal/terminalrc".source = if sboo.dark
-    then ../../../submodules/xfce4-terminal-colors-solarized/dark-high-contrast/terminalrc
-    else ../../../submodules/xfce4-terminal-colors-solarized/light/terminalrc;
+ "xfce4/terminal/terminalrc".source = ../../../themes/zenburn/terminalrc;
+
+ # "xfce4/terminal/terminalrc".source = if sboo.dark
+ #    then ../../../submodules/xfce4-terminal-colors-solarized/dark-high-contrast/terminalrc
+ #    else ../../../submodules/xfce4-terminal-colors-solarized/light/terminalrc;
 
   #----------------------------#
 
