@@ -1,5 +1,7 @@
 ##################################################
-{ sboo
+{ pkgs
+
+, sboo
 , applications
 , xdgUtilities
 }:
@@ -34,7 +36,9 @@ in
 
   #----------------------------#
 
- "xfce4/terminal/terminalrc".source = ../../../themes/zenburn/terminalrc;
+ "xfce4/terminal/terminalrc".source = ../../../themes/solarized/terminalrc;
+
+ # "xfce4/terminal/terminalrc".source = ../../../themes/zenburn/terminalrc;
 
  # "xfce4/terminal/terminalrc".source = if sboo.dark
  #    then ../../../submodules/xfce4-terminal-colors-solarized/dark-high-contrast/terminalrc
@@ -42,7 +46,10 @@ in
 
   #----------------------------#
 
- "cabal/config".text                 = import ../cabal/cabal-global.project.nix {};
+ "cabal/config".text = import ../cabal/cabal-global.project.nix {
+   inherit (pkgs) pass;
+ };
+
 #"stack/config.yaml".source = ../../../stack/config.yaml; #TODO
 
   #----------------------------#

@@ -409,9 +409,17 @@ in
 
  #-----------------------------------------------#
 
-  #----------------------------------------------#
-
  h = "( rm -fr ~/.cabal/packages/hackage.mobilehaskell/ ) ; ${cabal} new-build all";   # build {a}ll
+
+ #-----------------------------------------------#
+
+ cabal-run  = "LC_ALL=C.UTF-8 ${cabal} new-run";
+ cabal-exec = "LC_ALL=C.UTF-8 ${cabal} new-exec --";
+
+ cabal-build = "${cabal} new-build";
+ cabal-test  = "${cabal} new-test";
+ cabal-bench = "${cabal} new-bench";
+# cabal-     = "${cabal} new- ";
 
  #-----------------------------------------------#
 

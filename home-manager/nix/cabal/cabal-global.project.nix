@@ -1,9 +1,10 @@
-{}:
+{ pass
+}:
 
 ##################################################
 let
 
-config = {
+config = rec {
 
   verbose = 2;
   jobs    = 4;
@@ -21,10 +22,7 @@ config = {
   allow-newer = false;
 
   username         = "sboo";
-  password-command = "sboo-get-hackage-password";
-                    # ^ defined in « ~/.profile ».
-
-  #TODO ''${pass} "www.hackage.com/user/sboo"''
+  password-command = ''${pass}/bin/pass hackage.haskell.org/user/${username} 2>/dev/null'';
 
   remote-build-reporting = "detailed";
 
@@ -41,6 +39,35 @@ int = builtins.toString;
 
 path = builtins.toString;
 
+repository = {
+
+  stackage = { snapshot ? null, nightly ? null, lts ? null }:
+
+  let
+  snapshot' =
+
+    if snapshot != null then snapshot
+    else
+
+    if lts      != null then lts'
+    else
+
+    if nightly  != null then nightly'
+    else
+
+    abort ''« repository.stackage {} » one field is required, one of: « snapshot », « nightly », « lts ».'';
+
+  nightly' = ''nightly-${builtins.toString nightly}'';
+  lts'     = ''lts-${builtins.toString lts}'';
+  in
+
+  ''
+  repository stackage-${snapshot'}
+    url: https://www.stackage.org/${snapshot'}
+  '';
+
+};
+
 in
 ##################################################
 ''
@@ -48,13 +75,11 @@ in
 -- Repositories ----------------------------------
 --------------------------------------------------
 
-repository stackage-lts-13.13
-
-  url: https://www.stackage.org/lts-13.13
+${repository.stackage { lts = "13.15"; }}
 
   -- ^ Stackage, GHC-8.6.4 (circa 2019-03)
   -- 
-  -- See: https://www.stackage.org/lts-13.9/cabal.config?global=true
+  -- See: https://www.stackage.org/lts-13/cabal.config?global=true
   -- 
 
 --------------------------------------------------
