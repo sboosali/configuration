@@ -19,3 +19,6 @@
 [submodule "haskell-mode"]
 	path = submodules/haskell-mode
 	url = https://github.com/haskell/haskell-mode
+[submodule "nix-bash-completions"]
+	path = submodules/nix-bash-completions
+	url = https://github.com/hedning/nix-bash-completions
