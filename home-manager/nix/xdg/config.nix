@@ -36,7 +36,7 @@ in
 
   #----------------------------#
 
- "xfce4/terminal/terminalrc".source = ../../../themes/solarized/terminalrc;
+ "xfce4/terminal/terminalrc".source = ../../../themes/sboo/terminalrc;
 
  # "xfce4/terminal/terminalrc".source = ../../../themes/zenburn/terminalrc;
 
