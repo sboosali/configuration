@@ -188,6 +188,10 @@ self = rec {
   };
 
   #----------------------------#
+
+  manual.html.enable = true;
+
+  #----------------------------#
   # Keyboard:
 
   home.keyboard = import ./home/keyboard.nix {};

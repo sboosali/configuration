@@ -7,7 +7,7 @@ let
 config = rec {
 
   verbose = 2;
-  jobs    = 4;
+  jobs    = 1;
 
   nix           = false;
   deterministic = true;

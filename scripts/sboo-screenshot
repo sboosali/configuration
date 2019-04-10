@@ -1,0 +1,88 @@
+#!/bin/bash
+set -eu
+
+##################################################
+
+# Creates a screenshot using the gnome-screenshot utility
+# based on an area selection and automatically
+# saves it to the dedicated pictures folder.
+
+display_usage() {
+    echo -e "Usage:\tscreenshot-area [options]"
+    echo -e "Options:\n\t-l|--locate to open file with nautilus\n\t-p|--preview to preview the image afterwards\n"
+}
+
+#------------------------------------------------#
+
+sboo-screenshot-per-desktop-session() {
+
+    case "$DESKTOP_SESSION" in
+
+        # ^ for conditioning on the current desktop environment.
+
+        "xubuntu")
+            xfce4-screenshooter -f $_filename
+            ;;
+
+        "plasma")
+            #            sboo-desktop-settings-for-only-plasma
+            ;;
+        
+        "gnome"|"ubuntu")
+            gnome-screenshot --area --file=$_filename
+            ;;
+
+
+        *)
+            ;;
+    esac
+
+}
+
+##################################################
+
+_locate=false
+_preview=false
+
+#------------------------------------------------#
+
+for i in "$@"
+do
+    case $i in
+        -l|--locate)
+            _locate=true
+            ;;
+        -p|--preview)
+            _preview=true
+            ;;
+        *)
+            echo "Unknown argument '$i'"
+            display_usage
+            exit 1
+            ;;
+    esac
+done
+
+#------------------------------------------------#
+
+_now=$(date +"%m-%d-%Y-%H-%M-%S")
+_pictures_directory="$HOME/Pictures/screenshots"
+_filename="$_pictures_directory/screenshot-$_now.png"
+
+#------------------------------------------------#
+
+if [ ! -d "$_pictures_directory" ]; then
+    mkdir -p "$_pictures_directory"
+fi
+
+sboo-screenshot-per-desktop-session
+
+if [ $_locate = true ]; then
+    nautilus "$_filename"
+fi
+
+if [ $_preview = true ]; then
+    xdg-open "$_filename"
+fi
+
+##################################################

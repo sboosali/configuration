@@ -31,6 +31,7 @@ in
  cabal-install                  # Comment-out to use development-version « cabal-install-2.5.0.0 » in « ~/.cabal/bin ».
  cabal2nix
  bat                            # a cat(1) clone with "wings" (i.e. syntax highlighting and Git integration.) « https://github.com/sharkdp/bat »
+ bfg-repo-cleaner               # « bfg » (reverse acronym of « git-filter-branch »). « https://help.github.com/en/articles/removing-sensitive-data-from-a-repository »
  colordiff
  dex
  dhall

@@ -32,7 +32,8 @@ in
 
  ghcid                          # GHCi Daemon
  hasktags                       # TAGS-generator
- hpack                          # 
+ hpack                          #
+#liquidhaskell                  # Haskell (Refinement-)Type-Checker
 
  git-annex                      # 
 

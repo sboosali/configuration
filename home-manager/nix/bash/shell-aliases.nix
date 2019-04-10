@@ -154,6 +154,10 @@ in
 
  #-----------------------------------------------#
 
+ cd-mtg = ''cd ~/haskell/mtg && if type xterm-set-title; then xterm-set-title "mtg"; fi'';
+
+ #-----------------------------------------------#
+
  cd-xdg-data   = ''cd ${XDG_DATA_HOME}'';
  cd-xdg-config = ''cd ${XDG_CONFIG_HOME}'';
  cd-xdg-cache  = ''cd ${XDG_CACHE_HOME}'';
@@ -417,8 +421,8 @@ in
  cabal-exec = "LC_ALL=C.UTF-8 ${cabal} new-exec --";
 
  cabal-build = "${cabal} new-build";
- cabal-test  = "${cabal} new-test";
- cabal-bench = "${cabal} new-bench";
+ cabal-test  = "${cabal} new-test --enable-tests";
+ cabal-bench = "${cabal} new-bench --enable-benchmarks";
 # cabal-     = "${cabal} new- ";
 
  #-----------------------------------------------#

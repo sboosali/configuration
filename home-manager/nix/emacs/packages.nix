@@ -165,6 +165,7 @@ moreEmacsPackages = (with epkgs; [
 
  wrap-region
  # ^ Wrap selection with punctuations, tags (org-mode, markdown-mode, ..)
+ #   « https://github.com/rejeep/wrap-region.el »
 
  deft                           # « Notational Velocity » port
  # ^ Quick note taking and management
