@@ -1,29 +1,47 @@
 [Configuration]
 
-# Colors (8-color Solarized):
+# Colors ("8"-color Solarized Light theme):
 
 ColorCursor=#586e75
 ColorForeground=#657b83
 ColorBackground=#fdf6e3
 ColorPalette=#073642;#dc322f;#859900;#b58900;#268bd2;#d33682;#2aa198;#eee8d5;#002b36;#cb4b16;#93a1a1;#839496;#657b83;#6c71c4;#586e75;#fdf6e3
 
-# Settings:
+# Fonts:
 
-MiscAlwaysShowTabs=FALSE
+#FontName=DejaVu Sans Mono 9
+
+# Settings (tabs):
+
+MiscTabCloseButtons=FALSE
+MiscTabPosition=GTK_POS_BOTTOM
+MiscAlwaysShowTabs=TRUE
+MiscCycleTabs=TRUE
+MiscTabCloseMiddleClick=FALSE
+
+# Settings (scrolling):
+
+ScrollingLines=999999
+
+# Settings (misc):
+
 MiscBell=FALSE
 MiscBordersDefault=TRUE
 MiscCursorBlinks=FALSE
-MiscCursorShape=TERMINAL_CURSOR_SHAPE_BLOCK
+MiscCursorShape=TERMINAL_CURSOR_SHAPE_BLOCK # TERMINAL_CURSOR_SHAPE_BLOCK (the default), TERMINAL_CURSOR_SHAPE_IBEAM, TERMINAL_CURSOR_SHAPE_UNDERLINE.
 MiscDefaultGeometry=80x24
 MiscInheritGeometry=FALSE
 MiscMenubarDefault=TRUE
 MiscMouseAutohide=FALSE
 MiscToolbarDefault=FALSE
 MiscConfirmClose=TRUE
-MiscCycleTabs=TRUE
-MiscTabCloseButtons=TRUE
-MiscTabCloseMiddleClick=TRUE
-MiscTabPosition=GTK_POS_TOP
 MiscHighlightUrls=TRUE
 MiscScrollAlternateScreen=TRUE
-ScrollingLines=999999
+
+# Notes:
+
+# MiscTabCloseButtons=TRUE
+# MiscTabPosition=GTK_POS_TOP
+#
+# MiscTabCloseButtons=FALSE
+# MiscTabPosition=GTK_POS_BOTTOM

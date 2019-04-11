@@ -48,6 +48,10 @@ at this filepath:
 
 <code>~/.config/xfce4/terminal/terminalrc</code>
 
+Links:
+
+https://docs.xfce.org/apps/terminal/advanced
+
  */
 ##################################################
 rec {

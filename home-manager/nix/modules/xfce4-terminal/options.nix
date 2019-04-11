@@ -75,6 +75,26 @@ config = {
                                                (types.submodule ansiColors16)
                                 );
 
+  Configuration.MiscAlwaysShowTabs        = types.bool;
+  Configuration.MiscBell                  = types.bool;
+  Configuration.MiscBordersDefault        = types.bool;
+  Configuration.MiscCursorBlinks          = types.bool;
+  Configuration.MiscCursorShape           = types.string; # e.g. « TERMINAL_CURSOR_SHAPE_BLOCK »
+  Configuration.MiscDefaultGeometry       = types.string; # e.g. « 80x24 »
+  Configuration.MiscInheritGeometry       = types.bool;
+  Configuration.MiscMenubarDefault        = types.bool;
+  Configuration.MiscMouseAutohide         = types.bool;
+  Configuration.MiscToolbarDefault        = types.bool;
+  Configuration.MiscConfirmClose          = types.bool;
+  Configuration.MiscCycleTabs             = types.bool;
+  Configuration.MiscTabCloseButtons       = types.bool;
+  Configuration.MiscTabCloseMiddleClick   = types.bool;
+  Configuration.MiscTabPosition           = types.string; # e.g. « GTK_POS_TOP »
+  Configuration.MiscHighlightUrls         = types.bool;
+  Configuration.MiscScrollAlternateScreen = types.bool;
+
+  Configuration.ScrollingLines = types.positive # e.g. « 999999 »
+
 };
 
 #------------------------------------------------#

@@ -37,6 +37,7 @@ systemLibraries = with pkgs; [
 
  flac
  openssl
+ libtar
  zlib
  zlib.static
 
@@ -90,6 +91,8 @@ fltkLibraries = with pkgs; [
 
 #m
 #pthread
+
+ libtar
  zlib
  bzip2     # « bz2 »
 
