@@ -45,7 +45,10 @@ then
 
              # ^ Whether xbindkeys is already running.
 
-        then "${xbindkeys}" --poll-rc --file ${xbindkeysrc}
+        then
+             if    [[ -f ${xbindkeysrc} && -r ${xbindkeysrc} ]]
+             then "${xbindkeys}" --poll-rc --file ${xbindkeysrc}
+             fi
         fi
 
     # ^ Start the « xbindkeys » daemon in the background.

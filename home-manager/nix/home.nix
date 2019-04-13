@@ -252,7 +252,7 @@ self = rec {
   # XDG:
 
   xdg =
-    (import ./xdg { inherit pkgs;
+    (import ./xdg { inherit pkgs lib;
                     inherit sboo applications xdgUtilities;
                   })
      // { enable = true;

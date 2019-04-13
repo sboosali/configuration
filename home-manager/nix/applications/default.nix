@@ -15,13 +15,13 @@ in
 
 #------------------------------------------------#
 
-  google-chrome.autostart = true;
-  google-chrome.desktop   = import ../desktop/google-chrome.desktop.nix { password-store = "basic"; };
+  "google-chrome".autostart = true;
+  "google-chrome".desktop   = import ../desktop/google-chrome.desktop.nix { passwordStore = "basic"; };
 
   # ^ « password-store = "basic" » stops the "Unlock Keyring" spam
   #   (in which a modal prompt pops up literally a dozen times).
 
-------------------------------------------------#
+#-------------------------------------------------#
 
   xfce4-terminal.autostart = true;
   xfce4-terminal.desktop   = rec { Name = "xfce4-terminal"; Exec = Name; TryExec = Exec; };

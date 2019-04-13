@@ -1,5 +1,6 @@
 ##################################################
 { pkgs
+, lib
 
 , sboo
 , applications
@@ -79,12 +80,17 @@ in
   #----------------------------#
 
 #------------------------------------------------#
-} // (if applications.emacs.autostart then {
+} // lib.optionalAttrs applications.emacs.autostart {
 
   "autostart/emacs.desktop".text = applications.emacs.desktop;
-
+}
 #------------------------------------------------#
-} else {}) // {
+ // lib.optionalAttrs applications.google-chrome.autostart {
+
+  "autostart/google-chrome.desktop".text = applications.google-chrome.desktop;
+}
+#------------------------------------------------#
+// {
 
 }
 ##################################################

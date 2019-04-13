@@ -1,5 +1,6 @@
 ##################################################
 { pkgs
+, lib
 
 , sboo
 , applications
@@ -28,7 +29,7 @@ in
 
  #-----------------------------#
 
- configFile = import ./config.nix { inherit pkgs; inherit sboo applications xdgUtilities; };
+ configFile = import ./config.nix { inherit pkgs lib; inherit sboo applications xdgUtilities; };
  dataFile   = import ./data.nix   { inherit sboo applications; };
 
  #-----------------------------#

@@ -1,5 +1,6 @@
 ##################################################
-{ password-store ? null         # e.g. "basic"
+{ Exec ? null
+, passwordStore ? null         # e.g. "basic"
 }:
 
 ##################################################
@@ -23,17 +24,25 @@ in
 let
 #------------------------------------------------#
 
---password-store = ''--password-store=${fromString password-store}'';
+passwordStore' = ''--password-store=${fromString passwordStore}'';
 
 #------------------------------------------------#
 
+Exec' =
+
+  if   null != Exec
+  then Exec
+  else 
+
+  if   null != passwordStore
+  then ''/usr/bin/google-chrome-stable ${passwordStore'} %U''
+  else
+
+  Exec_default;
+
+#
+
 Exec_default = ''/usr/bin/google-chrome-stable %U'';
-
-Exec =
-
-  if   null != password-store
-  then ''/usr/bin/google-chrome-stable ${--password-store} %U'';
-  else Exec_default;
 
 #------------------------------------------------#
 in
@@ -46,7 +55,7 @@ Name=Google Chrome
 
 #------------------------------------------------#
 
-Exec=${Exec}
+Exec=${Exec'}
 
 StartupNotify=true
 
