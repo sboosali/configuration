@@ -93,6 +93,13 @@ bootstrap:
 
 #------------------------------------------------#
 
+nixos-19.03:
+
+	NIX_PATH=nixpkgs=nixos-19.03 $(HM) -f $(HM_FILE) build
+
+.PHONY: nixos-19.03
+
+
 home-manager:
 
 	$(HM) -f $(HM_FILE) build

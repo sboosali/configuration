@@ -423,8 +423,10 @@ in
  cabal-build = "${cabal} new-build";
  cabal-test  = "${cabal} new-test --enable-tests";
  cabal-bench = "${cabal} new-bench --enable-benchmarks";
-# cabal-     = "${cabal} new- ";
 
+ cabal-typecheck = ''${cabal} new-build --ghc-options="-fno-code -fforce-recomp"'';
+
+# cabal-     = "${cabal} new- ";
  #-----------------------------------------------#
 
  hc = "${cabal} new-configure";  # {c}onfigure
@@ -512,8 +514,9 @@ in
  #-----------------------------------------------#
 
  nm  = ''time ${home-manager} -f ${sboo.files."home.nix"}'';
- nmb = ''time ${home-manager} -f ${sboo.files."home.nix"} build'';
- nmw = ''time ${home-manager} -f ${sboo.files."home.nix"} switch'';
+
+ nmb = ''time (cd ~/configuration ; ${home-manager} -f ${sboo.files."home.nix"} build)'';
+ nmw = ''time (cd ~/configuration ; ${home-manager} -f ${sboo.files."home.nix"} switch)'';
 
  nmg = ''${home-manager} generations'';
  nmp = ''${home-manager} packages'';

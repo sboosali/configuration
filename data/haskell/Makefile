@@ -4,7 +4,8 @@
 
 # Targets:
 #
-# • « make {upload,publish}-{hackage,github} »
+# • Standard targets — « make {build,check,dist,install} ».
+# • Release targets  — « make static », « make release », « make {upload,publish}-{hackage,github} ».
 #
 
 #------------------------------------------------#
@@ -170,6 +171,34 @@ update:
 .PHONY: update
 
 #------------------------------------------------#
+# Makefile Targets: Development -----------------#
+#------------------------------------------------#
+
+typecheck:
+	@printf "\n%s\n" "========================================"
+
+	@printf "%s\n\n" "Typechecking..."
+
+	$(Cabal) new-build $(CabalOptions) --ghc-options="-fno-code -fforce-recomp" $(CabalTargets)
+
+	@printf "\n%s\n" "========================================"
+
+.PHONY: typecheck
+
+#------------------------------------------------#
+
+develop:
+	@printf "\n%s\n" "========================================"
+
+	@printf "%s\n\n" "Building (« -f+develop »)..."
+
+	$(Cabal) new-build $(CabalOptions) -f"+develop" $(CabalTargets)
+
+	@printf "\n%s\n" "========================================"
+
+.PHONY: develop
+
+#------------------------------------------------#
 # Makefile Targets: Static ----------------------#
 #------------------------------------------------#
 
@@ -182,7 +211,7 @@ upload-hackage: dist
 	@printf "\n%s\n" "========================================"
 	@printf "%s\n\n" "Uploading (Hackage)..."
 
-	$(Cabal) upload --username=$(HackageUser) --password-command=$(HackagePassword) "$(BuildDirectory)/sdist/$(Package)-$(Version).tar.gz"
+	$(Cabal) upload --username='$(HackageUser)' --password-command='$(HackagePassword)' "$(BuildDirectory)/sdist/$(Package)-$(Version).tar.gz"
 
 	@printf "\n%s\n" "========================================"
 
@@ -195,7 +224,7 @@ publish-hackage: dist
 	@printf "\n%s\n" "========================================"
 	@printf "%s\n\n" "Publishing (Hackage)..."
 
-	$(Cabal) upload --publish --username=$(HackageUser) --password-command=$(HackagePassword) "$(BuildDirectory)/sdist/$(Package)-$(Version).tar.gz"
+	$(Cabal) upload --publish --username='$(HackageUser)' --password-command='$(HackagePassword)' "$(BuildDirectory)/sdist/$(Package)-$(Version).tar.gz"
 
 	@printf "\n%s\n" "========================================"
 
@@ -209,7 +238,7 @@ upload-github: dist
 	@printf "%s\n\n" "Uploading (Github)..."
 
 
-	curl -X POST -H "Content-Type: application/json" --data=$(GitHubReleasePostData) $(GitHubReleasePostPath)
+	curl -X POST -H "Content-Type: application/json" --data $(GitHubReleasePostData) $(GitHubReleasePostPath)
 
 	@printf "\n%s\n" "========================================"
 
@@ -222,7 +251,7 @@ publish-github: dist
 	@printf "\n%s\n" "========================================"
 	@printf "%s\n\n" "Publishing (Github)..."
 
-	curl -X POST -H "Content-Type: application/json" --data=$(GitHubPublishPostData) $(GitHubReleasePostPath)
+	curl -X POST -H "Content-Type: application/json" --data $(GitHubPublishPostData) '$(GitHubReleasePostPath)'
 
 	@printf "\n%s\n" "========================================"
 
@@ -237,7 +266,7 @@ release: check dist
 	@printf "\n%s\n" "========================================"
 	@printf "%s\n\n" "Publishing (Hackage)..."
 
-	$(Cabal) upload --publish --username=$(HackageUser) --password-command=$(HackagePassword) "$(BuildDirectory)/sdist/$(Package)-$(Version).tar.gz"
+	$(Cabal) upload --publish --username='$(HackageUser)' --password-command='$(HackagePassword)' "$(BuildDirectory)/sdist/$(Package)-$(Version).tar.gz"
 
 	@printf "\n%s\n" "========================================"
 	@printf "%s\n\n" "Tagging (Git)..."
@@ -248,7 +277,7 @@ release: check dist
 	@printf "\n%s\n" "========================================"
 	@printf "%s\n\n" "Publishing (GitHub)..."
 
-	curl -X POST -H "Content-Type: application/json" --data=$(GitHubPublishPostData) $(GitHubReleasePostPath)
+	curl -X POST -H "Content-Type: application/json" --data=$(GitHubPublishPostData) '$(GitHubReleasePostPath)'
 
 	@printf "\n%s\n" "========================================"
 
