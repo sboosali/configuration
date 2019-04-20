@@ -31,7 +31,9 @@ alias f=find
 # alias clean-emacs='remove "${1:?}".~ .\#"${1:?}"'
 
 alias ft=find-temporaries
+
 alias rt=rm-temporaries
+alias rta='(cd ~ && rm-temporaries)'
 
 ##################################################
 
