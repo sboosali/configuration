@@ -2213,6 +2213,130 @@ in
 
 
 
+#------------------------------------------------#
+
+# Build with:
+#
+#     $ home-manager -f ~/configuration/configs/nixpkgs/home-noattrs.nix build
+#
+
+##################################################
+arguments@
+{ pkgs, ...}:
+
+##################################################
+let
+#------------------------------------------------#
+
+file =
+
+  let
+  value-dynamic = builtins.getEnv "SBOO_HOME_NIX";
+  value-static  = ~/configuration/home-manager/nix/home.nix;
+  in
+
+  if   (builtins.isString value-dynamic && "" != value-dynamic)
+  then value-dynamic
+  else value-static;
+
+#------------------------------------------------#
+in
+##################################################
+
+import file arguments
+
+##################################################
+
+# Local Variables:
+# compile-command: "home-manager -f ~/configuration/configs/nixpkgs/home-noattrs.nix build"
+# End:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#   $ nix-instantiate --eval -E 'let home = import /home/sboo/configuration/configs/nixpkgs/home-attrs.nix; in (builtins.trace (builtins.toString (builtins.attrNames home)) null)' 1>& 2 2>& 1
+#   trace: darwin default emacs full linux programs small
+#
+# 
+
+
+
+
+
+
+
+
+
+
+
+_home-manager_list_nix_attributes ()
+
+{
+    local HomeFile
+    local HomeAttrsString
+    local HomeAttrsArray
+    local HomeAttr
+
+    HomeFile=$(readlink -f "$(_home-manager_get_home_file)")
+
+    HomeAttrsString=$(nix-instantiate --eval -E "let home = import ${HomeFile}; in (builtins.trace (builtins.toString (builtins.attrNames home)) null)" |& grep '^trace: ')
+    HomeAttrsString="${HomeAttrsString#trace: }"
+
+    IFS=" " read -ar HomeAttrsArray <<< "${HomeAttrsString}"
+
+    local HomeAttr
+    for HomeAttr in "${HomeAttrsArray[@]}"
+    do
+        echo "${HomeAttr}"
+    done | sort 
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CompletionDirectory="${XDG_DATA_HOME:-$HOME/.local/share}"/bash/completions
+CompletionFiles="${XDG_DATA_HOME:-$HOME/.local/share}"/bash/completions/*
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
