@@ -132,6 +132,13 @@ moreEmacsPackages = (with epkgs; [
  smooth-scrolling
  centered-cursor-mode
 
+ spaceline
+#doom-modeline
+
+#all-the-icons                  # https://github.com/domtronn/all-the-icons.el
+#all-the-icons-dired            # https://github.com/jtbm37/all-the-icons-dired
+#icons-in-terminal              # https://github.com/sebastiencs/icons-in-terminal
+
  #----------------------------------------------#
  # Haskell
 

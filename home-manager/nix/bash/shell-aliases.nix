@@ -73,6 +73,10 @@ cabal      = ''${pkgs.cabal-install}/bin/cabal'';
 
 #------------------------------------------------#
 
+dhclient = "dhclient";
+
+##################################################
+
 XDG_DATA_HOME   = builtins.getEnv "XDG_DATA_HOME";
 XDG_CONFIG_HOME = builtins.getEnv "XDG_CONFIG_HOME";
 XDG_CACHE_HOME  = builtins.getEnv "XDG_CACHE_HOME";
@@ -85,7 +89,7 @@ NIXPKGS     = "${env.HOME}/nixpkgs";
 #NixProfile = "${env.HOME}/.nix-profile";
 #NixProfile = "${env.HOME}/.nix-profile";
 
-#------------------------------------------------#
+##################################################
 
 nixpkgs = builtins.mapAttrs (k: v: builtins.toString v) {
 
@@ -198,7 +202,10 @@ in
 
  rr = "rm -fr";
 
-  #----------------------------------------------#
+ # rt  = "";
+ # rta = "";
+
+ #----------------------------------------------#
 
  md="${mkdir} -p";
 
@@ -433,8 +440,10 @@ in
  hb = "${cabal} new-build";      # {b}uild
  hr = "${cabal} new-repl";       # {r}epl
  hx = "${cabal} new-run";        # e{x}ecute
- ht = "${cabal} new-test";       # {t}est
- hn = "${cabal} new-bench";      # be{n}ch
+
+ ht = "${cabal} new-test --enable-tests";             # {t}est
+ hn = "${cabal} new-bench --enable-benchmarks";       # be{n}ch
+ hd = "${cabal} new-haddock --enable-documentation";  # {d}ocumentation
 
  hz = "${cabal} new-clean";      # {z}(?)
  hu = "${cabal} new-update";     # {u}pdate
@@ -443,10 +452,11 @@ in
 
  hca = "${cabal} new-configure all";
  hba = "${cabal} new-build all";
- hra = "${cabal} new-repl all";
  hxa = "${cabal} new-run all -- ";
- hta = "${cabal} new-test all";
- hna = "${cabal} new-bench all";
+
+ hta = "${cabal} new-test --enable-tests all";
+ hna = "${cabal} new-bench --enable-benchmarks all";
+ hda = "${cabal} new-haddock --enable-documentation all";
 
  #-----------------------------------------------#
 
@@ -673,6 +683,14 @@ in
 # • ‹cd› to root directory, then create a relative archive.
 # • extracting relative filepaths is always safe. after extraction, ‹mv› them under « / ».
 #
+
+  #----------------------------------------------#
+
+  sboo-restart-ethernet = ''sudo ${dhclient} enxa44cc89c79ed '';
+
+  #----------------------------------------------#
+
+  sboo-refresh-font-cache =''sudo fc-cache -f -v '';
 
   #----------------------------------------------#
 }

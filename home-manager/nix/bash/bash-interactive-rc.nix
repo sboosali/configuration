@@ -21,6 +21,8 @@ bashUtilities.concatBashScripts
       (builtins.readFile ../../../bash/bash_aliases)
       (builtins.readFile ../../../bash/bash_settings)
 
+      (builtins.readFile ../../bash/completion.bash)
+
       (bashUtilities.renderBashFunctions bashFunctions)
       (bashUtilities.renderBashSources   bashCompletions)
     ]   
