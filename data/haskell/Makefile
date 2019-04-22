@@ -39,22 +39,33 @@ CabalProgram ?=exe:$(Program)
 CabalProject ?=./cabal.project
 
 #------------------------------------------------#
-# Makefile Variables ----------------------------#
+# Makefile Variables: Programs ------------------#
 #------------------------------------------------#
-# Programs...
 
 Cabal ?=cabal
 Ghc   ?=ghc
-Open  ?=xdg-open
 
 #------------------------------------------------#
-# Paths...
 
-DataDirectory  ?=./data
-BuildDirectory ?=./dist-newstyle
+Open ?=xdg-open
+Nix  ?=nix
 
 #------------------------------------------------#
-# Options...
+# Makefile Variables: Paths ---------------------#
+#------------------------------------------------#
+
+BuildDirectory   ?=./dist-newstyle
+DataDirectory    ?=./data
+
+#------------------------------------------------#
+
+ShareDirectory      ?=./gitignored/share
+HaddockDirectory    ?=$(ShareDirectory)/doc
+CompletionDirectory ?=$(ShareDirectory)/bash/completions
+
+#------------------------------------------------#
+# Makefile Variables: Options -------------------#
+#------------------------------------------------#
 
 CabalOptions=--project-file $(ProjectFile) --builddir $(BuildDirectory)
 
@@ -73,7 +84,19 @@ GitHubReleasePostData ?='{ "tag_name": "v$(Version)", "target_commitish": "maste
 GitHubPublishPostData ?='{ "tag_name": "v$(Version)", "target_commitish": "master", "name": "v$(Version)", "body": "v$(Version)", "draft": true, "prerelease": true }'
 
 #------------------------------------------------#
-# Environment Variables...
+# Makefile Variables: Subcommands ---------------#
+#------------------------------------------------#
+
+CabalBuild   ?=$(Cabal) new-build $(CabalOptions)
+CabalRun     ?=$(Cabal) new-run $(CabalOptions)
+CabalInstall ?=$(Cabal) -v --overwrite-policy=always new-install
+CabalTest    ?=$(Cabal) new-test --enable-tests $(CabalOptions)
+CabalBench   ?=$(Cabal) new-bench --enable-benchmarks $(CabalOptions)
+CabalDocs    ?=$(Cabal) new-haddock --enable-documentation $(CabalOptions)
+
+#------------------------------------------------#
+# Makefile Variables: Environment Variables -----#
+#------------------------------------------------#
 
 LC_ALL=C.UTF-8
 
