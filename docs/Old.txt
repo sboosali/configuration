@@ -2336,6 +2336,32 @@ CompletionFiles="${XDG_DATA_HOME:-$HOME/.local/share}"/bash/completions/*
 
 
 
+ h = "( rm -fr ~/.cabal/packages/hackage.mobilehaskell/ ) ; ${cabal} new-build all";   # build {a}ll
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

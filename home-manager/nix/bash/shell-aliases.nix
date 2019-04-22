@@ -69,7 +69,35 @@ xbindkeys_show = ''${pkgs.xbindkeys}/bin/xbindkeys_show'';
 
 #TODO configure between [1] the package's program and [2] the vendored submodule's program with environment-variable like SBOO_HOME_MANAGER_CABAL
 
-cabal      = ''${pkgs.cabal-install}/bin/cabal'';
+cabal = ''${pkgs.cabal-install}/bin/cabal'';
+
+ghc        = ''${pkgs.ghc}/bin/ghc'';
+ghci       = ''${pkgs.ghc}/bin/ghci'';
+ghc-pkg    = ''${pkgs.ghc}/bin/ghc-pkg'';
+haddock    = ''${pkgs.ghc}/bin/haddock'';
+runghc     = ''${pkgs.ghc}/bin/runghc'';
+runhaskell = ''${pkgs.ghc}/bin/runhaskell'';
+hpc        = ''${pkgs.ghc}/bin/hpc'';
+hp2ps      = ''${pkgs.ghc}/bin/hp2ps'';
+
+# $ cd « pkgs.ghc »
+# $ find -L ./bin -type f -executable
+#
+# ./bin/ghc
+# ./bin/ghc-8.6.4
+# ./bin/ghc-pkg
+# ./bin/ghc-pkg-8.6.4
+# ./bin/ghci
+# ./bin/ghci-8.6.4
+# ./bin/haddock
+# ./bin/haddock-ghc-8.6.4
+# ./bin/hp2ps
+# ./bin/hpc
+# ./bin/hsc2hs
+# ./bin/runghc
+# ./bin/runghc-8.6.4
+# ./bin/runhaskell
+#
 
 #------------------------------------------------#
 
@@ -418,9 +446,9 @@ in
 # alias screen-night-dim="screen-brighter--via-xdotool 20 ; ${redshift} -x ; ${redshift} -O 1000 ; xrandr-invert-colors ; screen-dimmer--via-xdotool 10"
 # alias screen-dusk="screen-brighter--via-xdotool 20 ; ${redshift} -x ; ${redshift} -O 2000 ; xrandr-invert-colors"
 
- #-----------------------------------------------#
+ #===============================================#
 
- h = "( rm -fr ~/.cabal/packages/hackage.mobilehaskell/ ) ; ${cabal} new-build all";   # build {a}ll
+ h = "${cabal} new-build all";   # build {a}ll
 
  #-----------------------------------------------#
 
@@ -521,7 +549,19 @@ in
 
  hm = ''${home-manager}'';
 
- #-----------------------------------------------#
+
+#------------------------------------------------#
+
+ sboo-haskell-print-platform = ''${ghci} -e ":unset +t" -e "putStrLn System.Info.arch" -e "putStrLn System.Info.os" 2>/dev/null'';
+
+ # e.g.:
+ #
+ #   $ sboo-haskell-print-platform
+ #
+ #     x86_64
+ #     linux
+
+ #===============================================#
 
  nm  = ''time ${home-manager} -f ${sboo.files."home.nix"}'';
 
@@ -560,7 +600,7 @@ in
 
  nix-reverse-dependencies = ''${nix-store} --query --referrers'';
 
-  #----------------------------------------------#
+ #===============================================#
 
  sboo-apt-install = ''sudo apt -y install'';
 

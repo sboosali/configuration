@@ -201,6 +201,9 @@ self = rec {
 
   fonts.fontconfig.enableProfileFonts = true;
 
+  #fonts.fontconfig.enable = true;
+  #OBSOLETE:# fonts.fontconfig.enableProfileFonts = true;
+
   #----------------------------#
   # GTK Appearence/Behavior:
 
