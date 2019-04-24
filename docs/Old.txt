@@ -1,3 +1,91 @@
+========================================
+/home/sboo/src/sboo/home-manager/modules/services/xbindkeys/xbindkeys.service.nix
+
+##################################################
+{ lib
+, pkgs
+
+, rcScheme ? null
+, rcDsl ? null
+, isScheme ? false
+, isDsl ? false
+
+}: 
+
+##################################################
+let
+#------------------------------------------------#
+
+xbindkeys = ''${pkgs.xbindkeys}/bin/xbindkeys'';
+
+#------------------------------------------------#
+
+defaultXbindkeysRc = ''-f "$XDG_CONFIG_HOME"/xbindkeys/xbindkeysrc'';
+
+#------------------------------------------------#
+
+XBINDKEYSRC = 
+
+  if   isScheme
+
+  then dslXbindkeysRc 
+  else schemeXbindkeysRc
+
+  then dslXbindkeysRc 
+  else schemeXbindkeysRc;
+
+  else defaultXbindkeysRc;
+
+# ^ a command-line option with its (filepath) argument.
+
+#------------------------------------------------#
+
+dslXbindkeysRc    = ''-f "$XDG_CONFIG_HOME"/xbindkeys/xbindkeysrc'';
+
+schemeXbindkeysRc = ''-fg "$XDG_CONFIG_HOME"/xbindkeys/xbindkeysrc.scm'';
+
+# ^ “late-binding” for the xdg environment-variable.
+
+#------------------------------------------------#
+in
+##################################################
+
+''#
+
+[Unit]
+
+Description=XBindKeys: global keybindings and shortcuts
+
+Documentation=man:xbindkeys(1) https://wiki.archlinux.org/index.php/Xbindkeys
+
+After=environment.target
+
+# 
+
+[Service]
+
+ExecStart=${xbindkeys}/bin/xbindkeys -n ${XBINDKEYSRC}
+
+ExecStop=killall xbindkeys
+
+Restart=on-failure
+
+KillMode=process
+
+# Environment=
+
+#
+
+[Install]
+
+WantedBy=default.target
+
+#''
+
+
+
+========================================
+
 # HM_FILE ?=$HOME/configuration/home-manager/nix/home.nix
 
 
@@ -2337,6 +2425,475 @@ CompletionFiles="${XDG_DATA_HOME:-$HOME/.local/share}"/bash/completions/*
 
 
  h = "( rm -fr ~/.cabal/packages/hackage.mobilehaskell/ ) ; ${cabal} new-build all";   # build {a}ll
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+lib.enableCabalFlag "embed_data_files" super.pandoc
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# « cabal2nix -f"+embed_data_files" cabal://pandoc-2.7.2 »
+
+# « -f"+embed_data_files"
+
+
+pandoc = self.callPackage ./pandoc.nix { inherit (self) file-embed; };
+
+
+==============================================
+
+##################################################
+{ lib
+, pkgs
+}: 
+
+##################################################
+let
+#------------------------------------------------#
+
+T = lib.types;
+
+#------------------------------------------------#
+in
+##################################################
+{
+
+  enable = lib.mkEnableOption "Xbindkeys";
+
+  settings = lib.mkOption {
+
+    type = T.attrsOf (T.either T.bool (T.either T.int T.str));
+
+    default = {};
+    example = {
+      mode = "blank";
+      lock = false;
+      fadeTicks = 20;
+    };
+
+    description = ''
+The settings to use for Xbindkeys.
+    '';
+  };
+
+}
+
+
+
+
+
+
+    xresources.properties =
+      lib.mapAttrs' (n: lib.nameValuePair "xbindkeys.${n}") cfg.settings;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##################################################
+{ lib
+, pkgs
+}: 
+
+##################################################
+let
+#------------------------------------------------#
+
+T = lib.types;
+
+#------------------------------------------------#
+in
+##################################################
+{
+
+  enable = lib.mkEnableOption "XBindKeys";
+
+  #----------------------------#
+
+  fileGuile = lib.mkOption {
+
+    type = T.lines;
+
+    default = [];
+    example = ''
+(define (run-xbindkeys_show) 
+  (run-command "xbindkeys_show"))
+
+;; Run « xbindkeys_show » when you press « C-S-q »:
+
+(xbindkey-function '(control alt shift q) 
+                   sboo-xbindkeys_show)
+'';
+
+    description = ''
+Keybindings for XBindKeys, in the Guile-Scheme programming language.
+
+These expressions are appended to <filename>~/.config/xbindkeys/xbindkeysrc.scm</filename>.
+
+<code>extraBindingsGuile<code/> is mutually-exclusive with <code>extraBindings<code/>.
+
+See <link xlink:href="https://www.gnu.org/software/guile"/> for Guile examples.
+    '';
+
+  };
+
+  #----------------------------#
+
+  #----------------------------#
+
+  extraBindingsGuile = lib.mkOption {
+
+    type = T.lines;
+
+    default = [];
+    example = ''
+(define (run-xbindkeys_show) 
+  (run-command "xbindkeys_show"))
+
+;; Run « xbindkeys_show » when you press « C-S-q »:
+
+(xbindkey-function '(control alt shift q) 
+                   sboo-xbindkeys_show)
+'';
+
+    description = ''
+Keybindings for XBindKeys, in the Guile-Scheme programming language.
+
+These expressions are appended to <filename>~/.config/xbindkeys/xbindkeysrc.scm</filename>.
+
+<code>extraBindingsGuile<code/> is mutually-exclusive with <code>extraBindings<code/>.
+
+See <link xlink:href="https://www.gnu.org/software/guile"/> for Guile examples.
+    '';
+
+  };
+
+  #----------------------------#
+
+  extraBindings = lib.mkOption {
+
+    type = T.lines;
+
+    default = [];
+    example = ''
+# Run « xbindkeys_show » when you press « C-S-q »:
+
+"xbindkeys_show" 
+  control+shift + q
+'';
+
+    description = ''
+Keybindings for XBindKeys, in XBindKeys' domain-specific language.
+
+These statements are appended to <filename>~/.config/xbindkeys/xbindkeysrc</filename>.
+
+<code>extraBindings<code/> is mutually-exclusive with <code>extraBindingsGuile<code/>.
+
+See <link xlink:href="https://wiki.archlinux.org/index.php/Xbindkeys"/> for examples.
+    '';
+
+  };
+
+  #----------------------------#
+
+}
+
+# xbindkeys --defaults
+# xbindkeys --defaults-guile
+
+
+# TODO Test:
+#  sboo-xbindkeys-test   = ''${xbindkeys} --show --verbose --nodaemon ${XBINDKEYSRC}'';
+
+
+# KillMode=process
+# Reload = killall -s1 xbindkeys
+# Reload = killall -HUP xbindkeys
+
+        RestartSec = 3;
+        Restart = "always";
+
+
+
+
+
+
+##################################################
+{ lib
+, cfg
+}: 
+
+##################################################
+let
+#------------------------------------------------#
+
+cfg.config
+cfg.configFile
+
+cfg.extraConfig
+cfg.extraConfigGuile
+
+#------------------------------------------------#
+in
+##################################################
+let
+#------------------------------------------------#
+
+xbindkeys =
+
+  if   cfg ? package
+  then ''${cfg.package}/bin/xbindkeys''
+  else ''xbindkeys'';
+
+#------------------------------------------------#
+
+xbindkeysrcDefault = ''-f "$XDG_CONFIG_HOME"/xbindkeys/xbindkeysrc'';
+
+#------------------------------------------------#
+
+XBINDKEYSRC = 
+
+  if   isScheme
+
+  then dslXbindkeysRc 
+  else schemeXbindkeysRc
+
+  then dslXbindkeysRc 
+  else schemeXbindkeysRc;
+
+  else xbindkeysrcDefault;
+
+# ^ a command-line option with its (filepath) argument.
+
+#------------------------------------------------#
+
+dslXbindkeysRc    = ''-f "$XDG_CONFIG_HOME"/xbindkeys/xbindkeysrc'';
+
+schemeXbindkeysRc = ''-fg "$XDG_CONFIG_HOME"/xbindkeys/xbindkeysrc.scm'';
+
+# ^ “late-binding” for the xdg environment-variable.
+
+#------------------------------------------------#
+in
+##################################################
+
+{
+
+  Unit = {
+    Description   = "XBindKeys global-keybinding daemon";
+    Documentation = ''"man:xbindkeys(1) https://www.nongnu.org/xbindkeys/xbindkeys.html file:/usr/include/X11/keysymdef.h'';
+    After         = [ "environment.target" ];
+
+    StartLimitIntervalSec = 0
+  };
+
+  Service = {
+    ExecStart  = ''${xbindkeys} -n ${XBINDKEYSRC} '';
+    ExecStop   = ''kill "$MAINPID"'';
+    ExecReload = ''kill -s1 "$MAINPID"''; # « ExecReload= » should be synchronous (if possible).
+    Restart    = "on-failure";
+    RestartSec = 1;
+    #TODO# Environment=''GUILE_PATH=${pkgs.guile???}''; # Register Nix-Installed Guile packages with XBindKeys.
+  };
+
+  Install = {
+    WantedBy = [ "default.target" ];
+  };
+
+}
+
+
+--------------------------------#
+
+XBINDKEYSRC_OPTION = 
+
+  if   
+  then 
+
+  else 
+
+  if  
+  then 
+
+  else 
+
+  if  
+  then 
+
+  else xbindkeysrcDefault;
+
+# ^ a command-line option with its (filepath) argument.
+
+
+
+
+
+#------------------------------------------------#
+
+XBINDKEYSRC_FILE =
+
+  if  
+  then 
+
+  else 
+
+  if  
+  then 
+
+  else default_XBINDKEYSRC_FILE;
+
+#------------------------------------------------#
+
+XBINDKEYSRC_OPTION =
+
+  if  
+  then 
+
+  else 
+
+  if  
+  then 
+
+  else default_XBINDKEYSRC_OPTION;
+
+# ^ a command-line option with its (filepath) argument.
+
+
+
+==============================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
