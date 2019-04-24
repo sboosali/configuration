@@ -2800,12 +2800,552 @@ XBINDKEYSRC_OPTION =
 
 
 
+  cfg = config.services.emacs;
+  emacsCfg = config.programs.emacs;
+  emacsBinPath = "${emacsCfg.finalPackage}/bin";
+
+
+==============================================
+
+
+let
+
+  cfg = config.services.emacs;
+  emacsCfg = config.programs.emacs;
+  emacsBinPath = "${emacsCfg.finalPackage}/bin";
+
+in
+
+{
+  options.services.emacs = {
+    enable = mkEnableOption "the Emacs daemon";
+  };
+
+  config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = emacsCfg.enable;
+        message = "The Emacs service module requires"
+          + " 'programs.emacs.enable = true'.";
+      }
+    ];
+
+</filename></member></simplelist></listitem></varlistentry>
+
+
+
+
+
+
+
+
+
+
+
+
+##################################################
+{ lib
+, pkgs
+}: 
+
+##################################################
+let
+#------------------------------------------------#
+
+T = lib.types;
+
+#------------------------------------------------#
+in
+##################################################
+{
+
+  enable = lib.mkEnableOption "the XBindKeys daemon";
+
+  #----------------------------#
+
+  language = lib.mkOption {
+
+    type = T.nullOr (T.enum [ "xbindkeys" "guile" ]);
+
+    default = null;
+    example = "guile";
+
+    description = ''
+Force a configuration language: Guile-Scheme (a LISP), or XBindKeys' custom format. 
+
+If:
+
+• <code>"xbindkeys"<code/> — then use <option>config</option> and <option>extraConfig</option>.
+• <code>"guile"<code/> — then use <option>configGuile</option> and <option>extraConfigGuile</option>.
+
+Otherwise (if <code>null<code/>), guess given the first non-<code>null</code> value among <option>config</option> and <option>configGuile</option>, or among <option>extraConfig</option> and <option>extraConfigGuile</option>.
+'';
+
+  };
+
+  #----------------------------#
+
+  configGuile = lib.mkOption {
+
+    type = T.either T.path T.str;
+
+    default = ''"$XDG_CONFIG_HOME"/xbindkeys/xbindkeysrc.scm'';
+
+    description = ''
+Configuration file for XBindKeys, in the Guile-Scheme programming language.
+
+Home-Manager's default, <filename>~/.config/xbindkeys/xbindkeysrc.scm</filename>,
+is XDG-conformant (overriding XBindKey's default, <filename>~/.xbindkeysrc.scm</filename>).
+
+<code>configGuile<code/> is mutually-exclusive with <code>config<code/>. 
+
+For a default config file, run <code>xbindkeys --defaults-guile > ./xbindkeys.scm<code/>.
+    '';
+
+  };
+
+  #----------------------------#
+
+  config = lib.mkOption {
+
+    type = T.either T.path T.str;
+
+    default = ''"$XDG_CONFIG_HOME"/xbindkeys/xbindkeysrc'';
+
+    description = ''
+Configuration file for XBindKeys, in the Guile-Scheme programming language.
+
+Home-Manager's default, <filename>~/.config/xbindkeys/xbindkeysrc</filename>,
+is XDG-conformant (overriding XBindKey's default, <filename>~/.xbindkeysrc</filename>).
+
+<code>configGuile<code/> is mutually-exclusive with <code>config<code/>.
+
+For a default config file, run <code>xbindkeys --defaults > ./xbindkeys<code/>.
+    '';
+
+  };
+
+  #----------------------------#
+
+  extraConfigGuile = lib.mkOption {
+
+    type = T.lines;
+
+    default = [];
+    example = ''
+(define (run-xbindkeys_show) 
+  (run-command "xbindkeys_show"))
+
+;; Run « xbindkeys_show » when you press « C-S-q »:
+
+(xbindkey-function '(control alt shift q) 
+                   run-xbindkeys_show)
+'';
+
+    description = ''
+Extra keybindings for XBindKeys, in the Guile-Scheme programming language.
+
+These expressions are appended to <option>configGuile</option>.
+
+<code>extraConfigGuile<code/> is mutually-exclusive with <code>extraConfig<code/>.
+
+See <link xlink:href="https://www.gnu.org/software/guile"/> for Guile examples.
+    '';
+
+  };
+
+  #----------------------------#
+
+  extraConfig = lib.mkOption {
+
+    type = T.lines;
+
+    default = [];
+    example = ''
+# Run « xbindkeys_show » when you press « C-S-q »:
+
+"xbindkeys_show" 
+  control+shift + q
+'';
+
+   description = ''
+Extra keybindings for XBindKeys, in XBindKeys' domain-specific language.
+
+These statements are appended to <option>config</option>. 
+
+<code>extraConfig<code/> is mutually-exclusive with <code>extraConfigGuile<code/>.
+
+See <link xlink:href="https://wiki.archlinux.org/index.php/Xbindkeys"/> for examples.
+    '';
+
+  };
+
+  #----------------------------#
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==============================================
+
+
+
+;;----------------------------------------------;;
+;; Compatibility -------------------------------;;
+;;----------------------------------------------;;
+
+(when (not (defined? 'xbindkey-function))
+  (let ()
+    (define (xbindkey-function keys function) (list keys function))
+    'xbindkey-function))
+
+
+
+  (if (defined? 'xbindkey-function)
+    xbindkey-function
+    (let ()
+      (define (xbindkey-function keys function) (list keys function))
+      xbindkey-function))
+
+
+
+
+
+  extraConfigGuile = ''
+(define (run-xbindkeys_show) 
+  (run-command "xbindkeys_show"))
+
+;; Run « xbindkeys_show » when you press « C-S-q »:
+
+(xbindkey-function '(control alt shift q) 
+                   run-xbindkeys_show)
+'';
+
+  #----------------------------#
+
+
+xbindkeys =
+
+  if   cfgProgram  cfg ?
+  then ''${cfg.package}/bin/xbindkeys''
+  else ''xbindkeys'';
+
+
+   ExecReload = ''${kill} -s1 "$MAINPID"'';
+
+
+kill = ''${pkgs.kill}/bin/kill''
+
+killall = ''${pkgs.killall}/bin/killall''
+
+
+
+${bash} -l -c "exec kill -s1 "$MAINPID"'';
+
+$ pgrep xbindkeys 
+30311
+$ bash -l -c "kill -USR1 30311"
+
+    ExecReload = ''${bash} -l -c "exec kill -USR1 $MAINPID"'';
+    ExecReload = ''${bash} -l -c "kill -HUP $MAINPID"'';
+
+----------------------------------------------
+
+==============================================
+
+##################################################
+{ lib
+, pkgs
+
+, cfgProgram                    # « programs.xbindkeys._ »
+, cfgService                    # « services.xbindkeys._ »
+}:
+
+##################################################
+let
+#------------------------------------------------#
+
+xbindkeys = ''${cfgProgram.finalPackage}/bin/xbindkeys'';
+
+#------------------------------------------------#
+
+bash = ''${pkgs.stdenv.shell}'';
+
+#------------------------------------------------#
+in
+##################################################
+let
+#------------------------------------------------#
+
+default_XBINDKEYSRC_FILE   = ''"$XDG_CONFIG_HOME"/xbindkeys/xbindkeysrc'';
+default_XBINDKEYSRC_OPTION = ''-f ${default_XBINDKEYSRC_FILE}'';
+
+# ^ “late-binding” for the xdg environment-variable.
+
+# dslXbindkeysRc    = ''-f "$XDG_CONFIG_HOME"/xbindkeys/xbindkeysrc'';
+# schemeXbindkeysRc = ''-fg "$XDG_CONFIG_HOME"/xbindkeys/xbindkeysrc.scm'';
+
+
+
+#------------------------------------------------#
+
+XBINDKEYSRC_FILE =
+
+  if   (cfgService.language == "xbindkeys") && (cfgService.config != null)
+  then cfgService.config
+
+  else
+
+  if   (cfgService.language == "guile") && (cfgService.configGuile != null)
+  then cfgService.configGuile
+
+  else default_XBINDKEYSRC_FILE;
+
+# ^ a filepath
+
+#------------------------------------------------#
+
+XBINDKEYSRC_OPTION =
+
+  if   (cfgService.language == "xbindkeys") && (cfgService.config != null)
+  then ''-f ${cfgService.config}''
+
+  else
+
+  if   (cfgService.language == "guile") && (cfgService.configGuile != null)
+  then ''-fg ${cfgService.configGuile}''
+
+  else default_XBINDKEYSRC_OPTION;
+
+# ^ a command-line option with its (filepath) argument.
+
+#------------------------------------------------#
+in
+##################################################
+
+{
+
+  Unit = {
+    Description           = "XBindKeys global-keybinding daemon";
+    Documentation         = ''"man:xbindkeys(1) https://www.nongnu.org/xbindkeys/xbindkeys.html file:/usr/include/X11/keysymdef.h'';
+    After                 = [ "environment.target" ];
+    PartOf                = [ "graphical-session.target" ];
+  # AssertPathExists      = ''${XBINDKEYSRC_FILE}'';
+    StartLimitIntervalSec = 0;
+  };
+
+  Service = {
+    ExecStart  = ''${xbindkeys} -n ${XBINDKEYSRC_OPTION} '';
+    ExecReload = ''${bash} -l -c "kill -HUP $MAINPID"'';
+    Type       = "";
+    Restart    = "on-failure";
+    RestartSec = 1;
+
+    # NOTE
+    #
+    # • « Type= » — The command « xbindkeys -n » means “no-daemon”,
+    #   which implies the service should not be « Type=forking ».
+    #   If « ExecStart= » is changed (e.g. to daemonize),
+    #   then « Type= » should be updated too.
+    #
+    # • « ExecReload= » — should be synchronous (if possible);
+    #   however, « kill » is asynchronous.
+    #
+    # • « kill » is a shell-builtin (c.f. « $ type kill »).
+    #   The « Exec*= » fields require absolute-filepaths to executables.
+    #   Hence, the shell-builtin is wrapped within a shell-call;
+    #   c.f. « ExecReload=bash -l -c '...'  »,
+    #   with an absolute-filepath to « .../bin/bash ».
+    #
+    # • « bash -l -c »:
+    #     • « -c STRING » — run the given command.
+    #     • « -l » — run as a Login-Shell.
+    #
+
+  };
+
+  Install = {
+    WantedBy = [ "xsession.target" ];
+
+  };
+
+}
+
+# Links (for maintainers):
+#
+# • <https://superuser.com/questions/759759/writing-a-service-that-depends-on-xorg>
+#
+
+/* TODO...
+
+Environment=''GUILE_PATH=${pkgs.guile?}'';
+# Register Nix-Installed Guile packages with XBindKeys.
+
+*/
+
+==============================================
+
+$ systemctl --user status xbindkeys.service
+
+  ● xbindkeys.service - XBindKeys global-keybinding daemon
+     Loaded: error (Reason: Invalid argument)
+     Active: inactive (dead)
+  
+  Apr 24 09:11:59 SpirOS systemd[1547]: [/nix/store/9j14kllkwjppjz0kwa3nazjld3jz6896-xbindkeys.service/xbindkeys.service:9] Failed to parse service type, ignoring: exec
+  Apr 24 09:11:59 SpirOS systemd[1547]: [/nix/store/9j14kllkwjppjz0kwa3nazjld3jz6896-xbindkeys.service/xbindkeys.service:15] Invalid syntax, ignoring: 
+  Apr 24 09:11:59 SpirOS systemd[1547]: [/nix/store/9j14kllkwjppjz0kwa3nazjld3jz6896-xbindkeys.service/xbindkeys.service:17] Unknown lvalue 'StartLimitIntervalSec' in section 'Unit'
+  Apr 24 09:11:59 SpirOS systemd[1547]: xbindkeys.service: Service lacks both ExecStart= and ExecStop= setting. Refusing.
+  Apr 24 09:22:10 SpirOS systemd[1547]: [/nix/store/9j14kllkwjppjz0kwa3nazjld3jz6896-xbindkeys.service/xbindkeys.service:5] Executable path is not absolute, ignoring: kill -s1 "$MAINPID"
+  Apr 24 09:22:10 SpirOS systemd[1547]: [/nix/store/9j14kllkwjppjz0kwa3nazjld3jz6896-xbindkeys.service/xbindkeys.service:6] Executable path is not absolute, ignoring: xbindkeys -n -fg /nix/store/8y2sp4i4rh9sm59h4xr9xfx1b7gnfygw-xbindkeysrc.scm
+  Apr 24 09:22:10 SpirOS systemd[1547]: xbindkeys.service: Service lacks both ExecStart= and ExecStop= setting. Refusing.
+
+----------------------------------------------
+
+$ echo $PATH
+/home/sboo/.nix-profile/bin:/home/sboo/.nix-profile/bin:/home/sboo/configuration/bin/:/home/sboo/configuration/scripts/:/home/sboo/bin/:/home/sboo/.cabal/bin/:/home/sboo/.local/bin/:/home/sboo/.nix-profile/bin/:/bin/:/sbin/:/usr/bin/:/usr/sbin/:/usr/local/bin/:/usr/local/sbin/
+
+$ PATH=/home/sboo/.nix-profile/bin:/bin/:/sbin/:/usr/bin/:/usr/sbin/:/usr/local/bin/:/usr/local/sbin/
+
+$ which kill
+
+  /bin/kill
+
+$ type kill
+
+  kill is a shell builtin
+
+----------------------------------------------
+
+$ home-manager -v -f ~/.config/nixpkgs/home.nix switch
+
+  warning: dumping very large path (> 256 MiB); this may run out of memory
+
+  Starting home manager activation
+  Sanity checking oldGenNum and oldGenPath
+  This is a live run
+  Using Nix version: nix-env (Nix) 2.2
+  Activation variables:
+    oldGenNum=308
+    oldGenPath=/nix/store/n73s999456bwypsqg5f2jlrfxmsh162d-home-manager-generation
+    newGenPath=/nix/store/hfp8a5lsz7y4j1slrpa096m7y9i6hgx2-home-manager-generation
+    newGenNum=309
+    newGenProfilePath=/nix/var/nix/profiles/per-user/sboo/home-manager-309-link
+    newGenGcPath=/nix/var/nix/gcroots/per-user/sboo/current-home
+    genProfilePath=/nix/var/nix/profiles/per-user/sboo/home-manager
+  Activating checkFilesChanged
+  Activating checkLinkTargets
+  Activating writeBoundary
+  Activating installPackages
+  replacing old 'home-manager-path'
+  installing 'home-manager-path'
+  Activating linkGeneration
+  Cleaning up orphan links from /home/sboo
+
+----------------------------------------------
+
+$ systemctl --user status xbindkeys.service
+
+  ● xbindkeys.service - XBindKeys global-keybinding daemon
+     Loaded: loaded (/nix/store/hnmwi7b1j4c3qxlz71fzb89bfjjl1g44-xbindkeys.service/xbindkeys.service; enabled; vendor preset: enabled)
+     Active: failed (Result: start-limit-hit) since Wed 2019-04-24 11:05:29 PDT; 13s ago
+    Process: 4435 ExecStart=/nix/store/hpanfcl1pwb58y8d7qjmb4ynh943si7r-xbindkeys-1.8.6/bin/xbindkeys -n -fg /nix/store/8y2sp4i4rh9sm59h4xr9xfx1b7gnfygw-xbindkeysrc.scm (code=exited, status=1/FAILURE)
+
+   Main PID: 4435 (code=exited, status=1/FAILURE)
+
+  Apr 24 11:05:28 SpirOS systemd[1547]: xbindkeys.service: Unit entered failed state.
+  Apr 24 11:05:28 SpirOS systemd[1547]: xbindkeys.service: Failed with result 'exit-code'.
+  Apr 24 11:05:29 SpirOS systemd[1547]: xbindkeys.service: Service hold-off time over, scheduling restart.
+  Apr 24 11:05:29 SpirOS systemd[1547]: Stopped XBindKeys global-keybinding daemon.
+  Apr 24 11:05:29 SpirOS systemd[1547]: xbindkeys.service: Start request repeated too quickly.
+  Apr 24 11:05:29 SpirOS systemd[1547]: Failed to start XBindKeys global-keybinding daemon.
+  Apr 24 11:05:29 SpirOS systemd[1547]: xbindkeys.service: Unit entered failed state.
+  Apr 24 11:05:29 SpirOS systemd[1547]: xbindkeys.service: Failed with result 'start-limit-hit'.
+
+----------------------------------------------
+
+$ /nix/store/hpanfcl1pwb58y8d7qjmb4ynh943si7r-xbindkeys-1.8.6/bin/xbindkeys -n -fg /nix/store/8y2sp4i4rh9sm59h4xr9xfx1b7gnfygw-xbindkeysrc.scm
+
+  add_key ok!!!  fun=1
+  add_key ok!!!  fun=1
+  add_key ok!!!  fun=1
+  add_key ok!!!  fun=1
+  add_key ok!!!  fun=1
+
+but ExecStart should work...
+
+----------------------------------------------
+
+https://www.lucas-nussbaum.net/blog/?p=877
+
+Type=forking
+
+>Type=forking should work here, assuming one thing: the parent process should not exit until it has been notified by the child process that all is OK.
+
+----------------------------------------------
+
+ExecStart=/nix/store/hpanfcl1pwb58y8d7qjmb4ynh943si7r-xbindkeys-1.8.6/bin/xbindkeys -n -fg /nix/store/8y2sp4i4rh9sm59h4xr9xfx1b7gnfygw-xbindkeysrc.scm
+
+----------------------------------------------
+
+● xbindkeys.service - XBindKeys global-keybinding daemon
+   Loaded: loaded (/nix/store/q58c51l280gy6wyixn0hq3i18w14491q-xbindkeys.service/xbindkeys.service; enabled; vendor preset: enabled)
+   Active: active (running) since Wed 2019-04-24 12:42:41 PDT; 5ms ago
+     Docs: man:xbindkeys(1)
+           https://www.nongnu.org/xbindkeys/xbindkeys.html
+           file:/usr/include/X11/keysymdef.h
+ Main PID: 29398 (xbindkeys)
+   CGroup: /user.slice/user-1001.slice/user@1001.service/xbindkeys.service
+           └─29398 /nix/store/hpanfcl1pwb58y8d7qjmb4ynh943si7r-xbindkeys-1.8.6/bin/xbindkeys -n -fg /nix/store/8y2sp4i4rh9sm59h4xr9xfx1b7gnfygw-xbindkeysrc.scm
+
+----------------------------------------------
+
+
+
+----------------------------------------------
+
+
+
 ==============================================
 
 
 
 
 
+safeName = lib.replaceChars ["@" ":" "\\" "[" "]"] ["-" "-" "-" "" ""]
+...
+name = "imapnotify-${safeName account.name}";
+
+
+
+
+TODO replace if ... then "true" else "false" with builtins.toJSON
+TODO add to a `nix-lint`: `(if ... then "true" else "false")` → `(builtins.toJSON ...)`.
+TODO add also to a Style Guide, under `CONTRIBUTING`. 
+
+
+
+
+---          exports.tls = ${if account.imap.tls.enable then "true" else "false"};
++++          exports.tls = ${builtins.toJSON account.imap.tls.enable};
+
+
+By "point directly to the file in the Nix store" below I mean to here have something like:
+
+        ExecStart = "${pkgs.imapnotify}/bin/imapnotify -c %E/imap_inotify/%i-config.js";
+        ExecStart = "${pkgs.imapnotify}/bin/imapnotify -c ${genAccountConfig account}";
+and change `genAccountConfig` to return the result of a `pkgs.writeText` call.
 
 
 
@@ -2816,7 +3356,7 @@ XBINDKEYSRC_OPTION =
 
 
 
-
+==============================================
 
 
 
