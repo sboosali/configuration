@@ -32,6 +32,7 @@ in
  cabal2nix
  bat                            # a cat(1) clone with "wings" (i.e. syntax highlighting and Git integration.) « https://github.com/sharkdp/bat »
  bfg-repo-cleaner               # « bfg » (reverse acronym of « git-filter-branch »). « https://help.github.com/en/articles/removing-sensitive-data-from-a-repository »
+ borgbackup                     # « borg » Backup.
  colordiff
  dex
  dhall
@@ -47,11 +48,13 @@ in
  gnupg22                        # for « gpg » version ≥2.1.17
  graphviz                       # GraphViz renders « .dot » files.
  guile                          # « Scheme » implementation (v2.2.4, circa 2019)
+ guile-lint                     # 
  haskell-overridez
  htop
  imagemagick
  inotify-tools
  jq
+ killall                        # « killall ».
  libreoffice
  markdown-pp
  #markdown-merge
@@ -87,7 +90,7 @@ in
  vlc
  wmctrl
  xautomation
- xbindkeys
+#xbindkeys
  xbrightness
  xcalib
  xclip

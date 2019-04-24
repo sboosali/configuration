@@ -131,7 +131,10 @@ nixpkgs = builtins.mapAttrs (k: v: builtins.toString v) {
 
 #------------------------------------------------#
 
-xbindkeysrc = builtins.toString ~/.config/xbindkeys/xbindkeysrc.scm;
+xbindkeysrc = builtins.toString ~/configuration/xbindkeys/xbindkeysrc.scm;
+
+#xbindkeysrc = builtins.toString ~/.config/xbindkeys/xbindkeysrc.scm;
+#xbindkeysrc = builtins.toString ~/configuration/xbindkeys/xbindkeysrc.scm;
 
 #------------------------------------------------#
 in
@@ -565,8 +568,10 @@ in
 
  nm  = ''time ${home-manager} -f ${sboo.files."home.nix"}'';
 
- nmb = ''time (cd ~/configuration ; ${home-manager} -f ${sboo.files."home.nix"} build)'';
- nmw = ''time (cd ~/configuration ; ${home-manager} -f ${sboo.files."home.nix"} switch)'';
+ nmb = ''time (cd ~/configuration ; ${home-manager} -v -f ${sboo.files."home.nix"} build)'';
+ nmw = ''time (cd ~/configuration ; ${home-manager} -v -f ${sboo.files."home.nix"} switch)'';
+
+ # ^ NOTE « -v » passes « --show-trace ».
 
  nmg = ''${home-manager} generations'';
  nmp = ''${home-manager} packages'';
@@ -574,7 +579,9 @@ in
  #-----------------------------------------------#
 
  sboo-home-manager-build  = ''${home-manager} -f ${sboo.files."home.nix"} build'';
- sboo-home-manager-switch = ''N${home-manager} -f ${sboo.files."home.nix"} switch'';
+ sboo-home-manager-switch = ''${home-manager} -f ${sboo.files."home.nix"} switch && systemctl --user daemon-reload'';
+
+ sboo-home-manager-switch-xbindkeys = ''${home-manager} -f ${sboo.files."home.nix"} switch && systemctl --user daemon-reload && systemctl --user start xbindkeys && systemctl --user status xbindkeys'';
 
  #-----------------------------------------------#
 
@@ -631,7 +638,7 @@ in
 
   sboo-xbindkeys-start  = ''${xbindkeys} --poll-rc -fg ${xbindkeysrc}'';
   sboo-xbindkeys-stop   = ''killall xbindkeys'';
-  sboo-xbindkeys-reload = ''killall -s1 xbindkeys'';
+  sboo-xbindkeys-reload = ''killall -HUP xbindkeys'';
 
   sboo-xbindkeys-test   = ''${xbindkeys} --show --verbose --nodaemon -fg ${xbindkeysrc}'';
   sboo-xbindkeys-list   = ''pgrep -x xbindkeys'';
@@ -643,7 +650,10 @@ in
 
   #----------------------------------------------#
 
-  #----------------------------------------------#
+  systemd-restart = ''systemctl --user daemon-reload'';
+
+  systemd-xbindkeys-start = ''systemctl --user daemon-reload && systemctl --user start xbindkeys'';
+  systemd-xbindkeys-stop  = ''systemctl --user stop xbindkeys'';
 
   #----------------------------------------------#
 
@@ -653,17 +663,31 @@ in
 
   #----------------------------------------------#
 
- untargz = "${tar} -v -f -z --gzip";
+  #----------------------------------------------#
 
- # ^ Uncompress and Extract a « .tar.gz »
+  # « tar »:
+  #
+  # • « -x » — extract (a.k.a un-archive / de-compress).
+  # • « -c » — compress (a.k.a archive / compress).
+  # • « -v » — verbose (prints files).
+  # • « -f FILEPATH » — take a file.
+  #
 
- untarbz2 = "${tar} -v -f -z --bzip2";
+  untargz = "${tar} -v -x --gzip -f";
 
- # ^ Uncompress and Extract a « .tar.bz2 »
+  # ^ Uncompress and Extract a « .tar.gz »
 
- from-tarball = "${tar} -v -f -z";
+  untarbz2 = "${tar} -v -x --bzip2 -f";
 
- # ^ Uncompress and Extract (infer compression from file-extension).
+  # ^ Uncompress and Extract a « .tar.bz2 »
+
+  untarxz = "${tar} -v -x --xz -f";
+
+  # ^ Uncompress and Extract a « .tar.xz »
+
+  untarball = "${tar} -v -x -f";
+
+  # ^ Uncompress and Extract (infer compression from file-extension).
 
   #----------------------------------------------#
 

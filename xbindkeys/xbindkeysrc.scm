@@ -6,6 +6,16 @@
 (use-modules (ice-9 format))
 
 ;;----------------------------------------------;;
+;; Compatibility -------------------------------;;
+;;----------------------------------------------;;
+
+  ;; (if (defined? 'xbindkey-function)
+  ;;   xbindkey-function
+  ;;   (let ()
+  ;;     (define (xbindkey-function keys function) (list keys function))
+  ;;     xbindkey-function))
+
+;;----------------------------------------------;;
 ;; Programs ------------------------------------;;
 ;;----------------------------------------------;;
 
@@ -126,6 +136,15 @@
   (notify-send "date" DATE)))
 
 ;;----------------------------------------------;;
+
+(define (sboo-popup-guile-version)
+
+  (let ((TEXT (format #f "v~a" (version))) ; e.g. « v2.2.3 ».
+        )
+
+  (notify-send "XBindKeys Guile" TEXT)))
+
+;;----------------------------------------------;;
 ;; Keybindings: Aliases ------------------------;;
 ;;----------------------------------------------;;
 
@@ -153,8 +172,7 @@
 ;; Keybindings: Miscellaneous ------------------;;
 ;;----------------------------------------------;;
 
-;;----------------------------------------------;;
-
+(xbindkey-function '(control alt shift v) sboo-popup-guile-version)
 (xbindkey-function '(control alt shift d) sboo-popup-date)
 
 ;;----------------------------------------------;;
@@ -329,3 +347,6 @@
 ;;----------------------------------------------;;
 ;; EOF -----------------------------------------;;
 ;;----------------------------------------------;;
+;; Local Variables:
+;; compile-command: "guile "/home/sboo/configuration/xbindkeys/xbindkeysrc.scm"
+;; End:

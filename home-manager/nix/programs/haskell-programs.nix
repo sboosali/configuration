@@ -25,7 +25,7 @@ with self;
  hscolour                       # 
 
  stack                          # Build Tool
- intero                         # 
+#intero                         # 
 
  ghcid                          # GHCi Daemon
  hasktags                       # TAGS-generator
