@@ -3195,6 +3195,44 @@ Environment=''GUILE_PATH=${pkgs.guile?}'';
 
 */
 
+
+
+baseConfigGuile  = builtins.readFile cfgServices.extraConfigGuile;
+extraConfigGuile = cfgServices.extraConfigGuile;
+fullConfigGuile  = baseConfigGuile + "\n\n" + extraConfigGuile;
+
+pkgConfigGuile = pkgs.writeText "xbindkeys.scm" fullConfigGuile;
+
+#------------------------------------------------#
+
+baseConfigXbk  = builtins.readFile cfgServices.extraConfigXbk;
+extraConfigXbk = cfgServices.extraConfigXbk;
+fullConfigXbk  = baseConfigXbk + "\n\n" + extraConfigXbk;
+
+pkgConfigXbk = pkgs.writeText "xbindkeys" fullConfigXbk;
+
+#------------------------------------------------#
+
+baseConfigDefault  = builtins.readFile default_XBINDKEYSRC_FILE;
+pkgConfigDefault = pkgs.writeText "xbindkeys" baseConfigDefault;
+
+#------------------------------------------------#
+
+pkgConfig =
+
+  if   (cfgService.language == "xbindkeys") && (cfgService.config != null || cfgService.extraConfig != null)
+  then pkgConfigXbk
+
+  else
+
+  if   (cfgService.language == "guile") && (cfgService.configGuile != null || cfgService.extraConfigGuile != null)
+  then pkgConfigGuile
+
+  else pkgConfigDefault;
+
+
+
+
 ==============================================
 
 $ systemctl --user status xbindkeys.service
@@ -3346,6 +3384,76 @@ By "point directly to the file in the Nix store" below I mean to here have somet
         ExecStart = "${pkgs.imapnotify}/bin/imapnotify -c %E/imap_inotify/%i-config.js";
         ExecStart = "${pkgs.imapnotify}/bin/imapnotify -c ${genAccountConfig account}";
 and change `genAccountConfig` to return the result of a `pkgs.writeText` call.
+
+
+
+
+
+
+
+
+
+isGuile = (cfgService.language == "guile")     && (cfgService.configGuile != null || cfgService.extraConfigGuile != null);
+isXkd   = (cfgService.language == "xbindkeys") && (cfgService.config      != null || cfgService.extraConfig      != null);
+
+
+
+
+finalConfig =
+
+  if   isGuile
+  then pkgConfigXbk
+
+  else
+
+  if   isXkd
+  then pkgConfigGuile
+
+  else pkgConfigDefault;
+
+
+
+
+
+
+  #----------------------------#
+
+  fileConfigGuile = lib.mkOption {
+
+    type = T.nullOr (T.either T.path T.str);
+
+    default = ''"$XDG_CONFIG_HOME"/xbindkeys/xbindkeysrc.scm'';
+  };
+
+  #----------------------------#
+
+  fileConfigXkb = lib.mkOption {
+
+    type = T.nullOr (T.either T.path T.str);
+
+    default = ''"$XDG_CONFIG_HOME"/xbindkeys/xbindkeysrc'';
+
+  };
+
+  #----------------------------#
+
+  extraConfigGuile = lib.mkOption {
+
+    type = T.lines;
+
+    '';
+
+  };
+
+  #----------------------------#
+
+  extraConfigXkb = lib.mkOption {
+  };
+}
+
+
+
+
 
 
 
