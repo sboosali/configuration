@@ -3465,6 +3465,76 @@ finalConfig =
 
 
 
+default_XBINDKEYSRC_FILE   = ''"$XDG_CONFIG_HOME"/xbindkeys/xbindkeysrc'';
+default_XBINDKEYSRC_OPTION = ''-f ${default_XBINDKEYSRC_FILE}'';
+
+# ^ “late-binding” for the xdg environment-variable.
+
+# dslXbindkeysRc    = ''-f "$XDG_CONFIG_HOME"/xbindkeys/xbindkeysrc'';
+# schemeXbindkeysRc = ''-fg "$XDG_CONFIG_HOME"/xbindkeys/xbindkeysrc.scm'';
+
+#------------------------------------------------#
+
+XBINDKEYSRC_FILE =
+
+  if   (cfgService.language == "xbindkeys") && (cfgService.config != null)
+  then cfgService.config
+
+  else
+
+  if   (cfgService.language == "guile") && (cfgService.configGuile != null)
+  then cfgService.configGuile
+
+  else default_XBINDKEYSRC_FILE;
+
+# ^ a filepath
+
+#------------------------------------------------#
+
+XBINDKEYSRC_OPTION =
+
+  if   (cfgService.language == "xbindkeys") && (cfgService.config != null)
+  then ''-f ${cfgService.config}''
+
+  else
+
+  if   (cfgService.language == "guile") && (cfgService.configGuile != null)
+  then ''-fg ${cfgService.configGuile}''
+
+  else default_XBINDKEYSRC_OPTION;
+
+# ^ a command-line option with its (filepath) argument.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ==============================================

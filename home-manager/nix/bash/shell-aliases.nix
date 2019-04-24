@@ -60,6 +60,8 @@ redshift    = ''${pkgs.redshift}/bin/redshift'';
 
 bat         = ''${pkgs.bat}/bin/bat'';
 
+bfg         = ''${pkgs.bfg-repo-cleaner}/bin/bfg'';
+
 #------------------------------------------------#
 
 xbindkeys      = ''${pkgs.xbindkeys}/bin/xbindkeys'';
@@ -548,21 +550,17 @@ in
 
  hnba = ''${nix-shell} --run "${cabal} new-build all"'';
 
-  #----------------------------------------------#
+ #===============================================#
 
  hm = ''${home-manager}'';
 
+ #-----------------------------------------------#
 
-#------------------------------------------------#
+ help-home-manager = ''${home-manager} --help'';
 
- sboo-haskell-print-platform = ''${ghci} -e ":unset +t" -e "putStrLn System.Info.arch" -e "putStrLn System.Info.os" 2>/dev/null'';
+ #===============================================#
 
- # e.g.:
- #
- #   $ sboo-haskell-print-platform
- #
- #     x86_64
- #     linux
+ bfg-force-remove = ''${bfg} --no-blob-protection --delete-files '';
 
  #===============================================#
 
@@ -576,7 +574,13 @@ in
  nmg = ''${home-manager} generations'';
  nmp = ''${home-manager} packages'';
 
- #-----------------------------------------------#
+ nr=''sboo-nix-repl'';
+
+ #----------------------------------------------#
+
+ nix-reverse-dependencies = ''${nix-store} --query --referrers'';
+
+ #===============================================#
 
  sboo-home-manager-build  = ''${home-manager} -f ${sboo.files."home.nix"} build'';
  sboo-home-manager-switch = ''${home-manager} -f ${sboo.files."home.nix"} switch && systemctl --user daemon-reload'';
@@ -595,17 +599,14 @@ in
 
  #-----------------------------------------------#
 
- help-home-manager = ''${home-manager} --help'';
+ sboo-haskell-print-platform = ''${ghci} -e ":unset +t" -e "putStrLn System.Info.arch" -e "putStrLn System.Info.os" 2>/dev/null'';
 
-  #----------------------------------------------#
-
- #-----------------------------------------------#
-
- nr=''sboo-nix-repl'';
-
- #-----------------------------------------------#
-
- nix-reverse-dependencies = ''${nix-store} --query --referrers'';
+ # e.g.:
+ #
+ #   $ sboo-haskell-print-platform
+ #
+ #     x86_64
+ #     linux
 
  #===============================================#
 
