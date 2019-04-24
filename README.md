@@ -12,7 +12,7 @@ Uses `nix`.
 * `./dictation/...` — Notes about Dictation & Instructions for configuring microphones and for installing `Dragon NaturallySpeaking` 15 within a `Windows 10` virtual-machine via `VirtualBox`
 * TODO
 
-## `./bin`
+## Binaries (in `./bin`)
 
 `./bin` holds platform-specific, statically-linked executables. 
 
@@ -24,7 +24,7 @@ to bootstrap, on your platform, register the programs. e.g., on 64-bit Linux:
 PATH="$(readlink -f ./bin/x86_64-linux):${PATH}"
 ```
 
-### bootstrapping configuring
+### Binaries: bootstrapping configuring
 
 static `nix`:
 
@@ -42,9 +42,9 @@ $ ./bin/x86_64-linux/nix --version
   nix (Nix) 2.2
 ```
 
-### bootstrapping haskell
+### Binaries: bootstrapping haskell
 
-static `cabal`:
+static `ghc`:
 
 ``` sh
 $ ldd ./bin/x86_64-linux/ghc
@@ -75,6 +75,27 @@ $ ./bin/x86_64-linux/cabal --numeric-version
 
   2.2.0.0
 ```
+
+### Binaries: convenience
+
+static `pandoc`:
+
+``` sh
+$ ldd ./bin/x86_64-linux/pandoc
+
+  not a dynamic executable
+
+$ du -h ./bin/x86_64-linux/pandoc
+
+  39M
+
+$ ./bin/x86_64-linux/pandoc --version
+
+  pandoc 2.2.1
+  Compiled with: pandoc-types 1.17.5.1, texmath 0.11.0.1, skylighting 0.7.2
+```
+
+<https://github.com/jgm/pandoc/releases/tag/2.7.2>
 
 ### 
 

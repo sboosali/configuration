@@ -37,9 +37,9 @@
 
 _xbindkeys_show_options=( )
 
-_xbindkeys_show_options+=( "--help" )
-_xbindkeys_show_options+=( "-f" "--file" )
-_xbindkeys_show_options+=( "-fg""--file-guile" )
+_xbindkeys_show_options+=(       "--help" )
+_xbindkeys_show_options+=( "-f"  "--file" )
+_xbindkeys_show_options+=( "-fg" "--file-guile" )
 
 #------------------------------------------------#
 
