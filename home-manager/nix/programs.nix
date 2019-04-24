@@ -20,8 +20,7 @@ with utilities;
   #----------------------------#
 
   home-manager.enable = true;
-
-  home-manager.path = (import ./versions/home-manager.nix).local;
+  home-manager.path   = (import ./versions/home-manager.nix).fork;
 
   # ^
 
@@ -100,7 +99,7 @@ with utilities;
   firefox = {
       enable = true;
 
-      enableAdobeFlash = true;
+      # enableAdobeFlash = true;
   };
 
   #----------------------------#
@@ -245,7 +244,6 @@ with utilities;
 
   #----------------------------#
 
-# xbindkeys.enable = true;           # TODO
 
   #----------------------------#
 }

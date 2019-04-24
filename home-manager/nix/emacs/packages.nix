@@ -132,8 +132,9 @@ moreEmacsPackages = (with epkgs; [
  smooth-scrolling
  centered-cursor-mode
 
- spaceline
-#doom-modeline
+ telephone-line                 # Modeline.
+#spaceline                      # Modeline.
+#doom-modeline                  # Modeline.
 
 #all-the-icons                  # https://github.com/domtronn/all-the-icons.el
 #all-the-icons-dired            # https://github.com/jtbm37/all-the-icons-dired
@@ -144,8 +145,8 @@ moreEmacsPackages = (with epkgs; [
 
 #dante
 
-#intero                         # needs `stack` system-package
-#ghc                            # « ghc-mod »
+ intero                         # needs `stack` system-package
+#ghc                            # « ghc-mod » # NOTE it's been DEPRECATED for « haskell-ide-engine ».
 
  lsp-mode                       # for « haskell-ide-engine »
  lsp-ui                         # for « haskell-ide-engine »
@@ -224,6 +225,8 @@ moreEmacsPackages = (with epkgs; [
  direnv         # needs `direnv` system-package
  neotree
  multi-term
+
+ pandoc-mode
 
  #----------------------------------------------#
  # Miscellaneous

@@ -9,6 +9,8 @@
  ~/configuration/scripts        # my personal/downloaded programs
  ~/bin                          # my personal/downloaded programs
 
+ ~/configuration/bin/x86_64-linux/pandoc-2.7.2/bin # TODO
+
  ~/.cabal/bin                   # installed by « cabal »
  ~/.local/bin                   # installed by « stack »
 

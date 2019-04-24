@@ -68,7 +68,7 @@ in
  nixnote2                       # NixNote is an unofficial Evernote client.
  nox
  openssh
- pandoc
+#pandoc
  pass
  pinta                          # Pinta is a simple image-editor.
  pocketsphinx
