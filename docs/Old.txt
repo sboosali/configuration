@@ -3528,6 +3528,17 @@ XBINDKEYSRC_OPTION =
 
 
 
+XBINDKEYSRC_OPTION =
+
+  if   (cfgService.finalLanguage == "xbindkeys")
+  then ''-f ${cfgService.config}''
+
+  else
+
+  if   (cfgService.finalLanguage == "guile")
+  then ''-fg ${cfgService.configGuile}''
+
+  else abort ;
 
 
 
@@ -3536,6 +3547,304 @@ XBINDKEYSRC_OPTION =
 
 
 
+
+
+
+
+
+
+
+
+  extraConfigGuile = lib.mkOption {
+
+    type = T.lines;
+
+    default = [];
+    example = ''
+(define (run-xbindkeys_show) 
+  (run-command "xbindkeys_show"))
+
+;; Run « xbindkeys_show » when you press « C-S-q »:
+
+(xbindkey-function '(control alt shift q) 
+                   run-xbindkeys_show)
+'';
+
+    description = ''
+Keybindings for XBindKeys, in the Guile-Scheme programming language.
+
+These expressions are appended to <filename>~/.config/xbindkeys/xbindkeysrc.scm</filename>.
+
+<varname>extraConfigGuile</varname> is mutually-exclusive with <varname>extraConfig</varname>.
+
+See <link xlink:href="https://www.gnu.org/software/guile"/> for Guile examples.
+'';
+
+
+
+
+
+
+
+
+
+
+
+
+   After = [ "graphical-session-pre.target" ];
+    PartOf = [ "graphical-session.target" ];
+
+
+
+
+
+
+
+
+
+XBINDKEYSRC_FILE =
+
+  let
+  choices =
+    {
+     "xbindkeys" = cfgService.config;
+     "guile"     = cfgService.configGuile;
+    };
+
+  chosen = choices.''${cfgService.finalLanguage}'';
+  in
+
+  chosen;
+
+# ^ a filepath
+
+#------------------------------------------------#
+
+XBINDKEYSRC_OPTION =
+
+  let
+  choices =
+    {
+     "xbindkeys" = ''-f ${cfgService.config}'';
+     "guile"     = ''-fg ${cfgService.configGuile}'';
+    };
+
+  chosen = choices.''${cfgService.finalLanguage}'';
+  in
+
+  chosen;
+
+# ^ a command-line option with its (filepath) argument.
+
+
+
+
+
+
+
+
+
+
+
+
+See the
+        <citerefentry>
+          <refentrytitle>compton</refentrytitle>
+          <manvolnum>1</manvolnum>
+        </citerefentry>
+        man page
+
+
+
+
+
+
+
+
+
+
+<envar>HOME</envar>.
+
+
+
+
+
+
+
+
+
+
+
+
+          <variablelist>
+          <varlistentry>
+            <term><literal>always</literal></term>
+            <listitem><para>Always show tray icon.</para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><literal>auto</literal></term>
+            <listitem><para>
+              Show tray icon only when there is a device available.
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><literal>never</literal></term>
+            <listitem><para>Never show tray icon.</para></listitem>
+          </varlistentry>
+          </variablelist>
+
+
+
+
+
+
+</para><para>
+
+
+
+
+------------------------------------------------
+
+e.g.
+
+this:
+
+> The options are
+> 
+> <variablelist>
+> 
+> <varlistentry>
+> <term><literal>always</literal></term>
+> <listitem><para>Always show tray icon.</para></listitem>
+> </varlistentry>
+> 
+> <varlistentry>
+> <term><literal>auto</literal></term>
+> <listitem><para>
+> Show tray icon only when there is a device available.
+> </para></listitem>
+> </varlistentry>
+> 
+> <varlistentry>
+> <term><literal>never</literal></term>
+> <listitem><para>Never show tray icon.</para></listitem>
+> </varlistentry>
+> 
+> </variablelist>
+
+renders as
+
+> The options are
+> 
+> always
+>    Always show tray icon.
+> 
+> auto
+>    Show tray icon only when there is a device available.
+> 
+> never
+>   Never show tray icon.
+
+
+<term>${1:<literal>null</literal>}</term>
+<listitem><para>{2:the default}</para></listitem>
+
+------------------------------------------------
+
+<varlist>
+  <varentry>
+    <term>${1:<literal>null</literal>}</term>
+    <listitem><para>{2:The default.}</para></listitem>
+  <varentry>
+  $0
+</varlist>
+
+
+
+<varlist>
+  <varentry>
+    <term><literal>null</literal></term>
+    <listitem><para></para></listitem>
+  <varentry>
+  $0
+</varlist>
+
+
+The options are:
+
+<varlist>
+
+  <varentry>
+    <term><literal>""</literal></term>
+    <listitem><para>.</para></listitem>
+  <varentry>
+
+
+• <code>"xbindkeys"<code/> — then use <varname>config</varname> and <varname>extraConfig</varname>.
+• <code>"guile"<code/> — then use <varname>configGuile</varname> and <varname>extraConfigGuile</varname>.
+
+Otherwise (if <code>null<code/>), guess given the first non-<code>null</code> value among <varname>config</varname> and <varname>configGuile</varname>, or among <varname>extraConfig</varname> and <varname>extraConfigGuile</varname>.
+
+
+  <varentry>
+    <term><literal>null</literal></term>
+    <listitem><para>guess given the first non-<code>null</code> value among <varname>config</varname> and <varname>configGuile</varname>, or among <varname>extraConfig</varname> and <varname>extraConfigGuile</varname>.</para></listitem>
+  <varentry>
+
+</varlist>
+
+
+
+==============================================
+
+------------------------------------------------
+
+home.file.<name?>.source
+Path of the source file. The file name must not start with a period since Nix will not allow such names in the Nix store.
+
+This may refer to a directory.
+
+Type: path
+
+Declared by:
+
+<home-manager/modules/files.nix>
+
+------------------------------------------------
+
+home.file.<name?>.target
+Path to target file relative to HOME.
+
+Type: string
+
+Declared by:
+
+<home-manager/modules/files.nix>
+
+------------------------------------------------
+
+home.file.<name?>.text
+Text of the file.
+
+Type: null or strings concatenated with "\n"
+
+Default: null
+
+------------------------------------------------
+
+services.xbindkeys.xkb.config.source — input  (path).
+services.xbindkeys.xkb.config.text   — input  (string).
+services.xbindkeys.xkb.config.target — output (path).
+
+services.xbindkeys.guile.config.source — input  (path).
+services.xbindkeys.guile.config.text   — input  (string).
+services.xbindkeys.guile.config.target — output (path).
+
+Inspired by « home.file.<name?>.* »:
+
+home.file.<name?>.source — input  (path).
+home.file.<name?>.text   — input  (string).
+home.file.<name?>.target — output (path).
 
 ==============================================
 

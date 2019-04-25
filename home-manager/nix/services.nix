@@ -13,7 +13,7 @@
 
   ################################################
 
-  xbindkeys = import ./services/xbindkeys.nix { inherit pkgs sboo; } // { enable = true; };
+# xbindkeys = import ./services/xbindkeys.nix { inherit pkgs sboo; } // { enable = true; };
   
   # ^ Enable XBindKeys, a hotkey daemon.
 

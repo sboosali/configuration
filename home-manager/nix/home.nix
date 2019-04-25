@@ -245,6 +245,19 @@ self = rec {
 
  #----------------------------#
 
+ systemd.user.startServices = true;
+
+ # ^ 
+ #   ① Start all services that are wanted by active targets.
+ #   ② Stop obsolete services, from the previous generation.
+ #
+
+#systemd.user.timers = { };
+
+# “Definition of systemd per-user timer units.”
+
+ #----------------------------#
+
   # language.base     = enUS;      # « $LANG »
   # language.address  = enUS_UTF8; # « $LC_ADDRESS »
   # language.monetary = enUS_UTF8; # « $LC_MONETARY »
