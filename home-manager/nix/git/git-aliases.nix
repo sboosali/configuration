@@ -132,6 +132,16 @@ in
 
   #----------------------------#
 
+  upstream-rebase = "pull --rebase upstream master";
+
+  # ^ for updating a fork (rebase master onto upstream).
+
+  # ^ run « git fetch upstream » first.
+
+  upstream-branch = "checkout upstream/master -b";
+
+  # ^ for branching off a fork (supports rebasing with default arguments).
+
   upstream-set    = "remote add upstream";
 
   # ^ e.g.:
@@ -161,12 +171,6 @@ in
   #   Local ref configured for 'git push':
   #     master pushes to master (local out of date)
   #
-
-  upstream-rebase = "pull --rebase upstream master";
-
-  # ^ for updating a fork (rebase master onto upstream).
-
-  # ^ run « git fetch upstream » first.
 
   #----------------------------#
 
