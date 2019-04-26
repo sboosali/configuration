@@ -3960,6 +3960,414 @@ Otherwise (if <code>null<code/>), guess given the first non-<code>null</code> va
 </varlist>
 
 
+        <programlisting language="nix">
+          home.sessionVariables = {
+            FOO = "Hello";
+            BAR = "$FOO World!";
+          };
+        </programlisting>
+
+
+          <informaltable frame="none"><tgroup cols="1"><tbody>
+          ${concatStringsSep "\n" (
+            mapAttrsToList (n: v: ''
+              <row>
+                <entry><varname>${n}</varname></entry>
+                <entry>${v.description}</entry>
+              </row>
+            '') knownSettings
+          )}
+          </tbody></tgroup></informaltable>
+
+
+
+
+
+
+
+
+
+          <informaltable frame="none"><tgroup cols="1"><tbody>
+          ${concatStringsSep "\n" (
+            mapAttrsToList (n: v: ''
+              <row>
+                <entry><varname>${n}</varname></entry>
+                <entry>${v.description}</entry>
+              </row>
+            '') knownSettings
+          )}
+          </tbody></tgroup></informaltable>
+
+
+
+
+
+
+          You can use <code>%1</code>, <code>%2</code>, and
+          <code>%3</code> to refer respectively to:
+          <orderedlist numeration="arabic">
+            <listitem><para>file name</para></listitem>
+            <listitem><para>server name</para></listitem>
+            <listitem><para>socket ID</para></listitem>
+          </orderedlist>
+
+
+
+
+          Launch application on a particular workspace. DEPRECATED:
+          Use <varname><link linkend="opt-xsession.windowManager.i3.config.assigns">xsession.windowManager.i3.config.assigns</link></varname>
+          instead. See <link xlink:href="https://github.com/rycee/home-manager/issues/265"/>.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==============================================
+
+        description = "Text of the file.";
+
+        onChange = mkOption {
+          type = types.lines;
+          default = "";
+          description = ''
+            Shell commands to run when file has changed between
+            generations. The script will be run
+            <emphasis>after</emphasis> the new files have been linked
+            into place.
+          '';
+        };
+      };
+
+      config = {
+        target = mkDefault name;
+        source = mkIf (config.text != null) (
+          mkDefault (pkgs.writeTextFile {
+            inherit (config) executable text;
+            name = stringsExtra.storeFileName name;
+          })
+        );
+
+------------------------------------------------
+
+      description = ''
+        Whether to enable msmtp.
+        </para><para>
+        If enabled then it is possible to use the
+        <parameter class="command">--account</parameter> command line
+        option to send a message for a given account using the
+        <command>msmtp</command> or <command>msmtpq</command> tool.
+        For example, <command>msmtp --account=private</command> would
+        send using the account defined in
+        <option>accounts.email.accounts.private</option>. If the
+        <parameter class="command">--account</parameter> option is not
+        given then the primary account will be used.
+      '';
+      
+------------------------------------------------
+
+      settings = mkOption {
+        type = vimSettingsType;
+        default = {};
+        example = literalExample ''
+          {
+            expandtab = true;
+            history = 1000;
+            background = "dark";
+          }
+        '';
+        description = ''
+          At attribute set of Vim settings. The attribute names and
+          corresponding values must be among the following supported
+          options.
+
+          <informaltable frame="none"><tgroup cols="1"><tbody>
+          ${concatStringsSep "\n" (
+            mapAttrsToList (n: v: ''
+              <row>
+                <entry><varname>${n}</varname></entry>
+                <entry>${v.description}</entry>
+              </row>
+            '') knownSettings
+          )}
+          </tbody></tgroup></informaltable>
+
+          See the Vim documentation for detailed descriptions of these
+          options. Note, use <varname>extraConfig</varname> to
+          manually set any options not listed above.
+        '';
+      };
+
+------------------------------------------------
+
+        description = ''
+          You can use <code>%1</code>, <code>%2</code>, and
+          <code>%3</code> to refer respectively to:
+          <orderedlist numeration="arabic">
+            <listitem><para>file name</para></listitem>
+            <listitem><para>server name</para></listitem>
+            <listitem><para>socket ID</para></listitem>
+          </orderedlist>
+          See <link xlink:href='https://github.com/astroidmail/astroid/wiki/Customizing-editor' />.
+        '';
+      };
+
+
+------------------------------------------------
+
+
+        description = ''
+          Launch application on a particular workspace. DEPRECATED:
+          Use <varname><link linkend="opt-xsession.windowManager.i3.config.assigns">xsession.windowManager.i3.config.assigns</link></varname>
+          instead. See <link xlink:href="https://github.com/rycee/home-manager/issues/265"/>.
+        '';
+
+------------------------------------------------
+
+
+==============================================
+
+`fileType`...
+
+------------------------------------------------
+
+{ homeDirectory, lib, pkgs }:
+
+with lib;
+
+let
+
+  stringsExtra = import ./strings.nix { inherit lib; };
+
+in
+
+{
+  # Constructs a type suitable for a `home.file` like option. The
+  # target path may be either absolute or relative, in which case it
+  # is relative the `basePath` argument (which itself must be an
+  # absolute path).
+  #
+  # Arguments:
+  #   - basePathDesc   docbook compatible description of the base path
+  #   - basePath       the file base path
+  fileType = basePathDesc: basePath: types.loaOf (types.submodule (
+    { name, config, ... }: {
+      options = {
+        target = mkOption {
+          type = types.str;
+          apply = p:
+            let
+              absPath = if hasPrefix "/" p then p else "${basePath}/${p}";
+            in
+              removePrefix (homeDirectory + "/") absPath;
+          description = ''
+            Path to target file relative to ${basePathDesc}.
+          '';
+        };
+
+        text = mkOption {
+          default = null;
+          type = types.nullOr types.lines;
+          description = "Text of the file.";
+        };
+
+        source = mkOption {
+          type = types.path;
+          description = ''
+            Path of the source file. The file name must not start
+            with a period since Nix will not allow such names in
+            the Nix store.
+            </para><para>
+            This may refer to a directory.
+          '';
+        };
+
+        executable = mkOption {
+          type = types.nullOr types.bool;
+          default = null;
+          description = ''
+            Set the execute bit. If <literal>null</literal>, defaults to the mode
+            of the <varname>source</varname> file or to <literal>false</literal>
+            for files created through the <varname>text</varname> option.
+          '';
+        };
+
+        recursive = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            If the file source is a directory, then this option
+            determines whether the directory should be recursively
+            linked to the target location. This option has no effect
+            if the source is a file.
+            </para><para>
+            If <literal>false</literal> (the default) then the target
+            will be a symbolic link to the source directory. If
+            <literal>true</literal> then the target will be a
+            directory structure matching the source's but whose leafs
+            are symbolic links to the files of the source directory.
+          '';
+        };
+
+        onChange = mkOption {
+          type = types.lines;
+          default = "";
+          description = ''
+            Shell commands to run when file has changed between
+            generations. The script will be run
+            <emphasis>after</emphasis> the new files have been linked
+            into place.
+          '';
+        };
+      };
+
+      config = {
+        target = mkDefault name;
+        source = mkIf (config.text != null) (
+          mkDefault (pkgs.writeTextFile {
+            inherit (config) executable text;
+            name = stringsExtra.storeFileName name;
+          })
+        );
+      };
+    }
+  ));
+}
+
+------------------------------------------------
+
+{ homeDirectory, lib, pkgs }:
+
+  stringsExtra = import ./strings.nix { inherit lib; };
+
+{
+
+  fileType = basePathDesc: basePath: types.loaOf (types.submodule (
+    { name, config, ... }: {
+      options = {
+        target = mkOption {
+          type = types.str;
+          apply = p:
+            let
+              absPath = if hasPrefix "/" p then p else "${basePath}/${p}";
+            in
+              removePrefix (homeDirectory + "/") absPath;
+          description = ''
+            Path to target file relative to ${basePathDesc}.
+          '';
+        };
+
+        text = mkOption {
+          default = null;
+          type = types.nullOr types.lines;
+          description = "Text of the file.";
+        };
+
+        source = mkOption {
+          type = types.path;
+          description = ''
+            Path of the source file. The file name must not start
+            with a period since Nix will not allow such names in
+            the Nix store.
+            </para><para>
+            This may refer to a directory.
+          '';
+        };
+
+        executable = mkOption {
+          type = types.nullOr types.bool;
+          default = null;
+          description = ''
+            Set the execute bit. If <literal>null</literal>, defaults to the mode
+            of the <varname>source</varname> file or to <literal>false</literal>
+            for files created through the <varname>text</varname> option.
+          '';
+        };
+
+        recursive = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            If the file source is a directory, then this option
+            determines whether the directory should be recursively
+            linked to the target location. This option has no effect
+            if the source is a file.
+            </para><para>
+            If <literal>false</literal> (the default) then the target
+            will be a symbolic link to the source directory. If
+            <literal>true</literal> then the target will be a
+            directory structure matching the source's but whose leafs
+            are symbolic links to the files of the source directory.
+          '';
+        };
+
+        onChange = mkOption {
+          type = types.lines;
+          default = "";
+          description = ''
+            Shell commands to run when file has changed between
+            generations. The script will be run
+            <emphasis>after</emphasis> the new files have been linked
+            into place.
+          '';
+        };
+      };
+
+      config = {
+        target = mkDefault name;
+        source = mkIf (config.text != null) (
+          mkDefault (pkgs.writeTextFile {
+            inherit (config) executable text;
+            name = stringsExtra.storeFileName name;
+          })
+        );
+      };
+    }
+  ));
+}
+
+
+------------------------------------------------
+
+`home-manager.lib.string`
+
+
+{ lib }:
+
+with lib;
+
+{
+  # Figures out a valid Nix store name for the given path.
+  storeFileName = path:
+    let
+      # All characters that are considered safe. Note "-" is not
+      # included to avoid "-" followed by digit being interpreted as a
+      # version.
+      safeChars =
+        [ "+" "." "_" "?" "=" ]
+        ++ lowerChars
+        ++ upperChars
+        ++ stringToCharacters "0123456789";
+
+      empties = l: genList (x: "") (length l);
+
+      unsafeInName = stringToCharacters (
+        replaceStrings safeChars (empties safeChars) path
+      );
+
+      safeName = replaceStrings unsafeInName (empties unsafeInName) path;
+    in
+      "hm_" + safeName;
+}
+
 
 ==============================================
 
@@ -3998,10 +4406,12 @@ Default: null
 
 ------------------------------------------------
 
+services.xbindkeys.xkb.enable        — (bool).
 services.xbindkeys.xkb.config.source — input  (path).
 services.xbindkeys.xkb.config.text   — input  (string).
 services.xbindkeys.xkb.config.target — output (path).
 
+services.xbindkeys.guile.enable        — (bool).
 services.xbindkeys.guile.config.source — input  (path).
 services.xbindkeys.guile.config.text   — input  (string).
 services.xbindkeys.guile.config.target — output (path).
@@ -4012,11 +4422,104 @@ home.file.<name?>.source — input  (path).
 home.file.<name?>.text   — input  (string).
 home.file.<name?>.target — output (path).
 
-==============================================
+------------------------------------------------
 
 git checkout upstream/master -b xbindkeys
 
+------------------------------------------------
 
+programs.xbindkeys.conf.enable        — (bool).
+programs.xbindkeys.conf.config.source — input  (path).
+programs.xbindkeys.conf.config.text   — input  (string).
+programs.xbindkeys.conf.config.target — output (path).
+
+programs.xbindkeys.guile.enable        — (bool).
+programs.xbindkeys.guile.config.source — input  (path).
+programs.xbindkeys.guile.config.text   — input  (string).
+programs.xbindkeys.guile.config.target — output (path).
+
+Inspired by « home.file.<name?>.* »:
+
+home.file.<name?>.source — input  (path).
+home.file.<name?>.text   — input  (string).
+home.file.<name?>.target — output (path).
+
+------------------------------------------------
+
+  conf.enable;
+  conf.config.source;
+  conf.config.text;
+  conf.config.target;
+
+  guile.enable;
+  guile.config.source;
+  guile.config.text;
+  guile.config.target;
+
+------------------------------------------------
+
+
+
+
+
+==============================================
+
+{
+  programs.xbindkeys.enable = true;
+
+  programs.xbindkeys.config.guile = ''
+;;======================================;;
+
+(use-modules (ice-9 format))
+
+;;======================================;;
+
+(define (notify-send title message)
+
+  (run-command
+   (format #f "notify-send '~a' '~a'" title message)))
+
+;;--------------------------------------;;
+
+(define (sboosali-popup-date)
+
+  (let ((DATE (date->string (current-date) "~A, ~B ~e ~Y ~H:~S"))
+        )
+
+  (notify-send "date" DATE)))
+
+;;======================================;;
+
+(xbindkey-function '(control alt shift d) sboosali-popup-date)
+
+;;======================================;;
+'';
+
+}
+
+==============================================
+
+--------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------------------------------------
+
+
+==============================================
 
 
 
