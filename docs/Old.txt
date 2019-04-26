@@ -3810,6 +3810,18 @@ XBINDKEYSRC_OPTION =
 
 
 
+ nmb = ''time (cd ~/configuration ; ${home-manager} -v -f ${sboo.files."home.nix"} build)'';
+ nmw = ''time (cd ~/configuration ; ${home-manager} -v -f ${sboo.files."home.nix"} switch)'';
+
+
+
+
+
+	~/configuration/bin/home-manager build -I home-manager=./xbindkeys/home-manager -f ~/configuration/home-manager/nix/home.nix
+
+
+
+
 
 
 
@@ -4496,6 +4508,257 @@ home.file.<name?>.target — output (path).
 '';
 
 }
+
+
+
+==============================================
+
+
+moreEmacsPackages = (with epkgs; [
+
+ #----------------------------------------------#
+
+ edit-env
+ hexrgb
+#awesome-tab
+
+ #----------------------------------------------#
+
+ pinentry
+
+  # ^ 
+  # This package allows GnuPG passphrase to be prompted through the
+  # minibuffer instead of graphical dialog.
+  #
+  # To use, add "allow-emacs-pinentry" to "~/.gnupg/gpg-agent.conf",
+  # reload the configuration with "gpgconf --reload gpg-agent", and
+  # start the server with M-x pinentry-start.
+  #
+  # The actual communication path between the relevant components
+  # is as follows:
+  #
+  #     gpg --> gpg-agent --> pinentry --> Emacs
+  #
+  # where pinentry and Emacs communicate through a Unix domain socket
+  # created at:
+  #
+  #     ${TMPDIR-/tmp}/emacs$(id -u)/pinentry
+  #
+  # under the same directory which server.el uses.
+
+ #----------------------------------------------#
+ # Completion
+
+ helm-dash
+ helm-make
+ helm-swoop
+ helm-hayoo
+
+ #company-yasnippet
+ #company-abbrev
+ #company-dabbrev
+
+ company-ghc
+ company-ghci
+ company-cabal
+ company-web
+ company-restclient
+ company-anaconda
+
+ #----------------------------------------------#
+ # Window/Buffer Management
+
+#awesome-tab                    # Tabs
+ shackle
+ window-purpose
+
+ #----------------------------------------------#
+ # Appearence
+
+ color-theme
+ smooth-scrolling
+ centered-cursor-mode
+
+ telephone-line                 # Modeline.
+#spaceline                      # Modeline.
+#doom-modeline                  # Modeline.
+
+#all-the-icons                  # https://github.com/domtronn/all-the-icons.el
+#all-the-icons-dired            # https://github.com/jtbm37/all-the-icons-dired
+#icons-in-terminal              # https://github.com/sebastiencs/icons-in-terminal
+
+ #----------------------------------------------#
+ # Haskell
+
+#dante
+
+ intero                         # needs `stack` system-package
+#ghc                            # « ghc-mod » # NOTE it's been DEPRECATED for « haskell-ide-engine ».
+
+ lsp-mode                       # for « haskell-ide-engine »
+ lsp-ui                         # for « haskell-ide-engine »
+ lsp-haskell                    # for « haskell-ide-engine »
+
+ #----------------------------------------------#
+ # Bookmarks
+
+ bm                             # visual bookmarks
+
+ #----------------------------------------------#
+ # Desktops
+
+#desktopPlus
+
+ #----------------------------------------------#
+ # Editing
+
+ expand-region
+ # ^ Expand selection to strings, definitions, words, lines, paragraphs, etc.
+
+ page-break-lines
+ # ^ Convert the ^L (form feed) chars to horizontal lines
+
+ wrap-region
+ # ^ Wrap selection with punctuations, tags (org-mode, markdown-mode, ..)
+ #   « https://github.com/rejeep/wrap-region.el »
+
+ deft                           # « Notational Velocity » port
+ # ^ Quick note taking and management
+
+ edit-indirect
+
+ simpleclip
+
+ #----------------------------------------------#
+ # FileSystem
+
+ dired-collapse # from the « dired-hacks » megarepo
+ dired-filter   # from the « dired-hacks » megarepo
+#dired-list     # from the « dired-hacks » megarepo
+ dired-open     # from the « dired-hacks » megarepo
+ dired-rainbow  # from the « dired-hacks » megarepo
+#dired-ranger   # from the « dired-hacks » megarepo
+ dired-sidebar  # from the « dired-hacks » megarepo
+ dired-subtree  # from the « dired-hacks » megarepo
+
+ #----------------------------------------------#
+ # Formats
+
+ markdown-mode                  # « .md »
+ json-mode                      # « .json »
+ yaml-mode                      # « .yaml »
+ restclient                     # « POST ... »
+
+ #----------------------------------------------#
+ # Lisp
+
+#paredit
+
+ modalka # « https://github.com/mrkkrp/modalka/blob/master/README.md »
+
+ #----------------------------------------------#
+ # Python
+
+ anaconda-mode
+
+ #----------------------------------------------#
+ # Development
+
+ #magit          # <C-x g>
+ magit-annex
+ magithub
+#github-pullrequest             # FIXME
+
+ direnv         # needs `direnv` system-package
+ neotree
+ multi-term
+
+ pandoc-mode
+
+ #----------------------------------------------#
+ # Miscellaneous
+
+ anzu                # shows total search hits in mode line (c.f. `query-replace`).
+ desktop-environment # « https://github.com/DamienCassou/desktop-environment/ »
+ eimp
+ elfeed
+ elnode
+ epc
+ hungry-delete
+ imgbb
+ move-text
+ ov
+ request             # « https://tkf.github.io/emacs-request/manual.html »
+ rg
+ vlf                 # abbreviates "View Large Files"
+ volatile-highlights # 
+ webpaste
+ quack
+ which-key           # « https://github.com/justbur/emacs-which-key/blob/master/README.org »
+
+ #TODO# graphviz-dot
+ #any-ini-mode # EmacsWiki only
+ #csv-nav # editing CSV files
+ #emacs-web-server
+ #TODO# elisp-ffi
+ #TODO# objed
+ #palimpsest
+ #ranger
+
+ #-----------------------------#
+ # EmacsWiki:
+
+ rainbow-mode                   # Visualize Hex strings, CSS color syntax, X11 color names, etc. « http://elpa.gnu.org/packages/rainbow-mode.html »
+ grab-and-drag
+ better-registers
+
+ #-----------------------------#
+ 
+])
+
+
+==============================================
+
+
+
+
+[submodule "wild-bind"]
+	path = submodules/wild-bind
+	url = https://github.com/debug-ito/wild-bind
+[submodule "cabal"]
+	path = submodules/cabal
+	url = https://github.com/haskell/cabal
+[submodule "awesome-tab"]
+	path = submodules/awesome-tab
+	url = https://github.com/manateelazycat/awesome-tab
+[submodule "xfce4-terminal-colors-solarized"]
+	path = submodules/xfce4-terminal-colors-solarized
+	url = https://github.com/sgerrand/xfce4-terminal-colors-solarized.git
+[submodule "solarized-xresources"]
+	path = submodules/solarized-xresources
+	url = https://github.com/solarized/xresources.git
+[submodule "haskell-mode"]
+	path = submodules/haskell-mode
+	url = https://github.com/haskell/haskell-mode
+[submodule "nix-bash-completions"]
+	path = submodules/nix-bash-completions
+	url = https://github.com/hedning/nix-bash-completions
+
+
+
+
+==============================================
+
+
+
+
+
+
+
+
+
+
+
 
 ==============================================
 

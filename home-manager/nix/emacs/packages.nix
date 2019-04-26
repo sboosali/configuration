@@ -2,8 +2,10 @@
 # Inputs #########################################
 ##################################################
 { pkgs
+, lib
 
 , utilities
+, options ? { minimal = false; }
 }:
 
 #------------------------------------------------#
@@ -67,17 +69,17 @@ coreEmacsPackages = with epkgs; [
 ];
 #------------------------------------------------#
 
-moreEmacsPackages = (with epkgs; [
+moreEmacsPackages = [
 
  #----------------------------------------------#
 
- edit-env
- hexrgb
+ (epkgs.edit-env            or null)
+ (epkgs.hexrgb              or null)
 #awesome-tab
 
  #----------------------------------------------#
 
- pinentry
+ (epkgs.pinentry            or null)
 
   # ^ 
   # This package allows GnuPG passphrase to be prompted through the
@@ -102,37 +104,36 @@ moreEmacsPackages = (with epkgs; [
  #----------------------------------------------#
  # Completion
 
- helm-dash
- helm-make
- helm-swoop
- helm-hayoo
+ (epkgs.helm-dash            or null)
+ (epkgs.helm-make            or null)
+ (epkgs.helm-swoop           or null)
+ (epkgs.helm-hayoo           or null)
 
  #company-yasnippet
  #company-abbrev
  #company-dabbrev
 
- company-ghc
- company-ghci
- company-cabal
- company-web
- company-restclient
- company-anaconda
+ (epkgs.company-ghc          or null)
+ (epkgs.company-ghci         or null)
+ (epkgs.company-cabal        or null)
+ (epkgs.company-web          or null)
+ (epkgs.company-restclient   or null)
+ (epkgs.company-anaconda     or null)
 
  #----------------------------------------------#
  # Window/Buffer Management
 
 #awesome-tab                    # Tabs
- shackle
- window-purpose
+ (epkgs.shackle              or null)
+ (epkgs.window-purpose       or null)
 
  #----------------------------------------------#
  # Appearence
 
- color-theme
- smooth-scrolling
- centered-cursor-mode
-
- telephone-line                 # Modeline.
+ (epkgs.color-theme          or null)
+ (epkgs.smooth-scrolling     or null)
+ (epkgs.centered-cursor-mode or null)
+ (epkgs.telephone-line       or null)  # Modeline.
 #spaceline                      # Modeline.
 #doom-modeline                  # Modeline.
 
@@ -145,17 +146,17 @@ moreEmacsPackages = (with epkgs; [
 
 #dante
 
- intero                         # needs `stack` system-package
+ (epkgs.intero              or null)                         # needs `stack` system-package
 #ghc                            # « ghc-mod » # NOTE it's been DEPRECATED for « haskell-ide-engine ».
 
- lsp-mode                       # for « haskell-ide-engine »
- lsp-ui                         # for « haskell-ide-engine »
- lsp-haskell                    # for « haskell-ide-engine »
+ (epkgs.lsp-mode            or null)                       # for « haskell-ide-engine »
+ (epkgs.lsp-ui              or null)                         # for « haskell-ide-engine »
+ (epkgs.lsp-haskell         or null)                    # for « haskell-ide-engine »
 
  #----------------------------------------------#
  # Bookmarks
 
- bm                             # visual bookmarks
+ (epkgs.bm                   or null)                             # visual bookmarks
 
  #----------------------------------------------#
  # Desktops
@@ -165,89 +166,89 @@ moreEmacsPackages = (with epkgs; [
  #----------------------------------------------#
  # Editing
 
- expand-region
+ (epkgs.expand-region        or null)
  # ^ Expand selection to strings, definitions, words, lines, paragraphs, etc.
 
- page-break-lines
+ (epkgs.page-break-lines     or null)
  # ^ Convert the ^L (form feed) chars to horizontal lines
 
- wrap-region
+ (epkgs.wrap-region          or null)
  # ^ Wrap selection with punctuations, tags (org-mode, markdown-mode, ..)
  #   « https://github.com/rejeep/wrap-region.el »
 
- deft                           # « Notational Velocity » port
+ (epkgs.deft                 or null)                           # « Notational Velocity » port
  # ^ Quick note taking and management
 
- edit-indirect
+ (epkgs.edit-indirect        or null)
 
- simpleclip
+ (epkgs.simpleclip           or null)
 
  #----------------------------------------------#
  # FileSystem
 
- dired-collapse # from the « dired-hacks » megarepo
- dired-filter   # from the « dired-hacks » megarepo
-#dired-list     # from the « dired-hacks » megarepo
- dired-open     # from the « dired-hacks » megarepo
- dired-rainbow  # from the « dired-hacks » megarepo
-#dired-ranger   # from the « dired-hacks » megarepo
- dired-sidebar  # from the « dired-hacks » megarepo
- dired-subtree  # from the « dired-hacks » megarepo
+ (epkgs.dired-collapse       or null) # from the « dired-hacks » megarepo
+ (epkgs.dired-filter         or null)   # from the « dired-hacks » megarepo
+#(epkgs.dired-list          or null)     # from the « dired-hacks » megarepo
+ (epkgs.dired-open           or null)     # from the « dired-hacks » megarepo
+ (epkgs.dired-rainbow        or null)  # from the « dired-hacks » megarepo
+#(epkgs.dired-ranger        or null)   # from the « dired-hacks » megarepo
+ (epkgs.dired-sidebar        or null)  # from the « dired-hacks » megarepo
+ (epkgs.dired-subtree        or null)  # from the « dired-hacks » megarepo
 
  #----------------------------------------------#
  # Formats
 
- markdown-mode                  # « .md »
- json-mode                      # « .json »
- yaml-mode                      # « .yaml »
- restclient                     # « POST ... »
+ (epkgs.markdown-mode        or null)                  # « .md »
+ (epkgs.json-mode            or null)                      # « .json »
+ (epkgs.yaml-mode            or null)                      # « .yaml »
+ (epkgs.restclient           or null)                     # « POST ... »
 
  #----------------------------------------------#
  # Lisp
 
 #paredit
 
- modalka # « https://github.com/mrkkrp/modalka/blob/master/README.md »
+ (epkgs.modalka              or null) # « https://github.com/mrkkrp/modalka/blob/master/README.md »
 
  #----------------------------------------------#
  # Python
 
- anaconda-mode
+ (epkgs.anaconda-mode        or null)
 
  #----------------------------------------------#
  # Development
 
  #magit          # <C-x g>
- magit-annex
- magithub
-#github-pullrequest             # FIXME
+ (epkgs.magit-annex        or null)
+ (epkgs.magithub           or null)
+ (epkgs.github-pullrequest or null)             # FIXME
 
- direnv         # needs `direnv` system-package
- neotree
- multi-term
+ (epkgs.direnv               or null)         # needs `direnv` system-package
+ (epkgs.neotree              or null)
+ (epkgs.multi-term           or null)
 
- pandoc-mode
+ (epkgs.pandoc-mode          or null)
 
  #----------------------------------------------#
  # Miscellaneous
 
- anzu                # shows total search hits in mode line (c.f. `query-replace`).
- desktop-environment # « https://github.com/DamienCassou/desktop-environment/ »
- eimp
- elfeed
- elnode
- epc
- hungry-delete
- imgbb
- move-text
- ov
- request             # « https://tkf.github.io/emacs-request/manual.html »
- rg
- vlf                 # abbreviates "View Large Files"
- volatile-highlights # 
- webpaste
- quack
- which-key           # « https://github.com/justbur/emacs-which-key/blob/master/README.org »
+ (epkgs.anzu                 or null)                # shows total search hits in mode line (c.f. `query-replace`).
+ (epkgs.desktop-environment  or null) # « https://github.com/DamienCassou/desktop-environment/ »
+ (epkgs.eimp                 or null)
+ (epkgs.elfeed               or null)
+ (epkgs.elnode               or null)
+ (epkgs.epc                  or null)
+ (epkgs.hungry-delete        or null)
+ (epkgs.imgbb                or null)
+ (epkgs.move-text            or null)
+ (epkgs.ov                   or null)
+ (epkgs.request              or null)             # « https://tkf.github.io/emacs-request/manual.html »
+ (epkgs.rg                   or null)
+ (epkgs.vlf                  or null)                 # abbreviates "View Large Files"
+ (epkgs.volatile-highlights  or null) # 
+ (epkgs.webpaste             or null)
+ (epkgs.quack                or null)
+ (epkgs.which-key            or null)           # « https://github.com/justbur/emacs-which-key/blob/master/README.org »
 
  #TODO# graphviz-dot
  #any-ini-mode # EmacsWiki only
@@ -261,19 +262,21 @@ moreEmacsPackages = (with epkgs; [
  #-----------------------------#
  # EmacsWiki:
 
- rainbow-mode                   # Visualize Hex strings, CSS color syntax, X11 color names, etc. « http://elpa.gnu.org/packages/rainbow-mode.html »
- grab-and-drag
- better-registers
+ (epkgs.rainbow-mode         or null)                   # Visualize Hex strings, CSS color syntax, X11 color names, etc. « http://elpa.gnu.org/packages/rainbow-mode.html »
+ (epkgs.grab-and-drag        or null)
+ (epkgs.better-registers     or null)
 
  #-----------------------------#
  
-]);
+];
+
+# ^ the « pkgs._ or null » form supports extremely-optional packages.
 
 #------------------------------------------------#
 
-themeEmacsPackages = with epkgs; [
+themeEmacsPackages = [
 
- solarized-theme #TODO
+ (epkgs.solarized-theme or null)
 
 ];
 
@@ -285,7 +288,7 @@ builtins.concatLists
 
   [
     coreEmacsPackages
-    moreEmacsPackages
+  # (lib.optionals (! options.minimal) moreEmacsPackages)
   # themeEmacsPackages
   ]
 

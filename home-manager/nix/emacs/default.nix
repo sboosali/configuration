@@ -2,9 +2,11 @@
 { nixpkgs  ? <nixpkgs>
 , config   ? {}
 , overlays ? []
+, pkgs     ? (import nixpkgs         { inherit config overlays; })
+, lib      ? pkgs.lib
 
-, pkgs      ? (import nixpkgs         { inherit config overlays; })
-, utilities ? (import ./utilities.nix { inherit pkgs;            })
+, utilities ? (import ./utilities.nix { inherit pkgs; })
+, options   ? { minimal = false; }
 }:
 
 ##################################################
@@ -20,17 +22,18 @@ in
 
   extraPackages = import ./packages.nix {
 
-    inherit pkgs;
+    inherit pkgs lib;
     inherit utilities;
 
   };
 
-  overrides = import ./overrides.nix {
+  # overrides = import ./overrides.nix {
 
-    inherit pkgs;
-    inherit utilities;
+  #   inherit pkgs lib;
+  #   inherit utilities;
+  #   inherit options;
 
-  };
+  # };
 
 }
 ##################################################

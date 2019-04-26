@@ -3,6 +3,7 @@
 , lib
 
 , sboo
+, options ? { minimal = false; }
 , xdg
 , applications
 
@@ -20,12 +21,13 @@ with utilities;
   #----------------------------#
 
   home-manager.enable = true;
-  home-manager.path   = (import ./versions/home-manager.nix).fork;
+  home-manager.path   = (import ./versions/home-manager.nix).submodule;
 
   # ^
 
   # home-manager.path = (import ./versions/home-manager.nix).remote;
   # home-manager.path = (import ./versions/home-manager.nix).local;
+  # home-manager.path   = (import ./versions/home-manager.nix).fork;
 
   #TODO:
   # - https://github.com/rycee/home-manager/archive/release-18.09.tar.gz;
@@ -52,7 +54,8 @@ with utilities;
   emacs =
 
     (import ./emacs
-            { inherit pkgs;
+            { inherit pkgs lib;
+              inherit options;
             })
 
      // { enable = true;
@@ -244,7 +247,7 @@ with utilities;
 
   #----------------------------#
 
-  xbindkeys.enable = true;
+# xbindkeys.enable = true;
 
   #----------------------------#
 }

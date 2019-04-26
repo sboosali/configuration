@@ -26,25 +26,66 @@ Make sure.
 
 #### XML Elements
 
-Useful markup elements includes:
+Useful markup elements include:
 
-* `<para>`
-* `<code>`
+* `<link>`           — Links! 
+* `<para>`           — Linebreak. Abbreviates "paragraph".
+* `<code>`           — Code Block. Renders in Monospace. Same as HTML `<code> ... </code>` or Markdown `` `...` `` (i.e. backticks).
 * `<literal>`
 * `<filename>`
 * `<varname>`
 * `<command>`
 * `<parameter>`
-* `<variablelist>`
-* `<programlisting>`
-* `<>`
-* `<>`
+* `<variablelist>`   — List of terms or values, and their definitions or meanings. Renders as a list with indentation. Same as HTML *Definition List* (e.g. `<dl> <dt>"0"</dt> <dd>The default.</dd> ... </dl>`). See the <https://rycee.gitlab.io/home-manager/options.html> ` ` option> for an example.
+* `<programlisting>` — Code Block, multi-line. Same as Markdown `` ``` ... ``` `` (i.e. triple-backticks).
+* `<citerefentry>`
+* `<envar>`
 
-#### `<programlisting>`
+At a minimum, use the `<link>` and `<code>` tags!
 
-e.g. `<programlisting>`...
+#### `<citerefentry>` Element
 
-this `docbook` markup:
+For example, this `docbook` markup:
+
+``` xml
+```
+
+renders as:
+
+#### Semantic `<code>`-like Elements
+
+Examples include:
+
+* `<> </>`
+* `<envar>HOME</envar>`
+* `<filename>~/.config/nixpkgs/home.nix</filename>`
+* `<> </>`
+* `<> </>`
+* `<literal>null</literal>`
+* `<literal>false</literal>`
+* `<literal>true</literal>`
+* `<literal>1/literal>`
+* `<literal>"yes"</literal>`
+
+For example, this `docbook` markup:
+
+``` xml
+```
+
+renders as:
+
+#### `<>` Element
+
+For example, this `docbook` markup:
+
+``` xml
+```
+
+renders as:
+
+#### `<programlisting>` Element
+
+For example, this `docbook` markup:
 
 ``` xml
 <programlisting language="nix">
@@ -75,11 +116,9 @@ home.sessionVariables = {
 \`\`\`
 ```
 
-#### `<variablelist>`
+#### `<variablelist>` Element
 
-e.g. `<variablelist>`...
-
-this markup (indentation is optional, it's included for readability):
+For example, this markup (indentation is optional, it's included for readability):
 
 ``` xml
 The options are:
@@ -119,6 +158,28 @@ renders as:
 > `never`
 >   Never show tray icon.
 > 
+
+See the
+        <citerefentry>
+          <refentrytitle>compton</refentrytitle>
+          <manvolnum>1</manvolnum>
+        </citerefentry>
+        man page
+
+
+
+
+
+
+
+
+
+
+<envar>HOME</envar>
+
+
+
+### 
 
 <term>${1:<literal>null</literal>}</term>
 <listitem><para>{2:the default}</para></listitem>
@@ -226,26 +287,24 @@ Otherwise (if <code>null<code/>), guess given the first non-<code>null</code> va
 
 <!-- secret convenience templates (for contributors to this document)... -->
 
-<!-- Bad: -->
-<!-- -->
+<!-- Bad:    -->
+<!--         -->
 <!-- ``` nix -->
-<!-- ``` -->
-<!-- -->
-<!-- Good: -->
-<!-- -->
+<!-- ```     -->
+<!--         -->
+<!-- Good:   -->
+<!--         -->
 <!-- ``` nix -->
-<!-- ``` -->
+<!-- ```     -->
 
-<!-- #### `<>` -->
-<!-- ->
-<!-- e.g. `<>`... -->
-<!-- ->
-<!-- this `docbook` markup: -->
-<!-- ->
-<!-- ``` xml -->
-<!-- ``` -->
-<!-- ->
-<!-- renders as: -->
-<!-- ->
-<!-- ->
+<!-- #### `<>` Element                   -->
+<!--                                     -->
+<!-- For example, this `docbook` markup: -->
+<!--                                     -->
+<!-- ``` xml                             -->
+<!-- ```                                 -->
+<!--                                     -->
+<!-- renders as:                         -->
+<!--                                     -->
+<!--                                     -->
 

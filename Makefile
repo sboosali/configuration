@@ -29,6 +29,8 @@ HM ?=home-manager
 #HM_FILE    ?=${HOME}/configuration/home-manager/nix/home.nix
 #HM_FILE    ?=./configuration/home-manager/nix/home.nix
 
+HM_PATH ?=~/configuration/submodules/h
+
 HM_NIXPKGS ?=
 
 # HM_NIXPKGS ?=<nixpkgs>
@@ -112,9 +114,9 @@ home-manager:
 
 #------------------------------------------------#
 
-switch: build
+switch:
 
-	$(HM) -f $(HM_FILE) switch
+	HOME_MANAGER_CONFIG=$(HM_FILE) $(HM) -v -f $(HM_FILE) switch
 
 .PHONY: switch
 

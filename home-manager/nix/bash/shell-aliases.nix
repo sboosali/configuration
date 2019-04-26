@@ -31,7 +31,7 @@ nix-shell   = "nix-shell"; #TODO# ''${pkgs.nix}/bin/nix-shell''
  #TODO3 or... keep "dynamic" (not lexical) to use the same nix that must be installed for home-manager to evaluate this very file
 nix-store = "nix-store";
 
-home-manager = "home-manager"; #TODO#
+home-manager = "home-manager"; #TODO#? ''${config.programs.home-manager.path}/home-manager/home-manager.sh''
 
 tar         = "tar"; #TODO# ''${pkgs.tar}/bin/tar'';
 sed         = "sed"; #TODO# ''${pkgs.coreutils?}/bin/sed'';
@@ -566,8 +566,8 @@ in
 
  nm  = ''time ${home-manager} -f ${sboo.files."home.nix"}'';
 
- nmb = ''time (cd ~/configuration ; ${home-manager} -v -f ${sboo.files."home.nix"} build)'';
- nmw = ''time (cd ~/configuration ; ${home-manager} -v -f ${sboo.files."home.nix"} switch)'';
+ nmb = ''time (cd ~/configuration ; ${home-manager} -v -f ${builtins.toString ~/configuration/home-manager/nix/home.nix} build)'';
+ nmw = ''time (cd ~/configuration ; ${home-manager} -v -f ${builtins.toString ~/configuration/home-manager/nix/home.nix} switch)'';
 
  # ^ NOTE « -v » passes « --show-trace ».
 

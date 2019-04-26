@@ -1,5 +1,4 @@
 # -*- mode: nix -*-
-
 ##################################################
 # Parameters #####################################
 ##################################################
@@ -12,25 +11,39 @@
 # , emacsPackages     ? (pkgs.emacs26Packages)
 # , melpaPackages     ? (pkgs.emacs26PackagesNg)
 
-, platformLinux       ? true
-, platformDarwin      ? false
+  #TODO# sboo prefix?
 
-, minimalInstallation ? false
-, maximalInstallation ? true
+  # Personal Configuration:
+
+, minimalInstallation ? null
+, maximalInstallation ? null
+
+, platformLinux       ? false
+, platformDarwin      ? false
 
 , onlyEmacsPackages   ? false
 , onlySystemPrograms  ? false
 
-  #TODO# sboo prefix
+  # ^ (these booleans are forwarded from attributes in « home-attrs.nix »,
+  #    via « home-manager -A ... ».)
+
+#TODO# logic for both « only*{Programs,Libraries} », for testing, and « install*{Programs,Libraries} », for configuration:
+
+# , installEmacsPackages   ? false
+# , installSystemPrograms  ? false
 
 , ...
 }:
+
+#------------------------------------------------#
 
 ##################################################
 # Bootstrap ######################################
 ##################################################
 let
+#-----------------------------------------------#
 
+#-----------------------------------------------#
 in
 ##################################################
 # Imports ########################################
@@ -39,6 +52,7 @@ let
 #-----------------------------------------------#
 
 inherit (pkgs.stdenv) lib;
+inherit (pkgs)        stdenv;
 
 #-----------------------------------------------#
 
@@ -75,6 +89,61 @@ haskell = import ./haskell { inherit pkgs; };
 
 enUS      = "en_US";
 enUS_UTF8 = "en_US.UTF-8";
+
+#-----------------------------------------------#
+
+options = {
+
+  minimal  = nullbool maximalInstallation (nullbool minimalInstallation false);
+
+  platform = if platformLinux then "linux" else if platformDarwin then "darwin" else (stdenv.targetPlatform.parsed.kernel.name or "unspecified");
+
+  libraries = builtins.concat [ (lib.optionals onlyEmacsPackages "emacs")   ]; # TODO installHaskellPrograms
+  programs  = builtins.concat [ (lib.optionals onlySystemPrograms "system") ]; # TODO installHaskellLibraries
+
+};
+
+# ^ Personal options.
+
+/* NOTE:
+
+« currentSystem » includes both Operating System and Architecture.
+
+  > builtins.currentSystem
+    "x86_64-linux"
+
+« stdenv »'s « .*{build,target}Platform.parsed » has structured-data:
+
+  > stdenv.targetPlatform.parsed.kernel.name
+    "linux"
+
+ */
+
+#-----------------------------------------------#
+
+/* Nullable Boolean.
+ *
+ * Nix « nullbool b x » is like Haskell « maybe x id b »
+ *
+ */
+
+nullbool = b: x:
+  assert (b == null || builtins.isBool b);
+
+  if b != null then b else x;
+
+#-----------------------------------------------#
+
+/* Nullable value.
+ *
+ * Nix « nullor x y » is like Haskell « maybe y id x »
+ *
+ */
+
+nullor = x: y:
+  assert (x != null && y != null) -> (builtins.typeOf x == builtins.typeOf y);
+
+  if x != null then x else y;
 
 #-----------------------------------------------#
 in
@@ -177,6 +246,7 @@ self = rec {
   programs = import ./programs.nix
   {
     inherit pkgs lib;
+    inherit options;
     inherit sboo xdg applications;
     inherit utilities xdgUtilities;
   };
