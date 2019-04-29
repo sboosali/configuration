@@ -1,4 +1,4 @@
-### -*- mode: conf-unix; -*-
+### -*- mode: shell-script; -*-
 
 # set -u 
 # which will cause any unset argument reference to immediately fail the script.
@@ -1807,17 +1807,77 @@ function bash-completion--source-everything () {
   
 }
 
-############################################################
-############################################################
-## EMACS
+#------------------------------------------------#
+# Emacs -----------------------------------------#
+#------------------------------------------------#
 
 
-############################################################
-############################################################
+
+#------------------------------------------------#
+# Home-Manager ----------------------------------#
+#------------------------------------------------#
+
+function sboo-home-manager-archive () (
+
+    set -e
+
+    #--------------------------#
+
+    command -v home-manager >/dev/null
+    command -v tar          >/dev/null
+    command -v find         >/dev/null
+    command -v sed          >/dev/null
+
+    #--------------------------#
+
+    local HMGenerationToArchive
+    local NixStorePathToArchive
+
+    #--------------------------#
+
+    if [ -z "${1}" ]
+    then
+        HMGenerationToArchive="$(home-manager generations  |  sed -n -e 's/^................ : id \([[:alnum:]]\+\) -> .*/\1/p'  |  sort -n -r  |  head)"
+    else
+        HMGenerationToArchive="${1}"
+    fi
+
+    if [ -z "${HMGenerationToArchive}" ]
+    then
+        printf "« sboo-home-manager-archive » Internal Error: « \${HMGenerationToArchive} » was empty.\n"
+        exit 1
+    else
+        NixStorePathToArchive=$(home-manager generations  |  grep "${HMGenerationToArchive}"  |  sed -n -e 's/^................ : id \([[:alnum:]]\+\) -> .*/\1/p')
+    fi
+
+    find -L "${NixStorePathToArchive}" -type f  |  tar -c -v --gzip -f ./"home-manager-generation-${HMGenerationToArchive}".tar -T -
+
+    #--------------------------#
+
+    # ^ NOTES...
+    #
+    #   $ home-manager generations
+    #   2019-04-29 03:39 : id 326 -> /nix/store/pjqav8m4rjvix0z9q7vzxjlm0j7jjd6z-home-manager-generation
+    #   ...
+    #
+    #   e.g.:
+    #       cp -v -ra -L "/nix/store/pjqav8m4rjvix0z9q7vzxjlm0j7jjd6z-home-manager-generation" ./home-manager-generation-326
+    #       find ./home-manager-generation-326 -type d -exec chmod 755 '{}' ';'
+    #       find ./home-manager-generation-326 -type f -exec chmod 644 '{}' ';'
+    #       find ./home-manager-generation-326 -type f  |  tar -c -v --gzip -f ./home-manager-generation-326.tar -T -
+    #
+
+)
+
+#------------------------------------------------#
+# Screen ----------------------------------------#
+#------------------------------------------------#
 ## SCREEN COLOR/BRIGHTNESS MANIPULATION (X11)
 
 function get-brightness--via-sysclass () {
- cat /sys/class/backlight/intel_backlight/brightness
+
+    cat /sys/class/backlight/intel_backlight/brightness
+
 }
 
 # function screen-dim--via-sysclass () {
