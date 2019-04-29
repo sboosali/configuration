@@ -5,16 +5,28 @@
 , xdg
 }:
 ##################################################
+let
+#------------------------------------------------#
+
+xmodmap   = ''${pkgs.xorg.xmodmap}/bin/xmodmap'';
+
+#------------------------------------------------#
+in
+##################################################
 {
 
  #-----------------------------#
 
+ ".Xmodmap".source = ../../../xmodmap/sboo.xmodmap;
+ ".Xmodmap".onChange = ''
+
+  ${xmodmap} ~/.Xmodmap
+
+  '';
+
 #TODO#
 # ".xinitrc".source     = import ../x11/xinitrc.nix { inherit pkgs xdg; };
 # ".xinitrc".executable = true;
-
-#TODO#
-# ".Xmodmap".source     = import ../x11/xmodmap.nix { inherit pkgs xdg; };
 
  #-----------------------------#
 

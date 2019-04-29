@@ -1,16 +1,11 @@
 ! ============================================== !
 
-! “Shift-Swap” several keys:
-!
-! ① Shift-Swap the Number-Row (i.e. swap « 1 » and « ! », ..., swap « 9 » and « ( », swap « 0 » and « ) »).
-! ② Shift-Swap « ; » and « : ».
-! ③ Shift-Swap « ' » and « " ».
+! “Shift-Swap” the Number-Row (i.e. swap « 1 » and « ! », ..., swap « 9 » and « ( », swap « 0 » and « ) »).
 ! 
 
 ! ---------------------------------------------- !
 ! Keybindings ---------------------------------- !
 ! ---------------------------------------------- !
-! ①:
 
 keycode  10 = exclam 1 exclam 1
 keycode  11 = at 2 at 2
@@ -22,12 +17,6 @@ keycode  16 = ampersand 7 ampersand 7
 keycode  17 = asterisk 8 asterisk 8
 keycode  18 = parenleft 9 parenleft 9
 keycode  19 = parenright 0 parenright 0
-
-! ---------------------------------------------- !
-! ② and ③:
-
-keycode  47 = colon semicolon colon semicolon
-keycode  48 = quotedbl apostrophe quotedbl apostrophe
 
 ! ---------------------------------------------- !
 ! Notes -----------------------------------------!
@@ -45,9 +34,6 @@ keycode  48 = quotedbl apostrophe quotedbl apostrophe
 !   keycode  17 = * 8
 !   keycode  18 = ( 9
 !   keycode  19 = ) 0
-!   ...
-!   keycode  47 = : ; : ;
-!   keycode  48 = " ' " '
 !
 ! overriding these (original) keysyms:
 !
@@ -63,14 +49,5 @@ keycode  48 = quotedbl apostrophe quotedbl apostrophe
 !     keycode  17 = 8 asterisk 8 asterisk
 !     keycode  18 = 9 parenleft 9 parenleft
 !     keycode  19 = 0 parenright 0 parenright
-!     ...
-!     keycode  47 = semicolon colon semicolon colon
-!     keycode  48 = apostrophe quotedbl apostrophe quotedbl
-!
-
-! ---------------------------------------------- !
-
-! 2015-06-15
-! http://xahlee.info/linux/linux_xmodmap_tutorial.html
 
 ! ============================================== !
