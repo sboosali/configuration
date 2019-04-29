@@ -16,7 +16,7 @@ let
 
 xmodmaps = [
 
-  ../../../xmodmap/swap_parentheses-with-square-brackets.xmodmap
+  ../../../xmodmap/swap_number-row.xmodmap
   ../../../xmodmap/swap_semicolon-with-colon.xmodmap
   ../../../xmodmap/swap_apostrophe-with-quotation.xmodmap
 

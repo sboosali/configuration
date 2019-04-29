@@ -3,7 +3,10 @@
 # Parameters #####################################
 ##################################################
 
-{ pkgs ? (import ./nixpkgs {}).pkgs
+{ nixpkgs  ? ./nixpkgs
+, config   ? {}
+, overlays ? []
+, pkgs     ? (import nixpkgs { inherit config overlays; })
 
 # , haskellPackages   ? (pkgs.haskellPackages)
 # , haskellCompilers  ? (pkgs.haskell.compiler)
@@ -94,7 +97,7 @@ enUS_UTF8 = "en_US.UTF-8";
 
 options = {
 
-  minimal  = nullbool maximalInstallation (nullbool minimalInstallation false);
+  minimal  = nullor minimalInstallation (nullor maximalInstallation false);
 
   platform = if platformLinux then "linux" else if platformDarwin then "darwin" else (stdenv.targetPlatform.parsed.kernel.name or "unspecified");
 
@@ -118,19 +121,6 @@ options = {
     "linux"
 
  */
-
-#-----------------------------------------------#
-
-/* Nullable Boolean.
- *
- * Nix « nullbool b x » is like Haskell « maybe x id b »
- *
- */
-
-nullbool = b: x:
-  assert (b == null || builtins.isBool b);
-
-  if b != null then b else x;
 
 #-----------------------------------------------#
 

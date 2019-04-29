@@ -5,7 +5,7 @@
 , lib
 
 , utilities
-, options ? { minimal = false; }
+, options
 }:
 
 #------------------------------------------------#
@@ -220,8 +220,8 @@ moreEmacsPackages = [
 
  #magit          # <C-x g>
  (epkgs.magit-annex        or null)
- (epkgs.magithub           or null)
- (epkgs.github-pullrequest or null)             # FIXME
+#(epkgs.magithub           or null) #TODO addTool git 
+#(epkgs.github-pullrequest or null) #TODO addTool git 
 
  (epkgs.direnv               or null)         # needs `direnv` system-package
  (epkgs.neotree              or null)
@@ -288,7 +288,7 @@ builtins.concatLists
 
   [
     coreEmacsPackages
-  # (lib.optionals (! options.minimal) moreEmacsPackages)
+    (lib.optionals (! options.minimal) moreEmacsPackages)
   # themeEmacsPackages
   ]
 

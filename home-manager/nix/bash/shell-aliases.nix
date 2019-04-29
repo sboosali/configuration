@@ -566,8 +566,8 @@ in
 
  nm  = ''time ${home-manager} -f ${sboo.files."home.nix"}'';
 
- nmb = ''time (cd ~/configuration ; ${home-manager} -v -f ${builtins.toString ~/configuration/home-manager/nix/home.nix} build)'';
- nmw = ''time (cd ~/configuration ; ${home-manager} -v -f ${builtins.toString ~/configuration/home-manager/nix/home.nix} switch)'';
+ nmb = ''time (cd ~/configuration ; ${home-manager} -v build)'';
+ nmw = ''time (cd ~/configuration ; ${home-manager} -v switch)'';
 
  # ^ NOTE « -v » passes « --show-trace ».
 
@@ -689,6 +689,10 @@ in
   untarball = "${tar} -v -x -f";
 
   # ^ Uncompress and Extract (infer compression from file-extension).
+
+  targz-stdin = "${tar} -c -v --gzip -T - -f home-manager.tar";
+
+  # ^ Archive+Compress files from « stdin ».
 
   #----------------------------------------------#
 

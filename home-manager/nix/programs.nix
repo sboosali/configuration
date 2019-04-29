@@ -3,7 +3,7 @@
 , lib
 
 , sboo
-, options ? { minimal = false; }
+, options
 , xdg
 , applications
 
@@ -21,13 +21,14 @@ with utilities;
   #----------------------------#
 
   home-manager.enable = true;
-  home-manager.path   = (import ./versions/home-manager.nix).submodule;
+  home-manager.path   = (import ./versions/home-manager.nix).v19_03;
 
   # ^
 
-  # home-manager.path = (import ./versions/home-manager.nix).remote;
-  # home-manager.path = (import ./versions/home-manager.nix).local;
+  # home-manager.path = (import ./versions/home-manager.nix).submodule;
   # home-manager.path   = (import ./versions/home-manager.nix).fork;
+  # home-manager.path = (import ./versions/home-manager.nix).v19_03;
+  # home-manager.path = (import ./versions/home-manager.nix).v18_09;
 
   #TODO:
   # - https://github.com/rycee/home-manager/archive/release-18.09.tar.gz;
