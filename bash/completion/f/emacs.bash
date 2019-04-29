@@ -2,7 +2,7 @@
 
 ##################################################
 
-# « emacst » command-line completion
+# « emacs » command-line completion
 #
 # GPL-3.0-or-later © 2019 "Sam Boosalis" <samboosalis@gmail.com>
 
@@ -31,17 +31,17 @@
 # (1) Invoke « shellcheck »
 #
 #     * source: « https://github.com/koalaman/shellcheck »
-#     * run:    « shellcheck ./share/bash-completion/completions/emacst »
+#     * run:    « shellcheck ./share/bash-completion/completions/emacs »
 #
 # (2) Interpret via Bash 3
 #
-#     * run:    « bash --noprofile --norc ./share/bash-completion/completions/emacst »
+#     * run:    « bash --noprofile --norc ./share/bash-completion/completions/emacs »
 #
 
 ##################################################
 # Examples:
 
-# $ emacst <TAB>
+# $ emacs <TAB>
 #
 # -V
 # --version
@@ -78,7 +78,7 @@
 ##################################################
 # Notes:
 
-# « emacst » Options:
+# « emacs » Options:
 #
 # -V
 # --version
@@ -128,9 +128,9 @@
 
 #------------------------------------------------#
 
-# $ emacst --help
+# $ emacs --help
 # 
-# Usage: /nix/store/p1if8dbvw752c5n4qrxrnkyjz45q0sln-emacs-26.1/bin/emacst [OPTIONS] FILE...
+# Usage: /nix/store/p1if8dbvw752c5n4qrxrnkyjz45q0sln-emacs-26.1/bin/emacs [OPTIONS] FILE...
 #
 # Tell the Emacs server to visit the specified files.
 # Every FILE can be either just a FILENAME or [+LINE[:COLUMN]] FILENAME.
@@ -159,7 +159,7 @@
 # 			If EDITOR is the empty string, start Emacs in daemon
 # 			mode and try connecting again
 # -T PREFIX, --tramp=PREFIX
-#                         PREFIX to prepend to filenames sent by emacst
+#                         PREFIX to prepend to filenames sent by emacs
 #                         for locating files remotely via Tramp
 #
 # Report bugs with M-x report-emacs-bug.
@@ -168,15 +168,15 @@
 ##################################################
 # Dependencies:
 
-command -v emacst  >/dev/null
-command -v grep         >/dev/null
-command -v sed          >/dev/null
+command -v emacs  >/dev/null
+command -v grep   >/dev/null
+command -v sed    >/dev/null
 
 ##################################################
 # Code:
 
 # shellcheck disable=SC2207
-_emacst_completions ()
+_emacs_completions ()
 {
 
     #--------------------------#
@@ -184,21 +184,21 @@ _emacst_completions ()
     local Subcommands
     Subcommands=( )
 
-    # ^ « emacst »'s subcommands.
+    # ^ « emacs »'s subcommands.
 
     #--------------------------#
 
     local Options
     Options=( "-V" "--version" "-H" "--help" "-nw" "-t" "--tty" "-c" "--create-frame" "-F" "--frame-parameters" "-e" "--eval" "-n" "--no-wait" "-q" "--quiet" "-u" "--suppress-output" "-d" "--display" "--parent" "-s" "-socket-name" "-f" "--server-file" "-a" "--alternate-editor" "-T" "--tramp" )
 
-    # ^ « emacst »'s options and flags.
+    # ^ « emacs »'s options and flags.
 
     #--------------------------#
 
     local UnaryOptions
     UnaryOptions=( "-F" "--frame-parameters" "-e" "--eval" "-d" "--display" "--parent" "-s" "-socket-name" "-f" "--server-file" "-a" "--alternate-editor" "-T" "--tramp" )
 
-    # ^ « emacst »'s (non-flag) options.
+    # ^ « emacs »'s (non-flag) options.
 
     #--------------------------#
 
@@ -217,7 +217,7 @@ _emacst_completions ()
 
     # ^ the word to the left of the current word.
     #
-    #   e.g. in « emacst -v -f ./<TAB> »:
+    #   e.g. in « emacs -v -f ./<TAB> »:
     #
     #       PreviousWord="-f"
     #       CurrentWord="./"
@@ -269,4 +269,4 @@ _emacst_completions ()
 
 ##################################################
 
-complete -F _emacst_completions -o default emacst
+complete -F _emacs_completions -o default emacs
