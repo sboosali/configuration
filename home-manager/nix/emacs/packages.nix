@@ -73,6 +73,7 @@ moreEmacsPackages = [
 
  #----------------------------------------------#
 
+ (epkgs.sidebar             or null)            # https://github.com/sebastiencs/sidebar.el
  (epkgs.edit-env            or null)
  (epkgs.hexrgb              or null)
 #awesome-tab

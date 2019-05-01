@@ -204,6 +204,9 @@ apt-install:
 
 	sudo apt install -y "paper-icon-theme"
 
+	sudo apt install -y "deluge-gtk"
+	sudo apt install -y "deluge-console"
+
 #	sudo apt install -y ""
 
         #----------------------#

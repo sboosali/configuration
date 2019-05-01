@@ -761,6 +761,20 @@ in
 
   sboo-refresh-font-cache =''sudo fc-cache -f -v '';
 
+
+  #----------------------------------------------#
+
+  sboo-virtualbox-groups = ''cat /etc/group | grep'^vbox' | grep "$USER"\$ |  cut -d ':' -f1'':
+
+ /* e.g.
+  *
+  *    $ sboo-virtualbox-groups
+  *
+  *    vboxusers
+  *    vboxsf
+  *
+  */
+
   #----------------------------------------------#
 }
 ##################################################

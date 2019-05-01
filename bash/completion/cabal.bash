@@ -6,7 +6,6 @@
 
 # cabal command line completion
 #
-# Copyright 2007-2008 "Lennart Kolmodin" <kolmodin@gentoo.org>
 #                     "Duncan Coutts"    <dcoutts@gentoo.org>
 #                     "Sam Boosalis"     <samboosalis@gmail.com>
 #

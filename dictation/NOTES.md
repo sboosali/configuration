@@ -7,6 +7,197 @@
 * `./vocabulary.txt` — list of words/phrases (one-per-line) to import into DragonNaturallySpeaking
 * `./scripts/add-user.sh` — register `$USER` under VirtualBox `group`s.
 
+## `Dragon NaturallySpeaking`
+
+"C:\Program Files (x86)\Nuance\NaturallySpeaking15\Program\"
+
+### `Dragon NaturallySpeaking` Files
+
+the `Dragon NaturallySpeaking` executeable (for `DNS v15` on *Windows 10*) is at `"C:\Program Files (x86)\Nuance\NaturallySpeaking15\Program\natspeak.exe"`.
+
+### Autostart
+
+the `shell:startup` command launches the *Autostart Directory*.
+
+Create an *Application Shortcut* (e.g. `"C:\Program Files (x86)\Nuance\NaturallySpeaking15\Program\natspeak.exe"`) in the *Autostart Directory* (e.g. `"C:\Users\VirtualSpiros\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup"`).
+
+## `VirtualBox`
+
+### Installing `VirtualBox`
+
+1. On the host (via `apt` on Ubuntu):
+
+    ```
+    $ sudo apt install -y virtualbox-guest-additions-iso
+    $ ls /usr/share/virtualbox/VBoxGuestAdditions.iso
+    ```
+
+2. Drag-n-drop the `.iso` from the host (via a *File Explorer*) to the guest (e.g. onto the Desktop):
+
+3. On the guest (on Windows):
+
+    - double-click on the `.iso` (to extract it).
+    - double-click on an `.exe` (to install it), for example `VBoxGuestAdditions-amd64.exe` (for a `x86_64-linux` host).
+    - reboot.
+
+### `VirtualBox` groups
+
+`vbox*` groups include:
+
+* `vboxsf` — permits mounting of Shared Folders.
+* `vboxusers` — permits passing USB Devices through, from the Host to any Guests.
+
+NOTE add your User as a member of the `vbox*` Groups (or ensure your User is already a member).
+
+e.g. before membership:
+
+```sh
+$ cat /etc/group | grep vbox
+
+vboxusers:x:130:
+vboxsf:x:131:
+```
+
+e.g. add membership (for my User, i.e. `sboo`):
+
+```sh
+$ sudo usermod -aG vboxusers "$USER"
+$ sudo usermod -aG vboxsf    "$USER"
+
+# then « reboot » or « logout/login » (if necessary).
+```
+
+e.g. after membership:
+
+```sh
+$ cat /etc/group | grep vbox
+
+vboxusers:x:130:sboo
+vboxsf:x:131:sboo
+
+$ cat /etc/group | grep'^vbox' | grep "$USER"\$ |  cut -d ':' -f1
+
+vboxusers
+vboxsf
+
+$ cat /etc/group | grep vbox | grep "$USER" | wc -l
+
+2
+```
+
+### VirtualBox's *Shared Folder* Support
+
+to register a Shared Folder on a Windows Guest, e.g. for a Shared Folder named `Host`, run `use` (in `CMD.exe`):
+
+e.g. Success:
+
+``` bat
+> net use x: \\vboxsvr\Host
+
+The command completed successfully.
+```
+
+e.g. Failure:
+
+``` bat
+> net use x: \\vboxsvr\Host
+
+System error 53 has occurred.
+
+The network path was not found.
+```
+
+e.g. Failure:
+
+``` bat
+> net use x: \\vboxsvr\Host
+
+System error 69 has occurred.
+
+The network name was not found.
+```
+
+Troubleshooting:
+
+* Disable the *(Windows) Firewall* (on the Windows Guest).
+* Re-Install the *VirtualBox Guest Additions*.
+* Discover the Shared Folder name:
+
+    - e.g. `Host` if created by an invocation of this command: `$ VBoxManage sharedfolder add "Windows10Dragon15" -name "Host" -hostpath "~/guests/Windows10Dragon15"`
+    - e.g. In the *VirtualBox GUI*, for a Virtual Machine named *Windows10Dragon15*, click `Shared Folders > Folders List > Machine Folders`, then read the `Name` (leftmost) column.
+
+When simultaneously editing *Shared Files*, set the *Line-Ending Convention* to *"\r"*:
+
+- On the Guest, with *Notepad.exe* — which `Dragon NaturallySpeaking` supports natively.
+- On the Host, with *Emacs* — which can save File Buffers in Windows' Line-Ending Convention via `M-x set-buffer-file-coding-system RET dos RET` (i.e. `M-: (set-buffer-file-coding-system 'dos)`).
+
+### VirtualBox's *USB* Support
+
+e.g. before setup:
+
+```sh
+$ VBoxManage list usbhost
+
+Host USB Devices:
+
+<none>
+```
+
+e.g. after setup:
+
+```sh
+$ VBoxManage list usbhost
+
+Host USB Devices:
+
+UUID:               7f019d5c-abd5-455a-a765-4f064fd3f541
+VendorId:           0x8c00 (8C00)
+ProductId:          0x3c00 (3C00)
+Revision:           1.0 (0100)
+Port:               0
+USB version/speed:  1/Full
+Manufacturer:       C-Media Electronics Inc.      
+Product:            USB TableMike
+Address:            sysfs:/sys/devices/pci0000:00/0000:00:14.0/usb1/1-1/1-1.1//device:/dev/vboxusb/001/004
+Current State:      Busy
+
+UUID:               5acda71f-cb35-4d0c-8d68-e99c0ff09a86
+VendorId:           0x1125 (1125)
+ProductId:          0x1807 (1807)
+Revision:           0.0 (0000)
+Port:               1
+USB version/speed:  1/Low
+Manufacturer:       Genovation Inc
+Product:            ControlPad24
+Address:            sysfs:/sys/devices/pci0000:00/0000:00:14.0/usb1/1-2//device:/dev/vboxusb/001/024
+Current State:      Busy
+
+UUID:               69242917-5c10-4f49-9e4b-1609e8b2b0da
+VendorId:           0x058f (058F)
+ProductId:          0x6366 (6366)
+Revision:           1.0 (0100)
+Port:               3
+USB version/speed:  2/High
+Manufacturer:       Generic
+Product:            Mass Storage Device
+SerialNumber:       058F0O1111B1
+Address:            sysfs:/sys/devices/pci0000:00/0000:00:14.0/usb1/1-1/1-1.4//device:/dev/vboxusb/001/006
+Current State:      Busy
+
+UUID:               c0f34417-00a8-4a33-828c-84132c0efe30
+VendorId:           0x04f3 (04F3)
+ProductId:          0x24a0 (24A0)
+Revision:           17.17 (1717)
+Port:               8
+USB version/speed:  2/Full
+Manufacturer:       ELAN
+Product:            Touchscreen
+Address:            sysfs:/sys/devices/pci0000:00/0000:00:14.0/usb1/1-9//device:/dev/vboxusb/001/005
+Current State:      Busy
+```
+
+
+
 ## Vocabulary
 
 ### creating `vocabulary.txt`
@@ -30,8 +221,6 @@ via:
 for parsing haskell:
 
 * `haskell-src-meta`, `haskell-src-exts`
-
-
 
 ### importing `vocabulary.txt`
 
@@ -88,9 +277,6 @@ Create *USB Filters* for:
     * `Port`         — 
 
 where the data came from `lsusb -v`.
-
-
-
 
 ### `lsusb` & the `TableMike`
 
@@ -221,128 +407,7 @@ $ lsusb -v -d 058f:6366
 
 ```
 
-## `VirtualBox`
-
-### `VirtualBox` groups
-
-`vbox*` groups include:
-
-* `vboxsf` — permits mounting of Shared Folders.
-* `vboxusers` — permits passing USB Devices through, from the Host to any Guests.
-
-NOTE add your User as a member of the `vbox*` Groups (or ensure your User is already a member).
-
-e.g. before membership:
-
-```sh
-$ cat /etc/group | grep vbox
-
-vboxusers:x:130:
-vboxsf:x:131:
-```
-
-e.g. add membership (for my User, i.e. `sboo`):
-
-```sh
-$ sudo usermod -aG vboxusers "$USER"
-$ sudo usermod -aG vboxsf    "$USER"
-
-# then « reboot » or « logout/login » (if necessary).
-```
-
-e.g. after membership:
-
-```sh
-$ cat /etc/group | grep vbox
-
-vboxusers:x:130:sboo
-vboxsf:x:131:sboo
-
-$ cat /etc/group | grep vbox | grep "$USER" | wc -l
-
-2
-```
-
-### VirtualBox's USB Support
-
-e.g. before setup:
-
-```sh
-$ VBoxManage list usbhost
-
-Host USB Devices:
-
-<none>
-```
-
-e.g. after setup:
-
-```sh
-$ VBoxManage list usbhost
-
-Host USB Devices:
-
-UUID:               7f019d5c-abd5-455a-a765-4f064fd3f541
-VendorId:           0x8c00 (8C00)
-ProductId:          0x3c00 (3C00)
-Revision:           1.0 (0100)
-Port:               0
-USB version/speed:  1/Full
-Manufacturer:       C-Media Electronics Inc.      
-Product:            USB TableMike
-Address:            sysfs:/sys/devices/pci0000:00/0000:00:14.0/usb1/1-1/1-1.1//device:/dev/vboxusb/001/004
-Current State:      Busy
-
-UUID:               5acda71f-cb35-4d0c-8d68-e99c0ff09a86
-VendorId:           0x1125 (1125)
-ProductId:          0x1807 (1807)
-Revision:           0.0 (0000)
-Port:               1
-USB version/speed:  1/Low
-Manufacturer:       Genovation Inc
-Product:            ControlPad24
-Address:            sysfs:/sys/devices/pci0000:00/0000:00:14.0/usb1/1-2//device:/dev/vboxusb/001/024
-Current State:      Busy
-
-UUID:               69242917-5c10-4f49-9e4b-1609e8b2b0da
-VendorId:           0x058f (058F)
-ProductId:          0x6366 (6366)
-Revision:           1.0 (0100)
-Port:               3
-USB version/speed:  2/High
-Manufacturer:       Generic
-Product:            Mass Storage Device
-SerialNumber:       058F0O1111B1
-Address:            sysfs:/sys/devices/pci0000:00/0000:00:14.0/usb1/1-1/1-1.4//device:/dev/vboxusb/001/006
-Current State:      Busy
-
-UUID:               c0f34417-00a8-4a33-828c-84132c0efe30
-VendorId:           0x04f3 (04F3)
-ProductId:          0x24a0 (24A0)
-Revision:           17.17 (1717)
-Port:               8
-USB version/speed:  2/Full
-Manufacturer:       ELAN
-Product:            Touchscreen
-Address:            sysfs:/sys/devices/pci0000:00/0000:00:14.0/usb1/1-9//device:/dev/vboxusb/001/005
-Current State:      Busy
-```
-
-
-
-
 ### 
-
-
-
-
-
-
-
-
-
-
-
 
 
 

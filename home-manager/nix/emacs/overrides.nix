@@ -128,5 +128,26 @@ with utilities;
 # https://github.com/sebastiencs/icons-in-terminal
 
  #-----------------------------#
+
+ # sidebar = super.trivialBuild {
+
+ #    pname   = "sidebar";
+ #    version = "0.0.1";
+
+ #    src = lib.fetchFromGitHub ./sidebar.nix;
+ #    # ^ $ nix-prefetch-github --nix --prefetch --rev 6576dbe9e3e87b24194ef1d7fde42b00c6a22fbb sebastiencs sidebar ./sidebar.nix
+
+ #    recipe = pkgs.writeText "sidebar-recipe" ''
+ #      (sidebar
+ #       :repo "sebastiencs/sidebar" :fetcher github
+ #       :files ("*.el"))
+ #    '';
+
+ #    meta.homepage = "https://github.com/sebastiencs/sidebar#README";
+ #    meta.license  = lib.licenses.gpl3Plus;
+
+ # };
+
+ #-----------------------------#
 }
 ##################################################
