@@ -5130,9 +5130,9 @@ nullbool = b: x:
 
 -----------------------------------------------
 
+$ nix-prefetch-github --nix --prefetch --out ./sidebar.nix --rev 6576dbe9e3e87b24194ef1d7fde42b00c6a22fbb sebastiencs sidebar
 
 -----------------------------------------------
-
 
 
 
