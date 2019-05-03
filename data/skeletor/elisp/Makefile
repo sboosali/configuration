@@ -1,22 +1,53 @@
-##################################################
-# Settings #######################################
-##################################################
+#------------------------------------------------#
+# README ----------------------------------------#
+#------------------------------------------------#
+
+# Targets:
+#
+# • Standard targets — « make {build,check,dist,install} ».
+# • Release targets  — « make {upload,publish}-{melpa,github} ».
+#
+
+#------------------------------------------------#
+# Makefile Settings -----------------------------#
+#------------------------------------------------#
 
 SHELL=bash
 
 .EXPORT_ALL_VARIABLES:
 
-##################################################
-# Variables ######################################
-##################################################
+#------------------------------------------------#
+# Makefile Variables: Metadata ------------------#
+#------------------------------------------------#
 
-EmacsDirectory ?=$(CURDIR)
-
-# ^ e.g. « ~/emacs.d/ ».
+Version=0.0.0
+Feature=expresso-mode
 
 #------------------------------------------------#
 
-Timestamp:=$(shell date +%d-%m-%Y+%H:%M)
+CaskFile?=./Cask
+
+#------------------------------------------------#
+# Makefile Variables: Paths ---------------------#
+#------------------------------------------------#
+
+BuildDirectory ?=./.cask
+DataDirectory  ?=./data
+ShareDirectory ?=./gitignored/share
+
+#------------------------------------------------#
+
+#------------------------------------------------#
+# Makefile Variables: Options -------------------#
+#------------------------------------------------#
+
+EmacsOptions ?=--no-init-file --maximized --no-splash --no-desktop
+
+#------------------------------------------------#
+# Makefile Variables: Programs ------------------#
+#------------------------------------------------#
+
+Cask?=cask
 
 #------------------------------------------------#
 
@@ -24,28 +55,62 @@ Emacs      ?=emacs
 EmacsBuild ?=emacs  -batch  --funcall=batch-byte-compile
 EmacsStart ?=emacs "--name=Emacs - SBoo/$(Timestamp)" --maximized --no-splash --no-desktop
 
-#Emacs ?=emacs
-#Emacs ?=./result/bin/emacs
+#------------------------------------------------#
 
+Open ?=xdg-open
+Nix  ?=nix
+
+#------------------------------------------------#
+# Makefile Variables: Paths ---------------------#
+#------------------------------------------------#
+
+BuildDirectory   ?=./dist-newstyle
+DataDirectory    ?=./data
 
 #------------------------------------------------#
 
-EmacsOptions ?= "--name=SBoo/$(Timestamp)" --maximized --no-splash --no-desktop
+ShareDirectory      ?=./gitignored/share
+HaddockDirectory    ?=$(ShareDirectory)/doc
+CompletionDirectory ?=$(ShareDirectory)/bash/completions
 
-# ^ « emacs » (case-insensitive) must be in « --name »,
-#   for « wmctrl -a emacs » to work.
+#------------------------------------------------#
+# Makefile Variables: Options -------------------#
+#------------------------------------------------#
+
+CaskOptions=--cask-file $(ProjectFile) --builddir $(BuildDirectory)
 
 #------------------------------------------------#
 
-Cask?=cask
-
-##################################################
-# Targets ########################################
-##################################################
+MelpaUser     =sboo
+MelpaPassword =pass melpa.org/user/$(MelpaUser)
 
 #------------------------------------------------#
-# Emacs -----------------------------------------#
+
+GitHubOwner      =sboosali
+GitHubRepository =$(Project)
+
 #------------------------------------------------#
+# Makefile Variables: Subcommands ---------------#
+#------------------------------------------------#
+
+CaskBuild   ?=$(Cask) new-build $(CaskOptions)
+CaskRun     ?=$(Cask) new-run $(CaskOptions)
+CaskInstall ?=$(Cask) -v --overwrite-policy=always new-install
+CaskTest    ?=$(Cask) new-test --enable-tests $(CaskOptions)
+CaskBench   ?=$(Cask) new-bench --enable-benchmarks $(CaskOptions)
+CaskDocs    ?=$(Cask) new-haddock --enable-documentation $(CaskOptions)
+
+#------------------------------------------------#
+# Makefile Variables: Environment Variables -----#
+#------------------------------------------------#
+
+LC_ALL=C.UTF-8
+
+#------------------------------------------------#
+# Makefile Targets: Standard --------------------#
+#------------------------------------------------#
+
+# Emacs
 
 build:
 

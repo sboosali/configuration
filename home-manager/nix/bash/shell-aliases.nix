@@ -764,7 +764,7 @@ in
 
   #----------------------------------------------#
 
-  sboo-virtualbox-groups = ''cat /etc/group | grep'^vbox' | grep "$USER"\$ |  cut -d ':' -f1'':
+  sboo-virtualbox-groups = ''cat /etc/group | grep'^vbox' | grep "$USER"\$ |  cut -d ':' -f1'';
 
  /* e.g.
   *
