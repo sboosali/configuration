@@ -7,52 +7,20 @@
 # GPL-3.0-or-later © 2019 "Sam Boosalis" <samboosalis@gmail.com>
 
 ##################################################
-# Contributing:
-
-# Compatibility — Bash 3.
-#
-# OSX won't update Bash 3 (last updated circa 2009) to Bash 4,
-# and we'd like this completion script to work on both Linux and Mac.
-#
-# For example, OSX Yosemite (released circa 2014) ships with Bash 3:
-#
-#  $ echo $BASH_VERSION
-#  3.2
-#
-# While Ubuntu LTS 14.04 (a.k.a. Trusty, also released circa 2016)
-# ships with the latest version, Bash 4 (updated circa 2016):
-#
-#  $ echo $BASH_VERSION
-#  4.3
-#
-
-# Testing
-#
-# (1) Invoke « shellcheck »
-#
-#     * source: « https://github.com/koalaman/shellcheck »
-#     * run:    « shellcheck ./share/bash-completion/completions/emacs »
-#
-# (2) Interpret via Bash 3
-#
-#     * run:    « bash --noprofile --norc ./share/bash-completion/completions/emacs »
-#
-
-##################################################
 # Notes:
 
-# $ emacs --help 
+# $ emacs --help
 # Usage: /nix/store/z6x936aa6kfnwpz8fb34z28qng5prrp9-emacs-26.1/bin/emacs [OPTION-OR-FILENAME]...
-# 
+#
 # Run Emacs, the extensible, customizable, self-documenting real-time
 # display editor.  The recommended way to start Emacs for normal editing
 # is with no options at all.
-# 
+#
 # Run M-x info RET m emacs RET m emacs invocation RET inside Emacs to
 # read the main documentation for these command-line arguments.
-# 
+#
 # Initialization options:
-# 
+#
 # --batch                     do not do interactive display; implies -q
 # --chdir DIR                 change to directory DIR
 # --daemon, --bg-daemon[=NAME] start a (named) server in the background
@@ -75,9 +43,9 @@
 # --script FILE               run FILE as an Emacs Lisp script
 # --terminal, -t DEVICE       use DEVICE for terminal I/O
 # --user, -u USER             load ~USER/.emacs instead of your own
-# 
+#
 # Action options:
-# 
+#
 # FILE                    visit FILE
 # +LINE                   go to line LINE in next FILE
 # +LINE:COLUMN            go to line LINE, column COLUMN, in next FILE
@@ -91,9 +59,9 @@
 # --kill                  exit without asking for confirmation
 # --load, -l FILE         load Emacs Lisp FILE using the load function
 # --visit FILE            visit FILE
-# 
+#
 # Display options:
-# 
+#
 # --background-color, -bg COLOR   window background color
 # --basic-display, -D             disable many display features;
 #                                   used for debugging Emacs
@@ -125,176 +93,78 @@
 # --parent-id XID                 set parent window
 # --help                          display this help and exit
 # --version                       output version information and exit
-# 
+#
 # You can generally also specify long option names with a single -; for
 # example, -batch as well as --batch.  You can use any unambiguous
 # abbreviation for a --option.
-# 
+#
 # Various environment variables and window system resources also affect
 # the operation of Emacs.  See the main documentation.
-# 
-
-##################################################
-# Dependencies:
-
-command -v emacs  >/dev/null
-command -v grep   >/dev/null
-command -v sed    >/dev/null
+#
 
 ##################################################
 # Code:
 
+_emacs_options=( )
 
-# --batch                     
-# --chdir DIR                 
-# --daemon, --bg-daemon[=NAME]
-# --fg-daemon[=NAME]          
-# --debug-init                
-# --display, -d DISPLAY       
-# --module-assertions         
-# --no-build-details          
-# --no-desktop                
-# --no-init-file, -q          
-# --no-loadup, -nl            
-# --no-site-file              
-# --no-x-resources            
-# --no-site-lisp, -nsl        
-# --no-splash                 
-# --no-window-system, -nw     
-# --quick, -Q                 
-# --script FILE               
-# --terminal, -t DEVICE       
-# --user, -u USER             
-# --directory, -L DIR
-# --eval EXPR        
-# --execute EXPR     
-# --file FILE        
-# --find-file FILE   
-# --funcall, -f FUNC 
-# --insert FILE      
-# --kill             
-# --load, -l FILE    
-# --visit FILE       
-# --background-color, -bg COLOR
-# --basic-display, -D         
-# --border-color, -bd COLOR   
-# --border-width, -bw WIDTH   
-# --color, --color=MODE       
-# --cursor-color, -cr COLOR   
-# --font, -fn FONT            
-# --foreground-color, -fg COLOR
-# --fullheight, -fh           
-# --fullscreen, -fs           
-# --fullwidth, -fw            
-# --maximized, -mm            
-# --geometry, -g GEOMETRY     
-# --no-bitmap-icon, -nbi      
-# --iconic                    
-# --internal-border, -ib WIDTH
-# --line-spacing, -lsp PIXELS 
-# --mouse-color, -ms COLOR    
-# --name NAME                 
-# --no-blinking-cursor, -nbc  
-# --reverse-video, -r, -rv    
-# --title, -T TITLE           
-# --vertical-scroll-bars, -vb 
-# --xrm XRESOURCES            
-# --parent-id XID             
-# --help                      
-# --version                   
+_emacs_options+=(        "--help"                               )
+_emacs_options+=(        "--version"                            )
+_emacs_options+=(        "--batch"                              )
+_emacs_options+=(        "--chdir"                              )
+_emacs_options+=(        "--daemon"               "--bg-daemon" )
+_emacs_options+=(        "--fg-daemon"                          )
+_emacs_options+=(        "--debug-init"                         )
+_emacs_options+=( "-d"   "--display"                            )
+_emacs_options+=(        "--module-assertions"                  )
+_emacs_options+=(        "--no-build-details"                   )
+_emacs_options+=(        "--no-desktop"                         )
+_emacs_options+=( "-q"   "--no-init-file"                       )
+_emacs_options+=( "-nl"  "--no-loadup"                          )
+_emacs_options+=(        "--no-site-file"                       )
+_emacs_options+=(        "--no-x-resources"                     )
+_emacs_options+=( "-nsl" "--no-site-lisp"                       )
+_emacs_options+=(        "--no-splash"                          )
+_emacs_options+=( "-nw"  "--no-window-system"                   )
+_emacs_options+=( "-Q"   "--quick"                              )
+_emacs_options+=(        "--script"                             )
+_emacs_options+=( "-t"   "--terminal"                           )
+_emacs_options+=( "-u"   "--user"                               )
+_emacs_options+=( "-L"   "--directory"                          )
+_emacs_options+=(        "--eval"                               )
+_emacs_options+=(        "--execute"                            )
+_emacs_options+=(        "--file"                               )
+_emacs_options+=(        "--find-file"                          )
+_emacs_options+=( "-f"   "--funcall"                            )
+_emacs_options+=(        "--insert"                             )
+_emacs_options+=(        "--kill"                               )
+_emacs_options+=( "-l"   "--load"                               )
+_emacs_options+=(        "--visit"                              )
+_emacs_options+=( "-bg"  "--background-color"                   )
+_emacs_options+=( "-D"   "--basic-display"                      )
+_emacs_options+=( "-bd"  "--border-color"                       )
+_emacs_options+=( "-bw"  "--border-width"                       )
+_emacs_options+=(        "--color"                              )
+_emacs_options+=( "-cr"  "--cursor-color"                       )
+_emacs_options+=( "-fn"  "--font"                               )
+_emacs_options+=( "-fg"  "--foreground-color"                   )
+_emacs_options+=( "-fh"  "--fullheight"                         )
+_emacs_options+=( "-fs"  "--fullscreen"                         )
+_emacs_options+=( "-fw"  "--fullwidth"                          )
+_emacs_options+=( "-mm"  "--maximized"                          )
+_emacs_options+=( "-g"   "--geometry"                           )
+_emacs_options+=( "-nbi" "--no-bitmap-icon"                     )
+_emacs_options+=(        "--iconic"                             )
+_emacs_options+=( "-ib"  "--internal-border"                    )
+_emacs_options+=( "-lsp" "--line-spacing"                       )
+_emacs_options+=( "-ms"  "--mouse-color"                        )
+_emacs_options+=(        "--name"                               )
+_emacs_options+=( "-nbc" "--no-blinking-cursor"                 )
+_emacs_options+=( "-r"   "--reverse-video"        "-rv"         )
+_emacs_options+=( "-T"   "--title"                              )
+_emacs_options+=( "-vb"  "--vertical-scroll-bars"               )
+_emacs_options+=(        "--xrm"                                )
+_emacs_options+=(        "--parent-id"                          )
 
-# shellcheck disable=SC2207
-_emacs_completions ()
-{
+#------------------------------------------------#
 
-    #--------------------------#
-
-    local Subcommands
-    Subcommands=( )
-
-    # ^ « emacs »'s subcommands.
-
-    #--------------------------#
-
-    local Options
-    Options=( "-V" "--version" "-H" "--help" "-nw" "-t" "--tty" "-c" "--create-frame" "-F" "--frame-parameters" "-e" "--eval" "-n" "--no-wait" "-q" "--quiet" "-u" "--suppress-output" "-d" "--display" "--parent" "-s" "-socket-name" "-f" "--server-file" "-a" "--alternate-editor" "-T" "--tramp" )
-
-    # ^ « emacs »'s options and flags.
-
-    #--------------------------#
-
-    local UnaryOptions
-    UnaryOptions=( "-F" "--frame-parameters" "-e" "--eval" "-d" "--display" "--parent" "-s" "-socket-name" "-f" "--server-file" "-a" "--alternate-editor" "-T" "--tramp" )
-
-    # ^ « emacs »'s (non-flag) options.
-
-    #--------------------------#
-
-    local CurrentWord
-    CurrentWord="${COMP_WORDS[$COMP_CWORD]}"
-
-    # ^ the word currently being completed
-
-    local PreviousWord
-    if [ "$COMP_CWORD" -ge 1 ]
-    then
-        PreviousWord="${COMP_WORDS[COMP_CWORD-1]}"
-    else
-        PreviousWord=""
-    fi
-
-    # ^ the word to the left of the current word.
-    #
-    #   e.g. in « emacs -v -f ./<TAB> »:
-    #
-    #       PreviousWord="-f"
-    #       CurrentWord="./"
-
-    #--------------------------#
-
-    COMPREPLY=()
-
-   # COMPREPLY+=( $( compgen -A file -- "$CurrentWord") )
-
-    case "$PreviousWord" in
-
-        "-f"|"--server-file")
-
-            COMPREPLY+=( $( compgen -A file -- "$CurrentWord") )
-
-            # e.g. SERVER_FILE: « /tmp/emacs1001/server29946 »
-            #
-            # e.g.
-            #      $ echo "$UID"
-            #      1001
-            #
-
-            ;;
-
-        "-a"|"--alternate-editor")
-
-            COMPREPLY+=( $( compgen -A command -- "$CurrentWord") )
-
-            # e.g. EDITOR: « nano »
-            #
-
-            ;;
-
-        *)
-
-            COMPREPLY+=( $( compgen -A file -- "$CurrentWord") )
-            COMPREPLY+=( $( compgen -W "${Options[*]}" -- "$CurrentWord" ) )
-           #COMPREPLY+=( $( compgen -W "${Subcommands[*]}" -- "$CurrentWord" ) )
-
-            #TODO# "FILE is FILENAME or [+LINE[:COLUMN]] FILENAME"
-            
-            ;;
-
-    esac
-
-    #--------------------------#
-}
-
-##################################################
-
-complete -F _emacs_completions -o default emacs
+complete -W "${_emacs_options[*]}" emacs
