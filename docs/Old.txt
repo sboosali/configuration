@@ -5132,7 +5132,28 @@ nullbool = b: x:
 
 $ nix-prefetch-github --nix --prefetch --out ./sidebar.nix --rev 6576dbe9e3e87b24194ef1d7fde42b00c6a22fbb sebastiencs sidebar
 
------------------------------------------------
+==============================================
+
+#------------------------------------------------#
+# Makefile Variables: Options -------------------#
+#------------------------------------------------#
+
+CaskOptions=--cask-file $(ProjectFile) --builddir $(BuildDirectory)
+
+#------------------------------------------------#
+
+MelpaUser     =sboo
+MelpaPassword =pass melpa.org/user/$(MelpaUser)
+
+#------------------------------------------------#
+
+GitHubOwner      =sboosali
+GitHubRepository =$(Project)
+
+==============================================
+
+        [ "$Completion" == new-build -o "$Completion" == v2-build ] && _cabal_list_targets              && break
+--------------------------------------
 
 
 
@@ -5140,7 +5161,6 @@ $ nix-prefetch-github --nix --prefetch --out ./sidebar.nix --rev 6576dbe9e3e87b2
 ==============================================
 
 --------------------------------------
-
 
 
 

@@ -1,6 +1,11 @@
 # Dictation
 
-## Contents
+Notes about:
+
+- `Dragon NaturallySpeaking` — (and *Speech Recognition* in general).
+- `VirtualBox`               — (and *Virtual Machines*, in general).
+- `Windows`                  — as a *Guest Machine*.
+- `Linux`                    — as the *Host Machine*. (and Host *Operating Systems*, in general, like *MacOS*).
 
 ## Files
 
@@ -15,11 +20,23 @@
 
 the `Dragon NaturallySpeaking` executeable (for `DNS v15` on *Windows 10*) is at `"C:\Program Files (x86)\Nuance\NaturallySpeaking15\Program\natspeak.exe"`.
 
-### Autostart
+### Autostart `Dragon NaturallySpeaking`
 
 the `shell:startup` command launches the *Autostart Directory*.
 
 Create an *Application Shortcut* (e.g. `"C:\Program Files (x86)\Nuance\NaturallySpeaking15\Program\natspeak.exe"`) in the *Autostart Directory* (e.g. `"C:\Users\VirtualSpiros\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup"`).
+
+## Windows
+
+### Enable *Sticky Keys*
+
+Enable *Sticky Keys*:
+
+- type `sticky keys` in the *Search Bar*.
+
+Configure *Sticky Keys*:
+
+Navigate to the `Control Panel\Ease of Access\Ease of Access Center\Set up Sticky Keys` menu.
 
 ## `VirtualBox`
 
