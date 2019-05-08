@@ -1,0 +1,1 @@
+/home/sboo/configuration/bash/completion/w/emacs.bash

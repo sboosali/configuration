@@ -149,5 +149,30 @@ with utilities;
  # };
 
  #-----------------------------#
+
+ # highlight-quoted           = https://github.com/Fanael/highlight-quoted;
+ # highlight-numbers          = https://github.com/Fanael/highlight-numbers;
+ # highlight-defined          = https://github.com/Fanael/highlight-defined;
+ # highlight-escape-sequences = https://github.com/dgutov/highlight-escape-sequences;
+
+ # #-----------------------------#
+
+ # rainbow-delimiters  = https://github.com/Fanael/rainbow-delimiters;
+ # rainbow-identifiers = https://github.com/Fanael/rainbow-identifiers;
+ # rainbow-blocks      = https://github.com/istib/rainbow-blocks;
+
+ #-----------------------------#
 }
 ##################################################
+/*
+
+nix-prefetch-github --prefetch --rev 0.1    Fanael highlight-quoted           > ./json/highlight-quoted.json
+nix-prefetch-github --prefetch --rev 0.2.3  Fanael highlight-numbers          > ./json/highlight-numbers.json
+nix-prefetch-github --prefetch --rev 0.1.5  Fanael highlight-defined          > ./json/highlight-defined.json
+nix-prefetch-github --prefetch --rev master dgutov highlight-escape-sequences > ./json/highlight-escape-sequences.json
+
+nix-prefetch-github --prefetch --rev 2.1.3  Fanael rainbow-delimiters         > ./json/rainbow-delimiters.json
+nix-prefetch-github --prefetch --rev 0.2.2  Fanael rainbow-identifiers        > ./json/rainbow-identifiers.json
+nix-prefetch-github --prefetch --rev master istib rainbow-blocks              > ./json/rainbow-blocks.json
+
+ */

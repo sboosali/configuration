@@ -5155,6 +5155,20 @@ GitHubRepository =$(Project)
         [ "$Completion" == new-build -o "$Completion" == v2-build ] && _cabal_list_targets              && break
 --------------------------------------
 
+==============================================
+
+
+ #----------------------------------------------#
+ # « prog-mode »s
+
+ (epkgs.rainbow-delimeters   )
+ (epkgs.rainbow-blocks       )
+
+ (epkgs.highlight-numbers          )
+ (epkgs.highlight-quoted           )
+ (epkgs.highlight-escape-sequences )
+
+
 
 
 

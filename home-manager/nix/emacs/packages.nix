@@ -29,6 +29,7 @@ coreEmacsPackages = with epkgs; [
 # use-package
   bind-key
   diminish
+  delight
 
   #----------------------------------------------#
 
@@ -62,6 +63,7 @@ coreEmacsPackages = with epkgs; [
 
   wgrep                         # "Writeable GREP"
 
+  # ^ Mode for « grep ».
   # ^ https://github.com/mhayashi1120/Emacs-wgrep
 
   #----------------------------------------------#
@@ -110,10 +112,6 @@ moreEmacsPackages = [
  (epkgs.helm-swoop           or null)
  (epkgs.helm-hayoo           or null)
 
- #company-yasnippet
- #company-abbrev
- #company-dabbrev
-
  (epkgs.company-ghc          or null)
  (epkgs.company-ghci         or null)
  (epkgs.company-cabal        or null)
@@ -121,10 +119,17 @@ moreEmacsPackages = [
  (epkgs.company-restclient   or null)
  (epkgs.company-anaconda     or null)
 
+ #company-yasnippet
+ #company-abbrev
+ #company-dabbrev
+
+ #----------------------------------------------#
+ # Templates
+
  #----------------------------------------------#
  # Window/Buffer Management
 
-#awesome-tab                    # Tabs
+#(epkgs.awesome-tab          or null)           # « https://github.com/manateelazycat/awesome-tab ». Tabs.
  (epkgs.shackle              or null)
  (epkgs.window-purpose       or null)
 
@@ -155,27 +160,17 @@ moreEmacsPackages = [
  (epkgs.lsp-haskell         or null)                    # for « haskell-ide-engine »
 
  #----------------------------------------------#
- # Bookmarks
-
- (epkgs.bm                   or null)                             # visual bookmarks
-
- #----------------------------------------------#
- # Desktops
-
-#desktopPlus
-
- #----------------------------------------------#
- # Editing
-
- (epkgs.expand-region        or null)
- # ^ Expand selection to strings, definitions, words, lines, paragraphs, etc.
-
- (epkgs.page-break-lines     or null)
- # ^ Convert the ^L (form feed) chars to horizontal lines
+ # Editing:
 
  (epkgs.wrap-region          or null)
  # ^ Wrap selection with punctuations, tags (org-mode, markdown-mode, ..)
  #   « https://github.com/rejeep/wrap-region.el »
+
+ (epkgs.expand-region        or null)
+ # ^ Expand selection to strings, definitions, words, lines, paragraphs, etc.
+
+ (epkgs.sed-mode       or null)
+ # ^ Mode for « sed ».
 
  (epkgs.deft                 or null)                           # « Notational Velocity » port
  # ^ Quick note taking and management
@@ -184,32 +179,48 @@ moreEmacsPackages = [
 
  (epkgs.simpleclip           or null)
 
- #----------------------------------------------#
- # FileSystem
-
- (epkgs.dired-collapse       or null) # from the « dired-hacks » megarepo
- (epkgs.dired-filter         or null)   # from the « dired-hacks » megarepo
-#(epkgs.dired-list          or null)     # from the « dired-hacks » megarepo
- (epkgs.dired-open           or null)     # from the « dired-hacks » megarepo
- (epkgs.dired-rainbow        or null)  # from the « dired-hacks » megarepo
-#(epkgs.dired-ranger        or null)   # from the « dired-hacks » megarepo
- (epkgs.dired-sidebar        or null)  # from the « dired-hacks » megarepo
- (epkgs.dired-subtree        or null)  # from the « dired-hacks » megarepo
+ (epkgs.page-break-lines     or null)
+ # ^ Convert the ^L (form feed) chars to horizontal lines
 
  #----------------------------------------------#
- # Formats
+ # FileSystem:
 
- (epkgs.markdown-mode        or null)                  # « .md »
- (epkgs.json-mode            or null)                      # « .json »
- (epkgs.yaml-mode            or null)                      # « .yaml »
- (epkgs.restclient           or null)                     # « POST ... »
+ (epkgs.dired-collapse       or null)   # from the « dired-hacks » megarepo.
+ (epkgs.dired-filter         or null)   # from the « dired-hacks » megarepo.
+#(epkgs.dired-list           or null)   # from the « dired-hacks » megarepo.
+ (epkgs.dired-open           or null)   # from the « dired-hacks » megarepo.
+ (epkgs.dired-rainbow        or null)   # from the « dired-hacks » megarepo.
+#(epkgs.dired-ranger         or null)   # from the « dired-hacks » megarepo.
+ (epkgs.dired-sidebar        or null)   # from the « dired-hacks » megarepo.
+ (epkgs.dired-subtree        or null)   # from the « dired-hacks » megarepo.
+
+ (epkgs.peep-dired           or null)   # « https://github.com/asok/peep-dired ». c.f. « ranger ».
+ (epkgs.neotree              or null)
+
+ #----------------------------------------------#
+ # Formats:
+
+ (epkgs.markdown-mode        or null)   # « .md » files.
+ (epkgs.json-mode            or null)   # « .json » files.
+ (epkgs.yaml-mode            or null)   # « .yaml » files.
+ (epkgs.restclient           or null)   # « POST ... » “files”.
+
+ #----------------------------------------------#
+ # « prog-mode »s
+
+ (epkgs.rainbow-delimeters   or null)
+ (epkgs.rainbow-blocks       or null)
+
+ (epkgs.highlight-numbers          or null)
+ (epkgs.highlight-quoted           or null)
+ (epkgs.highlight-escape-sequences or null)
 
  #----------------------------------------------#
  # Lisp
 
-#paredit
-
  (epkgs.modalka              or null) # « https://github.com/mrkkrp/modalka/blob/master/README.md »
+
+#paredit
 
  #----------------------------------------------#
  # Python
@@ -225,10 +236,20 @@ moreEmacsPackages = [
 #(epkgs.github-pullrequest or null) #TODO addTool git 
 
  (epkgs.direnv               or null)         # needs `direnv` system-package
- (epkgs.neotree              or null)
  (epkgs.multi-term           or null)
 
  (epkgs.pandoc-mode          or null)
+
+ #----------------------------------------------#
+ # Media:
+
+ (epkgs.pdf-tool or null)       # « .pdf ».
+
+ #----------------------------------------------#
+ # External Packages which extend Internal Packages:
+
+ (epkgs.bm                   or null)                             # extends `bookmark'. visual bookmarks.
+ (epkgs.desktopPlus          or null)                             # extends `desktop'.
 
  #----------------------------------------------#
  # Miscellaneous
@@ -245,7 +266,7 @@ moreEmacsPackages = [
  (epkgs.ov                   or null)
  (epkgs.request              or null)             # « https://tkf.github.io/emacs-request/manual.html »
  (epkgs.rg                   or null)
- (epkgs.vlf                  or null)                 # abbreviates "View Large Files"
+ (epkgs.vlf                  or null)                 # « https://github.com/m00natic/vlfi ». « vlf » abbreviates "View Large Files".
  (epkgs.volatile-highlights  or null) # 
  (epkgs.webpaste             or null)
  (epkgs.quack                or null)

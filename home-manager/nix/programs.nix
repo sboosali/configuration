@@ -21,7 +21,7 @@ with utilities;
   #----------------------------#
 
   home-manager.enable = true;
-  home-manager.path   = (import ./versions/home-manager.nix).v19_03;
+  home-manager.path   = (import ./versions/home-manager.nix).submodule;
 
   # ^
 
