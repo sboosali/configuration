@@ -44,6 +44,12 @@
 #"fish/completions".recursive = false;
 
  #-----------------------------#
+
+#TODO# ".aspell.en.pws".source = ../../../data/aspell/en.pws;
+
+ # « ~/.aspell.en.pws » is the default (non-XDG-conformant) location for an English-language Personal Dictionary.
+
+ #-----------------------------#
  # ...
 
  

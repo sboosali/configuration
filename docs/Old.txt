@@ -5169,6 +5169,13 @@ GitHubRepository =$(Project)
  (epkgs.highlight-escape-sequences )
 
 
+==============================================
+
+$ echo "Atog Thrull Saproling Homarid Kobold Lhurgoyf Licid Masticore Viashino Kor Hellion Kavu Orgg Metathran Kithkin Cephalid Myr Thopter Pentavite Noggle Brushwagg Vedalken Zubera Eldrazi Surrakar Aetherborn" > aspell --lang=en create personal ./mtg.en.pws
+
+$ aspell --lang=en create master ./mtg.en.pws < "Atog Thrull Saproling Homarid Kobold Lhurgoyf Licid Masticore Viashino Kor Hellion Kavu Orgg Metathran Kithkin Cephalid Myr Thopter Pentavite Noggle Brushwagg Vedalken Zubera Eldrazi Surrakar Aetherborn"
+
+==============================================
 
 
 

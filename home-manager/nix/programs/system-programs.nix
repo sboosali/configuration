@@ -13,7 +13,7 @@ haskell-overridez =
   let
   version = "0.10.3.1";
   notes   = "https://github.com/adetokunbo/haskell-overridez#readme";
-  in
+ aspellDicts.en-science   in
   builtins.fetchTarball {
     url    = "https://github.com/adetokunbo/haskell-overridez/archive/v${version}.tar.gz";
     sha256 = "1w2pv96bdf16nc1vvh03acx37qq4h4hrz2y979a705i70z8h59lk"; # via « nix-prefetch-url »
@@ -27,6 +27,7 @@ in
 [
 
  arcanist
+#aspellWithDicts []             # Spell-Checker + Dictionaries.
  bash-completion
  cabal-install                  # Comment-out to use development-version « cabal-install-2.5.0.0 » in « ~/.cabal/bin ».
  cabal2nix
@@ -51,6 +52,7 @@ in
  guile-lint                     # 
  haskell-overridez
  htop
+ hunspell                       # Spell-Checker ("hunspell" abbreviates "HUNgarian SPELL-checker")
  imagemagick
  inotify-tools
  jq

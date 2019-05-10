@@ -70,6 +70,15 @@ in
 
   #----------------------------#
 
+#TODO# "aspell/aspell.conf".source = ../../../configs/aspell/aspell.conf;
+
+  # ^ Initialized via « aspell --lang=en dump config > aspell.conf ».
+  #
+  # "store your personal dictionaries wherever you want."
+  #
+
+  #----------------------------#
+
  "autostart/dropbox.desktop".source  = ../../desktop/dropbox.desktop;
  "autostart/firefox.desktop".source  = ../../desktop/firefox.desktop;
 #TODO "autostart/terminal.desktop".source  = ../../desktop/terminal.desktop;
