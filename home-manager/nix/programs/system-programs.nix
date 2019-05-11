@@ -13,7 +13,7 @@ haskell-overridez =
   let
   version = "0.10.3.1";
   notes   = "https://github.com/adetokunbo/haskell-overridez#readme";
- aspellDicts.en-science   in
+ in
   builtins.fetchTarball {
     url    = "https://github.com/adetokunbo/haskell-overridez/archive/v${version}.tar.gz";
     sha256 = "1w2pv96bdf16nc1vvh03acx37qq4h4hrz2y979a705i70z8h59lk"; # via « nix-prefetch-url »
@@ -22,12 +22,22 @@ haskell-overridez =
 # /nix/store/qjq8scb0y89nsq2shk3a8pf3sr70hpp0-ghcjs-8.6.0.1
 
 #------------------------------------------------#
+
+#TODO# aspellWithDicts []             # Spell-Checker + Dictionaries.
+#  aspellDicts.en-science
+#  aspellDicts.en-computer
+
+ # aspell
+ # aspellDicts.en
+ # aspellDicts.en-computers
+ # aspellDicts.en-science
+
+#------------------------------------------------#
 in
 ##################################################
 [
 
  arcanist
-#aspellWithDicts []             # Spell-Checker + Dictionaries.
  bash-completion
  cabal-install                  # Comment-out to use development-version « cabal-install-2.5.0.0 » in « ~/.cabal/bin ».
  cabal2nix
@@ -52,7 +62,7 @@ in
  guile-lint                     # 
  haskell-overridez
  htop
- hunspell                       # Spell-Checker ("hunspell" abbreviates "HUNgarian SPELL-checker")
+#hunspell                       # Spell-Checker ("hunspell" abbreviates "HUNgarian SPELL-checker")
  imagemagick
  inotify-tools
  jq
@@ -86,6 +96,7 @@ in
  signal-desktop
  sox
  stack
+ swiProlog                      # Prolog compiler.
  tmux
  tree
  unzip
