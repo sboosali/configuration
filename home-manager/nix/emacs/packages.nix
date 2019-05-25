@@ -110,6 +110,7 @@ moreEmacsPackages = [
  (epkgs.helm-dash            or null)
  (epkgs.helm-make            or null)
  (epkgs.helm-swoop           or null)
+ (epkgs.helm-navi            or null)           # https://github.com/emacs-helm/helm-navi
  (epkgs.helm-hayoo           or null)
 
  (epkgs.company-ghc          or null)
@@ -129,7 +130,7 @@ moreEmacsPackages = [
  #----------------------------------------------#
  # Window/Buffer Management
 
-#(epkgs.awesome-tab          or null)           # « https://github.com/manateelazycat/awesome-tab ». Tabs.
+#(epkgs.awesome-tab          or null)   # « https://github.com/manateelazycat/awesome-tab ». Tabs.
  (epkgs.shackle              or null)
  (epkgs.window-purpose       or null)
 
@@ -139,25 +140,25 @@ moreEmacsPackages = [
  (epkgs.color-theme          or null)
  (epkgs.smooth-scrolling     or null)
  (epkgs.centered-cursor-mode or null)
- (epkgs.telephone-line       or null)  # Modeline.
-#spaceline                      # Modeline.
-#doom-modeline                  # Modeline.
+ (epkgs.telephone-line       or null)   # Modeline.
+#spaceline                              # Modeline.
+#doom-modeline                          # Modeline.
 
-#all-the-icons                  # https://github.com/domtronn/all-the-icons.el
-#all-the-icons-dired            # https://github.com/jtbm37/all-the-icons-dired
-#icons-in-terminal              # https://github.com/sebastiencs/icons-in-terminal
+#all-the-icons                          # https://github.com/domtronn/all-the-icons.el
+#all-the-icons-dired                    # https://github.com/jtbm37/all-the-icons-dired
+#icons-in-terminal                      # https://github.com/sebastiencs/icons-in-terminal
 
  #----------------------------------------------#
  # Haskell
 
 #dante
 
- (epkgs.intero              or null)                         # needs `stack` system-package
-#ghc                            # « ghc-mod » # NOTE it's been DEPRECATED for « haskell-ide-engine ».
+ (epkgs.intero              or null)    # needs `stack` system-package
+#ghc                                    # « ghc-mod » # NOTE it's been DEPRECATED for « haskell-ide-engine ».
 
- (epkgs.lsp-mode            or null)                       # for « haskell-ide-engine »
- (epkgs.lsp-ui              or null)                         # for « haskell-ide-engine »
- (epkgs.lsp-haskell         or null)                    # for « haskell-ide-engine »
+ (epkgs.lsp-mode            or null)    # for « haskell-ide-engine »
+ (epkgs.lsp-ui              or null)    # for « haskell-ide-engine »
+ (epkgs.lsp-haskell         or null)    # for « haskell-ide-engine »
 
  #----------------------------------------------#
  # Editing:
@@ -172,7 +173,7 @@ moreEmacsPackages = [
  (epkgs.sed-mode       or null)
  # ^ Mode for « sed ».
 
- (epkgs.deft                 or null)                           # « Notational Velocity » port
+ (epkgs.deft                 or null)   # « Notational Velocity » port
  # ^ Quick note taking and management
 
  (epkgs.edit-indirect        or null)
@@ -218,7 +219,9 @@ moreEmacsPackages = [
  #----------------------------------------------#
  # Lisp
 
- (epkgs.modalka              or null) # « https://github.com/mrkkrp/modalka/blob/master/README.md »
+ (epkgs.package-lint         or null)   # Linter for Library Headers of Emacs Packages.
+ (epkgs.flycheck-package     or null)   # Flycheck « package-lint ».
+ (epkgs.modalka              or null)   # « https://github.com/mrkkrp/modalka/blob/master/README.md »
 
 #paredit
 
@@ -230,12 +233,12 @@ moreEmacsPackages = [
  #----------------------------------------------#
  # Development
 
- #magit          # <C-x g>
+ #magit                                 # <C-x g>
  (epkgs.magit-annex        or null)
 #(epkgs.magithub           or null) #TODO addTool git 
 #(epkgs.github-pullrequest or null) #TODO addTool git 
 
- (epkgs.direnv               or null)         # needs `direnv` system-package
+ (epkgs.direnv               or null)   # needs `direnv` system-package
  (epkgs.multi-term           or null)
 
  (epkgs.pandoc-mode          or null)
@@ -243,18 +246,29 @@ moreEmacsPackages = [
  #----------------------------------------------#
  # Media:
 
- (epkgs.pdf-tool or null)       # « .pdf ».
+ (epkgs.pdf-tool or null)               # « .pdf ».
 
  #----------------------------------------------#
  # External Packages which extend Internal Packages:
 
- (epkgs.bm                   or null)                             # extends `bookmark'. visual bookmarks.
- (epkgs.desktopPlus          or null)                             # extends `desktop'.
+ (epkgs.bm                   or null)   # extends `bookmark'. visual bookmarks.
+ (epkgs.desktopPlus          or null)   # extends `desktop'.
+
+ #-----------------------------#
+ # Tools:
+
+ (epkgs.pass or null)                   # TUI for « pass ».
+
+ #----------------------------------------------#
+ # Dependencies
+
+ (epkgs.navi                 or null)   # https://github.com/alphapapa/navi
+ (epkgs.outshine             or null)   # https://github.com/alphapapa/outshine
 
  #----------------------------------------------#
  # Miscellaneous
 
- (epkgs.anzu                 or null)                # shows total search hits in mode line (c.f. `query-replace`).
+ (epkgs.anzu                 or null)   # shows total search hits in mode line (c.f. `query-replace`).
  (epkgs.desktop-environment  or null) # « https://github.com/DamienCassou/desktop-environment/ »
  (epkgs.eimp                 or null)
  (epkgs.elfeed               or null)
@@ -264,13 +278,13 @@ moreEmacsPackages = [
  (epkgs.imgbb                or null)
  (epkgs.move-text            or null)
  (epkgs.ov                   or null)
- (epkgs.request              or null)             # « https://tkf.github.io/emacs-request/manual.html »
+ (epkgs.request              or null)   # « https://tkf.github.io/emacs-request/manual.html »
  (epkgs.rg                   or null)
- (epkgs.vlf                  or null)                 # « https://github.com/m00natic/vlfi ». « vlf » abbreviates "View Large Files".
+ (epkgs.vlf                  or null)   # « https://github.com/m00natic/vlfi ». « vlf » abbreviates "View Large Files".
  (epkgs.volatile-highlights  or null) # 
  (epkgs.webpaste             or null)
  (epkgs.quack                or null)
- (epkgs.which-key            or null)           # « https://github.com/justbur/emacs-which-key/blob/master/README.org »
+ (epkgs.which-key            or null)   # « https://github.com/justbur/emacs-which-key/blob/master/README.org »
 
  #TODO# graphviz-dot
  #any-ini-mode # EmacsWiki only

@@ -5186,6 +5186,14 @@ $ aspell --lang=en create master ./mtg.en.pws < "Atog Thrull Saproling Homarid K
 
 ----------------------------------------------
 
+(query-replace "\"" "&quot;")
+(query-replace "'" "&apos;")
+(query-replace "<" "&lt;")
+(query-replace ">" "&gt;")
+(query-replace "&" "&amp;")
+
+----------------------------------------------
+
 
 
 ==============================================

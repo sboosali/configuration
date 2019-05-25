@@ -12,6 +12,31 @@ Notes about:
 * `./vocabulary.txt` — list of words/phrases (one-per-line) to import into DragonNaturallySpeaking
 * `./scripts/add-user.sh` — register `$USER` under VirtualBox `group`s.
 
+## Configuration
+
+Configuring the *Guest Virtual Machine*:
+
+* *Windows* configuration:
+
+    - enable **Sticky Keys*
+    - verify the *Local Network* (i.e. can the Guest and Host communicate?). 
+      otherwise, disable the *Windows Firewall*.
+
+* *VirtualBox* configuration:
+
+    - install *Guest Additions*
+    - register a *Shared Folder*
+    - verify the *Audio Driver* (the default, *ALSA*, works for me). 
+    - passthru the *TableMike* USB Recording Device
+
+* *Dragon NaturallySpeaking* configuration:
+
+    - install *Dragon NaturallySpeaking v15* 
+    - create a *User Profile*
+    - 
+
+
+
 ## `Dragon NaturallySpeaking`
 
 "C:\Program Files (x86)\Nuance\NaturallySpeaking15\Program\"
