@@ -4,6 +4,8 @@
 , sboo
 , applications
 
+, onlyFiles ? false
+
 }:
 ##################################################
 let
@@ -16,12 +18,20 @@ env = {
 };
 
 #------------------------------------------------#
+
+program = pkg: exe:
+
+  if   onlyFiles
+  then exe
+  else ''${pkg}/bin/${exe}'';
+
+#------------------------------------------------#
 in
 ##################################################
 let
 #------------------------------------------------#
 
-mkdir       = ''${pkgs.coreutils}/bin/mkdir'';
+mkdir       = program pkgs.coreutils "mkdir";
 chmod       = ''${pkgs.coreutils}/bin/chmod'';
 
 find        = ''${pkgs.findutils}/bin/find'';
@@ -553,6 +563,9 @@ in
  #===============================================#
 
  hm = ''${home-manager}'';
+
+ hma = ''${home-manager} -v -f ~/configuration/home-manager/nix/home.nix'' ;      # « --all »
+ hmf = ''${home-manager} -v -f ~/configuration/home-manager/nix/home-files.nix''; # « --files-only »
 
  #-----------------------------------------------#
 

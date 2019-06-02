@@ -8,44 +8,19 @@
 , overlays ? []
 , pkgs     ? (import nixpkgs { inherit config overlays; })
 
-# , haskellPackages   ? (pkgs.haskellPackages)
-# , haskellCompilers  ? (pkgs.haskell.compiler)
-# 
-# , emacsPackages     ? (pkgs.emacs26Packages)
-# , melpaPackages     ? (pkgs.emacs26PackagesNg)
-
-  #TODO# sboo prefix?
-
-  # Personal Configuration:
-
-, minimalInstallation ? null
-, maximalInstallation ? null
-
 , platformLinux       ? false
 , platformDarwin      ? false
-
-, onlyFiles           ? false   # no packages
-, onlyEmacsPackages   ? false
-, onlySystemPrograms  ? false
-
-  # ^ (these booleans are forwarded from attributes in « home-attrs.nix »,
-  #    via « home-manager -A ... ».)
-
-#TODO# logic for both « only*{Programs,Libraries} », for testing, and « install*{Programs,Libraries} », for configuration:
-
-# , installEmacsPackages   ? false
-# , installSystemPrograms  ? false
 
 , ...
 }:
 
-#------------------------------------------------#
-
 ##################################################
-# Bootstrap ######################################
+# Constants ######################################
 ##################################################
 let
 #-----------------------------------------------#
+
+onlyFiles = true;
 
 #-----------------------------------------------#
 in
@@ -78,63 +53,8 @@ applications = import ./applications {
 
 #-----------------------------------------------#
 
-emacs = import ./emacs { inherit pkgs; };
-
-#-----------------------------------------------#
-
-haskell = import ./haskell { inherit pkgs; };
-
-#-----------------------------------------------#
-
-# haskellPackages   = (pkgs.haskellPackages);
-# haskellCompilers  = (pkgs.haskell.compiler);
-
-#-----------------------------------------------#
-
 enUS      = "en_US";
 enUS_UTF8 = "en_US.UTF-8";
-
-#-----------------------------------------------#
-
-options = {
-
-  minimal  = nullor minimalInstallation (nullor maximalInstallation false);
-
-  platform = if platformLinux then "linux" else if platformDarwin then "darwin" else (stdenv.targetPlatform.parsed.kernel.name or "unspecified");
-
-  libraries = lib.optionals (! onlyFiles) (builtins.concat [ (lib.optionals onlyEmacsPackages "emacs")   ]);  # TODO installHaskellPrograms
-  programs  = lib.optionals (! onlyFiles) (builtins.concat [ (lib.optionals onlySystemPrograms "system") ]);  # TODO installHaskellLibraries
-
-};
-
-# ^ Personal options.
-
-/* NOTE:
-
-« currentSystem » includes both Operating System and Architecture.
-
-  > builtins.currentSystem
-    "x86_64-linux"
-
-« stdenv »'s « .*{build,target}Platform.parsed » has structured-data:
-
-  > stdenv.targetPlatform.parsed.kernel.name
-    "linux"
-
- */
-
-#-----------------------------------------------#
-
-/* Nullable value.
- *
- * Nix « nullor x y » is like Haskell « maybe y id x »
- *
- */
-
-nullor = x: y:
-  assert (x != null && y != null) -> (builtins.typeOf x == builtins.typeOf y);
-
-  if x != null then x else y;
 
 #-----------------------------------------------#
 in
@@ -219,14 +139,7 @@ self = rec {
   #----------------------------#
   # Programs:
 
-  home.packages = [
-
-    (import ./packages.nix  { inherit pkgs sboo; })
-    (import ./libraries.nix { inherit pkgs; })
-    haskell.compilers
-    haskell.packages
-
-  ];
+  home.packages = [ ];
 
   #----------------------------#
 
@@ -234,19 +147,17 @@ self = rec {
 
   #----------------------------#
 
-  programs = import ./programs.nix
-  {
-    inherit pkgs lib;
-    inherit options onlyFiles;
-    inherit sboo xdg applications;
-    inherit utilities xdgUtilities;
-  };
+  programs.bash =
 
-  #----------------------------#
+    (import ./bash
+            {
+              inherit pkgs lib;
+              inherit sboo xdg applications onlyFiles;
+              inherit xdgUtilities;
+            })
 
-  services = import ./services.nix {
-    inherit pkgs sboo;
-  };
+     // { enable = true;
+        };
 
   #----------------------------#
 
@@ -256,15 +167,6 @@ self = rec {
   # Keyboard:
 
   home.keyboard = import ./home/keyboard.nix {};
-
-  #----------------------------#
-  # Fonts:
-
-  fonts.fontconfig.enable             = true;
-# fonts.fontconfig.enableProfileFonts = true;
-
-  #fonts.fontconfig.enable = true;
-  #OBSOLETE:# fonts.fontconfig.enableProfileFonts = true;
 
   #----------------------------#
   # GTK Appearence/Behavior:
@@ -294,29 +196,6 @@ self = rec {
         else "";
 
    in themeString;
-
-  # xresources.extraConfig = builtins.readFile (if sboo.dark
-  #   then /usr/share/xfce4/terminal/colorschemes/solarized-light.theme
-  #   else /usr/share/xfce4/terminal/colorschemes/solarized-dark.theme;
-  # );
-
-  # xresources.extraConfig = builtins.readFile (if sboo.dark
-  #   then ../../submodules/solarized-xresources/Xresources.dark
-  #   else ../../submodules/solarized-xresources/Xresources.light
-  # );
-
- #----------------------------#
-
- systemd.user.startServices = true;
-
- # ^ 
- #   ① Start all services that are wanted by active targets.
- #   ② Stop obsolete services, from the previous generation.
- #
-
-#systemd.user.timers = { };
-
-# “Definition of systemd per-user timer units.”
 
  #----------------------------#
 
@@ -377,5 +256,5 @@ self
 #------------------------------------------------#
 
 # Local Variables:
-# compile-command: "home-manager -v -f ~/configuration/home-manager/nix/home.nix -A default build"
+# compile-command: "home-manager -v -f ~/configuration/home-manager/nix/home-files.nix -A default build"
 # End:

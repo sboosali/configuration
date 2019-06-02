@@ -33,5 +33,5 @@ import file arguments
 ##################################################
 
 # Local Variables:
-# compile-command: "home-manager -f ~/configuration/configs/nixpkgs/home-noattrs.nix build"
+# compile-command: "home-manager -v -f ~/configuration/configs/nixpkgs/home-noattrs.nix build"
 # End:

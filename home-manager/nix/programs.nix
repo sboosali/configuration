@@ -6,15 +6,22 @@
 , options
 , xdg
 , applications
+, onlyFiles
 
 , utilities
 , xdgUtilities
 }:
 
-##################################################
+#------------------------------------------------#
 
 with utilities;
 
+##################################################
+let
+
+alsoPrograms = (! onlyFiles);
+
+in
 ##################################################
 {
 
@@ -91,7 +98,7 @@ with utilities;
     (import ./bash
             {
               inherit pkgs lib;
-              inherit sboo xdg applications;
+              inherit sboo xdg applications onlyFiles;
               inherit xdgUtilities;
             })
 
@@ -212,7 +219,7 @@ with utilities;
   texlive = {
    enable = true;
 
-   extraPackages = tpkgs: 
+  extraPackages = tpkgs: lib.optionalAttrs (! onlyFiles)
     { inherit (tpkgs)
       resumecls
       resumemac

@@ -5,6 +5,7 @@
 , sboo
 , applications
 , xdg
+, onlyFiles
 
 , xdgUtilities
 }:
@@ -96,7 +97,7 @@ rec {
 
  shellAliases =
   (import ./shell-aliases.nix
-          { inherit pkgs sboo applications;
+          { inherit pkgs sboo applications onlyFiles;
           });
 
  # ^ Attribute Set mapping aliases (the top-level Attribute Names in this option) either:

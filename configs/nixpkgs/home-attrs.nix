@@ -41,11 +41,12 @@ in
  full     = home { maximalInstallation = true; }; 
 
  emacs    = home { onlyEmacsPackages   = true; }; 
- programs = home { onlySystemPrograms  = true; }; 
+ programs = home { onlySystemPrograms  = true; };
+ files    = home { onlyFiles           = true; }; 
 
 }
 ##################################################
 
 # Local Variables:
-# compile-command: "home-manager -f ~/configuration/configs/nixpkgs/home-attrs.nix -A default build"
+# compile-command: "home-manager -v -f ~/configuration/configs/nixpkgs/home-attrs.nix -A default build"
 # End:

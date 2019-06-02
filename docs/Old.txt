@@ -5219,6 +5219,11 @@ $ aspell --lang=en create master ./mtg.en.pws < "Atog Thrull Saproling Homarid K
 
 ==============================================
 
+mkdir       = if onlyFiles then "mkdir" then ''${pkgs.coreutils}/bin/mkdir'';
+
+
+
+==============================================
 
 
 
