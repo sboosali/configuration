@@ -11,6 +11,7 @@
  "fonts/iosevka".source    = ../../../fonts/iosevka/ttf;
  "fonts/iosevka".recursive = true;
 
+/*
  "fonts/dejavu".source    = ../../../fonts/dejavu/ttf;
  "fonts/dejavu".recursive = true;
 
@@ -27,6 +28,7 @@
 
  # "fonts/all-the-icons".source    = ../../../fonts/all-the-icons/ttf;
  # "fonts/all-the-icons".recursive = true;
+ */
 
  #-----------------------------#
  # applications...
