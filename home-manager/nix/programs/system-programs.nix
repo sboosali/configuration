@@ -117,7 +117,7 @@ in
  xvkbd
  youtube-dl
  libxml2
-
+ wordnet                        # Thesaurus. provides « wn ». is for « synosaurus.el ».
  nodejs                         # JS Interpreter
  html-tidy                      # HTML Linter
  csslint                        # CSS Linter
