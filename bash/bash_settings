@@ -219,6 +219,13 @@ done
 
 #------------------------------------------------#
 
+if [ -x "$(command -v pandoc)" ]
+then
+    eval "$(pandoc --bash-completion)" || true
+fi
+
+#------------------------------------------------#
+
 ### {sudo,find,ls,export,declare,git,ghc,ghcjs,cabal,clang,gcc,g++,ssh,ssh-add,ssh-keygen,xmodmap,xrandr,xbindkeys,dconf,curl,ping,dd,tar,gzip,7z,rsync,htop,pkill,pgrep,pandoc,iconv,dot,nano,emacs,emacsclient,feh,scp,VBoxManage}
 
 #------------------------------------------------#
@@ -234,8 +241,6 @@ done
 #
 # e.g. ~/.nix-profile/share/bash-completion/completions/ghc
 #
-#
-#
 
 ########################################
 ## EDITOR SETTINGS
@@ -249,13 +254,14 @@ done
 #TODO
 # wrapper that picks gui-or-no given env-var
 
-if [ -x "$(command -v emacsclient)" ]; then
- export GIT_EDITOR=emacsclient
-#export VISUAL=emacsclient
- export EDITOR=emacsclient
- export ALTERNATE_EDITOR=nano
- # ^ for when an Emacs Server isn't running 
- #   (or available, if i'm messing with my `init.el`).
+if [ -x "$(command -v emacsclient)" ]
+then
+    export GIT_EDITOR=emacsclient
+    #export VISUAL=emacsclient
+    export EDITOR=emacsclient
+    export ALTERNATE_EDITOR=nano
+    # ^ for when an Emacs Server isn't running 
+    #   (or available, if i'm messing with my `init.el`).
 fi
 
 ########################################

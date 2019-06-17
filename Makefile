@@ -279,6 +279,13 @@ manual-install:
 
 #------------------------------------------------#
 
+dwarf-fortress:
+
+	apt -y install libsdl-image1.2:i386 libgtk2.0-0:i386 libsdl-ttf2.0-0:i386 libglu1-mesa:i386 libopenal1:i386
+	wget http://www.bay12games.com/dwarves/df_44_12_linux.tar.bz2
+
+.PHONY: dwarf-fortress
+
 ##################################################
 # Notes ##########################################
 ##################################################
