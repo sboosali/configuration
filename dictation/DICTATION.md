@@ -1,6 +1,6 @@
 # Dictation
 
-Notes about:
+Personal notes about:
 
 - `Dragon NaturallySpeaking` — (and *Speech Recognition* in general).
 - `VirtualBox`               — (and *Virtual Machines*, in general).
@@ -280,9 +280,12 @@ by `SpeechWare`.
 
 ### `TableMike` on the Host
 
-Audio Settings > Capture Devices > ...
-Microphone (USB TableMike Analog Mono)
-Internal Microphone (Built-In Audio Analog Stereo)
+VirtualBox Menu:
+
+```
+Audio Settings > Capture Devices > Microphone (USB TableMike Analog Mono)
+Audio Settings > Capture Devices > Internal Microphone (Built-In Audio Analog Stereo)
+```
 
 ### `TableMike` on the Guest
 
@@ -610,9 +613,7 @@ Invoking `lsusb -v` upon a `CP24` in "USB Mode" outputs:
 > Device Status:     0x0000
 >   (Bus Powered)
 
-
-
-## Troubleshooting the `ControlPad`
+### Troubleshooting the `ControlPad`
 
 If the `ControlPad` doesn't work or doesn't mount...
 
@@ -654,7 +655,23 @@ $ cd /media/sboo/CONTROLPAD
 
 
 
-## 
+## Emacs
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
