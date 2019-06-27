@@ -18,7 +18,7 @@ in
 ##################################################
 {
 
-  package = pkgs.emacs26;
+  package = pkgs.emacs26;          # TODO pkgs.emacs.override { inherit (pkgs) imagemagick; }
 
   extraPackages = import ./packages.nix {
 

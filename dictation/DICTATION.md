@@ -9,8 +9,11 @@ Personal notes about:
 
 ## Files
 
-* `./vocabulary.txt` — list of words/phrases (one-per-line) to import into DragonNaturallySpeaking
+* `./vocabulary.txt`      — list of words/phrases (one-per-line) to import into DragonNaturallySpeaking
 * `./scripts/add-user.sh` — register `$USER` under VirtualBox `group`s.
+* `./MW*Installer.exe`  — Installer for *MacroWorks*. (from <https://xkeys.com/pub/media/wysiwyg/smartwave/porto/category/FileDownloads/MW3.1(1.1.2.06)Installer.exe>)
+
+
 
 ## Configuration
 
@@ -456,7 +459,7 @@ $ lsusb -v -d 058f:6366
 
 
 
-## the `ControlPad`
+## `Genovation` `ControlPad`
 
 ### `lsusb` & the `ControlPad`
 
@@ -650,10 +653,18 @@ $ find /media/sboo/CONTROLPAD
 $ cd /media/sboo/CONTROLPAD
 ```
 
+## `XK-68 Jog & Shuttle`
+
+1. Install *Microsoft .NET Framework 3.5.1* (*Service Pack*).
+1. Install *MacroWorks 3.1* (*Application*).
+1. Configure `XK-68 Jog & Shuttle` via *MacroWorks*.
 
 
+### `MW3.exe`
 
+Configure *XKeys Devices* on *Windows* via *MacroWorks* (fetch from <http://xkeys.com/PISupport/SoftwareMacroWorks.php>).
 
+the `MW3.exe` executable requires the *Microsoft .NET Framework 3.5 SP1* Service Pack (fetch from <https://download.microsoft.com/download/2/0/E/20E90413-712F-438C-988E-FDAA79A8AC3D/dotnetfx35.exe>).
 
 ## Emacs
 
