@@ -37,8 +37,7 @@ Configuring the *Guest Virtual Machine*:
     - install *Dragon NaturallySpeaking v15* 
     - create a *User Profile*
     - 
-
-
+
 
 ## `Dragon NaturallySpeaking`
 
@@ -54,6 +53,8 @@ the `shell:startup` command launches the *Autostart Directory*.
 
 Create an *Application Shortcut* (e.g. `"C:\Program Files (x86)\Nuance\NaturallySpeaking15\Program\natspeak.exe"`) in the *Autostart Directory* (e.g. `"C:\Users\VirtualSpiros\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup"`).
 
+
+
 ## Windows
 
 ### Enable *Sticky Keys*
@@ -65,6 +66,8 @@ Enable *Sticky Keys*:
 Configure *Sticky Keys*:
 
 Navigate to the `Control Panel\Ease of Access\Ease of Access Center\Set up Sticky Keys` menu.
+
+
 
 ## `VirtualBox`
 
@@ -175,6 +178,26 @@ When simultaneously editing *Shared Files*, set the *Line-Ending Convention* to 
 
 - On the Guest, with *Notepad.exe* — which `Dragon NaturallySpeaking` supports natively.
 - On the Host, with *Emacs* — which can save File Buffers in Windows' Line-Ending Convention via `M-x set-buffer-file-coding-system RET dos RET` (i.e. `M-: (set-buffer-file-coding-system 'dos)`).
+
+### VirtualBox's *Audio*
+
+#### Troubleshooting
+
+<https://stackoverflow.com/questions/28134018/microphone-in-windows-10-in-virtualbox>
+
+__PROBLEM:__ *Builtin Microphone doesn't work, in Windows 10, under VirtualBox.*
+
+__SOLUTION:__
+
+ 1. In VirtualBox open the settings for your Windows 10 machine
+ 2. Go to Audio > Audio Controller, change to "ICH AC97"
+ 3. [Boot your Windows 10 machine and disable driver signature enforcement][2]
+ 4. Go to [Realtek's website][1], download and install the AC'97 audio codec/driver for Vista/7 ("Vista/Win7 (32/64 bits) Driver only (ZIP file)") onto your Windows 10 machine (run setup.exe after unzipping)
+ 5. Reboot Windows 10 and you should be done
+
+
+  [1]: https://www.realtek.com/en/component/zoo/category/pc-audio-codecs-ac-97-audio-codecs-software
+  [2]: http://www.howtogeek.com/167723/how-to-disable-driver-signature-verification-on-64-bit-windows-8.1-so-that-you-can-install-unsigned-drivers/
 
 ### VirtualBox's *USB* Support
 

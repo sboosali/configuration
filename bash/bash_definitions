@@ -1933,9 +1933,34 @@ function screen-dimmer--via-xdotool () {
 
 #
 
-function screen-set () {
- redshift -O "${1}00"
+function screen-set() {
+    redshift -O "${1}00"
 }
+
+#------------------------------------------------#
+# Archiving -------------------------------------#
+#------------------------------------------------#
+
+function sboo-tarball() (
+    set -e
+
+    command -v tar
+
+    DIR="${1:?sboo-tarball DIR}"
+
+    Tarball="$(basename "$DIR")".tar.gz
+
+    tar --exclude=".git" -czvf "${Tarball}" "$DIR"
+
+    ls -l -h "${Tarball}"
+
+    # ^ ‹ls -h› shows the size of the file in human-readable units.
+
+)
+
+#------------------------------------------------#
+# Compressing -----------------------------------#
+#------------------------------------------------#
 
 ##################################################
 # DirEnv #########################################
